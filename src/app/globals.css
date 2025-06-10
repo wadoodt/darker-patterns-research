@@ -1,122 +1,216 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
+@theme {
+  /* -------------------------------------------------------------------------- */
+  /* FONTS                                                                    */
+  /* -------------------------------------------------------------------------- */
+  --font-space-grotesk: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-noto-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-lora: 'Lora', ui-serif, Georgia, serif;
+  --font-open-sans: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  /* Semantic font utilities */
+  --font-heading-display: var(--font-space-grotesk);
+  --font-heading-academic: var(--font-lora);
+  --font-body-sans: var(--font-noto-sans);
+  --font-body-academic: var(--font-open-sans);
+
+  /* -------------------------------------------------------------------------- */
+  /* COLORS                                                                   */
+  /* -------------------------------------------------------------------------- */
+
+  /* Primary Brand Accent (Purple) */
+  --color-brand-purple-50: oklch(0.977 0.014 308.299);
+  --color-brand-purple-100: oklch(0.946 0.033 307.174);
+  --color-brand-purple-200: oklch(0.902 0.063 306.703);
+  --color-brand-purple-300: oklch(0.827 0.119 306.383);
+  --color-brand-purple-400: oklch(0.714 0.203 305.504);
+  --color-brand-purple-500: oklch(0.627 0.265 303.9);
+  --color-brand-purple-600: oklch(0.558 0.288 302.321);
+  --color-brand-purple-700: oklch(0.496 0.265 301.924);
+  --color-brand-purple-800: oklch(0.438 0.218 303.724);
+  --color-brand-purple-900: oklch(0.381 0.176 304.987);
+  --color-brand-purple-950: oklch(0.291 0.149 302.717);
+
+  /* Accent Colors */
+  --color-accent-cyan: oklch(0.715 0.143 215.221);
+  --color-accent-pink: oklch(0.656 0.241 354.308);
+  --color-accent-violet: oklch(0.606 0.25 292.717);
+
+  /* --- Dark Theme Specific Colors --- */
+  --color-dark-bg-primary: oklch(0.1 0.01 290);
+  --color-dark-bg-secondary: oklch(0.13 0.015 295);
+  --color-dark-bg-tertiary: oklch(0.18 0.018 293);
+  --color-dark-text-primary: oklch(0.96 0.005 290);
+  --color-dark-text-secondary: oklch(0.72 0.013 290);
+  --color-dark-text-tertiary: oklch(0.5 0.011 290);
+
+  /* --- Light Theme Specific Colors --- */
+  --color-light-bg-primary: oklch(0.982 0.003 240);
+  --color-light-bg-secondary: oklch(1 0 0);
+  --color-light-bg-tertiary: oklch(0.932 0.006 260);
+  --color-light-text-primary: oklch(0.2 0.018 260);
+  --color-light-text-secondary: oklch(0.28 0.02 260);
+  --color-light-text-tertiary: oklch(0.48 0.022 260);
+  --color-light-border-primary: oklch(0.86 0.01 260);
+
+  /* Functional Colors */
+  --color-success: oklch(0.723 0.219 149.579);
+  --color-warning: oklch(0.795 0.184 86.047);
+  --color-danger: oklch(0.637 0.237 25.331);
+  --color-info: oklch(0.623 0.214 259.815);
+
+  /* Helper Alpha Colors (for shadows primarily) */
+  --color-brand-purple-300-alpha-50: oklch(0.827 0.119 306.383 / 0.5);
+  --color-brand-purple-400-alpha-20: oklch(0.714 0.203 305.504 / 0.2);
+  --color-brand-purple-400-alpha-30: oklch(0.714 0.203 305.504 / 0.3);
+  --color-brand-purple-400-alpha-40: oklch(0.714 0.203 305.504 / 0.4);
+  --color-brand-purple-500-alpha-10: oklch(0.627 0.265 303.9 / 0.1);
+  --color-brand-purple-500-alpha-15: oklch(0.627 0.265 303.9 / 0.15);
+  --color-brand-purple-500-alpha-20: oklch(0.627 0.265 303.9 / 0.2);
+  --color-brand-purple-500-alpha-25: oklch(0.627 0.265 303.9 / 0.25);
+  --color-brand-purple-500-alpha-35: oklch(0.627 0.265 303.9 / 0.35);
+  --color-white-alpha-20: oklch(1 0 0 / 0.2);
+  --color-white-alpha-25: oklch(1 0 0 / 0.25);
+  --color-white-alpha-30: oklch(1 0 0 / 0.3);
+
+  /* -------------------------------------------------------------------------- */
+  /* SPACING, SIZING, RADIUS, SHADOWS                                           */
+  /* -------------------------------------------------------------------------- */
+  --radius-button-default: 0.5rem;
+  --radius-card-default: 0.75rem;
+  --radius-card-survey: 0.5rem;
+  --radius-input-default: 0.375rem;
+
+  /* Custom Shadows */
+  --shadow-card-dark: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
+  --shadow-card-light: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+  --shadow-cta-glow-purple-soft:
+    0 0 15px 4px var(--color-brand-purple-500-alpha-25), 0 0 30px 8px var(--color-brand-purple-500-alpha-10);
+  --shadow-cta-glow-purple-intense:
+    0 0 20px 6px var(--color-brand-purple-400-alpha-40), 0 0 45px 15px var(--color-brand-purple-400-alpha-20);
+
+  /* -------------------------------------------------------------------------- */
+  /* ANIMATIONS & TRANSITIONS                                                   */
+  /* -------------------------------------------------------------------------- */
+  --animate-cta-subtle-pulse: cta-subtle-pulse 2.5s infinite ease-in-out;
+  --animate-thank-you-pop: thankYouPop 1s ease-out forwards;
+
+  /* -------------------------------------------------------------------------- */
+  /* SHADCN UI THEME VARIABLES (Dark Theme Default)                           */
+  /* -------------------------------------------------------------------------- */
+  --background: var(--color-dark-bg-primary);
+  --foreground: var(--color-dark-text-primary);
+
+  --card: oklch(0.147 0.019 288.75);
+  --card-foreground: var(--color-dark-text-primary);
+
+  --popover: oklch(0.147 0.019 288.75);
+  --popover-foreground: var(--color-dark-text-primary);
+
+  --primary: var(--color-brand-purple-500);
+  --primary-foreground: oklch(0.957 0.026 295.6);
+
+  --secondary: oklch(0.245 0.023 289.43);
+  --secondary-foreground: oklch(0.854 0.013 288.94);
+
+  --muted: oklch(0.197 0.02 288.71);
+  --muted-foreground: oklch(0.662 0.016 288.63);
+
+  --accent: var(--color-accent-violet);
+  --accent-foreground: oklch(0.906 0.057 301.76);
+
+  --destructive: var(--color-danger);
+  --destructive-foreground: oklch(0.982 0 0);
+
+  --border: oklch(0.293 0.025 289.26);
+  --input: oklch(0.245 0.023 289.43);
+  --ring: var(--color-accent-violet);
+
+  --radius: var(--radius-card-default);
+
+  /* Chart colors */
+  --chart-1: var(--primary);
+  --chart-2: var(--accent);
+  --chart-3: oklch(0.627 0.198 253.33);
+  --chart-4: oklch(0.606 0.17 186.11);
+  --chart-5: oklch(0.697 0.199 66.82);
+
+  /* Sidebar specific colors */
+  --sidebar-background: oklch(0.121 0.014 289.54);
+  --sidebar-foreground: oklch(0.854 0.01 270);
+  --sidebar-primary: oklch(0.584 0.278 303.32);
+  --sidebar-primary-foreground: oklch(0.982 0 0);
+  --sidebar-accent: oklch(0.485 0.265 296.86);
+  --sidebar-accent-foreground: oklch(0.982 0 0);
+  --sidebar-border: oklch(0.245 0.023 289.43);
+  --sidebar-ring: var(--sidebar-accent);
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+@keyframes cta-subtle-pulse {
+  0%,
+  100% {
+    box-shadow:
+      var(--shadow-cta-glow-purple-soft),
+      inset 0 1px 1px var(--color-white-alpha-20);
+  }
+  50% {
+    box-shadow:
+      0 0 13px 3px var(--color-brand-purple-500-alpha-35),
+      0 0 26px 7px var(--color-brand-purple-500-alpha-15),
+      inset 0 1px 1px var(--color-white-alpha-25);
+  }
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+@keyframes thankYouPop {
+  0% {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(-5px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
+    /* Defaulting to dark theme base styles for root, specific layouts can override */
+    @apply font-body-sans bg-dark-bg-primary text-dark-text-primary antialiased;
+    /* For light theme contexts (survey, info pages), their layouts will set: */
+    /* @apply font-body-academic bg-light-bg-primary text-light-text-secondary; */
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1; /* Common font ligatures */
   }
 }
+
+@utility link-standard-light {
+  @apply text-brand-purple-500 hover:text-brand-purple-600 hover:underline;
+}
+
+@utility link-standard-dark {
+  @apply text-brand-purple-300 hover:text-brand-purple-200 hover:underline;
+}
+
+@utility text-glow-landing-alt {
+  text-shadow: 0 0 8px var(--color-brand-purple-400);
+}
+
+@utility sr-only {
+  @apply absolute -m-px h-px w-px overflow-hidden border-0 p-0 whitespace-nowrap;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* Import custom component styles */
+@import '../styles/buttons.css';
+@import '../styles/forms.css';
+@import '../styles/landing.css';
+@import '../styles/survey.css';
+@import '../styles/admin-dashboard.css';
+@import '../styles/animations.css';

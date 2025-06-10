@@ -1,0 +1,168 @@
+.admin-body-bg {
+  @apply bg-[color:var(--color-dark-bg-primary)] text-[color:var(--color-dark-text-primary)];
+}
+
+.admin-card {
+  @apply rounded-xl border border-[color:var(--color-dark-bg-tertiary)] bg-[color:var(--color-dark-bg-secondary)] p-6 shadow-[var(--shadow-card-dark)];
+}
+
+.admin-header-title {
+  @apply font-heading-display text-2xl font-bold text-[color:var(--color-dark-text-primary)] sm:text-3xl;
+}
+
+.card-base-dark {
+  @apply rounded-[var(--radius-card-default)] border border-[color:var(--color-dark-bg-tertiary)] bg-[color:var(--color-dark-bg-secondary)] p-6 shadow-[var(--shadow-card-dark)];
+}
+
+/* === Admin Sidebar Styles === */
+.admin-sidebar {
+  @apply sticky top-0 flex h-screen w-64 flex-col border-r border-[color:var(--color-dark-bg-tertiary)] bg-[color:var(--color-dark-bg-secondary)] p-4 sm:w-72 sm:p-5;
+}
+.admin-sidebar-header {
+  @apply mb-6 flex flex-col items-center pt-2 pb-6;
+}
+.admin-sidebar-logo-container {
+  @apply mb-1 flex items-center gap-2 sm:gap-2.5;
+}
+.admin-sidebar-logo-icon {
+  @apply h-7 w-7 text-[color:var(--color-brand-purple-500)] sm:h-8 sm:w-8;
+}
+.admin-sidebar-logo-text {
+  @apply font-heading-display text-lg font-bold text-[color:var(--color-dark-text-primary)] sm:text-xl;
+}
+.admin-sidebar-version {
+  @apply text-xs font-medium text-[color:var(--color-dark-text-secondary)];
+}
+.admin-sidebar-user-info-container {
+  @apply my-2 border-t border-b border-[color:var(--color-dark-bg-tertiary)/0.7] px-2 py-3;
+}
+.admin-sidebar-user-info {
+  @apply flex items-center gap-2.5;
+}
+.admin-sidebar-user-avatar {
+  @apply flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--color-dark-bg-tertiary)] text-[color:var(--color-dark-text-secondary)];
+}
+.admin-sidebar-user-details {
+  @apply flex flex-col overflow-hidden;
+}
+.admin-sidebar-user-greeting {
+  @apply text-xs text-[color:var(--color-dark-text-tertiary)];
+}
+.admin-sidebar-user-name {
+  @apply truncate text-sm font-medium text-[color:var(--color-dark-text-primary)];
+}
+.admin-sidebar-user-role {
+  @apply text-xs font-medium text-[color:var(--color-brand-purple-400)] capitalize;
+}
+.admin-sidebar-nav {
+  @apply flex flex-grow flex-col gap-1.5;
+}
+.admin-sidebar-navlink {
+  @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-[color:var(--color-dark-text-secondary)] transition-colors duration-150 ease-in-out hover:bg-[color:var(--color-dark-bg-tertiary)] hover:text-[color:var(--color-dark-text-primary)];
+}
+.admin-sidebar-navlink.active {
+  @apply bg-[color:var(--color-brand-purple-600)] text-white shadow-md;
+}
+.admin-sidebar-navlink-icon {
+  @apply h-5 w-5 flex-shrink-0;
+}
+.admin-sidebar-navlink-text {
+  @apply text-sm leading-normal font-medium;
+}
+.admin-sidebar-logout-container {
+  @apply mt-auto border-t border-[color:var(--color-dark-bg-tertiary)/0.7] pt-4;
+}
+.admin-sidebar-logout-button {
+  @apply flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[color:var(--color-dark-text-secondary)] transition-colors duration-150 ease-in-out hover:bg-red-700/20 hover:text-red-400;
+}
+
+/* === Admin Main Content Header Styles === */
+.admin-main-header-container {
+  @apply mb-8 sm:mb-10;
+}
+.admin-main-header-title {
+  @apply font-heading-display text-2xl font-bold tracking-tight text-[color:var(--color-dark-text-primary)] sm:text-3xl;
+}
+.admin-main-header-objective {
+  @apply font-body-sans mt-1 text-sm leading-normal text-[color:var(--color-dark-text-secondary)] sm:mt-2 sm:text-base;
+}
+
+/* === Stat Card Admin Styles === */
+.stat-card-title {
+  @apply text-base font-medium text-[color:var(--color-dark-text-secondary)] sm:text-lg;
+}
+.stat-card-value {
+  @apply text-3xl leading-tight font-bold text-[color:var(--color-dark-text-primary)] sm:text-4xl;
+}
+.stat-card-value-secondary {
+  @apply ml-1 text-2xl font-medium text-[color:var(--color-dark-text-secondary)];
+}
+.stat-card-icon-wrapper {
+  @apply text-[color:var(--color-dark-text-secondary)];
+}
+.stat-card-progress-track {
+  @apply mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[color:var(--color-dark-bg-tertiary)] sm:h-2;
+}
+.stat-card-progress-fill {
+  @apply h-full rounded-full;
+}
+.stat-card-footer {
+  @apply mt-2 flex items-center text-xs sm:text-sm;
+}
+.stat-card-footer-icon {
+  @apply mr-1 h-4 w-4;
+}
+
+/* === Demographics Chart Admin Styles === */
+.demographics-item {
+  @apply space-y-1;
+}
+.demographics-label-percent {
+  @apply mb-0.5 flex justify-between;
+}
+.demographics-label {
+  @apply text-xs font-medium text-[color:var(--color-dark-text-secondary)] sm:text-sm;
+}
+.demographics-percent {
+  @apply text-xs font-medium text-[color:var(--color-dark-text-primary)] sm:text-sm;
+}
+.demographics-bar-track {
+  @apply h-2 w-full rounded-full bg-[color:var(--color-dark-bg-tertiary)] sm:h-2.5;
+}
+.demographics-bar-fill {
+  @apply h-full rounded-full;
+}
+
+/* === Activity Item Styles === */
+.activity-list {
+  @apply divide-y divide-[color:var(--color-dark-bg-tertiary)];
+}
+.activity-item {
+  @apply flex items-center justify-between px-1 py-3 sm:py-4;
+}
+.activity-item-content {
+  @apply flex items-center gap-3;
+}
+.activity-item-text-primary {
+  @apply text-sm font-medium text-[color:var(--color-dark-text-primary)];
+}
+.activity-item-text-secondary {
+  @apply text-xs text-[color:var(--color-dark-text-tertiary)];
+}
+.activity-item-action-link {
+  @apply text-sm text-[color:var(--color-brand-purple-400)] hover:text-[color:var(--color-brand-purple-300)] hover:underline;
+}
+
+/* === Chart Placeholder Styles === */
+.chart-placeholder {
+  @apply flex w-full flex-col items-center justify-center rounded-lg border border-dashed border-[color:var(--color-dark-bg-tertiary)] bg-[color:var(--color-dark-bg-tertiary)/0.5] p-4 text-center text-[color:var(--color-dark-text-secondary)];
+}
+.chart-placeholder-icon {
+  @apply mb-2 h-12 w-12 text-[color:var(--color-dark-text-tertiary)/0.7];
+}
+.chart-placeholder-text {
+  @apply text-sm;
+}
+.chart-placeholder-desc {
+  @apply mt-1 text-xs text-[color:var(--color-dark-text-tertiary)/0.8];
+}

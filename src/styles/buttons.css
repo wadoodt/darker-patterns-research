@@ -1,0 +1,158 @@
+/* -------------------------------------------------------------------------- */
+/* BASE BUTTON UTILITY                                                        */
+/* -------------------------------------------------------------------------- */
+.btn-base {
+  @apply rounded-button-default /* Default text size */ /* For icons in buttons */ flex items-center justify-center gap-2 text-sm font-semibold shadow-sm transition-all duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* -------------------------------------------------------------------------- */
+/* CALL TO ACTION (CTA) BUTTONS                                               */
+/* -------------------------------------------------------------------------- */
+@keyframes subtle-shimmer {
+  0% {
+    background-position: 200% center;
+  } /* Start from off-screen right */
+  100% {
+    background-position: -200% center;
+  } /* Move to off-screen left */
+}
+
+/* --- CTA Dark Theme (e.g., Landing Page Hero) --- */
+.btn-cta-dark {
+  @apply text-dark-text-primary /* Larger padding & text for hero CTAs */ /* Gradient from theme */ from-brand-purple-600 to-accent-violet hover:from-brand-purple-500 hover:to-accent-violet focus:ring-brand-purple-500 focus:ring-offset-dark-bg-primary relative overflow-hidden bg-gradient-to-r px-6 py-3 text-base sm:text-lg;
+  /* Shadows from theme variables */
+  box-shadow:
+    var(--shadow-cta-glow-purple-soft),
+    inset 0 1px 1px var(--color-white-alpha-20);
+  border: 1px solid var(--color-brand-purple-500-alpha-20);
+  /* Animation */
+  background-size: 250% 100%; /* For shimmer, ensure it's larger than button */
+  animation:
+    var(--animate-cta-subtle-pulse, cta-subtle-pulse 2.5s infinite ease-in-out),
+    subtle-shimmer 4s linear infinite;
+}
+.btn-cta-dark::before {
+  /* Shimmer effect - now part of the main animation stack */
+  content: '';
+  @apply absolute inset-0 opacity-20; /* Reduced opacity for subtlety */
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-white-alpha-20, oklch(1 0 0 / 0.2)),
+    /* Using theme var with fallback */ transparent
+  );
+  /* Managed by the main animation's background-size and background-position */
+}
+.btn-cta-dark:hover {
+  @apply scale-105;
+  box-shadow:
+    var(--shadow-cta-glow-purple-intense),
+    inset 0 1px 2px var(--color-white-alpha-30);
+  border-color: var(--color-brand-purple-400-alpha-30);
+  animation:
+    var(--animate-cta-subtle-pulse, cta-subtle-pulse 1.5s infinite ease-in-out),
+    /* Faster pulse on hover */ subtle-shimmer 3s linear infinite; /* Faster shimmer on hover */
+}
+.btn-cta-dark .sparkle-container {
+  /* JS will add particles here */
+  @apply pointer-events-none absolute inset-0 z-10 overflow-visible; /* Ensure overflow is visible for particles moving out */
+}
+
+/* --- CTA Light Theme (e.g., Survey Finish Button) --- */
+.btn-cta-light {
+  @apply from-brand-purple-600 to-accent-violet hover:from-brand-purple-500 hover:to-accent-violet focus:ring-brand-purple-500 focus:ring-offset-light-bg-secondary relative overflow-hidden bg-gradient-to-r px-5 py-2.5 text-sm text-white;
+  box-shadow:
+    var(--shadow-cta-glow-purple-soft),
+    inset 0 1px 1px var(--color-white-alpha-20);
+  border: 1px solid var(--color-brand-purple-500-alpha-20);
+  background-size: 250% 100%;
+  animation:
+    var(--animate-cta-subtle-pulse, cta-subtle-pulse 2.5s infinite ease-in-out),
+    subtle-shimmer 4.5s linear infinite; /* Slightly different speed */
+}
+.btn-cta-light::before {
+  content: '';
+  @apply absolute inset-0 opacity-20;
+  background: linear-gradient(90deg, transparent, var(--color-white-alpha-25), transparent);
+}
+.btn-cta-light:hover {
+  @apply scale-103;
+  box-shadow:
+    var(--shadow-cta-glow-purple-intense),
+    inset 0 1px 2px var(--color-white-alpha-30);
+  border-color: var(--color-brand-purple-400-alpha-30);
+  animation:
+    var(--animate-cta-subtle-pulse, cta-subtle-pulse 1.5s infinite ease-in-out),
+    subtle-shimmer 3.5s linear infinite;
+}
+.btn-cta-light .sparkle-container {
+  @apply pointer-events-none absolute inset-0 z-10 overflow-visible;
+}
+
+/* -------------------------------------------------------------------------- */
+/* PRIMARY BUTTONS                                                            */
+/* -------------------------------------------------------------------------- */
+.btn-primary-dark {
+  /* For dark backgrounds like admin dashboard */
+  @apply bg-brand-purple-600 text-dark-text-primary hover:bg-brand-purple-500 focus:ring-brand-purple-500 focus:ring-offset-dark-bg-secondary;
+  @apply px-4 py-2 text-sm; /* Example default size */
+}
+.btn-primary-light {
+  /* For light backgrounds like survey pages */
+  @apply bg-brand-purple-500 hover:bg-brand-purple-600 focus:ring-brand-purple-500 focus:ring-offset-light-bg-secondary text-white;
+  @apply px-4 py-2.5 text-sm; /* Example default size */
+}
+
+/* -------------------------------------------------------------------------- */
+/* SECONDARY BUTTONS                                                          */
+/* -------------------------------------------------------------------------- */
+.btn-secondary-dark {
+  @apply bg-dark-bg-tertiary text-dark-text-secondary border-dark-bg-tertiary /* Subtle or same as bg */ hover:bg-brand-purple-900 hover:text-dark-text-primary hover:border-brand-purple-700 focus:ring-brand-purple-700 focus:ring-offset-dark-bg-primary border;
+  @apply px-4 py-2 text-sm;
+}
+.btn-secondary-light {
+  @apply bg-light-bg-secondary text-light-text-secondary border-light-border-primary /* Using default grays for subtle hover */ focus:ring-brand-purple-500 focus:ring-offset-light-bg-secondary border hover:border-gray-400 hover:bg-gray-100;
+  @apply px-4 py-2.5 text-sm;
+}
+
+/* -------------------------------------------------------------------------- */
+/* TERTIARY BUTTONS (Often more subtle, e.g., less important actions)         */
+/* -------------------------------------------------------------------------- */
+.btn-tertiary-dark {
+  @apply text-dark-text-secondary /* No initial */ hover:bg-dark-bg-tertiary hover:text-dark-text-primary focus:ring-brand-purple-700 focus:ring-offset-dark-bg-primary border border-transparent bg-transparent;
+  @apply px-4 py-2 text-sm;
+}
+.btn-tertiary-light {
+  @apply text-light-text-secondary hover:text-light-text-primary focus:ring-brand-purple-500 focus:ring-offset-light-bg-secondary border border-transparent bg-transparent hover:bg-gray-100;
+  @apply px-4 py-2.5 text-sm;
+}
+
+/* -------------------------------------------------------------------------- */
+/* GHOST BUTTONS (Text with a border on hover, or very minimal)               */
+/* -------------------------------------------------------------------------- */
+.btn-ghost-dark {
+  @apply text-dark-text-secondary hover:text-dark-text-primary hover:bg-dark-bg-tertiary/50 /* Subtle bg on hover */ focus:ring-brand-purple-700 focus:ring-offset-dark-bg-primary bg-transparent;
+  @apply border-none px-4 py-2 text-sm; /* No border by default */
+}
+.btn-ghost-light {
+  @apply text-light-text-secondary hover:text-light-text-primary focus:ring-brand-purple-500 focus:ring-offset-light-bg-secondary bg-transparent hover:bg-gray-100/70;
+  @apply border-none px-4 py-2.5 text-sm;
+}
+
+/* -------------------------------------------------------------------------- */
+/* LINK BUTTONS (Styled like text links but act as buttons)                   */
+/* -------------------------------------------------------------------------- */
+.btn-link-dark {
+  @apply text-brand-purple-300 hover:text-brand-purple-200 focus:ring-brand-purple-400 focus:ring-offset-dark-bg-primary font-medium underline;
+  @apply p-1 text-sm shadow-none; /* Minimal padding, no shadow */
+}
+.btn-link-light {
+  /* Used for "Return Home" in survey footer */
+  @apply text-brand-purple-500 hover:text-brand-purple-600 focus:ring-brand-purple-500 focus:ring-offset-light-bg-secondary font-medium underline;
+  @apply p-1 text-sm shadow-none;
+}
+
+.btn-link-prominent {
+  /* General prominent link style */
+  @apply text-brand-purple-500 hover:text-brand-purple-600 font-medium underline;
+}

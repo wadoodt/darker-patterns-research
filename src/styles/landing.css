@@ -1,0 +1,18 @@
+.landing-hero-section {
+  @apply relative overflow-hidden py-24 sm:py-32;
+  background: linear-gradient(
+    180deg,
+    var(--color-dark-bg-primary) 0%,
+    var(--color-brand-purple-950) 100%
+  ); /* Example gradient */
+}
+
+.landing-hero-title {
+  @apply font-heading-display text-dark-text-primary text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl;
+  /* Potentially add .text-glow-landing-alt here or directly in component */
+}
+
+.landing-stat-card {
+  @apply rounded-card-default bg-light-bg-secondary shadow-card-light flex flex-col items-start p-6;
+  /* Note: Stats cards on landing were light on dark bg */
+}
