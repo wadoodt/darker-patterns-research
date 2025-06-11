@@ -1,4 +1,5 @@
 import { Toaster as SonnerToaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { inter, lora, notoSans, openSans, spaceGrotesk } from '@/lib/fonts';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
@@ -89,10 +90,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="flex min-h-screen flex-col antialiased">
-        {/* <AuthProvider> */}
-        {children}
-        <SonnerToaster richColors theme="dark" />
-        {/* </AuthProvider> */}
+        <AuthProvider>
+          {children}
+          <SonnerToaster richColors theme="dark" />
+        </AuthProvider>
         <SpeedInsights />
       </body>
     </html>

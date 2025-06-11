@@ -1,0 +1,9 @@
+import type { DPOEntry } from './dpo';
+
+export interface DisplayEntry extends DPOEntry {
+  id: string;
+  reviewProgress?: number;
+  statusText?: string;
+}
+
+export type SortableEntryKeys = keyof Pick<DisplayEntry, 'id' | 'category' | 'reviewCount'>;

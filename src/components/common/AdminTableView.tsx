@@ -1,0 +1,84 @@
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { SortableEntryKeys } from '@/types/entries';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import type { Column, SortDirection } from './AdminTable';
+
+interface AdminTableViewProps<T> {
+  columns: Column<T>[];
+  data: T[];
+  onSortColumn: (key: SortableEntryKeys) => void;
+  currentSortKey: SortableEntryKeys | null;
+  currentSortDirection: SortDirection;
+}
+
+export function AdminTableView<T>({
+  columns,
+  data,
+  onSortColumn,
+  currentSortKey,
+  currentSortDirection,
+}: AdminTableViewProps<T>) {
+  const renderSortIcons = (column: Column<T>) => {
+    if (!column.sortable) return null;
+
+    return (
+      <div className="ml-1 flex flex-col">
+        <ChevronUp
+          size={12}
+          className={`${
+            currentSortKey === column.key && currentSortDirection === 'asc'
+              ? 'text-brand-purple-400'
+              : 'text-dark-text-tertiary'
+          }`}
+        />
+        <ChevronDown
+          size={12}
+          className={`${
+            currentSortKey === column.key && currentSortDirection === 'desc'
+              ? 'text-brand-purple-400'
+              : 'text-dark-text-tertiary'
+          }`}
+        />
+      </div>
+    );
+  };
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          {columns.map((column) => (
+            <TableHead
+              key={column.key}
+              className={`${column.sortable ? 'cursor-pointer' : ''}`}
+              onClick={() => column.sortable && onSortColumn(column.key as SortableEntryKeys)}
+            >
+              <div className="flex items-center">
+                {column.icon && <column.icon size={16} className="mr-1" />}
+                {column.header}
+                {renderSortIcons(column)}
+              </div>
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.length > 0 ? (
+          data.map((item, index) => (
+            <TableRow key={index}>
+              {columns.map((column) => (
+                <TableCell key={column.key}>{column.renderCell(item)}</TableCell>
+              ))}
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={columns.length} className="text-center">
+              No data available.
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
+}
