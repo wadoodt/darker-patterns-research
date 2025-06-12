@@ -1,8 +1,6 @@
 // components/landing/UpdatesSection.tsx
-import { db } from '@/lib/firebase'; // Adjusted path
-import { doc, getDoc, Timestamp } from 'firebase/firestore'; // Changed from "type Timestamp"
-import { BarChartBig, CalendarDays, Milestone, Newspaper, Users2 } from 'lucide-react';
-import type React from 'react';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import UpdateList from './UpdateList';
 
 interface LandingUpdate {
@@ -36,7 +34,7 @@ const mockUpdatesData: LandingUpdate[] = [
 
 async function getLandingUpdates(): Promise<LandingUpdate[]> {
   if (process.env.NODE_ENV === 'test' || !db) {
-    console.log('UpdatesSection: Test mode or DB not available, returning mock updates.');
+    console.warn('UpdatesSection: Test mode or DB not available, returning mock updates.');
     return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
   }
   try {
@@ -58,14 +56,6 @@ async function getLandingUpdates(): Promise<LandingUpdate[]> {
     return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
   }
 }
-
-const iconMap: { [key: string]: React.ElementType } = {
-  BarChartBig: BarChartBig,
-  Milestone: Milestone,
-  Users2: Users2,
-  Newspaper: Newspaper,
-  default: CalendarDays,
-};
 
 const UpdatesSection = async () => {
   const updates = await getLandingUpdates();
