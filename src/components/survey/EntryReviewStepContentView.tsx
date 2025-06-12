@@ -45,118 +45,92 @@ interface EntryReviewStepContentViewProps {
   handleSubmitFlag: (reason: string, comment: string) => void;
 }
 
-const EntryReviewStepContentView: React.FC<EntryReviewStepContentViewProps> = (props) => {
-  const {
-    currentDisplayEntry,
-    currentDpoEntryIndex,
-    dpoEntriesToReview,
-    currentStepNumber,
-    totalSteps,
-    isLoadingEntries,
-    isCurrentEvaluationSubmitted,
-    selectedOptionKey,
-    userRating,
-    userComment,
-    localError,
-    contextError,
-    isFlagModalOpen,
-    canSubmitLocal,
-    userChoseCorrectlyIfRevealed,
-    optionAContent,
-    optionBContent,
-    optionAisDPOAccepted,
-    handleOptionSelect,
-    setUserRating,
-    setUserComment,
-    handleLocalSubmitAndReveal,
-    setIsFlagModalOpen,
-    handleSubmitFlag,
-  } = props;
+const LoadingEntries = () => (
+  <div className="survey-page-container p-10 text-center">
+    <p className="text-gray-600">Loading evaluation entries...</p>
+  </div>
+);
 
-  if (isLoadingEntries && !currentDisplayEntry) {
-    return (
-      <div className="survey-page-container p-10 text-center">
-        <p className="text-gray-600">Loading evaluation entries...</p>
-      </div>
-    );
+const NoEntriesMessage = () => (
+  <div className="survey-page-container p-10 text-center">
+    <p className="mb-4 text-gray-600">No entries available for review.</p>
+    <p className="text-sm text-gray-500">Please check back later or contact support if you believe this is an error.</p>
+  </div>
+);
+
+const EntryReviewStepContentView: React.FC<EntryReviewStepContentViewProps> = (props) => {
+  if (props.isLoadingEntries && !props.currentDisplayEntry) {
+    return <LoadingEntries />;
   }
-  if (!currentDisplayEntry) {
-    return (
-      <div className="survey-page-container p-10 text-center">
-        <p className="mb-4 text-gray-600">No more entries to display for this session.</p>
-        <p className="text-sm text-gray-500">
-          You might have completed all assigned entries, or an error occurred. Please use the navigation below to
-          proceed.
-        </p>
-      </div>
-    );
+  if (!props.currentDisplayEntry) {
+    return <NoEntriesMessage />;
   }
 
   const options: Option[] = [
-    { key: 'A', content: optionAContent, isDatasetAccepted: optionAisDPOAccepted },
-    { key: 'B', content: optionBContent, isDatasetAccepted: !optionAisDPOAccepted },
+    { key: 'A', content: props.optionAContent, isDatasetAccepted: props.optionAisDPOAccepted },
+    { key: 'B', content: props.optionBContent, isDatasetAccepted: !props.optionAisDPOAccepted },
   ];
 
   return (
     <div className="survey-page-container max-w-3xl">
       <ReviewHeader
-        currentDpoEntryIndex={currentDpoEntryIndex}
-        dpoEntriesToReview={dpoEntriesToReview}
-        currentStepNumber={currentStepNumber}
-        totalSteps={totalSteps}
+        currentDpoEntryIndex={props.currentDpoEntryIndex}
+        dpoEntriesToReview={props.dpoEntriesToReview}
+        currentStepNumber={props.currentStepNumber}
+        totalSteps={props.totalSteps}
       />
       <InstructionCard
-        instruction={currentDisplayEntry.instruction}
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-        setIsFlagModalOpen={setIsFlagModalOpen}
+        instruction={props.currentDisplayEntry.instruction}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+        setIsFlagModalOpen={props.setIsFlagModalOpen}
       />
       <OptionsSection
         options={options}
-        selectedOptionKey={selectedOptionKey}
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-        handleOptionSelect={handleOptionSelect}
-        userChoseCorrectlyIfRevealed={userChoseCorrectlyIfRevealed}
+        selectedOptionKey={props.selectedOptionKey}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+        handleOptionSelect={props.handleOptionSelect}
+        userChoseCorrectlyIfRevealed={props.userChoseCorrectlyIfRevealed}
       />
       <RatingSection
-        selectedOptionKey={selectedOptionKey}
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-        userRating={userRating}
-        setUserRating={setUserRating}
+        selectedOptionKey={props.selectedOptionKey}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+        userRating={props.userRating}
+        setUserRating={props.setUserRating}
       />
       <CommentsSection
-        selectedOptionKey={selectedOptionKey}
-        userRating={userRating}
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-        userComment={userComment}
-        setUserComment={setUserComment}
+        selectedOptionKey={props.selectedOptionKey}
+        userRating={props.userRating}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+        userComment={props.userComment}
+        setUserComment={props.setUserComment}
       />
       <ErrorMessages
-        localError={localError}
-        contextError={contextError}
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
+        localError={props.localError}
+        contextError={props.contextError}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
       />
       <SubmitButton
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-        selectedOptionKey={selectedOptionKey}
-        userRating={userRating}
-        handleLocalSubmitAndReveal={handleLocalSubmitAndReveal}
-        canSubmitLocal={canSubmitLocal}
-        isLoadingEntries={isLoadingEntries}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+        selectedOptionKey={props.selectedOptionKey}
+        userRating={props.userRating}
+        handleLocalSubmitAndReveal={props.handleLocalSubmitAndReveal}
+        canSubmitLocal={props.canSubmitLocal}
+        isLoadingEntries={props.isLoadingEntries}
       />
       <RevealSection
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-        currentDisplayEntry={currentDisplayEntry}
-        selectedOptionKey={selectedOptionKey}
-        userChoseCorrectlyIfRevealed={userChoseCorrectlyIfRevealed}
-        dpoEntriesToReview={dpoEntriesToReview}
-        currentDpoEntryIndex={currentDpoEntryIndex}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+        currentDisplayEntry={props.currentDisplayEntry}
+        selectedOptionKey={props.selectedOptionKey}
+        userChoseCorrectlyIfRevealed={props.userChoseCorrectlyIfRevealed}
+        dpoEntriesToReview={props.dpoEntriesToReview}
+        currentDpoEntryIndex={props.currentDpoEntryIndex}
       />
-      {currentDisplayEntry && (
+      {props.currentDisplayEntry && (
         <FlagEntryModal
-          isOpen={isFlagModalOpen}
-          onClose={() => setIsFlagModalOpen(false)}
-          onSubmitFlag={handleSubmitFlag}
-          entryId={currentDisplayEntry.id}
+          isOpen={props.isFlagModalOpen}
+          onClose={() => props.setIsFlagModalOpen(false)}
+          onSubmitFlag={props.handleSubmitFlag}
+          entryId={props.currentDisplayEntry.id}
         />
       )}
     </div>

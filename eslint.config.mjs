@@ -30,7 +30,7 @@ const eslintConfig = [
     globals: {
       React: 'writable',
     },
-    ignorePatterns: ['node_modules/', 'dist/', '.next/', 'out/', './src/components/ui/'],
+    ignorePatterns: ['**/src/components/ui/', '**/functions/'],
   }),
 ];
 

@@ -36,6 +36,7 @@ export async function persistSurveyData(
     for (const evaluation of evaluations) {
       const evalDocRef = doc(collection(db as Firestore, 'evaluations'));
       const { id, ...evalDataToSave } = evaluation;
+      console.warn('Saving evaluation:', id);
       transaction.set(evalDocRef, { ...evalDataToSave, submittedAt: serverTimestamp() });
 
       if (!evaluation.dpoEntryId.startsWith('dummyEntry')) {

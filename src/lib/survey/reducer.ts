@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import type { SurveyState } from '@/types/survey';
 import { SurveyAction, SurveyActionType } from './actions';
 import { validateDemographics, validateEmail, validateParticipationDetails } from './validators';

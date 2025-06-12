@@ -1,69 +1,38 @@
 // components/survey/SurveyNavigationFooter.tsx
 'use client';
-import React from 'react';
-import Link from 'next/link'; // Keep Link for "Back to Home" type scenarios
-import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, CheckCheck, Home, Loader2 } from 'lucide-react';
-// useRouter not strictly needed here if all navigation is through context or Link
-// import { useRouter } from 'next/navigation';
+import Link from 'next/link'; // Keep Link for "Back to Home" type scenarios
+import { useSurveyNavigationFooterLogic } from './useSurveyNavigationFooterLogic';
 
-const SurveyNavigationFooter = () => {
-  // const router = useRouter(); // Only if needed for direct navigation not covered by context
-  const {
-    currentStepNumber,
-    goToNextStep,
-    goToPreviousStep,
-    saveDemographics,
-    completeSurveyAndPersistData,
-    participationType,
-    participantEmail,
-    termsAgreed,
-    demographicsData,
-    dpoEntriesToReview,
-    currentDpoEntryIndex,
-    isLoadingEntries,
-    isSubmittingSurvey, // This is for the final persistence
-    isCurrentEvaluationSubmitted,
-    error: contextError,
-    surveyCompleted, // To know if final submission was successful
-  } = useSurveyProgress();
+// Define a type for the logic object to avoid 'any' and unused variable warnings
+interface SurveyNavigationFooterLogic {
+  currentStepNumber: number;
+  goToNextStep: () => void;
+  goToPreviousStep: () => void;
+  saveDemographics: () => void;
+  completeSurveyAndPersistData: () => void;
+  isLoadingEntries: boolean;
+  isSubmittingSurvey: boolean;
+  isCurrentEvaluationSubmitted: boolean;
+  contextError: string | null;
+  surveyCompleted: boolean;
+  canProceedFromIntro: boolean;
+  canProceedFromDemographics: boolean;
+  dpoEntriesToReview: { length: number };
+  currentDpoEntryIndex: number;
+  isLastEntryInBatch: boolean;
+}
 
-  let leftButton: React.ReactNode = null;
-  let rightButton: React.ReactNode = null;
-  let centerText: React.ReactNode = null;
-
-  // Validation for Introduction Step (Step 1)
-  const canProceedFromIntro =
-    participationType &&
-    termsAgreed &&
-    (participationType === 'anonymous' ||
-      (participationType === 'email' && !!participantEmail && /\S+@\S+\.\S+/.test(participantEmail)));
-
-  // Validation for Demographics Step (Step 2)
-  const isDemographicsFormValid = () => {
-    if (!demographicsData) return false;
-    const {
-      ageGroup,
-      gender,
-      genderOther,
-      educationLevel,
-      educationOther,
-      fieldOfExpertise,
-      expertiseOther,
-      aiFamiliarity,
-    } = demographicsData;
-    if (!ageGroup || !gender || !educationLevel || !fieldOfExpertise || !aiFamiliarity) return false;
-    if (gender === 'Prefer to self-describe' && !genderOther?.trim()) return false;
-    if (educationLevel === 'Other' && !educationOther?.trim()) return false;
-    if (fieldOfExpertise === 'Other' && !expertiseOther?.trim()) return false;
-    return true;
-  };
-  const canProceedFromDemographics = isDemographicsFormValid();
-
+// Extract button rendering into pure functions for clarity and separation
+function renderLeftButton({
+  currentStepNumber,
+  goToPreviousStep,
+  isLoadingEntries,
+  isSubmittingSurvey,
+}: SurveyNavigationFooterLogic) {
   if (currentStepNumber === 1) {
-    // Introduction
-    leftButton = (
+    return (
       <Button variant="link" size="sm" asChild className="btn-link-light px-1 text-xs">
         <Link href="/">
           {' '}
@@ -71,7 +40,66 @@ const SurveyNavigationFooter = () => {
         </Link>
       </Button>
     );
-    rightButton = (
+  } else if (currentStepNumber === 2 || currentStepNumber === 3) {
+    return (
+      <Button
+        onClick={goToPreviousStep}
+        variant="outline"
+        size="sm"
+        className="btn-secondary-light text-xs"
+        disabled={
+          currentStepNumber === 3 ? isLoadingEntries || isSubmittingSurvey : isLoadingEntries || isSubmittingSurvey
+        }
+      >
+        <ArrowLeft size={16} className="mr-1.5" /> Back
+      </Button>
+    );
+  } else if (currentStepNumber === 4) {
+    return (
+      <Button variant="link" size="sm" asChild className="btn-link-light px-1 text-xs" disabled={isSubmittingSurvey}>
+        <Link href="/">
+          {' '}
+          <Home size={14} className="mr-1" /> Return Home
+        </Link>
+      </Button>
+    );
+  }
+  return null;
+}
+
+function renderCenterText({
+  currentStepNumber,
+  currentDpoEntryIndex,
+  dpoEntriesToReview,
+}: SurveyNavigationFooterLogic) {
+  if (currentStepNumber === 3) {
+    return (
+      <p className="text-xs text-gray-500">
+        Entry {Math.min(currentDpoEntryIndex + 1, dpoEntriesToReview.length)} of {dpoEntriesToReview.length}
+      </p>
+    );
+  }
+  return null;
+}
+
+function renderRightButton(props: SurveyNavigationFooterLogic) {
+  const {
+    currentStepNumber,
+    goToNextStep,
+    saveDemographics,
+    completeSurveyAndPersistData,
+    isLoadingEntries,
+    isSubmittingSurvey,
+    isCurrentEvaluationSubmitted,
+    contextError,
+    canProceedFromIntro,
+    canProceedFromDemographics,
+    isLastEntryInBatch,
+    surveyCompleted,
+  } = props;
+
+  if (currentStepNumber === 1) {
+    return (
       <Button
         onClick={goToNextStep}
         disabled={!canProceedFromIntro || isLoadingEntries || !!contextError}
@@ -82,19 +110,7 @@ const SurveyNavigationFooter = () => {
       </Button>
     );
   } else if (currentStepNumber === 2) {
-    // Demographics
-    leftButton = (
-      <Button
-        onClick={goToPreviousStep}
-        variant="outline"
-        size="sm"
-        className="btn-secondary-light text-xs"
-        disabled={isLoadingEntries || isSubmittingSurvey}
-      >
-        <ArrowLeft size={16} className="mr-1.5" /> Back
-      </Button>
-    );
-    rightButton = (
+    return (
       <Button
         onClick={saveDemographics}
         disabled={!canProceedFromDemographics || isLoadingEntries || !!contextError}
@@ -105,25 +121,7 @@ const SurveyNavigationFooter = () => {
       </Button>
     );
   } else if (currentStepNumber === 3) {
-    // Evaluation
-    leftButton = (
-      <Button
-        onClick={goToPreviousStep}
-        variant="outline"
-        size="sm"
-        className="btn-secondary-light text-xs"
-        disabled={currentDpoEntryIndex === 0 || isLoadingEntries || isSubmittingSurvey || !isCurrentEvaluationSubmitted}
-      >
-        <ArrowLeft size={16} className="mr-1.5" /> Back
-      </Button>
-    );
-    centerText = (
-      <p className="text-xs text-gray-500">
-        Entry {Math.min(currentDpoEntryIndex + 1, dpoEntriesToReview.length)} of {dpoEntriesToReview.length}
-      </p>
-    );
-    const isLastEntryInBatch = currentDpoEntryIndex >= dpoEntriesToReview.length - 1;
-    rightButton = (
+    return (
       <Button
         onClick={goToNextStep}
         disabled={!isCurrentEvaluationSubmitted || isLoadingEntries || !!contextError}
@@ -135,18 +133,8 @@ const SurveyNavigationFooter = () => {
       </Button>
     );
   } else if (currentStepNumber === 4) {
-    // Thank You
-    leftButton = (
-      <Button variant="link" size="sm" asChild className="btn-link-light px-1 text-xs" disabled={isSubmittingSurvey}>
-        <Link href="/">
-          {' '}
-          <Home size={14} className="mr-1" /> Return Home
-        </Link>
-      </Button>
-    );
     if (!surveyCompleted) {
-      // Only show Finish & Submit if not already completed
-      rightButton = (
+      return (
         <Button
           onClick={completeSurveyAndPersistData}
           disabled={isSubmittingSurvey || !!contextError}
@@ -157,20 +145,29 @@ const SurveyNavigationFooter = () => {
         </Button>
       );
     } else {
-      rightButton = // Optionally show a disabled "Submitted" or nothing
-        (
-          <Button disabled={true} className="btn-primary-light min-w-[140px] cursor-not-allowed text-xs opacity-70">
-            <CheckCheck size={16} className="mr-1.5" /> Submitted
-          </Button>
-        );
+      return (
+        <Button disabled={true} className="btn-primary-light min-w-[140px] cursor-not-allowed text-xs opacity-70">
+          <CheckCheck size={16} className="mr-1.5" /> Submitted
+        </Button>
+      );
     }
   }
+  return null;
+}
 
+const SurveyNavigationFooter = () => {
+  // Ensure canProceedFromIntro is always boolean
+  const logicRaw = useSurveyNavigationFooterLogic();
+  const logic: SurveyNavigationFooterLogic = {
+    ...logicRaw,
+    canProceedFromIntro: !!logicRaw.canProceedFromIntro,
+    canProceedFromDemographics: !!logicRaw.canProceedFromDemographics,
+  };
   return (
     <footer className="survey-nav-footer">
-      <div className="flex w-1/3 justify-start">{leftButton}</div>
-      <div className="flex w-1/3 items-center justify-center text-center">{centerText}</div>
-      <div className="flex w-1/3 justify-end">{rightButton}</div>
+      <div className="flex w-1/3 justify-start">{renderLeftButton(logic)}</div>
+      <div className="flex w-1/3 items-center justify-center text-center">{renderCenterText(logic)}</div>
+      <div className="flex w-1/3 justify-end">{renderRightButton(logic)}</div>
     </footer>
   );
 };

@@ -18,8 +18,11 @@ export function validateParticipationDetails(details: {
   return null;
 }
 
-export function validateEmail(email: string): boolean {
-  return /\S+@\S+\.\S+/.test(email);
+export function validateEmail(email: string): string | null {
+  if (!/\S+@\S+\.\S+/.test(email)) {
+    return 'Please enter a valid email address';
+  }
+  return null;
 }
 
 export function validateDemographics(data: DemographicData): string | null {

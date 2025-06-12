@@ -18,18 +18,53 @@ export interface AdminEntriesSortConfig {
   direction: 'asc' | 'desc';
 }
 
-export const useAdminEntries = (defaultTargetReviews: number) => {
+const useAdminEntriesState = () => {
   const [entries, setEntries] = useState<DisplayEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalEntriesCount, setTotalEntriesCount] = useState(0);
   const [firstDocOfCurrentPage, setFirstDocOfCurrentPage] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [lastDocOfCurrentPage, setLastDocOfCurrentPage] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
-
   const [activeFilters, setActiveFilters] = useState<AdminEntriesFilter>({});
   const [sortConfig, setSortConfig] = useState<AdminEntriesSortConfig>({ key: 'id', direction: 'asc' });
+
+  return {
+    entries,
+    setEntries,
+    isLoading,
+    setIsLoading,
+    error,
+    setError,
+    currentPage,
+    setCurrentPage,
+    totalEntriesCount,
+    setTotalEntriesCount,
+    firstDocOfCurrentPage,
+    setFirstDocOfCurrentPage,
+    lastDocOfCurrentPage,
+    setLastDocOfCurrentPage,
+    activeFilters,
+    setActiveFilters,
+    sortConfig,
+    setSortConfig,
+  };
+};
+
+export const useAdminEntries = (defaultTargetReviews: number) => {
+  const state = useAdminEntriesState();
+  const {
+    setEntries,
+    setIsLoading,
+    setError,
+    setCurrentPage,
+    setTotalEntriesCount,
+    setFirstDocOfCurrentPage,
+    setLastDocOfCurrentPage,
+    activeFilters,
+    sortConfig,
+    currentPage,
+  } = state;
 
   const fetchEntries = useCallback(
     async (
@@ -48,7 +83,7 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
           targetReviews,
           ITEMS_PER_PAGE,
           pageDirection,
-          { first: firstDocOfCurrentPage, last: lastDocOfCurrentPage },
+          { first: state.firstDocOfCurrentPage, last: state.lastDocOfCurrentPage },
         );
 
         const [totalCount, { entries: fetchedEntries, cursors }] = await Promise.all([
@@ -68,49 +103,55 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
         setIsLoading(false);
       }
     },
-    [firstDocOfCurrentPage, lastDocOfCurrentPage],
+    [
+      state.firstDocOfCurrentPage,
+      state.lastDocOfCurrentPage,
+      setEntries,
+      setIsLoading,
+      setError,
+      setCurrentPage,
+      setTotalEntriesCount,
+      setFirstDocOfCurrentPage,
+      setLastDocOfCurrentPage,
+    ],
   );
 
   useEffect(() => {
-    // Fetch on initial mount and when filters/sort/targetReviews change
-    // For 'current' pageDirection, cursors (first/lastDoc) should ideally be reset for accurate first page
     setFirstDocOfCurrentPage(null);
     setLastDocOfCurrentPage(null);
     fetchEntries(1, activeFilters, sortConfig, defaultTargetReviews, 'current');
-  }, [activeFilters, sortConfig, defaultTargetReviews, fetchEntries]); // fetchEntries is now a dep
+  }, [
+    activeFilters,
+    sortConfig,
+    defaultTargetReviews,
+    fetchEntries,
+    setFirstDocOfCurrentPage,
+    setLastDocOfCurrentPage,
+  ]);
 
   const handleFilterChange = (newFilters: AdminEntriesFilter) => {
-    setActiveFilters(newFilters);
+    state.setActiveFilters(newFilters);
     setCurrentPage(1);
   };
 
   const handleSortChange = (key: keyof DisplayEntry | 'id') => {
     const newDirection = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
-    setSortConfig({ key: key as SortableEntryKeys, direction: newDirection });
+    state.setSortConfig({ key: key as SortableEntryKeys, direction: newDirection });
     setCurrentPage(1);
   };
 
   const handlePageChange = (newPage: number) => {
     const direction = newPage > currentPage ? 'next' : newPage < currentPage ? 'prev' : 'current';
-    // For direct page jumps (e.g., from pagination numbers), cursors might need reset or more complex logic
-    // For simplicity, 'current' page jumps will refetch the page based on its number without relying on existing cursors
-    // unless the underlying fetchEntries is adapted to handle numbered page jumps with cursors.
     if (direction === 'current' && newPage !== currentPage) {
-      setFirstDocOfCurrentPage(null); // Reset cursors for a jump to a specific page number
+      setFirstDocOfCurrentPage(null);
       setLastDocOfCurrentPage(null);
     }
     fetchEntries(newPage, activeFilters, sortConfig, defaultTargetReviews, direction);
   };
 
   return {
-    entries,
-    isLoading,
-    error,
-    currentPage,
-    totalEntriesCount,
+    ...state,
     ITEMS_PER_PAGE,
-    activeFilters,
-    sortConfig,
     handleFilterChange,
     handleSortChange,
     handlePageChange,

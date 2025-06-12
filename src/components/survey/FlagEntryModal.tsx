@@ -1,13 +1,13 @@
 // src/components/survey/FlagEntryModal.tsx
 'use client';
-import type React from 'react';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { AlertTriangle } from 'lucide-react';
+import type React from 'react';
+import { useFlagEntryModalState } from './useFlagEntryModalState';
 
 interface FlagEntryModalProps {
   isOpen: boolean;
@@ -26,36 +26,15 @@ const flagReasonsList = [
 ];
 
 const FlagEntryModal: React.FC<FlagEntryModalProps> = ({ isOpen, onClose, onSubmitFlag, entryId }) => {
-  const [selectedReason, setSelectedReason] = useState<string>('');
-  const [otherReasonComment, setOtherReasonComment] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
-
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      onClose();
-      // Reset local state when modal is closed
-      setSelectedReason('');
-      setOtherReasonComment('');
-      setError(null);
-    }
-  };
-
-  const handleSubmit = () => {
-    setError(null);
-    if (!selectedReason) {
-      setError('Please select a reason for flagging.');
-      return;
-    }
-    const finalReasonText =
-      selectedReason === 'Other (please specify below)' ? otherReasonComment.trim() : selectedReason;
-    if (!finalReasonText && selectedReason === 'Other (please specify below)') {
-      setError("Please specify your reason if 'Other' is selected, or choose a different reason.");
-      return;
-    }
-    // Pass the original selectedReason (which might be "Other...") and the otherReasonComment separately
-    onSubmitFlag(selectedReason, otherReasonComment.trim());
-    handleOpenChange(false); // Close modal on successful submit
-  };
+  const {
+    selectedReason,
+    setSelectedReason,
+    otherReasonComment,
+    setOtherReasonComment,
+    error,
+    handleOpenChange,
+    handleSubmit,
+  } = useFlagEntryModalState({ onClose, onSubmitFlag });
 
   if (!entryId) return null;
 
