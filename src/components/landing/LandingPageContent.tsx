@@ -16,7 +16,7 @@ const LandingPageContent = () => {
       <LazyLoadOnScroll className="min-h-[25rem]">
         <ProgressSection />
       </LazyLoadOnScroll>
-      <LazyLoadOnScroll className="min-h-[40rem]">
+      <LazyLoadOnScroll className="min-h-[25rem]">
         <UpdatesSection />
       </LazyLoadOnScroll>
       <LazyLoadOnScroll className="min-h-[30rem]">

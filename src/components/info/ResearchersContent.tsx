@@ -100,7 +100,7 @@ const ResearchersContent = () => {
           <p className="text-center">
             We are open to collaborations with fellow researchers, institutions, and industry partners who share our
             commitment to ethical AI. If you are interested in working with us, please{' '}
-            <Link href="/info/contact-us">get in touch</Link>.
+            <Link href="/contact-us">get in touch</Link>.
           </p>
         </section>
       </article>

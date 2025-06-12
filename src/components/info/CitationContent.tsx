@@ -31,7 +31,7 @@ const CitationContent = () => {
 
         <p className="mt-8 text-sm">
           Thank you for acknowledging our work. If you have specific questions about citation, please feel free to{' '}
-          <a href="/info/contact-us">contact us</a>.
+          <a href="/contact-us">contact us</a>.
         </p>
       </article>
     </div>

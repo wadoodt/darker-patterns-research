@@ -1,13 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LogOut, UserCircle, Settings, ChevronDown } from 'lucide-react';
+import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { useAuth } from '@/hooks/useAuth';
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
+import { ChevronDown, LogOut, Settings, UserCircle } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 export default function UserProfileButton() {
@@ -76,13 +76,13 @@ export default function UserProfileButton() {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/admin/profile">
+          <Link href="/profile">
             <UserCircle className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/admin/settings">
+          <Link href="/settings">
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </Link>

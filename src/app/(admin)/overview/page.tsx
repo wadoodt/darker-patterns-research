@@ -79,98 +79,108 @@ const overviewStaticData = {
 
 export const metadata: Metadata = { title: 'Project Overview - DPV Admin' };
 
+function StatsCardSection({ completionPercent }: { completionPercent: number }) {
+  return (
+    <section className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      <StatCardAdmin
+        title="Total Entries"
+        value={overviewStaticData.totalEntries.toLocaleString()}
+        icon={<BarChartHorizontalBig className="text-dark-text-secondary" size={24} />}
+        progressPercent={100}
+        progressColor="bg-brand-purple-500"
+      />
+      <StatCardAdmin
+        title="Entries Completed"
+        value={`${overviewStaticData.entriesCompleted.toLocaleString()}`}
+        valueSecondary={`/ ${completionPercent}%`}
+        valueSecondaryColor="stat-card-value-secondary"
+        icon={<CheckCircle className="text-green-500" size={24} />}
+        progressPercent={completionPercent}
+        progressColor="bg-green-500"
+      />
+      <StatCardAdmin
+        title="Avg. Time / Entry"
+        value={overviewStaticData.avgTimePerEntry}
+        icon={<Clock className="text-dark-text-secondary" size={24} />}
+        footerText={`Target: ${overviewStaticData.avgTimeTarget}`}
+        footerIcon={<TrendingUp className="text-yellow-500" size={16} />}
+        footerColor="text-yellow-500"
+      />
+      <StatCardAdmin
+        title="Active Participants"
+        value={overviewStaticData.activeParticipants.toLocaleString()}
+        icon={<Users className="text-dark-text-secondary" size={24} />}
+        footerText={`${overviewStaticData.activeParticipantsChange.split(' ')[0]} ${overviewStaticData.activeParticipantsChange.split(' ')[1]}`}
+        footerIcon={<TrendingUp className="text-green-500" size={16} />}
+        footerColor="text-green-500"
+      />
+    </section>
+  );
+}
+
+function ChartsSection() {
+  return (
+    <section className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="admin-card lg:col-span-2">
+        <h2 className="text-dark-text-primary mb-4 text-xl font-semibold">Project Progress Overview</h2>
+        <ChartPlaceholder
+          description="Visual representation of data entries over time, highlighting milestones and completion trends."
+          height="h-72"
+          icon={<PieChart className="chart-placeholder-icon" />}
+        />
+      </div>
+      <div className="admin-card">
+        <h2 className="text-dark-text-primary mb-4 text-xl font-semibold">Participant Demographics</h2>
+        <DemographicsChartAdmin
+          ageData={overviewStaticData.demographics.age}
+          techBgData={overviewStaticData.demographics.technicalBackground}
+        />
+      </div>
+    </section>
+  );
+}
+
+function RecentActivitySection() {
+  return (
+    <section>
+      <h2 className="text-dark-text-primary mb-5 text-xl font-bold sm:mb-6 sm:text-2xl">Recent Activity</h2>
+      <div className="admin-card p-0">
+        {overviewStaticData.recentActivity.length > 0 ? (
+          <ul className="activity-list">
+            {overviewStaticData.recentActivity.map((activity) => {
+              const IconComponent = activity.iconType;
+              return (
+                <ActivityItem
+                  key={activity.id}
+                  icon={<IconComponent size={20} className={activity.iconColor} />}
+                  text={activity.text}
+                  time={activity.time}
+                  actionLink={activity.actionLink}
+                  actionText={activity.actionText}
+                />
+              );
+            })}
+          </ul>
+        ) : (
+          <div className="text-dark-text-secondary p-6 text-center">No recent activity.</div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default function ProjectOverviewPage() {
   const completionPercent = Math.round((overviewStaticData.entriesCompleted / overviewStaticData.totalEntries) * 100);
 
   return (
     <>
-      {' '}
-      {/* AdminDashboardLayout already provides the main flex container */}
       <AdminHeader
         title="Dark Pattern in LLMs - DPO dataset human Validation"
         objective="Objective: Validate a dataset for detecting dark patterns in Large Language Models through human evaluation."
-        // className="mb-8 sm:mb-10" // Spacing is handled by AdminHeader's internal class
       />
-      {/* Stats Cards Section */}
-      <section className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCardAdmin
-          title="Total Entries"
-          value={overviewStaticData.totalEntries.toLocaleString()}
-          icon={<BarChartHorizontalBig className="text-dark-text-secondary" size={24} />}
-          progressPercent={100} // Assuming total is always 100% for itself
-          progressColor="bg-brand-purple-500"
-        />
-        <StatCardAdmin
-          title="Entries Completed"
-          value={`${overviewStaticData.entriesCompleted.toLocaleString()}`}
-          valueSecondary={`/ ${completionPercent}%`}
-          valueSecondaryColor="stat-card-value-secondary" // Uses the CSS class for styling
-          icon={<CheckCircle className="text-green-500" size={24} />}
-          progressPercent={completionPercent}
-          progressColor="bg-green-500"
-        />
-        <StatCardAdmin
-          title="Avg. Time / Entry"
-          value={overviewStaticData.avgTimePerEntry}
-          icon={<Clock className="text-dark-text-secondary" size={24} />}
-          footerText={`Target: ${overviewStaticData.avgTimeTarget}`}
-          footerIcon={<TrendingUp className="text-yellow-500" size={16} />} // Lucide icon directly
-          footerColor="text-yellow-500"
-        />
-        <StatCardAdmin
-          title="Active Participants"
-          value={overviewStaticData.activeParticipants.toLocaleString()}
-          icon={<Users className="text-dark-text-secondary" size={24} />}
-          footerText={`${overviewStaticData.activeParticipantsChange.split(' ')[0]} ${overviewStaticData.activeParticipantsChange.split(' ')[1]}`}
-          footerIcon={<TrendingUp className="text-green-500" size={16} />} // Corrected icon usage
-          footerColor="text-green-500"
-        />
-      </section>
-      {/* Main Content Sections (Charts) */}
-      <section className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="admin-card lg:col-span-2">
-          <h2 className="text-dark-text-primary mb-4 text-xl font-semibold">Project Progress Overview</h2>
-          <ChartPlaceholder
-            description="Visual representation of data entries over time, highlighting milestones and completion trends."
-            height="h-72"
-            icon={<PieChart className="chart-placeholder-icon" />}
-          />
-        </div>
-        <div className="admin-card">
-          <h2 className="text-dark-text-primary mb-4 text-xl font-semibold">Participant Demographics</h2>
-          <DemographicsChartAdmin
-            ageData={overviewStaticData.demographics.age}
-            techBgData={overviewStaticData.demographics.technicalBackground}
-          />
-        </div>
-      </section>
-      {/* Recent Activity Section */}
-      <section>
-        <h2 className="text-dark-text-primary mb-5 text-xl font-bold sm:mb-6 sm:text-2xl">Recent Activity</h2>
-        <div className="admin-card p-0">
-          {' '}
-          {/* Remove card padding if list items have their own */}
-          {overviewStaticData.recentActivity.length > 0 ? (
-            <ul className="activity-list">
-              {overviewStaticData.recentActivity.map((activity) => {
-                const IconComponent = activity.iconType;
-                return (
-                  <ActivityItem
-                    key={activity.id}
-                    icon={<IconComponent size={20} className={activity.iconColor} />}
-                    text={activity.text}
-                    time={activity.time}
-                    actionLink={activity.actionLink}
-                    actionText={activity.actionText}
-                  />
-                );
-              })}
-            </ul>
-          ) : (
-            <div className="text-dark-text-secondary p-6 text-center">No recent activity.</div>
-          )}
-        </div>
-      </section>
+      <StatsCardSection completionPercent={completionPercent} />
+      <ChartsSection />
+      <RecentActivitySection />
     </>
   );
 }

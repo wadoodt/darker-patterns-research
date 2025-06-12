@@ -18,8 +18,8 @@ export type AnimationType =
   | 'anim-fade-in-right'
   | 'anim-scale-up'; // Added scale-up
 
-const useScrollAnimation = (options?: IntersectionObserverOptions): RefObject<HTMLDivElement> => {
-  const elementRef = useRef<HTMLDivElement>(null!);
+const useScrollAnimation = <T extends HTMLElement>(options?: IntersectionObserverOptions): RefObject<T> => {
+  const elementRef = useRef<T>(null!);
 
   useEffect(() => {
     const node = elementRef.current;

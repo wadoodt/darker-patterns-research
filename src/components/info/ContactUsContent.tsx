@@ -52,9 +52,8 @@ const ContactUsContent = () => {
             </div>
             <p className="text-light-text-secondary mt-2 text-sm">
               For details regarding ethical considerations, data privacy, and participant rights, please refer to our{' '}
-              <a href="/info/ethics-privacy-participation">Ethics, Privacy & Participation</a> page. Information about
-              our research goals and methodology can be found on the{' '}
-              <a href="/info/about-research">About Our Research</a> page.
+              <a href="/ethics-privacy-participation">Ethics, Privacy & Participation</a> page. Information about our
+              research goals and methodology can be found on the <a href="/about-research">About Our Research</a> page.
             </p>
           </div>
         </section>

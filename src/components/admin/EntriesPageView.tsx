@@ -104,7 +104,7 @@ const tableColumns: Column<DisplayEntry>[] = [
     header: 'Actions',
     renderCell: (entry) => (
       <Link
-        href={`/admin/entries/${entry.id}`}
+        href={`/entries/${entry.id}`}
         className="text-brand-purple-400 flex items-center gap-1 text-sm font-medium hover:underline"
       >
         <Eye size={16} /> View

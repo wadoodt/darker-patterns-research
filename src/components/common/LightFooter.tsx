@@ -26,17 +26,15 @@ const LightFooter = () => {
 
   return (
     <footer className="light-footer">
-      {' '}
-      {/* Class from /styles/survey.css or footers.css */}
       <div className="light-footer-content">
         <div className="mb-6 flex justify-center space-x-6">
-          {renderLink('/info/ethics-privacy-participation', 'link-standard-light text-xs', 'Ethics &amp; Privacy')}
-          {renderLink('/info/terms-conditions', 'link-standard-light text-xs', 'Terms')}
-          {renderLink('/info/contact-us', 'link-standard-light text-xs', 'Contact Us')}
+          {renderLink('/ethics-privacy-participation', 'link-standard-light text-xs', 'Ethics & Privacy')}
+          {renderLink('/terms-conditions', 'link-standard-light text-xs', 'Terms')}
+          {renderLink('/contact-us', 'link-standard-light text-xs', 'Contact Us')}
         </div>
         <p className="light-footer-credit">Dark Pattern Validation Project &copy; {new Date().getFullYear()}.</p>
         <p className="light-footer-text">
-          Built with <span className="text-red-500">&hearts;</span> by the Firebase team.
+          Built with <span className="text-red-500">&hearts;</span> by Anthony Laguan.
         </p>
       </div>
     </footer>

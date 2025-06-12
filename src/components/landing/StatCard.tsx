@@ -1,8 +1,9 @@
 // src/components/landing/StatCard.tsx
 'use client';
-import React, { useEffect, useRef, useState } from 'react'; // Ensure React is explicitly imported
-import type { ReactNode } from 'react';
+import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface StatCardProps {
   title: string;
@@ -12,14 +13,15 @@ interface StatCardProps {
   changeColor?: string;
   unit?: string;
   className?: string;
+  animationDelay?: number; // This can be used by a parent component if needed
 }
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, changeText, changeColor, unit, className }) => {
-  const valueRef = useRef<HTMLParagraphElement>(null);
   const [displayValue, setDisplayValue] = useState('0');
   const [hasAnimated, setHasAnimated] = useState(false);
+  const cardRef = useScrollAnimation<HTMLDivElement>({ animationClass: 'anim-fade-in-up' });
+  const valueRef = useRef<HTMLParagraphElement>(null);
 
-  // Determine targetValue, handling strings with '+' or other non-numeric parts
   const parseTargetValue = (val: string | number): number => {
     if (typeof val === 'number') return val;
     return parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
@@ -34,7 +36,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, changeText, cha
       (entries) => {
         if (entries[0].isIntersecting) {
           setHasAnimated(true);
-          const duration = 1500; // ms
+          // Count-up animation logic...
+          const duration = 1500;
           const startTime = performance.now();
 
           const animateCount = (currentTime: number) => {
@@ -43,28 +46,14 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, changeText, cha
             let currentValToSet: string;
 
             if (progress === 1) {
-              // Use original string 'value' if it contains non-numeric parts like '+'
-              // Otherwise, format the target number.
-              if (typeof value === 'string' && isNaN(parseTargetValue(value))) {
-                currentValToSet = value; // e.g. "3+", "N/A"
-              } else if (
-                typeof value === 'string' &&
-                String(value).includes(String(targetValue)) &&
-                String(value) !== String(targetValue)
-              ) {
-                currentValToSet = value; // e.g. "1,234" string input, keep as is
+              if (typeof value === 'string' && String(value) !== String(targetValue)) {
+                currentValToSet = value;
               } else {
-                currentValToSet = targetValue.toLocaleString(undefined, {
-                  minimumFractionDigits: targetValue % 1 !== 0 ? 2 : 0,
-                  maximumFractionDigits: targetValue % 1 !== 0 ? 2 : 0,
-                });
+                currentValToSet = targetValue.toLocaleString();
               }
             } else {
               const currentNum = progress * targetValue;
-              currentValToSet = currentNum.toLocaleString(undefined, {
-                minimumFractionDigits: targetValue % 1 !== 0 ? 2 : 0,
-                maximumFractionDigits: targetValue % 1 !== 0 ? 2 : 0,
-              });
+              currentValToSet = Math.round(currentNum).toLocaleString();
             }
             setDisplayValue(currentValToSet);
 
@@ -80,27 +69,26 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, changeText, cha
     );
 
     observer.observe(node);
+
     return () => {
       if (node) {
         observer.unobserve(node);
       }
       observer.disconnect();
     };
-  }, [targetValue, hasAnimated, value]);
+  }, [hasAnimated, targetValue, value]);
 
   return (
-    <div className={cn('landing-stat-card scroll-animate-item', className)}>
-      {' '}
-      {/* Added scroll-animate-item for consistency */}
+    <div ref={cardRef} className={cn('landing-stat-card', className)}>
       <div className="mb-1 flex w-full items-center justify-between">
-        <p className="text-base font-semibold text-gray-700 sm:text-lg">{title}</p>
-        <div className="text-brand-purple-500">{icon}</div>
+        <p className="stat-title">{title}</p>
+        <div className="stat-icon">{icon}</div>
       </div>
-      <p ref={valueRef} className="font-heading-display mt-1 text-3xl font-bold text-gray-900 sm:text-4xl">
+      <p ref={valueRef} className="stat-value mt-1">
         {displayValue}
-        {unit && !String(displayValue).includes(unit) && <span className="text-2xl sm:text-3xl">{unit}</span>}
+        {unit && !String(displayValue).includes(unit) && <span className="stat-value-unit">{unit}</span>}
       </p>
-      {changeText && <p className={cn('mt-1 text-sm font-medium', changeColor || 'text-gray-500')}>{changeText}</p>}
+      {changeText && <p className={cn('stat-change mt-1', changeColor)}>{changeText}</p>}
     </div>
   );
 };

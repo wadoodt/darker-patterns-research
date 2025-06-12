@@ -9,7 +9,7 @@ interface CTAButtonProps {
   className?: string;
   isDark?: boolean; // To switch between dark and light versions
   // Allow all other button or anchor props
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const sparkleColors = ['#A78BFA', '#C4B5FD', '#818CF8', '#F472B6'];

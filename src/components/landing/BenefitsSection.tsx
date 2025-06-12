@@ -1,12 +1,10 @@
 // src/components/landing/BenefitsSection.tsx
 'use client';
-import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { Brain, FileText, Users, Zap } from 'lucide-react';
+import Link from 'next/link';
 import BenefitItem from './BenefitItem';
 
 const BenefitsSection = () => {
-  const sectionRef = useScrollAnimation({ animationClass: 'anim-fade-in-up', threshold: 0.2, triggerOnce: true });
-
   const benefits = [
     {
       title: 'Access to Findings',
@@ -30,15 +28,29 @@ const BenefitsSection = () => {
     },
   ];
   return (
-    <section id="benefits" className="bg-dark-bg-primary py-16 sm:py-24">
-      <div ref={sectionRef} className="scroll-animate-item mx-auto max-w-4xl px-6 lg:px-8">
-        <h2 className="font-heading-display text-dark-text-primary text-glow-landing-alt mb-12 text-center text-3xl font-bold tracking-tight sm:text-4xl">
-          Why Your Participation Matters
-        </h2>
-        <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2">
-          {benefits.map((benefit, index) => (
-            <BenefitItem key={index} {...benefit} animationDelay={`${index * 100}ms`} />
-          ))}
+    <section id="benefits" className="py-16 sm:py-24">
+      <div className="section-container">
+        <div className="mx-auto max-w-2xl lg:text-center">
+          <h2 className="section-title">Benefits of Participation</h2>
+          <p className="hero-paragraph mx-auto mt-4 max-w-2xl">
+            Your involvement directly contributes to a safer, more transparent digital ecosystem for everyone.
+          </p>
+        </div>
+        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4">
+            {benefits.map((benefit, index) => (
+              <BenefitItem key={index} {...benefit} animationDelay={`${index * 100}ms`} />
+            ))}
+          </dl>
+          <div className="mt-16 text-center">
+            <Link
+              href="/benefits"
+              className="btn-link-dark px-6 py-2.5 text-base"
+              aria-label="Learn more about the benefits of participation"
+            >
+              Learn More About Benefits
+            </Link>
+          </div>
         </div>
       </div>
     </section>

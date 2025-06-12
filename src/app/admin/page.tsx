@@ -1,9 +1,53 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import ActivityItem from '@/components/admin/ActivityItem';
+import { ChartCard } from '@/components/admin/ChartCard';
+import ChartPlaceholder from '@/components/admin/ChartPlaceholder';
+import { StatCard } from '@/components/admin/StatCard';
 import { useAuth } from '@/hooks/useAuth';
-import { BarChart, LineChart, PieChart, Users, AlertTriangle, CheckCircle } from 'lucide-react';
-import Image from 'next/image';
+import { AlertTriangle, BarChart, CheckCircle, LineChart, PieChart, Users } from 'lucide-react';
+
+const ACTIVITY_ITEMS = [
+  {
+    icon: <CheckCircle className="text-green-500" />,
+    text: 'New submission #1235 approved',
+    time: '2 hours ago by @researcher_jane',
+  },
+  {
+    icon: <AlertTriangle className="text-yellow-500" />,
+    text: 'Pattern "Roach Motel" definition updated',
+    time: '5 hours ago by @admin_mike',
+  },
+  {
+    icon: <Users className="text-blue-500" />,
+    text: 'New user "contributor_sam" registered',
+    time: '1 day ago',
+  },
+] as const;
+
+const STAT_CARDS = [
+  {
+    title: 'Total Submissions',
+    value: '1,234',
+    change: '+20.1% from last month',
+    icon: BarChart,
+    iconColorClass: 'text-primary',
+  },
+  {
+    title: 'Registered Users',
+    value: '258',
+    change: '+15 since last week',
+    icon: Users,
+    iconColorClass: 'text-accent',
+  },
+  {
+    title: 'Patterns Identified',
+    value: '78',
+    change: 'Across 12 categories',
+    icon: AlertTriangle,
+    iconColorClass: 'text-destructive',
+  },
+] as const;
 
 export default function AdminDashboardPage() {
   const { profile } = useAuth();
@@ -18,96 +62,35 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="shadow-lg transition-shadow duration-300 hover:shadow-xl">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Submissions</CardTitle>
-            <BarChart className="text-primary h-5 w-5" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-foreground text-3xl font-bold">1,234</div>
-            <p className="text-muted-foreground text-xs">+20.1% from last month</p>
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg transition-shadow duration-300 hover:shadow-xl">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Registered Users</CardTitle>
-            <Users className="text-accent h-5 w-5" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-foreground text-3xl font-bold">258</div>
-            <p className="text-muted-foreground text-xs">+15 since last week</p>
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg transition-shadow duration-300 hover:shadow-xl">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Patterns Identified</CardTitle>
-            <AlertTriangle className="text-destructive h-5 w-5" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-foreground text-3xl font-bold">78</div>
-            <p className="text-muted-foreground text-xs">Across 12 categories</p>
-          </CardContent>
-        </Card>
+        {STAT_CARDS.map((card) => (
+          <StatCard key={card.title} {...card} />
+        ))}
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <Card className="shadow-lg lg:col-span-3">
-          <CardHeader>
-            <CardTitle className="font-headline">Submission Trends</CardTitle>
-            <CardDescription>Monthly submissions over the last year.</CardDescription>
-          </CardHeader>
-          <CardContent className="pl-2">
-            {/* Placeholder for chart */}
-            <div className="bg-muted/50 flex h-[350px] w-full items-center justify-center rounded-md">
-              <LineChart className="text-muted-foreground h-16 w-16" />
-              <p className="text-muted-foreground ml-4">Chart data would be displayed here.</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="shadow-lg lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="font-headline">Pattern Distribution</CardTitle>
-            <CardDescription>Breakdown of identified dark patterns by type.</CardDescription>
-          </CardHeader>
-          <CardContent className="flex items-center justify-center">
-            {/* Placeholder for chart */}
-            <div className="bg-muted/50 flex h-[350px] w-full items-center justify-center rounded-md">
-              <PieChart className="text-muted-foreground h-16 w-16" />
-              <p className="text-muted-foreground ml-4">Pie chart of patterns.</p>
-            </div>
-          </CardContent>
-        </Card>
+        <ChartCard title="Submission Trends" description="Monthly submissions over the last year" colSpan={3}>
+          <ChartPlaceholder
+            icon={<LineChart size={48} />}
+            height="h-[350px]"
+            description="Visualizing submission trends over time"
+          />
+        </ChartCard>
+
+        <ChartCard title="Pattern Distribution" description="Breakdown of identified dark patterns by type" colSpan={2}>
+          <ChartPlaceholder
+            icon={<PieChart size={48} />}
+            height="h-[350px]"
+            description="Distribution of dark pattern categories"
+          />
+        </ChartCard>
       </div>
-      <Card className="mt-8 shadow-lg">
-        <CardHeader>
-          <CardTitle className="font-headline">Recent Activity</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-3">
-            <li className="bg-muted/30 flex items-center space-x-3 rounded-md p-3">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <div>
-                <p className="text-foreground font-medium">New submission #1235 approved.</p>
-                <p className="text-muted-foreground text-xs">2 hours ago by @researcher_jane</p>
-              </div>
-            </li>
-            <li className="bg-muted/30 flex items-center space-x-3 rounded-md p-3">
-              <AlertTriangle className="h-5 w-5 text-yellow-500" />
-              <div>
-                <p className="text-foreground font-medium">Pattern "Roach Motel" definition updated.</p>
-                <p className="text-muted-foreground text-xs">5 hours ago by @admin_mike</p>
-              </div>
-            </li>
-            <li className="bg-muted/30 flex items-center space-x-3 rounded-md p-3">
-              <Users className="h-5 w-5 text-blue-500" />
-              <div>
-                <p className="text-foreground font-medium">New user "contributor_sam" registered.</p>
-                <p className="text-muted-foreground text-xs">1 day ago</p>
-              </div>
-            </li>
-          </ul>
-        </CardContent>
-      </Card>
+      <ChartCard title="Recent Activity" className="mt-8">
+        <ul className="space-y-3">
+          {ACTIVITY_ITEMS.map((item) => (
+            <ActivityItem key={item.text} {...item} />
+          ))}
+        </ul>
+      </ChartCard>
     </div>
   );
 }

@@ -11,11 +11,11 @@ const AdminSidebar = () => {
   const { user, profile, logout, loading: authLoading, isAdmin } = useAuth();
 
   const navItems = [
-    { href: '/admin/overview', label: 'Project Overview', icon: LayoutDashboard, adminOnly: false },
-    { href: '/admin/entries', label: 'DPO Entries', icon: ListChecks, adminOnly: false }, // Updated label
-    { href: '/admin/statistics', label: 'Survey Statistics', icon: BarChart3, adminOnly: false }, // Updated label
+    { href: '/overview', label: 'Project Overview', icon: LayoutDashboard, adminOnly: false },
+    { href: '/entries', label: 'DPO Entries', icon: ListChecks, adminOnly: false }, // Updated label
+    { href: '/statistics', label: 'Survey Statistics', icon: BarChart3, adminOnly: false }, // Updated label
     // Add other nav items like Pattern Definitions, User Management here later
-    { href: '/admin/settings', label: 'Project Settings', icon: Settings, adminOnly: true },
+    { href: '/settings', label: 'Project Settings', icon: Settings, adminOnly: true },
   ];
 
   const handleLogout = async () => {
@@ -62,7 +62,7 @@ const AdminSidebar = () => {
         {navItems.map((item) => {
           if (item.adminOnly && !isAdmin) return null;
 
-          const isActive = item.href === '/admin/overview' ? pathname === item.href : pathname.startsWith(item.href);
+          const isActive = item.href === '/overview' ? pathname === item.href : pathname.startsWith(item.href);
           return (
             <Link key={item.label} href={item.href} className={`admin-sidebar-navlink ${isActive ? 'active' : ''}`}>
               <item.icon className="admin-sidebar-navlink-icon" strokeWidth={isActive ? 2.5 : 2} />

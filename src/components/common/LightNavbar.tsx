@@ -1,5 +1,10 @@
 // components/common/LightNavbar.tsx
+'use client';
+
+import { getLinkGroup, navLinks } from '@/lib/navigation';
+import { usePathname } from 'next/navigation';
 import React from 'react';
+import CTAButton from '../landing/CTAButton';
 import ProtectedLink from './ProtectedLink';
 import StylizedLink from './StylizedLink';
 
@@ -8,6 +13,11 @@ interface LightNavbarProps {
 }
 
 const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) => {
+  const pathname = usePathname();
+  const currentGroup = getLinkGroup(pathname);
+
+  const mainNavLinks = navLinks.filter((link) => link.group === 'landing');
+
   // Helper function to determine if a path requires protection
   const needsProtection = (path: string): boolean => {
     return path.startsWith('/survey');
@@ -26,7 +36,7 @@ const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) =>
       );
     }
     return (
-      <StylizedLink href={href} className={className}>
+      <StylizedLink href={href} className={className} key={href}>
         {children}
       </StylizedLink>
     );
@@ -48,12 +58,16 @@ const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) =>
           )}
         </div>
         <div className="hidden lg:flex lg:gap-x-6">
-          {renderLink('/info/about-research', 'light-navbar-link', 'About Research')}
-          {renderLink('/info/benefits', 'light-navbar-link', 'Benefits')}
-          {renderLink('/info/researchers', 'light-navbar-link', 'The Team')}
+          {mainNavLinks.map((link) => renderLink(link.href, 'light-navbar-link', link.label))}
         </div>
         <div className="flex flex-1 justify-end">
-          {renderLink('/admin/login', 'light-navbar-action-button', 'Access for Researchers')}
+          {currentGroup === 'info' ? (
+            <CTAButton href="/step-introduction" className="px-4 py-2 text-sm">
+              Start Survey
+            </CTAButton>
+          ) : (
+            renderLink('/login', 'light-navbar-action-button', 'Access for Researchers')
+          )}
         </div>
       </nav>
     </header>

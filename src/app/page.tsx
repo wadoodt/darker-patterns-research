@@ -14,11 +14,11 @@ export const metadata: Metadata = {
 
 export default function RootPage() {
   return (
-    // This div ensures the landing page's specific layout (navbar, content, footer)
-    // takes up the necessary space within the body's flex container.
-    <div className="flex flex-1 flex-col">
+    // By removing the flex layout, the navbar and main content can now overlap,
+    // allowing the backdrop-blur to work correctly.
+    <div>
       <DarkNavbar />
-      <main className="flex-grow">
+      <main>
         <LandingPageContent />
       </main>
       <DarkFooter />

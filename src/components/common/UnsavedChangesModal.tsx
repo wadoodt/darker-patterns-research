@@ -1,35 +1,41 @@
 // src/components/common/UnsavedChangesModal.tsx
 'use client';
-import React from 'react';
-import { useRouter } from 'next/navigation'; // If modal itself navigates
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose, // If you want an X button
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { AlertTriangle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface UnsavedChangesModalProps {
   isOpen: boolean;
-  onLeave: () => void; // Called when user confirms they want to leave (discarding changes)
-  onStay: () => void; // Called when user decides to stay
-  nextPath?: string | null; // The path to navigate to if "Leave" is chosen
+  onLeave: () => void;
+  onStay: () => void;
+  nextPath?: string | null;
+  handleNavigation?: boolean; // New prop to control whether modal handles navigation
 }
 
-const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({ isOpen, onLeave, onStay, nextPath }) => {
+const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({
+  isOpen,
+  onLeave,
+  onStay,
+  nextPath,
+  handleNavigation = false, // Default to false for backward compatibility
+}) => {
   const router = useRouter();
 
   const handleLeaveClick = () => {
-    onLeave(); // Parent handles state changes like hasUnsavedChanges = false
-    // Navigation can be handled by the parent that called onLeave, or here:
-    // if (nextPath) {
-    //   router.push(nextPath);
-    // }
+    onLeave(); // Parent handles state changes
+    // Only handle navigation if explicitly requested and nextPath is provided
+    if (handleNavigation && nextPath) {
+      router.push(nextPath);
+    }
   };
 
   if (!isOpen) {

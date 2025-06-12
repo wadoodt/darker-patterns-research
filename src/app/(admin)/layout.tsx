@@ -13,22 +13,22 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
 
   useEffect(() => {
     if (!authLoading) {
-      if (pathname === '/admin/login') {
+      if (pathname === '/login') {
         if (user && (isResearcher || isAdmin)) {
-          router.replace('/admin/overview');
+          router.replace('/overview');
         }
         return;
       }
 
       if (!user) {
-        router.replace('/admin/login?reason=unauthenticated');
+        router.replace('/login?reason=unauthenticated');
       } else if (!(isResearcher || isAdmin)) {
-        router.replace('/admin/login?reason=unauthorized');
+        router.replace('/login?reason=unauthorized');
       }
     }
   }, [user, authLoading, isResearcher, isAdmin, router, pathname]);
 
-  if (authLoading || (pathname === '/admin/login' && user && (isResearcher || isAdmin))) {
+  if (authLoading || (pathname === '/login' && user && (isResearcher || isAdmin))) {
     return (
       <div className="bg-dark-bg-primary text-dark-text-primary flex min-h-screen items-center justify-center">
         <Loader2 className="text-brand-purple-400 h-8 w-8 animate-spin" />
@@ -37,7 +37,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
     );
   }
 
-  if (pathname !== '/admin/login' && (!user || !(isResearcher || isAdmin))) {
+  if (pathname !== '/login' && (!user || !(isResearcher || isAdmin))) {
     return (
       <div className="bg-dark-bg-primary text-dark-text-primary flex min-h-screen items-center justify-center">
         <Loader2 className="text-brand-purple-400 h-8 w-8 animate-spin" />
@@ -46,7 +46,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
     );
   }
 
-  if (pathname === '/admin/login') {
+  if (pathname === '/login') {
     return <>{children}</>;
   }
 

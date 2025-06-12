@@ -4,10 +4,107 @@
 
 .landing-hero-title {
   @apply font-heading-display text-dark-text-primary text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl;
-  /* Potentially add .text-glow-landing-alt here or directly in component */
+  @apply text-glow-landing-alt;
+}
+
+.hero-paragraph {
+  @apply text-dark-text-secondary text-lg leading-8;
+}
+
+.hero-paragraph-highlight {
+  @apply text-brand-purple-300;
+}
+
+/* --- Reusable Section & Container Styles --- */
+.section-container {
+  @apply mx-auto w-full max-w-7xl px-6 lg:px-8;
+}
+
+.section-alt-bg {
+  @apply bg-dark-bg-secondary;
+}
+
+/* --- Reusable Section Title --- */
+.section-title {
+  @apply font-heading-display text-dark-text-primary text-glow-landing-alt mb-12 text-center text-3xl font-bold tracking-tight sm:text-4xl;
 }
 
 .landing-stat-card {
-  @apply rounded-card-default bg-light-bg-secondary shadow-card-light flex flex-col items-start p-6;
-  /* Note: Stats cards on landing were light on dark bg */
+  @apply rounded-lg border border-white/10 bg-white/5 p-6 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out;
+}
+
+.landing-stat-card:hover {
+  @apply -translate-y-1 border-white/20 bg-white/10 shadow-purple-900/50;
+}
+
+/* --- Dark Navbar Specific Styles --- */
+.dark-navbar {
+  @apply bg-dark-bg-primary/80 shadow-lg backdrop-blur-md;
+}
+
+.dark-navbar-content {
+  @apply mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8;
+}
+
+.dark-navbar-logo-accent {
+  @apply text-brand-purple-400; /* As per original HTML 'text-purple-400' */
+}
+
+.dark-navbar-logo-text {
+  @apply text-dark-text-primary font-semibold;
+}
+
+.dark-navbar-link {
+  @apply text-dark-text-secondary hover:text-dark-text-primary text-sm leading-6 font-medium transition-colors;
+}
+
+/* --- Dark Footer Specific Styles --- */
+.dark-footer {
+  @apply bg-dark-bg-primary border-t border-white/10;
+}
+
+.dark-footer-content {
+  @apply mx-auto max-w-7xl px-6 py-12 text-center lg:px-8;
+}
+
+.dark-footer-link {
+  @apply text-dark-text-secondary hover:text-dark-text-primary text-sm leading-6 transition-colors;
+}
+
+.dark-footer-copyright {
+  @apply text-dark-text-tertiary mt-8 text-xs leading-5;
+}
+
+/* --- Stat Card Internal Styles --- */
+.landing-stat-card .stat-title {
+  @apply text-dark-text-secondary text-base font-semibold sm:text-lg;
+}
+.landing-stat-card .stat-icon {
+  @apply text-brand-purple-400;
+}
+.landing-stat-card .stat-value {
+  @apply font-heading-display text-dark-text-primary text-3xl font-bold sm:text-4xl;
+}
+.landing-stat-card .stat-value-unit {
+  @apply text-2xl sm:text-3xl;
+}
+.landing-stat-card .stat-change {
+  @apply text-dark-text-tertiary mt-1 text-sm font-medium;
+}
+
+/* --- Benefit Item Styles --- */
+.benefit-item {
+  @apply bg-dark-bg-tertiary/70 flex items-start gap-4 rounded-xl p-6 shadow-lg transition-all duration-300 ease-in-out sm:gap-5;
+}
+.benefit-item:hover {
+  @apply -translate-y-1 bg-purple-900/20 shadow-purple-900/50;
+}
+.benefit-item .benefit-icon {
+  @apply text-brand-purple-400 mt-1 flex-shrink-0;
+}
+.benefit-item .benefit-title {
+  @apply text-dark-text-primary text-lg font-semibold sm:text-xl;
+}
+.benefit-item .benefit-description {
+  @apply text-dark-text-secondary mt-1 text-sm leading-relaxed sm:text-base;
 }

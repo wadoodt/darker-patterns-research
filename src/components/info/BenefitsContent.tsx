@@ -62,7 +62,7 @@ const BenefitsContent = () => {
           effort.
         </p>
         <p className="mt-6">
-          Ready to make an impact? <Link href="/survey/step-introduction">Start the survey now.</Link>
+          Ready to make an impact? <Link href="/step-introduction">Start the survey now.</Link>
         </p>
       </article>
     </div>
