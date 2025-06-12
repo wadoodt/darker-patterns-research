@@ -1,9 +1,8 @@
 // src/components/landing/BenefitsSection.tsx
 'use client';
-import React from 'react';
-import BenefitItem from './BenefitItem';
-import { FileText, Brain, Users, Zap } from 'lucide-react';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
+import { Brain, FileText, Users, Zap } from 'lucide-react';
+import BenefitItem from './BenefitItem';
 
 const BenefitsSection = () => {
   const sectionRef = useScrollAnimation({ animationClass: 'anim-fade-in-up', threshold: 0.2, triggerOnce: true });
@@ -33,8 +32,6 @@ const BenefitsSection = () => {
   return (
     <section id="benefits" className="bg-dark-bg-primary py-16 sm:py-24">
       <div ref={sectionRef} className="scroll-animate-item mx-auto max-w-4xl px-6 lg:px-8">
-        {' '}
-        {/* Wider for benefits */}
         <h2 className="font-heading-display text-dark-text-primary text-glow-landing-alt mb-12 text-center text-3xl font-bold tracking-tight sm:text-4xl">
           Why Your Participation Matters
         </h2>

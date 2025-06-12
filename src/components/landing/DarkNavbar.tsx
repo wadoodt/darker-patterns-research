@@ -1,8 +1,9 @@
 // components/landing/DarkNavbar.tsx
 'use client';
-import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react'; // Icons for mobile menu
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import CTAButton from './CTAButton';
 
 const DarkNavbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -46,13 +47,12 @@ const DarkNavbar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end">
-          <Link
+          <CTAButton
             href="/survey/step-introduction"
-            className="btn-cta-dark hidden px-4 py-2 text-sm sm:inline-flex" // Hide on very small screens if menu is better
+            className="hidden px-4 py-2 text-sm sm:inline-flex" // Hide on very small screens if menu is better
           >
             Start Survey
-            <div className="sparkle-container"></div>
-          </Link>
+          </CTAButton>
           {/* Mobile Menu Button */}
           <div className="ml-3 lg:hidden">
             <button
@@ -104,14 +104,13 @@ const DarkNavbar = () => {
                   ))}
                 </div>
                 <div className="py-6">
-                  <Link
+                  <CTAButton
                     href="/survey/step-introduction"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="btn-cta-dark w-full justify-center px-4 py-2.5 text-base"
+                    className="w-full justify-center px-4 py-2.5 text-base"
                   >
                     Start Survey
-                    <div className="sparkle-container"></div>
-                  </Link>
+                  </CTAButton>
                 </div>
               </div>
             </div>

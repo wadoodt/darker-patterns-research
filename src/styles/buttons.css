@@ -25,12 +25,16 @@
     var(--shadow-cta-glow-purple-soft),
     inset 0 1px 1px var(--color-white-alpha-20);
   border: 1px solid var(--color-brand-purple-500-alpha-20);
-  /* Animation */
-  background-size: 250% 100%; /* For shimmer, ensure it's larger than button */
+  background-size: 250% 100%;
+}
+
+/* Class to activate the looping animations */
+.cta-anim-active {
   animation:
     var(--animate-cta-subtle-pulse, cta-subtle-pulse 2.5s infinite ease-in-out),
     subtle-shimmer 4s linear infinite;
 }
+
 .btn-cta-dark::before {
   /* Shimmer effect - now part of the main animation stack */
   content: '';
@@ -66,10 +70,14 @@
     inset 0 1px 1px var(--color-white-alpha-20);
   border: 1px solid var(--color-brand-purple-500-alpha-20);
   background-size: 250% 100%;
+}
+
+.btn-cta-light.cta-anim-active {
   animation:
     var(--animate-cta-subtle-pulse, cta-subtle-pulse 2.5s infinite ease-in-out),
     subtle-shimmer 4.5s linear infinite; /* Slightly different speed */
 }
+
 .btn-cta-light::before {
   content: '';
   @apply absolute inset-0 opacity-20;

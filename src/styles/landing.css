@@ -1,10 +1,5 @@
 .landing-hero-section {
   @apply relative overflow-hidden py-24 sm:py-32;
-  background: linear-gradient(
-    180deg,
-    var(--color-dark-bg-primary) 0%,
-    var(--color-brand-purple-950) 100%
-  ); /* Example gradient */
 }
 
 .landing-hero-title {
