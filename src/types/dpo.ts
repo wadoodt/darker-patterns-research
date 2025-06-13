@@ -1,5 +1,11 @@
 import type { Timestamp } from 'firebase/firestore';
 
+export interface DPOOption {
+  key: 'A' | 'B';
+  content: string;
+  isDatasetAccepted: boolean;
+}
+
 export interface DPOEntry {
   id: string;
   instruction: string;

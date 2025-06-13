@@ -71,3 +71,11 @@ export interface ActivityLogItem {
   actionLink?: string;
   actionText?: string;
 }
+
+export interface LandingStats {
+  totalParticipants?: number;
+  totalEvaluationsSubmitted?: number;
+  averageCompletionRate?: number;
+  modelsImpacted?: number;
+  lastUpdatedAt?: Timestamp | { seconds: number; nanoseconds: number };
+}

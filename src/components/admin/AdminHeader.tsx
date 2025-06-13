@@ -1,11 +1,6 @@
 // components/admin/AdminHeader.tsx
 import type React from 'react';
-
-interface AdminHeaderProps {
-  title: string;
-  objective?: string;
-  className?: string; // Allow passing additional classes
-}
+import type { AdminHeaderProps } from './AdminHeader.types';
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({ title, objective, className = '' }) => {
   return (

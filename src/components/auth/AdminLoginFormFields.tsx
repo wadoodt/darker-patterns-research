@@ -4,19 +4,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { LoginReason } from '@/lib/auth/types';
+import type { AdminLoginFormProps } from '@/types/form';
 import { AlertTriangle, Loader2, LogIn } from 'lucide-react';
-import type { UseFormReturn } from 'react-hook-form';
 
-interface AdminLoginFormFieldsProps {
-  form: UseFormReturn<{ email: string; password: string }>;
-  onSubmit: (data: { email: string; password: string }) => Promise<void>;
-  isSubmitting: boolean;
-  error?: string;
-  loginReason?: LoginReason;
-}
-
-export function AdminLoginFormFields({ form, onSubmit, isSubmitting, error, loginReason }: AdminLoginFormFieldsProps) {
+export function AdminLoginFormFields({ form, onSubmit, isSubmitting, error, loginReason }: AdminLoginFormProps) {
   const reasonMessages = {
     unauthorized: "Access Denied: Your account doesn't have admin/researcher privileges.",
     unauthenticated: 'Please log in to access the admin dashboard.',

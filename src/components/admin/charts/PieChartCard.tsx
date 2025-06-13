@@ -1,22 +1,9 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { ChartConfig } from '@/components/ui/chart';
 import { ChartContainer, ChartLegendContent, ChartTooltipContent } from '@/components/ui/chart';
+import type { PieChartCardProps } from '@/types/charts';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-
-interface PieChartData {
-  name: string;
-  value: number;
-  fill: string;
-}
-
-interface PieChartCardProps {
-  data: PieChartData[];
-  title: string;
-  description: string;
-  chartConfig: ChartConfig;
-}
 
 export function PieChartCard({ data, title, description, chartConfig }: PieChartCardProps) {
   if (!data?.length || data.every((d) => d.value === 0)) {
@@ -24,7 +11,7 @@ export function PieChartCard({ data, title, description, chartConfig }: PieChart
       <Card>
         <CardHeader>
           <CardTitle className="text-dark-text-primary text-base font-medium">{title}</CardTitle>
-          <CardDescription className="text-dark-text-tertiary text-xs">{description}</CardDescription>
+          {description && <CardDescription className="text-dark-text-tertiary text-xs">{description}</CardDescription>}
         </CardHeader>
         <CardContent className="text-dark-text-secondary flex h-[250px] items-center justify-center text-sm">
           (No data available)
@@ -37,7 +24,7 @@ export function PieChartCard({ data, title, description, chartConfig }: PieChart
     <Card>
       <CardHeader>
         <CardTitle className="text-dark-text-primary text-base font-medium">{title}</CardTitle>
-        <CardDescription className="text-dark-text-tertiary text-xs">{description}</CardDescription>
+        {description && <CardDescription className="text-dark-text-tertiary text-xs">{description}</CardDescription>}
       </CardHeader>
       <CardContent className="h-[250px]">
         <ChartContainer config={chartConfig} className="h-full w-full text-xs">

@@ -2,14 +2,7 @@
 import { db } from '@/lib/firebase';
 import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import UpdateList from './UpdateList';
-
-interface LandingUpdate {
-  id: string;
-  title: string;
-  date: Timestamp | { seconds: number; nanoseconds: number };
-  description: string;
-  iconName?: string;
-}
+import type { LandingUpdate } from './types';
 
 interface AdminSettings {
   landingPageUpdates?: LandingUpdate[];

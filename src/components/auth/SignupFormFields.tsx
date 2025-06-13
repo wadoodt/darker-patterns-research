@@ -3,17 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import type { SignupFormValues } from '@/lib/validations/signup';
 import { UserPlus } from 'lucide-react';
-import type { UseFormReturn } from 'react-hook-form';
 
-interface SignupFormFieldsProps {
-  form: UseFormReturn<SignupFormValues>;
-  onSubmit: (data: SignupFormValues) => Promise<void>;
-  isSubmitting: boolean;
-}
+import { SignupFormProps } from '@/types/form';
 
-export function SignupFormFields({ form, onSubmit, isSubmitting }: SignupFormFieldsProps) {
+export function SignupFormFields({ form, onSubmit, isSubmitting }: SignupFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

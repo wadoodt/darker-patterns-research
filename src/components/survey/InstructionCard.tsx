@@ -1,11 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Flag, Info } from 'lucide-react';
-
-export interface InstructionCardProps {
-  instruction: string;
-  isCurrentEvaluationSubmitted: boolean;
-  setIsFlagModalOpen: (open: boolean) => void;
-}
+import { InstructionCardProps } from './InstructionCard.types';
 
 export default function InstructionCard({
   instruction,

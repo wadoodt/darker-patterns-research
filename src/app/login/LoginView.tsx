@@ -1,20 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import type { LoginFormValues } from '@/lib/auth/loginSchema';
+import type { LoginViewProps } from './LoginView.types';
 import { AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
-import type { UseFormReturn } from 'react-hook-form';
 import { LoginForm } from './LoginForm';
-
-interface LoginViewProps {
-  form: UseFormReturn<LoginFormValues>;
-  onSubmit: (data: LoginFormValues) => void;
-  showPassword: boolean;
-  setShowPassword: (show: boolean) => void;
-  isSubmitting: boolean;
-  error?: string;
-  displayReason?: string;
-}
 
 export function LoginView({
   form,

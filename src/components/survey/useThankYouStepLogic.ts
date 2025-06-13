@@ -1,27 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
-
-export interface ThankYouStepLogic {
-  // State
-  localEmailForUpdates: string;
-  submittedEmailOnThisPage: boolean;
-  localEmailError: string | null;
-  effectiveEmail: string | null;
-  canShowEmailForm: boolean;
-
-  // Context values
-  participationType: string | null;
-  emailFromContext: string | null;
-  surveyCompleted: boolean;
-  isSubmittingSurvey: boolean;
-  contextError: string | null;
-  currentStepNumber: number;
-  totalSteps: number;
-
-  // Handlers
-  handleEmailForUpdatesSubmit: (e: React.FormEvent) => void;
-  handleLocalEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { ThankYouStepLogic } from './useThankYouStepLogic.types';
 
 export function useThankYouStepLogic(): ThankYouStepLogic {
   const {

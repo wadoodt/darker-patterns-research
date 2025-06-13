@@ -1,15 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Skeleton } from '@/components/ui/skeleton';
-
-interface ProtectedRouteProps {
-  children: ReactNode;
-  requireResearcher?: boolean;
-}
+import type { ProtectedRouteProps } from './ProtectedRoute.types';
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireResearcher = false }) => {
   const { user, loading, isResearcher } = useAuth();

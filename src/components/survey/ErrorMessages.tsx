@@ -1,10 +1,5 @@
 import { AlertTriangle } from 'lucide-react';
-
-export interface ErrorMessagesProps {
-  localError: string | null;
-  contextError: string | null;
-  isCurrentEvaluationSubmitted: boolean;
-}
+import { ErrorMessagesProps } from './ErrorMessages.types';
 
 export default function ErrorMessages({ localError, contextError, isCurrentEvaluationSubmitted }: ErrorMessagesProps) {
   return (

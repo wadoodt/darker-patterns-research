@@ -1,12 +1,6 @@
 import { Star } from 'lucide-react';
 import { Fragment } from 'react';
-
-export interface RatingSectionProps {
-  selectedOptionKey: 'A' | 'B' | null;
-  isCurrentEvaluationSubmitted: boolean;
-  userRating: number;
-  setUserRating: (rating: number) => void;
-}
+import { RatingSectionProps } from './RatingSection.types';
 
 export default function RatingSection({
   selectedOptionKey,

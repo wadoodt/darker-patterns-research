@@ -1,21 +1,9 @@
 // src/components/admin/DemographicsChartAdmin.tsx
-import type React from 'react';
 import { cn } from '@/lib/utils';
+import type { DemoChartAdminProps, DemoDataItem } from '@/types/components';
+import type React from 'react';
 
-interface DemoDataItem {
-  range?: string; // For age
-  label?: string; // For tech background
-  percent: number;
-  color: string; // Tailwind background color class e.g. 'bg-brand-purple-500'
-}
-
-interface DemographicsChartAdminProps {
-  ageData: DemoDataItem[];
-  techBgData: DemoDataItem[];
-  className?: string;
-}
-
-const DemographicsChartAdmin: React.FC<DemographicsChartAdminProps> = ({ ageData, techBgData, className }) => {
+const DemographicsChartAdmin: React.FC<DemoChartAdminProps> = ({ ageData, techBgData, className }) => {
   const renderDemographicItem = (item: DemoDataItem, index: number) => (
     <div key={index} className="demographics-item">
       <div className="demographics-label-percent">
@@ -30,8 +18,6 @@ const DemographicsChartAdmin: React.FC<DemographicsChartAdminProps> = ({ ageData
 
   return (
     <div className={cn('space-y-5', className)}>
-      {' '}
-      {/* Increased spacing between sections */}
       <div>
         <h4 className="text-dark-text-primary mb-2 text-sm font-semibold">Age Groups</h4>
         <div className="space-y-2">{ageData.map(renderDemographicItem)}</div>

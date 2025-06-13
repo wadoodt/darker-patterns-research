@@ -1,13 +1,5 @@
 import { Button } from '@/components/ui/button';
-
-export interface SubmitButtonProps {
-  isCurrentEvaluationSubmitted: boolean;
-  selectedOptionKey: 'A' | 'B' | null;
-  userRating: number;
-  handleLocalSubmitAndReveal: () => void;
-  canSubmitLocal: boolean;
-  isLoadingEntries: boolean;
-}
+import { SubmitButtonProps } from './SubmitButton.types';
 
 export default function SubmitButton({
   isCurrentEvaluationSubmitted,

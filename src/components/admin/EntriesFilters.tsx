@@ -1,15 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import React from 'react';
-
-interface EntriesFiltersProps {
-  currentFilters: {
-    category?: string;
-    status?: string;
-  };
-  onFilterChange: (filters: { category?: string; status?: string }) => void;
-  categories: string[];
-  statusOptions: { value: string; label: string }[];
-}
+import type { EntriesFiltersProps } from './EntriesFilters.types';
 
 const EntriesFilters: React.FC<EntriesFiltersProps> = ({
   currentFilters,

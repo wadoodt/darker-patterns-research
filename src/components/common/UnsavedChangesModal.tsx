@@ -9,19 +9,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { UnsavedChangesDialogProps } from '@/types/dialog';
 import { AlertTriangle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-interface UnsavedChangesModalProps {
-  isOpen: boolean;
-  onLeave: () => void;
-  onStay: () => void;
-  nextPath?: string | null;
-  handleNavigation?: boolean; // New prop to control whether modal handles navigation
-}
-
-const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({
+const UnsavedChangesModal: React.FC<UnsavedChangesDialogProps> = ({
   isOpen,
   onLeave,
   onStay,

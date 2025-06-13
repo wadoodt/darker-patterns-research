@@ -1,20 +1,7 @@
 // src/components/admin/StatCardAdmin.tsx
+import { cn } from '@/lib/utils';
+import type { StatCardAdminProps } from '@/types/components';
 import type React from 'react';
-import { cn } from '@/lib/utils'; // For conditional classes
-
-interface StatCardAdminProps {
-  title: string;
-  value: string | number;
-  valueSecondary?: string | React.ReactNode; // For supplemental text like " / 45%" or "Target: ..."
-  valueSecondaryColor?: string; // Tailwind class for secondary value text e.g. text-dark-text-secondary
-  icon?: React.ReactNode;
-  progressPercent?: number;
-  progressColor?: string; // Tailwind class for progress bar fill e.g., 'bg-brand-purple-500'
-  footerText?: string;
-  footerIcon?: React.ReactNode;
-  footerColor?: string; // Tailwind class for footer text color e.g., 'text-green-500'
-  className?: string;
-}
 
 const StatCardAdmin: React.FC<StatCardAdminProps> = ({
   title,

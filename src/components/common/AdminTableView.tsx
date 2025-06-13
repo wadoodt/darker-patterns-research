@@ -1,15 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { SortableEntryKeys } from '@/types/entries';
+import { AdminTableViewProps, Column } from '@/types/table';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import type { Column, SortDirection } from './AdminTable';
-
-interface AdminTableViewProps<T> {
-  columns: Column<T>[];
-  data: T[];
-  onSortColumn: (key: SortableEntryKeys) => void;
-  currentSortKey: SortableEntryKeys | null;
-  currentSortDirection: SortDirection;
-}
 
 export function AdminTableView<T>({
   columns,

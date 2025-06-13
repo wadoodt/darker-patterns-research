@@ -1,0 +1,10 @@
+import type { DPOEntry } from '@/types/dpo';
+
+export interface RevealSectionProps {
+  isCurrentEvaluationSubmitted: boolean;
+  currentDisplayEntry: DPOEntry | null;
+  selectedOptionKey: 'A' | 'B' | null;
+  userChoseCorrectlyIfRevealed: boolean;
+  dpoEntriesToReview: DPOEntry[];
+  currentDpoEntryIndex: number;
+}

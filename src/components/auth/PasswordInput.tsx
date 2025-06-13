@@ -2,13 +2,7 @@ import { FormControl } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
-
-interface PasswordInputProps {
-  field: {
-    value: string;
-    onChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
-  };
-}
+import type { PasswordInputProps } from './PasswordInput.types';
 
 export function PasswordInput({ field }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);

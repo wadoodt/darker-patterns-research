@@ -1,19 +1,12 @@
 // components/landing/StatsSection.tsx
-import { db } from '@/lib/firebase'; // Adjusted path
-import { doc, getDoc, Timestamp } from 'firebase/firestore'; // Changed from "type Timestamp"
+import { db } from '@/lib/firebase';
+import type { LandingStats } from '@/types/stats';
+import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import { CheckCircle, TrendingUp, Users, Zap } from 'lucide-react';
 import StatCard from './StatCard';
 
-interface CachedStats {
-  totalParticipants?: number;
-  totalEvaluationsSubmitted?: number;
-  averageCompletionRate?: number;
-  modelsImpacted?: number;
-  lastUpdatedAt?: Timestamp | { seconds: number; nanoseconds: number };
-}
-
 // Mock data for test environment or if Firestore fetch fails
-const mockStatsData: CachedStats = {
+const mockStatsData: LandingStats = {
   totalParticipants: 1247,
   totalEvaluationsSubmitted: 8500,
   averageCompletionRate: 92,
@@ -21,7 +14,7 @@ const mockStatsData: CachedStats = {
   lastUpdatedAt: { seconds: Math.floor(Date.now() / 1000) - 3600, nanoseconds: 0 }, // Mock: 1 hour ago
 };
 
-async function getCachedStats(): Promise<CachedStats | null> {
+async function getCachedStats(): Promise<LandingStats | null> {
   if (process.env.NODE_ENV === 'test' || !db) {
     console.warn('StatsSection: Test mode or DB not available, returning mock stats.');
     return mockStatsData;
@@ -30,7 +23,7 @@ async function getCachedStats(): Promise<CachedStats | null> {
     const statsDocRef = doc(db, 'cached_statistics', 'overview_stats');
     const docSnap = await getDoc(statsDocRef);
     if (docSnap.exists()) {
-      return docSnap.data() as CachedStats;
+      return docSnap.data() as LandingStats;
     }
     console.warn('StatsSection: No cached_stats/overview_stats document found! Returning mock data.');
     return mockStatsData; // Fallback to mock if not found
@@ -90,7 +83,7 @@ const StatsSection = async () => {
                 changeText={stat.changeText}
                 changeColor={stat.changeColor}
                 unit={stat.unit}
-                className="scroll-animate-item" // Applied for consistency
+                className="scroll-animate-item"
               />
             ))}
           </div>

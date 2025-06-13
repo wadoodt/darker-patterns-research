@@ -51,69 +51,76 @@ const useAdminEntriesState = () => {
   };
 };
 
+async function fetchAndSetEntries(
+  page: number,
+  filters: AdminEntriesFilter,
+  sort: AdminEntriesSortConfig,
+  targetReviews: number,
+  pageDirection: 'next' | 'prev' | 'current',
+  state: ReturnType<typeof useAdminEntriesState>,
+) {
+  const {
+    setIsLoading,
+    setError,
+    setTotalEntriesCount,
+    setEntries,
+    setFirstDocOfCurrentPage,
+    setLastDocOfCurrentPage,
+    setCurrentPage,
+    firstDocOfCurrentPage,
+    lastDocOfCurrentPage,
+  } = state;
+
+  setIsLoading(true);
+  setError(null);
+  try {
+    const { mainQuery, countQuery } = buildEntriesQuery(filters, sort, targetReviews, ITEMS_PER_PAGE, pageDirection, {
+      first: firstDocOfCurrentPage,
+      last: lastDocOfCurrentPage,
+    });
+
+    const [totalCount, { entries: fetchedEntries, cursors }] = await Promise.all([
+      fetchEntriesCount(countQuery),
+      fetchEntriesData(mainQuery, targetReviews),
+    ]);
+    setTotalEntriesCount(totalCount);
+    setEntries(fetchedEntries);
+    setFirstDocOfCurrentPage(cursors.first);
+    setLastDocOfCurrentPage(cursors.last);
+    setCurrentPage(page);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Error fetching DPO entries:', err);
+    setError(`Failed to load DPO entries. Error: ${errorMessage}`);
+  } finally {
+    setIsLoading(false);
+  }
+}
+
 export const useAdminEntries = (defaultTargetReviews: number) => {
   const state = useAdminEntriesState();
   const {
-    setEntries,
-    setIsLoading,
-    setError,
-    setCurrentPage,
-    setTotalEntriesCount,
-    setFirstDocOfCurrentPage,
-    setLastDocOfCurrentPage,
     activeFilters,
     sortConfig,
     currentPage,
+    setFirstDocOfCurrentPage,
+    setLastDocOfCurrentPage,
+    setActiveFilters,
+    setCurrentPage,
+    setSortConfig,
   } = state;
 
   const fetchEntries = useCallback(
-    async (
+    (
       page: number,
       filters: AdminEntriesFilter,
       sort: AdminEntriesSortConfig,
       targetReviews: number,
       pageDirection: 'next' | 'prev' | 'current' = 'current',
     ) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const { mainQuery, countQuery } = buildEntriesQuery(
-          filters,
-          sort,
-          targetReviews,
-          ITEMS_PER_PAGE,
-          pageDirection,
-          { first: state.firstDocOfCurrentPage, last: state.lastDocOfCurrentPage },
-        );
-
-        const [totalCount, { entries: fetchedEntries, cursors }] = await Promise.all([
-          fetchEntriesCount(countQuery),
-          fetchEntriesData(mainQuery, targetReviews),
-        ]);
-        setTotalEntriesCount(totalCount);
-        setEntries(fetchedEntries);
-        setFirstDocOfCurrentPage(cursors.first);
-        setLastDocOfCurrentPage(cursors.last);
-        setCurrentPage(page);
-      } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        console.error('Error fetching DPO entries:', err);
-        setError(`Failed to load DPO entries. Error: ${errorMessage}`);
-      } finally {
-        setIsLoading(false);
-      }
+      fetchAndSetEntries(page, filters, sort, targetReviews, pageDirection, state);
     },
-    [
-      state.firstDocOfCurrentPage,
-      state.lastDocOfCurrentPage,
-      setEntries,
-      setIsLoading,
-      setError,
-      setCurrentPage,
-      setTotalEntriesCount,
-      setFirstDocOfCurrentPage,
-      setLastDocOfCurrentPage,
-    ],
+    [state],
   );
 
   useEffect(() => {
@@ -130,13 +137,13 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
   ]);
 
   const handleFilterChange = (newFilters: AdminEntriesFilter) => {
-    state.setActiveFilters(newFilters);
+    setActiveFilters(newFilters);
     setCurrentPage(1);
   };
 
   const handleSortChange = (key: keyof DisplayEntry | 'id') => {
     const newDirection = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
-    state.setSortConfig({ key: key as SortableEntryKeys, direction: newDirection });
+    setSortConfig({ key: key as SortableEntryKeys, direction: newDirection });
     setCurrentPage(1);
   };
 

@@ -1,13 +1,6 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-
-interface AuthCardProps {
-  title: string;
-  description: string;
-  children: React.ReactNode;
-  footer: React.ReactNode;
-  className?: string;
-}
+import type { AuthCardProps } from './AuthCard.types';
 
 export function AuthCard({ title, description, children, footer, className }: AuthCardProps) {
   return (

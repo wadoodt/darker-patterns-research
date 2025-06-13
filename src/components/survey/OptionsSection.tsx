@@ -1,19 +1,7 @@
 import { cn } from '@/lib/utils';
+import type { DPOOption } from '@/types/dpo';
 import { CheckCircle2, XCircle } from 'lucide-react';
-
-export interface Option {
-  key: 'A' | 'B';
-  content: string;
-  isDatasetAccepted: boolean;
-}
-
-export interface OptionsSectionProps {
-  options: Option[];
-  selectedOptionKey: 'A' | 'B' | null;
-  isCurrentEvaluationSubmitted: boolean;
-  handleOptionSelect: (optionKey: 'A' | 'B') => void;
-  userChoseCorrectlyIfRevealed: boolean;
-}
+import { OptionsSectionProps } from './OptionsSection.types';
 
 export default function OptionsSection({
   options,
@@ -28,7 +16,7 @@ export default function OptionsSection({
         Which response do you prefer for the instruction above?
       </h3>
       <div className="option-selection-container">
-        {options.map((opt: Option) => (
+        {options.map((opt: DPOOption) => (
           <div
             key={opt.key}
             onClick={() => !isCurrentEvaluationSubmitted && handleOptionSelect(opt.key)}

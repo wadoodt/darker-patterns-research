@@ -4,20 +4,10 @@ import { auth, db } from '@/lib/firebase';
 import { fetchOrCreateUserProfile } from '@/lib/userProfile';
 import type { User as FirebaseUser } from 'firebase/auth';
 import { signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
-import { Firestore, type FieldValue, type Timestamp as FirebaseClientTimestamp } from 'firebase/firestore';
+import { UserDataFromFirestore } from '@/types/user';
+import { Firestore } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { createContext, useEffect, useState } from 'react';
-
-export interface UserDataFromFirestore {
-  // Structure of your /users/{uid} document
-  uid: string;
-  email?: string | null;
-  roles?: string[]; // e.g., ['researcher'] or ['admin']
-  createdAt?: FirebaseClientTimestamp | string | Date | FieldValue; // Firestore Timestamp (client), ISO string, Date, or FieldValue
-  lastLoginAt?: FirebaseClientTimestamp | string | Date | FieldValue; // Firestore Timestamp (client), ISO string, Date, or FieldValue
-  displayName?: string | null; // User's display name
-  photoURL?: string | null;
-}
 
 interface AuthContextType {
   user: FirebaseUser | null; // Firebase Auth user object

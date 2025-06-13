@@ -1,13 +1,6 @@
 import { Textarea } from '@/components/ui/textarea';
 import { MessageSquare } from 'lucide-react';
-
-export interface CommentsSectionProps {
-  selectedOptionKey: 'A' | 'B' | null;
-  userRating: number;
-  isCurrentEvaluationSubmitted: boolean;
-  userComment: string;
-  setUserComment: (comment: string) => void;
-}
+import { CommentsSectionProps } from './CommentsSection.types';
 
 export default function CommentsSection({
   selectedOptionKey,

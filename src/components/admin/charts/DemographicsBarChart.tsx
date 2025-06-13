@@ -3,18 +3,8 @@
 
 import { ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import type { DemographicsBarChartProps } from '@/types/charts';
 import { ChartCard } from './ChartCard';
-import { ChartConfig, ChartDataItem } from './types';
-
-interface DemographicsBarChartProps {
-  data: ChartDataItem[];
-  title: string;
-  description?: string;
-  dataKey: string;
-  barDataKey?: string;
-  chartConfig: ChartConfig;
-  layout?: 'horizontal' | 'vertical';
-}
 
 export function DemographicsBarChart({
   data,

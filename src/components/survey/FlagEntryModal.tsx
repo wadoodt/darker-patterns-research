@@ -5,16 +5,10 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
+import { FlagEntryDialogProps } from '@/types/dialog';
 import { AlertTriangle } from 'lucide-react';
 import type React from 'react';
 import { useFlagEntryModalState } from './useFlagEntryModalState';
-
-interface FlagEntryModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmitFlag: (reason: string, comment: string) => void;
-  entryId: string | null;
-}
 
 const flagReasonsList = [
   'Instruction is unclear or confusing.',
@@ -25,7 +19,7 @@ const flagReasonsList = [
   'Other (please specify below)',
 ];
 
-const FlagEntryModal: React.FC<FlagEntryModalProps> = ({ isOpen, onClose, onSubmitFlag, entryId }) => {
+const FlagEntryModal: React.FC<FlagEntryDialogProps> = ({ isOpen, onClose, onSubmitFlag, entryId }) => {
   const {
     selectedReason,
     setSelectedReason,

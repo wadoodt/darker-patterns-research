@@ -2,8 +2,32 @@
 import type { ChartConfig } from '@/components/ui/chart';
 
 export interface ChartDataItem {
-  [key: string]: string | number | undefined;
   fill: string;
+  name: string;
+  value?: number;
+  count?: number;
+  [key: string]: string | number | undefined;
+}
+
+export interface PieChartData extends Omit<ChartDataItem, 'value'> {
+  value: number; // Make value required for pie charts
+}
+
+export interface ChartCardBaseProps {
+  title: string;
+  description?: string;
+  chartConfig: ChartConfig;
+}
+
+export interface DemographicsBarChartProps extends ChartCardBaseProps {
+  data: ChartDataItem[];
+  dataKey: string;
+  barDataKey?: string;
+  layout?: 'horizontal' | 'vertical';
+}
+
+export interface PieChartCardProps extends ChartCardBaseProps {
+  data: PieChartData[];
 }
 
 export const chartColors = [

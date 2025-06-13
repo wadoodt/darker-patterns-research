@@ -1,15 +1,6 @@
 import { cn } from '@/lib/utils';
-import type { DPOEntry } from '@/types/dpo';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
-
-export interface RevealSectionProps {
-  isCurrentEvaluationSubmitted: boolean;
-  currentDisplayEntry: DPOEntry | null;
-  selectedOptionKey: 'A' | 'B' | null;
-  userChoseCorrectlyIfRevealed: boolean;
-  dpoEntriesToReview: DPOEntry[];
-  currentDpoEntryIndex: number;
-}
+import { RevealSectionProps } from './RevealSection.types';
 
 export default function RevealSection({
   isCurrentEvaluationSubmitted,

@@ -1,18 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import type { LoginFormValues } from '@/lib/auth/loginSchema';
 import { AlertTriangle, Eye, EyeOff, LogIn } from 'lucide-react';
-import type { UseFormReturn } from 'react-hook-form';
 
-interface LoginFormProps {
-  form: UseFormReturn<LoginFormValues>;
-  onSubmit: (data: LoginFormValues) => void;
-  showPassword: boolean;
-  setShowPassword: (show: boolean) => void;
-  isSubmitting: boolean;
-  error?: string;
-}
+import { LoginFormProps } from '@/types/form';
 
 export function LoginForm({ form, onSubmit, showPassword, setShowPassword, isSubmitting, error }: LoginFormProps) {
   return (

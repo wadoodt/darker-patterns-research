@@ -1,7 +1,27 @@
-import { useMemo } from 'react';
+import type { SurveyContextValue } from '@/types/survey';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 
-export function useSurveyNavigationFooterLogic() {
+type NavigationProps = Pick<
+  SurveyContextValue,
+  | 'currentStepNumber'
+  | 'goToNextStep'
+  | 'goToPreviousStep'
+  | 'saveDemographics'
+  | 'completeSurveyAndPersistData'
+  | 'isLoadingEntries'
+  | 'isSubmittingSurvey'
+  | 'isCurrentEvaluationSubmitted'
+  | 'error'
+  | 'surveyCompleted'
+  | 'dpoEntriesToReview'
+  | 'currentDpoEntryIndex'
+> & {
+  canProceedFromIntro: boolean;
+  canProceedFromDemographics: boolean;
+  isLastEntryInBatch: boolean;
+};
+
+export function useSurveyNavigationFooterLogic(): NavigationProps {
   const {
     currentStepNumber,
     goToNextStep,
@@ -22,9 +42,9 @@ export function useSurveyNavigationFooterLogic() {
   } = useSurveyProgress();
 
   // Validation for Introduction Step (Step 1)
-  const canProceedFromIntro =
-    participationType &&
-    termsAgreed &&
+  const canProceedFromIntro: boolean =
+    !!participationType &&
+    !!termsAgreed &&
     (participationType === 'anonymous' ||
       (participationType === 'email' && !!participantEmail && /\S+@\S+\.\S+/.test(participantEmail)));
 
@@ -49,12 +69,9 @@ export function useSurveyNavigationFooterLogic() {
   };
   const canProceedFromDemographics = isDemographicsFormValid();
 
-  const isLastEntryInBatch = useMemo(
-    () => currentDpoEntryIndex >= dpoEntriesToReview.length - 1,
-    [currentDpoEntryIndex, dpoEntriesToReview.length],
-  );
+  const isLastEntryInBatch = currentDpoEntryIndex >= dpoEntriesToReview.length - 1;
 
-  return {
+  const returnValue: NavigationProps = {
     currentStepNumber,
     goToNextStep,
     goToPreviousStep,
@@ -63,15 +80,14 @@ export function useSurveyNavigationFooterLogic() {
     isLoadingEntries,
     isSubmittingSurvey,
     isCurrentEvaluationSubmitted,
-    contextError,
-    surveyCompleted,
-    canProceedFromIntro,
-    canProceedFromDemographics,
+    error: contextError,
+    surveyCompleted: !!surveyCompleted,
     dpoEntriesToReview,
     currentDpoEntryIndex,
+    canProceedFromIntro,
+    canProceedFromDemographics,
     isLastEntryInBatch,
-    participantEmail,
-    participationType,
-    termsAgreed,
   };
+
+  return returnValue;
 }

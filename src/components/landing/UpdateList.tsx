@@ -6,16 +6,8 @@ import React, { useState } from 'react';
 import UpdateItem from './UpdateItem';
 
 // Assuming the same interfaces and iconMap from the parent
-import type { Timestamp } from 'firebase/firestore';
 import { BarChartBig, CalendarDays, Milestone, Newspaper, Users2 } from 'lucide-react';
-
-interface LandingUpdate {
-  id: string;
-  title: string;
-  date: Timestamp | { seconds: number; nanoseconds: number };
-  description: string;
-  iconName?: string;
-}
+import type { LandingUpdate } from './types';
 
 const iconMap: { [key: string]: React.ElementType } = {
   BarChartBig: BarChartBig,
