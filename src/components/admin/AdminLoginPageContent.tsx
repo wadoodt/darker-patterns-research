@@ -4,6 +4,7 @@ import { AdminLoginFormFields } from '@/components/auth/AdminLoginFormFields';
 import { AuthCard } from '@/components/auth/AuthCard';
 import { LoadingScreen } from '@/components/ui/loading';
 import { useAuth } from '@/hooks/useAuth';
+import { FirebaseError } from 'firebase/app';
 import { getLoginErrorMessage, signInWithEmail } from '@/lib/auth/login';
 import type { LoginReason } from '@/lib/auth/types';
 import { loginSchema } from '@/lib/validations/login';
@@ -19,6 +20,7 @@ const AdminLoginPageContent = () => {
   const { user, isResearcher, loading: authLoading } = useAuth();
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -34,7 +36,7 @@ const AdminLoginPageContent = () => {
   // Redirect if user is already logged in and is a researcher
   useEffect(() => {
     if (!authLoading && user && isResearcher) {
-      router.replace('/admin/overview');
+      router.replace('/overview');
     }
   }, [user, isResearcher, authLoading, router]);
 
@@ -53,10 +55,14 @@ const AdminLoginPageContent = () => {
     setIsSubmitting(true);
     try {
       await signInWithEmail(email, password);
-      router.push('/admin/overview');
+      router.push('/overview');
     } catch (err) {
       console.error('Login error:', err);
-      setError(getLoginErrorMessage(err));
+      if (err instanceof FirebaseError) {
+        setError(getLoginErrorMessage(err));
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -80,6 +86,8 @@ const AdminLoginPageContent = () => {
         isSubmitting={isSubmitting}
         error={error}
         loginReason={loginReason}
+        showPassword={showPassword}
+        setShowPassword={setShowPassword}
       />
     </AuthCard>
   );

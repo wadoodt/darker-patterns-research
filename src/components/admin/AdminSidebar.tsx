@@ -32,7 +32,7 @@ const AdminSidebar = () => {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-header">
-        <Link href="/admin/overview" className="admin-sidebar-logo-container">
+        <Link href="/overview" className="admin-sidebar-logo-container">
           <Palette className="admin-sidebar-logo-icon" /> {/* Using Palette Icon */}
           <h1 className="admin-sidebar-logo-text">Validator</h1> {/* Updated to Validator */}
         </Link>
