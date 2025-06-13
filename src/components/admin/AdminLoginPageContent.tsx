@@ -4,11 +4,11 @@ import { AdminLoginFormFields } from '@/components/auth/AdminLoginFormFields';
 import { AuthCard } from '@/components/auth/AuthCard';
 import { LoadingScreen } from '@/components/ui/loading';
 import { useAuth } from '@/hooks/useAuth';
-import { FirebaseError } from 'firebase/app';
 import { getLoginErrorMessage, signInWithEmail } from '@/lib/auth/login';
 import type { LoginReason } from '@/lib/auth/types';
 import { loginSchema } from '@/lib/validations/login';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FirebaseError } from 'firebase/app';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -36,7 +36,7 @@ const AdminLoginPageContent = () => {
   // Redirect if user is already logged in and is a researcher
   useEffect(() => {
     if (!authLoading && user && isResearcher) {
-      router.replace('/overview');
+      router.replace('/admin');
     }
   }, [user, isResearcher, authLoading, router]);
 
@@ -55,7 +55,7 @@ const AdminLoginPageContent = () => {
     setIsSubmitting(true);
     try {
       await signInWithEmail(email, password);
-      router.push('/overview');
+      router.push('/admin');
     } catch (err) {
       console.error('Login error:', err);
       if (err instanceof FirebaseError) {

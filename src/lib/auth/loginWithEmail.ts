@@ -19,7 +19,7 @@ export async function loginWithEmail({
   try {
     await signInWithEmailAndPassword(auth, email, password);
     toast.success('Logged in successfully!');
-    const redirectUrl = searchParams.get('redirect') || '/overview';
+    const redirectUrl = searchParams.get('redirect') || '/admin';
     router.push(redirectUrl);
   } catch (error) {
     console.error('Login error:', error);

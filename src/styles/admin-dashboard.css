@@ -34,7 +34,7 @@
   @apply text-xs font-medium text-[color:var(--color-dark-text-secondary)];
 }
 .admin-sidebar-user-info-container {
-  @apply my-2 border-t border-b border-[color:var(--color-dark-bg-tertiary)/0.7] px-2 py-3;
+  @apply my-2 border-t border-[color:var(--color-dark-bg-tertiary)/0.7] px-2 py-3;
 }
 .admin-sidebar-user-info {
   @apply flex items-center gap-2.5;

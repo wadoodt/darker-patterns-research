@@ -13,7 +13,7 @@ const EntriesFilters: React.FC<EntriesFiltersProps> = ({
   };
 
   const handleStatusChange = (value: string) => {
-    onFilterChange({ status: value });
+    onFilterChange({ status: value === 'all' ? '' : value });
   };
 
   return (
@@ -37,16 +37,20 @@ const EntriesFilters: React.FC<EntriesFiltersProps> = ({
 
       <div className="flex items-center gap-2">
         <label className="text-dark-text-secondary text-sm font-medium">Status:</label>
-        <Select onValueChange={handleStatusChange} value={currentFilters.status || ''}>
+        <Select onValueChange={handleStatusChange} value={currentFilters.status || 'all'}>
           <SelectTrigger className="bg-dark-bg-secondary border-dark-border text-dark-text-primary w-[180px]">
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
           <SelectContent className="bg-dark-bg-secondary border-dark-border text-dark-text-primary">
-            {statusOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
+            <SelectItem value="all">All Statuses</SelectItem>
+            {statusOptions.map(
+              (option) =>
+                option.value && (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ),
+            )}
           </SelectContent>
         </Select>
       </div>

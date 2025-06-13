@@ -1,5 +1,5 @@
 // types/charts.ts
-import type { ChartConfig } from '@/components/ui/chart';
+import type { ChartConfig } from '@/components/ui/chart.types';
 
 export interface ChartDataItem {
   name: string;
