@@ -18,6 +18,11 @@
 .light-navbar-link {
   @apply hover:text-brand-purple-500 text-sm font-medium text-gray-600 transition-colors;
 }
+
+.light-navbar-link.disabled {
+  @apply cursor-not-allowed text-gray-400;
+}
+
 .light-navbar-action-button {
   @apply rounded-md bg-white px-3.5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 transition-all duration-150 ease-in-out ring-inset hover:bg-gray-50;
 }

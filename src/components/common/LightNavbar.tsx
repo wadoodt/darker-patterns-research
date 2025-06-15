@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 import CTAButton from '../landing/CTAButton';
 import ProtectedLink from './ProtectedLink';
-import StylizedLink from './StylizedLink';
 
 interface LightNavbarProps {
   showUnsavedChangesModal?: (path: string) => void;
+  hasUnsavedChanges?: boolean; // Optional prop for unsaved changes state
 }
 
 const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) => {
@@ -18,47 +18,30 @@ const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) =>
 
   const mainNavLinks = navLinks.filter((link) => link.group === 'landing');
 
-  // Helper function to determine if a path requires protection
-  const needsProtection = (path: string): boolean => {
-    return path.startsWith('/survey');
-  };
-
-  const renderLink = (href: string, className: string, children: React.ReactNode) => {
-    if (needsProtection(href)) {
-      return (
-        <ProtectedLink
-          href={href}
-          className={className}
-          onAttemptToNavigateWithUnsavedChanges={showUnsavedChangesModal}
-        >
-          {children}
-        </ProtectedLink>
-      );
-    }
-    return (
-      <StylizedLink href={href} className={className} key={href}>
-        {children}
-      </StylizedLink>
-    );
-  };
-
   return (
     <header className="light-navbar sticky top-[0.375rem] z-50">
-      {' '}
-      {/* Assumes progress bar height of h-1.5 (0.375rem) */}
       <nav className="light-navbar-content">
         <div className="flex lg:flex-1">
-          {renderLink(
-            '/',
-            '-m-1.5 flex items-center gap-2 p-1.5',
-            <>
-              <span className="light-navbar-logo-accent font-headline text-2xl font-bold">DPV</span>
-              <span className="light-navbar-logo-text font-headline">Dark Pattern Validation</span>
-            </>,
-          )}
+          <ProtectedLink
+            href="/"
+            className="light-navbar-logo"
+            onAttemptToNavigateWithUnsavedChanges={showUnsavedChangesModal}
+          >
+            <span className="light-navbar-logo-accent font-headline text-2xl font-bold">DPV</span>
+            <span className="light-navbar-logo-text font-headline">Dark Pattern Validation</span>
+          </ProtectedLink>
         </div>
         <div className="hidden lg:flex lg:gap-x-6">
-          {mainNavLinks.map((link) => renderLink(link.href, 'light-navbar-link', link.label))}
+          {mainNavLinks.map((link) => (
+            <ProtectedLink
+              key={link.href}
+              href={link.href}
+              className={`light-navbar-link ${pathname.includes(link.href) ? 'disabled' : ''}`}
+              onAttemptToNavigateWithUnsavedChanges={showUnsavedChangesModal}
+            >
+              {link.label}
+            </ProtectedLink>
+          ))}
         </div>
         <div className="flex flex-1 justify-end">
           {currentGroup === 'info' ? (
@@ -66,7 +49,13 @@ const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) =>
               Start Survey
             </CTAButton>
           ) : (
-            renderLink('/login', 'light-navbar-action-button', 'Access for Researchers')
+            <ProtectedLink
+              href="/login"
+              className="light-navbar-action-button"
+              onAttemptToNavigateWithUnsavedChanges={showUnsavedChangesModal}
+            >
+              Access for Researchers
+            </ProtectedLink>
           )}
         </div>
       </nav>

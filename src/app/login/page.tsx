@@ -1,5 +1,7 @@
 'use client';
 
+import DarkFooter from '@/components/landing/DarkFooter';
+import DarkNavbar from '@/components/landing/DarkNavbar';
 import { useAuth } from '@/hooks/useAuth';
 import { loginSchema, type LoginFormValues } from '@/lib/auth/loginSchema';
 import { loginWithEmail } from '@/lib/auth/loginWithEmail';
@@ -55,7 +57,7 @@ function LoginFormContainer() {
   useEffect(() => {
     if (!loading && user) {
       // Always redirect to the requested URL or home
-      const redirectUrl = searchParams.get('redirect') || '/';
+      const redirectUrl = searchParams.get('redirect') || '/admin';
       router.replace(redirectUrl);
     }
   }, [user, loading, router, searchParams]);
@@ -113,7 +115,11 @@ function LoginFormContainer() {
 export default function LoginPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <LoginFormContainer />
+      <DarkNavbar />
+      <main>
+        <LoginFormContainer />
+      </main>
+      <DarkFooter />
     </Suspense>
   );
 }

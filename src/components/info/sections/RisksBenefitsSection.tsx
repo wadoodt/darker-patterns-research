@@ -10,8 +10,9 @@ const RisksBenefitsSection = () => {
       <p>
         <strong>Benefits:</strong> While there are no direct monetary benefits for participation, you will be
         contributing to important research that aims to make AI systems more ethical and safer for everyone. If you
-        provide your email, you will also receive access to the research findings. You may also gain a better
-        understanding of how AI language models generate text and some of the current challenges in AI alignment.
+        provide your email, you&apos;ll receive early access to the research findings as a preprint. The final paper
+        will be publicly available in the updates section of this website. You may also gain a better understanding of
+        how AI language models generate text and some of the current challenges in AI alignment.
       </p>
     </section>
   );

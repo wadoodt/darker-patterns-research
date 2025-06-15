@@ -2,7 +2,7 @@
 'use client';
 import LightNavbar from '@/components/common/LightNavbar';
 import ProgressBar from '@/components/common/ProgressBar';
-import UnsavedChangesModal from '@/components/common/UnsavedChangesModal'; // Import Modal
+import UnsavedChangesModal from '@/components/common/UnsavedChangesModal';
 import SurveyNavigationFooter from '@/components/survey/SurveyNavigationFooter';
 import { SurveyProgressProvider, useSurveyProgress } from '@/contexts/SurveyProgressContext';
 import { useEffect, useState, type ReactNode } from 'react';
