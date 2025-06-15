@@ -23,7 +23,10 @@ const ImpactSection = () => {
         </li>
       </ul>
       <p className="mt-6">
-        Interested in participating? <Link href="/step-introduction">Contribute to the study.</Link>
+        Interested in participating?{' '}
+        <Link href="/step-introduction" className="link-standard-light">
+          Contribute to the study.
+        </Link>
       </p>
     </section>
   );

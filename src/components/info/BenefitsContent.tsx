@@ -28,7 +28,7 @@ const BenefitsContent = () => {
 
         <p>
           Your involvement in the Dark Pattern Validation project is invaluable. By contributing your insights, you play
-          a direct role in shaping a more ethical and transparent future for artificial intelligence. Here\u2019s how
+          a direct role in shaping a more ethical and transparent future for artificial intelligence. Here&apos;s how
           your participation makes a difference:
         </p>
 
