@@ -45,7 +45,7 @@ function renderLeftButton({
   isLoadingEntries,
   isSubmittingSurvey,
 }: Pick<NavigationProps, 'currentStepNumber' | 'goToPreviousStep' | 'isLoadingEntries' | 'isSubmittingSurvey'>) {
-  if (currentStepNumber === 1) {
+  if (currentStepNumber === 1 || currentStepNumber === 4) {
     return (
       <Button variant="link" size="sm" asChild className="survey-nav-footer-button btn-link-light px-1 text-xs">
         <Link href="/">
@@ -91,7 +91,7 @@ function renderRightButton(logic: NavigationProps) {
     isLoadingEntries ||
     isSubmittingSurvey ||
     (currentStepNumber === 1 && !canProceedFromIntro) ||
-    (currentStepNumber === 2 && (!canProceedFromDemographics || dpoEntriesToReview.length === 0)) ||
+    (currentStepNumber === 2 && !canProceedFromDemographics) ||
     (currentStepNumber === 3 && !isCurrentEvaluationSubmitted);
 
   let buttonText = 'Next Step';

@@ -3,7 +3,7 @@ import type { SurveyState } from '@/types/survey';
 import type { Dispatch } from 'react';
 import { useCallback } from 'react';
 import { SurveyAction, SurveyActionType } from '../actions';
-import { fetchAndAssignEntries, generateDummyEntries } from '../database';
+import { fetchAndAssignEntries } from '../database';
 import { getAssignedEntriesCount, getCurrentEntry } from '../surveyUtils';
 
 export function useSurveyQueries(state: SurveyState, dispatch: Dispatch<SurveyAction>) {
@@ -20,14 +20,7 @@ export function useSurveyQueries(state: SurveyState, dispatch: Dispatch<SurveyAc
       }
 
       const assignedEntriesCount = getAssignedEntriesCount(state.participationType);
-      let fetchedEntries: DPOEntry[];
-
-      // Conditionally fetch real or dummy data based on the environment
-      if (process.env.NODE_ENV === 'test') {
-        fetchedEntries = await generateDummyEntries(assignedEntriesCount);
-      } else {
-        fetchedEntries = await fetchAndAssignEntries(assignedEntriesCount);
-      }
+      const fetchedEntries: DPOEntry[] = await fetchAndAssignEntries(assignedEntriesCount);
 
       dispatch({ type: SurveyActionType.SET_ENTRIES, payload: fetchedEntries });
     } catch (error) {

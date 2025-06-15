@@ -3,8 +3,8 @@ import type { DPOEntry, EvaluationData, ParticipantSession } from '@/types/dpo';
 import {
   collection,
   doc,
-  getDocs,
   Firestore,
+  getDocs,
   increment,
   limit,
   orderBy,
@@ -48,7 +48,8 @@ export async function fetchAndAssignEntries(count: number): Promise<DPOEntry[]> 
 
     if (querySnapshot.empty) {
       console.warn('No DPO entries found in the database. Returning an empty array.');
-      return [];
+      return generateDummyEntries(count); // Return dummy entries if none found
+      //return [];
     }
 
     const entries = querySnapshot.docs.map((doc) => ({

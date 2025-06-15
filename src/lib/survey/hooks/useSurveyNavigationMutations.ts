@@ -29,8 +29,15 @@ export function useSurveyNavigationMutations(
   }, [dispatch]);
 
   const markCurrentEvaluationSubmitted = useCallback(() => {
+    if (!state.participantSessionUid) {
+      dispatch({
+        type: SurveyActionType.SET_ERROR,
+        payload: 'Error marking evaluation as submitted. No participant session UID.',
+      });
+      return;
+    }
     dispatch({ type: SurveyActionType.MARK_EVALUATION_SUBMITTED });
-  }, [dispatch]);
+  }, [dispatch, state.participantSessionUid]);
 
   const resetCurrentEvaluationSubmitted = useCallback(() => {
     dispatch({ type: SurveyActionType.RESET_EVALUATION_SUBMITTED });

@@ -150,6 +150,7 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
         isSubmittingSurvey: false,
         error: null,
         hasUnsavedChanges: false,
+        currentStepNumber: 4,
       };
 
     case SurveyActionType.RESET_SURVEY:

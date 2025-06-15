@@ -29,9 +29,10 @@ const handleStepNavigation = (
   router: AppRouterInstance,
   setGlobalError: (error: string) => void,
 ) => {
-  if (stepNumber > 1) {
+  if (stepNumber > 0) {
     switch (stepNumber) {
       case 1:
+        router.push('/step-introduction');
         break;
       case 2:
         router.push('/step-demographics');
@@ -73,7 +74,8 @@ export function useSurveyNavigationFooterLogic(): NavigationProps {
 
   useEffect(() => {
     handleStepNavigation(currentStepNumber || 1, router, setGlobalError);
-  }, [currentStepNumber, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStepNumber]);
 
   // Validation for Introduction Step (Step 1)
   const canProceedFromIntro: boolean =
