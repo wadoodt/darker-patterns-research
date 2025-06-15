@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { AdminEntriesFilter } from '@/hooks/useAdminEntries';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
+import { Column } from '@/types/table';
 import { Eye, Loader2, PlusCircle, Tag, UploadCloud } from 'lucide-react';
 import Link from 'next/link';
-import type { Column } from '../common/AdminTable';
 import AdminTable from '../common/AdminTable';
 import Pagination from '../common/Pagination';
 import AdminHeader from './AdminHeader';
@@ -65,12 +65,12 @@ const tableColumns: Column<DisplayEntry>[] = [
     key: 'id',
     header: 'ID',
     sortable: true,
-    renderCell: (entry) => <span className="font-mono text-xs">{entry.id.substring(0, 12)}...</span>,
+    renderCell: (entry: DisplayEntry) => <span className="font-mono text-xs">{entry.id.substring(0, 12)}...</span>,
   },
   {
     key: 'instruction',
     header: 'Instruction',
-    renderCell: (entry) => (
+    renderCell: (entry: DisplayEntry) => (
       <span className="block max-w-xs truncate text-sm" title={entry.instruction}>
         {entry.instruction}
       </span>
@@ -81,13 +81,13 @@ const tableColumns: Column<DisplayEntry>[] = [
     header: 'Category',
     sortable: true,
     icon: Tag,
-    renderCell: (entry) => <span className="text-sm">{entry.category}</span>,
+    renderCell: (entry: DisplayEntry) => <span className="text-sm">{entry.category}</span>,
   },
   {
     key: 'reviewCount',
     header: 'Reviews',
     sortable: true,
-    renderCell: (entry) => (
+    renderCell: (entry: DisplayEntry) => (
       <div className="flex items-center gap-2 text-sm">
         <span>{entry.statusText}</span>
         <div className="bg-dark-bg-tertiary h-2 w-20 overflow-hidden rounded-full">
@@ -102,7 +102,7 @@ const tableColumns: Column<DisplayEntry>[] = [
   {
     key: 'actions',
     header: 'Actions',
-    renderCell: (entry) => (
+    renderCell: (entry: DisplayEntry) => (
       <Link
         href={`/entries/${entry.id}`}
         className="text-brand-purple-400 flex items-center gap-1 text-sm font-medium hover:underline"

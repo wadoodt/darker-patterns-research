@@ -2,8 +2,9 @@
 import { useAdminEntries } from '@/hooks/useAdminEntries';
 import { useAuth } from '@/hooks/useAuth';
 import { db } from '@/lib/firebase';
+import { getMockEntries } from '@/lib/mocks/entries';
 import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { EntriesPageView } from './EntriesPageView';
 
 export default function EntriesPageContent() {
@@ -11,6 +12,12 @@ export default function EntriesPageContent() {
   const [defaultTargetReviews, setDefaultTargetReviews] = useState(10);
   const [initialDataLoading, setInitialDataLoading] = useState(true);
   const { isAdmin } = useAuth();
+
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // Always call the hook, but override values in dev
+  const adminEntries = useAdminEntries(defaultTargetReviews);
+  const mockEntries = useCallback(() => getMockEntries(10), []);
 
   useEffect(() => {
     const fetchInitialSetupData = async () => {
@@ -35,22 +42,29 @@ export default function EntriesPageContent() {
         setInitialDataLoading(false);
       }
     };
+    if (isDev) {
+      console.warn('Using mock data in development mode. Categories and default reviews will be set manually.');
+      setCategories(['Obscuring Information', 'Misleading Content', 'Privacy Har']);
+      setInitialDataLoading(false);
+      return;
+    }
     fetchInitialSetupData();
   }, []);
 
-  const {
-    entries,
-    isLoading: isLoadingEntries,
-    error,
-    currentPage,
-    totalEntriesCount,
-    ITEMS_PER_PAGE,
-    activeFilters,
-    sortConfig,
-    handleFilterChange,
-    handleSortChange,
-    handlePageChange,
-  } = useAdminEntries(defaultTargetReviews);
+  // Use mock data in dev, otherwise use real data
+  const entries = isDev ? mockEntries() : adminEntries.entries;
+  const isLoadingEntries = isDev ? false : adminEntries.isLoading;
+  const error = isDev ? null : adminEntries.error;
+  const currentPage = isDev ? 1 : adminEntries.currentPage;
+  const totalEntriesCount = isDev ? mockEntries.length : adminEntries.totalEntriesCount;
+  const ITEMS_PER_PAGE = isDev ? 20 : adminEntries.ITEMS_PER_PAGE;
+  const activeFilters = isDev ? {} : adminEntries.activeFilters;
+  const sortConfig: { key: 'id'; direction: 'asc' } | typeof adminEntries.sortConfig = isDev
+    ? { key: 'id', direction: 'asc' }
+    : adminEntries.sortConfig;
+  const handleFilterChange = isDev ? () => {} : adminEntries.handleFilterChange;
+  const handleSortChange = isDev ? () => {} : adminEntries.handleSortChange;
+  const handlePageChange = isDev ? () => {} : adminEntries.handlePageChange;
 
   const handleIngestDataset = () => {
     alert(

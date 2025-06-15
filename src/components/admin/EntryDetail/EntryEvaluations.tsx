@@ -10,7 +10,7 @@ export function EntryEvaluations({ evaluations }: EntryEvaluationsProps) {
   return (
     <section className="mb-6">
       <h2 className="mb-2 text-xl font-semibold">Evaluations</h2>
-      <div className="rounded bg-gray-100 p-4">
+      <div className="rounded bg-gray-900 p-4">
         <ul className="space-y-4">
           {evaluations.map((evaluation) => (
             <li key={evaluation.id} className="border-b border-gray-200 pb-2 last:border-0">

@@ -1,9 +1,9 @@
-import type { EntryDetailPageContentProps } from './EntryDetailPageContent.types';
 import { EntryActions } from './EntryDetail/EntryActions';
 import { EntryAnalytics } from './EntryDetail/EntryAnalytics';
 import { EntryComments } from './EntryDetail/EntryComments';
 import { EntryEvaluations } from './EntryDetail/EntryEvaluations';
 import { EntryOriginalData } from './EntryDetail/EntryOriginalData';
+import type { EntryDetailPageContentProps } from './EntryDetailPageContent.types';
 
 const EntryDetailPageContent: React.FC<EntryDetailPageContentProps> = ({ entry }) => {
   const handleEdit = () => {

@@ -8,7 +8,7 @@ export function EntryOriginalData({ entry }: EntryOriginalDataProps) {
   return (
     <section className="mb-6">
       <h2 className="mb-2 text-xl font-semibold">Original Entry Data</h2>
-      <div className="rounded bg-gray-100 p-4">
+      <div className="rounded bg-gray-900 p-4">
         <div className="grid gap-4">
           <div>
             <strong>Instruction:</strong> {entry.instruction}

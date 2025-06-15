@@ -1,22 +1,24 @@
-import EntryDetailPageContent from '@/components/admin/EntryDetailPageContent';
+import EntryDetailPageView from '@/components/admin/EntryDetailPageView';
 import { getEntry } from '@/lib/entries';
 import { getMockEntryDetails } from '@/lib/mocks/entryDetails';
 import type { EntryWithDetails } from '@/types/entryDetails';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: { entryId: string } }): Promise<Metadata> {
+  const { entryId } = await params;
   return {
-    title: `Entry Details: ${params.entryId}`,
+    title: `Entry Details: ${entryId}`,
   };
 }
 
-export default async function EntryDetailRoutePage({ params }: { params: { entryId: string } }) {
+export default async function EntryDetailRoutePage({ params }: { params: Promise<{ entryId: string }> }) {
+  const { entryId } = await params;
   let entryData: EntryWithDetails;
 
-  if (process.env.NODE_ENV === 'test') {
-    entryData = getMockEntryDetails(params.entryId);
+  if (process.env.NODE_ENV === 'development') {
+    entryData = getMockEntryDetails(entryId);
   } else {
-    const { entry, evaluations, flags, demographics, responseAggregates } = await getEntry(params.entryId);
+    const { entry, evaluations, flags, demographics, responseAggregates } = await getEntry(entryId);
 
     const formattedEvaluations = evaluations.map((evaluation) => ({
       id: evaluation.id ?? evaluation.dpoEntryId, // Fallback to dpoEntryId if id is undefined
@@ -40,5 +42,5 @@ export default async function EntryDetailRoutePage({ params }: { params: { entry
     } as EntryWithDetails;
   }
 
-  return <EntryDetailPageContent entry={entryData} />;
+  return <EntryDetailPageView entry={entryData} />;
 }

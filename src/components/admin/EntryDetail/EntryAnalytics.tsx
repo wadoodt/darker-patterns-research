@@ -99,7 +99,7 @@ export function EntryAnalytics({ entry }: EntryAnalyticsProps) {
   return (
     <section className="mb-6">
       <h2 className="mb-2 text-xl font-semibold">Entry Analytics</h2>
-      <div className="rounded bg-gray-100 p-4">
+      <div className="rounded bg-gray-900 p-4">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <BasicStats entry={entry} />
           {entry.responseAggregates && <ResponseStats responseAggregates={entry.responseAggregates} />}
