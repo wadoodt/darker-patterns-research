@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import type { SurveyState } from '@/types/survey';
 import { SurveyAction, SurveyActionType } from './actions';
-import { validateDemographics, validateEmail, validateParticipationDetails } from './validators';
+import { validateDemographics, validateEmail } from './validators';
 
 export const initialState: SurveyState = {
   currentStepNumber: 1,
@@ -33,10 +33,6 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
       };
 
     case SurveyActionType.SET_PARTICIPATION_DETAILS: {
-      const validationError = validateParticipationDetails(action.payload);
-      if (validationError) {
-        return { ...state, error: validationError, hasUnsavedChanges: true };
-      }
       return {
         ...state,
         participationType: action.payload.type,

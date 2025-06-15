@@ -60,7 +60,12 @@ const EntryReviewStepContent: React.FC<{ entryId?: string }> = () => {
       setLocalError(result);
       return;
     }
-    submitEvaluationToContext(result);
+    const currentEntry = dpoEntriesToReview[currentDpoEntryIndex];
+    if (!currentEntry) {
+      setLocalError('No current entry to submit evaluation for.');
+      return;
+    }
+    submitEvaluationToContext(result, currentEntry);
     markCurrentEvaluationSubmitted();
   };
 

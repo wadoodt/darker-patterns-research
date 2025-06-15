@@ -1,6 +1,17 @@
 import { db } from '@/lib/firebase';
 import type { DPOEntry, EvaluationData, ParticipantSession } from '@/types/dpo';
-import { collection, doc, Firestore, increment, runTransaction, serverTimestamp } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  Firestore,
+  increment,
+  limit,
+  orderBy,
+  query,
+  runTransaction,
+  serverTimestamp,
+} from 'firebase/firestore';
 
 export async function generateDummyEntries(count: number): Promise<DPOEntry[]> {
   return Array.from({ length: count }).map((_, i) => ({
@@ -13,6 +24,44 @@ export async function generateDummyEntries(count: number): Promise<DPOEntry[]> {
     discussion: `Expert discussion for entry ${i + 1}, explaining the rationale for the preferred response.`,
     reviewCount: Math.floor(Math.random() * 5),
   }));
+}
+
+/**
+ * Fetches a specified number of DPO entries from Firestore, prioritizing those with the lowest review count.
+ * This function is intended for use in production environments where real data is needed.
+ *
+ * @param count The number of entries to fetch.
+ * @returns A promise that resolves to an array of DPOEntry objects.
+ * @throws Throws an error if Firebase is not initialized or if fetching fails.
+ */
+export async function fetchAndAssignEntries(count: number): Promise<DPOEntry[]> {
+  if (!db) {
+    throw new Error('Firebase is not initialized. Ensure your environment configuration is correct.');
+  }
+
+  try {
+    // Query to get entries with the lowest review count
+    const entriesCollectionRef = collection(db as Firestore, 'dpo_entries');
+    const q = query(entriesCollectionRef, orderBy('reviewCount', 'asc'), limit(count));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.warn('No DPO entries found in the database. Returning an empty array.');
+      return [];
+    }
+
+    const entries = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as DPOEntry[];
+
+    return entries;
+  } catch (error) {
+    console.error('Error fetching DPO entries:', error);
+    // Re-throw the error to be handled by the calling function
+    throw new Error('Failed to fetch DPO entries from the database.');
+  }
 }
 
 export async function persistSurveyData(

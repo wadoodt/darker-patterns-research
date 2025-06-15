@@ -30,7 +30,7 @@ export interface SurveyContextValue extends SurveyState {
   updateDemographicsInContext: (data: DemographicData) => void;
   saveDemographics: () => Promise<void>;
   getCurrentDpoEntry: () => DPOEntry | null;
-  submitEvaluation: (evaluationDraft: EvaluationDraft) => void;
+  submitEvaluation: (evaluationDraft: EvaluationDraft, currentEntry: DPOEntry) => void;
   markCurrentEvaluationSubmitted: () => void;
   resetCurrentEvaluationSubmitted: () => void;
   goToNextStep: () => void;

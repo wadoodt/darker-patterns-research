@@ -1,7 +1,8 @@
 // components/survey/IntroductionStepContent.tsx
 'use client';
+import { validateEmail } from '@/lib/survey/validators';
 import type React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 import IntroductionStepView from './IntroductionStepView';
 
@@ -25,30 +26,6 @@ const IntroductionStepContent = () => {
     selectedOption === 'anonymous' ? contextTermsAgreed : false,
   );
 
-  // Effect to sync local state to context
-  const syncToContext = useCallback(() => {
-    if (selectedOption) {
-      const termsMet = selectedOption === 'email' ? agreedToTermsEmail : agreedToTermsAnonymous;
-      setParticipationDetails({
-        type: selectedOption,
-        email: selectedOption === 'email' ? localEmail : undefined,
-        termsAgreed: termsMet,
-      });
-      // Basic email validation for context, footer will do stricter check
-      if (selectedOption === 'email' && localEmail && !/\S+@\S+\.\S+/.test(localEmail)) {
-        setGlobalError('Please enter a valid email address.');
-      } else if (termsMet && selectedOption === 'email' && !localEmail) {
-        setGlobalError('Email is required for this participation type.');
-      } else {
-        setGlobalError(null);
-      }
-    }
-  }, [selectedOption, localEmail, agreedToTermsEmail, agreedToTermsAnonymous, setParticipationDetails, setGlobalError]);
-
-  useEffect(() => {
-    syncToContext();
-  }, [syncToContext]);
-
   // Effect to mark unsaved changes
   useEffect(() => {
     // Only set unsaved changes if there's an interaction
@@ -59,19 +36,36 @@ const IntroductionStepContent = () => {
 
   const handleOptionSelect = (option: 'email' | 'anonymous') => {
     setSelectedOption(option);
-    setGlobalError(null);
-    if (option === 'anonymous') setLocalEmail(''); // Clear email if anonymous is chosen
-  };
-
-  const handleTermsChange = (type: 'email' | 'anonymous', checked: boolean | 'indeterminate') => {
-    if (type === 'email') setAgreedToTermsEmail(!!checked);
-    else setAgreedToTermsAnonymous(!!checked);
-    setGlobalError(null);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!selectedOption) return;
     setLocalEmail(e.target.value);
-    setGlobalError(null);
+    if (e.target.value.length > 0) setGlobalError(null);
+  };
+
+  const handleTermsChange = (type: 'email' | 'anonymous', checked: boolean | 'indeterminate') => {
+    if (!selectedOption) return;
+    if (type === 'email') {
+      const error = validateEmail(localEmail);
+      if (error) {
+        setGlobalError(error);
+        return;
+      }
+      setAgreedToTermsEmail(!!checked);
+      setParticipationDetails({
+        type: selectedOption,
+        email: selectedOption === 'email' ? localEmail : undefined,
+        termsAgreed: !!checked,
+      });
+    } else {
+      setAgreedToTermsAnonymous(!!checked);
+      setParticipationDetails({
+        type: selectedOption,
+        email: selectedOption === 'email' ? localEmail : undefined,
+        termsAgreed: !!checked,
+      });
+    }
   };
 
   return (

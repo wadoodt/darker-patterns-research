@@ -51,8 +51,6 @@ const SurveyLayoutContent = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="bg-light-bg-primary text-light-text-secondary flex min-h-screen flex-col">
-      {' '}
-      {/* Removed theme-light-survey */}
       <ProgressBar />
       <LightNavbar showUnsavedChangesModal={showUnsavedChangesModal} />
       <main className="survey-content-scroll-area flex-grow pt-6 pb-24">{children}</main>

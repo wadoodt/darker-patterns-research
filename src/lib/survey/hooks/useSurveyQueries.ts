@@ -3,7 +3,7 @@ import type { SurveyState } from '@/types/survey';
 import type { Dispatch } from 'react';
 import { useCallback } from 'react';
 import { SurveyAction, SurveyActionType } from '../actions';
-import { generateDummyEntries } from '../database';
+import { fetchAndAssignEntries, generateDummyEntries } from '../database';
 import { getAssignedEntriesCount, getCurrentEntry } from '../surveyUtils';
 
 export function useSurveyQueries(state: SurveyState, dispatch: Dispatch<SurveyAction>) {
@@ -14,19 +14,31 @@ export function useSurveyQueries(state: SurveyState, dispatch: Dispatch<SurveyAc
   const saveDemographics = useCallback(async () => {
     dispatch({ type: SurveyActionType.SET_LOADING_ENTRIES, payload: true });
 
-    if (!state.demographicsData) {
+    try {
+      if (!state.demographicsData) {
+        throw new Error('Demographics data is required to fetch entries.');
+      }
+
+      const assignedEntriesCount = getAssignedEntriesCount(state.participationType);
+      let fetchedEntries: DPOEntry[];
+
+      // Conditionally fetch real or dummy data based on the environment
+      if (process.env.NODE_ENV === 'test') {
+        fetchedEntries = await generateDummyEntries(assignedEntriesCount);
+      } else {
+        fetchedEntries = await fetchAndAssignEntries(assignedEntriesCount);
+      }
+
+      dispatch({ type: SurveyActionType.SET_ENTRIES, payload: fetchedEntries });
+    } catch (error) {
+      console.error('Failed to save demographics and fetch entries:', error);
       dispatch({
         type: SurveyActionType.SET_ERROR,
-        payload: 'Demographics data is required.',
+        payload: error instanceof Error ? error.message : 'An unknown error occurred.',
       });
-      return;
+    } finally {
+      dispatch({ type: SurveyActionType.SET_LOADING_ENTRIES, payload: false });
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const assignedEntriesCount = getAssignedEntriesCount(state.participationType);
-    const fetchedEntries = await generateDummyEntries(assignedEntriesCount);
-
-    dispatch({ type: SurveyActionType.SET_ENTRIES, payload: fetchedEntries });
   }, [state.demographicsData, state.participationType, dispatch]);
 
   return {

@@ -1,4 +1,7 @@
 import type { SurveyContextValue } from '@/types/survey';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 
 type NavigationProps = Pick<
@@ -21,6 +24,31 @@ type NavigationProps = Pick<
   isLastEntryInBatch: boolean;
 };
 
+const handleStepNavigation = (
+  stepNumber: number,
+  router: AppRouterInstance,
+  setGlobalError: (error: string) => void,
+) => {
+  if (stepNumber > 1) {
+    switch (stepNumber) {
+      case 1:
+        break;
+      case 2:
+        router.push('/step-demographics');
+        break;
+      case 3:
+        router.push('/step-evaluation');
+        break;
+      case 4:
+        router.push('/step-thank-you');
+        break;
+      default:
+        setGlobalError('Invalid step number');
+        break;
+    }
+  }
+};
+
 export function useSurveyNavigationFooterLogic(): NavigationProps {
   const {
     currentStepNumber,
@@ -39,7 +67,13 @@ export function useSurveyNavigationFooterLogic(): NavigationProps {
     isCurrentEvaluationSubmitted,
     error: contextError,
     surveyCompleted,
+    setGlobalError,
   } = useSurveyProgress();
+  const router = useRouter();
+
+  useEffect(() => {
+    handleStepNavigation(currentStepNumber || 1, router, setGlobalError);
+  }, [currentStepNumber, router]);
 
   // Validation for Introduction Step (Step 1)
   const canProceedFromIntro: boolean =

@@ -10,7 +10,7 @@ export function validateParticipationDetails(details: {
   }
 
   if (details.type === 'email') {
-    if (!details.email || !validateEmail(details.email)) {
+    if (!details.email || validateEmail(details.email)) {
       return 'Please provide a valid email address or choose anonymous.';
     }
   }

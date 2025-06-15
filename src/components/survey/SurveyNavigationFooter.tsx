@@ -26,6 +26,18 @@ type NavigationProps = Pick<
   isLastEntryInBatch: boolean;
 };
 
+const SurveyNavigationFooter = () => {
+  const logic = useSurveyNavigationFooterLogic();
+  return (
+    <footer className="survey-nav-footer">
+      <div className="flex w-full items-center justify-between">
+        {renderLeftButton(logic)}
+        {renderRightButton(logic)}
+      </div>
+    </footer>
+  );
+};
+
 // Extract button rendering into pure functions for clarity and separation
 function renderLeftButton({
   currentStepNumber,
@@ -35,22 +47,20 @@ function renderLeftButton({
 }: Pick<NavigationProps, 'currentStepNumber' | 'goToPreviousStep' | 'isLoadingEntries' | 'isSubmittingSurvey'>) {
   if (currentStepNumber === 1) {
     return (
-      <Button variant="link" size="sm" asChild className="btn-link-light px-1 text-xs">
+      <Button variant="link" size="sm" asChild className="survey-nav-footer-button btn-link-light px-1 text-xs">
         <Link href="/">
-          {' '}
           <Home size={14} className="mr-1" /> Back to Home
         </Link>
       </Button>
     );
   }
-
   return (
     <Button
       variant="ghost"
       size="sm"
       onClick={goToPreviousStep}
       disabled={isLoadingEntries || isSubmittingSurvey}
-      className="hover:bg-gray-100"
+      className="survey-nav-footer-button hover:bg-gray-100"
     >
       <ArrowLeft size={16} className="mr-1" /> Previous Step
     </Button>
@@ -81,25 +91,33 @@ function renderRightButton(logic: NavigationProps) {
     isLoadingEntries ||
     isSubmittingSurvey ||
     (currentStepNumber === 1 && !canProceedFromIntro) ||
-    (currentStepNumber === 2 && !canProceedFromDemographics) ||
+    (currentStepNumber === 2 && (!canProceedFromDemographics || dpoEntriesToReview.length === 0)) ||
     (currentStepNumber === 3 && !isCurrentEvaluationSubmitted);
 
   let buttonText = 'Next Step';
   let buttonIcon = <ArrowRight size={16} className="ml-1" />;
   let onClick = goToNextStep;
+  let buttonClass = 'survey-nav-footer-button btn-light-theme btn-primary-light';
 
   // Handle special cases for different steps
   if (currentStepNumber === 2) {
-    buttonText = 'Start Evaluation';
+    buttonText = isLoadingEntries ? 'Assigning Entries...' : 'Start Evaluation';
     onClick = saveDemographics;
+    buttonClass =
+      'survey-nav-footer-button btn-light-theme btn-primary-light font-bold shadow-lg ring-2 ring-brand-purple-400'; // CTA emphasis
+    if (isLoadingEntries) {
+      buttonIcon = <Loader2 size={16} className="ml-1 animate-spin" />;
+    }
   } else if (currentStepNumber === 3) {
     const isLastEntry = currentDpoEntryIndex === dpoEntriesToReview.length - 1;
     if (isLastEntry || isLastEntryInBatch) {
       buttonText = 'Complete Survey';
       buttonIcon = <CheckCheck size={16} className="ml-1" />;
       onClick = completeSurveyAndPersistData;
+      buttonClass = 'survey-nav-footer-button btn-light-theme btn-primary-light'; // Special finish style
     } else {
       buttonText = 'Next Entry';
+      buttonClass = 'survey-nav-footer-button btn-light-theme btn-primary-light';
     }
   }
 
@@ -112,23 +130,11 @@ function renderRightButton(logic: NavigationProps) {
   }
 
   return (
-    <Button variant="default" size="sm" onClick={onClick} disabled={isDisabled}>
+    <Button variant="default" size="sm" onClick={onClick} disabled={isDisabled} className={buttonClass}>
       {buttonText}
       {buttonIcon}
     </Button>
   );
 }
-
-const SurveyNavigationFooter = () => {
-  const logic = useSurveyNavigationFooterLogic();
-  return (
-    <footer className="survey-navigation-footer">
-      <div className="survey-navigation-container">
-        {renderLeftButton(logic)}
-        {renderRightButton(logic)}
-      </div>
-    </footer>
-  );
-};
 
 export default SurveyNavigationFooter;
