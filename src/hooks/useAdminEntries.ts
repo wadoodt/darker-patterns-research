@@ -1,6 +1,6 @@
 // src/hooks/useAdminEntries.ts
 'use client';
-import { buildEntriesQuery, fetchEntriesCount, fetchEntriesData } from '@/lib/entries';
+import { buildDpoEntriesQuery, fetchDpoEntriesCount, fetchDpoEntriesData } from '@/lib/firestore/queries/admin';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
@@ -74,14 +74,21 @@ async function fetchAndSetEntries(
   setIsLoading(true);
   setError(null);
   try {
-    const { mainQuery, countQuery } = buildEntriesQuery(filters, sort, targetReviews, ITEMS_PER_PAGE, pageDirection, {
-      first: firstDocOfCurrentPage,
-      last: lastDocOfCurrentPage,
-    });
+    const { mainQuery, countQuery } = buildDpoEntriesQuery(
+      filters,
+      sort,
+      targetReviews,
+      ITEMS_PER_PAGE,
+      pageDirection,
+      {
+        first: firstDocOfCurrentPage,
+        last: lastDocOfCurrentPage,
+      },
+    );
 
     const [totalCount, { entries: fetchedEntries, cursors }] = await Promise.all([
-      fetchEntriesCount(countQuery),
-      fetchEntriesData(mainQuery, targetReviews),
+      fetchDpoEntriesCount(countQuery),
+      fetchDpoEntriesData(mainQuery, targetReviews),
     ]);
     setTotalEntriesCount(totalCount);
     setEntries(fetchedEntries);

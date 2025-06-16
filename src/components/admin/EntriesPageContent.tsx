@@ -2,7 +2,7 @@
 import { useAdminEntries } from '@/hooks/useAdminEntries';
 import { useAuth } from '@/hooks/useAuth';
 import { db } from '@/lib/firebase';
-import { getMockEntries } from '@/lib/firestore/mocks/entries';
+import { getMockDpoEntries } from '@/lib/firestore/mocks/admin';
 import { HARM_CATEGORIES } from '@/lib/harm-categories';
 import { doc, getDoc } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ export default function EntriesPageContent() {
 
   // Always call the hook, but override values in dev
   const adminEntries = useAdminEntries(defaultTargetReviews);
-  const mockEntries = useCallback(() => getMockEntries(10), []);
+  const mockEntries = useCallback(() => getMockDpoEntries(10), []);
 
   useEffect(() => {
     const fetchInitialSetupData = async () => {

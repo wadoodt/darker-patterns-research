@@ -1,6 +1,5 @@
 import EntryDetailPageView from '@/components/admin/EntryDetailPageView';
-import { getEntry } from '@/lib/entries';
-import { getMockEntryDetails } from '@/lib/firestore/mocks/entryDetails';
+import { getDpoEntry } from '@/lib/firestore/queries/admin';
 import type { EntryWithDetails } from '@/types/entryDetails';
 import type { Metadata } from 'next';
 
@@ -11,36 +10,29 @@ export async function generateMetadata({ params }: { params: { entryId: string }
   };
 }
 
-export default async function EntryDetailRoutePage({ params }: { params: Promise<{ entryId: string }> }) {
-  const { entryId } = await params;
-  let entryData: EntryWithDetails;
+export default async function EntryDetailRoutePage({ params }: { params: { entryId: string } }) {
+  const { entryId } = params;
+  const { entry, evaluations, flags } = await getDpoEntry(entryId);
 
-  if (process.env.NODE_ENV === 'development') {
-    entryData = getMockEntryDetails(entryId);
-  } else {
-    const { entry, evaluations, flags, demographics, responseAggregates } = await getEntry(entryId);
-
-    const formattedEvaluations = evaluations.map((evaluation) => ({
-      id: evaluation.id ?? evaluation.dpoEntryId, // Fallback to dpoEntryId if id is undefined
-      rating: evaluation.rating,
-      comment: evaluation.comment,
-      submittedAt: evaluation.submittedAt,
-      chosenOptionKey: evaluation.chosenOptionKey,
-      wasChosenActuallyAccepted: evaluation.wasChosenActuallyAccepted,
-    }));
-
-    entryData = {
-      ...entry,
-      analytics: {
-        views: 0, // TODO: Implement view tracking
-        flags: flags.length,
-        upvotes: responseAggregates?.ratingDistribution?.['5_star'] || 0,
-      },
-      evaluations: formattedEvaluations,
-      demographics,
-      responseAggregates,
-    } as EntryWithDetails;
-  }
+  const entryData: EntryWithDetails = {
+    ...entry,
+    analytics: {
+      views: 0, // TODO: Implement view tracking
+      flags: flags.length,
+      upvotes: evaluations.filter((e) => e.rating === 5).length,
+    },
+    evaluations: evaluations
+      .filter((e) => e.id)
+      .map((e) => ({
+        id: e.id!,
+        rating: e.rating,
+        comment: e.comment,
+        submittedAt: e.submittedAt,
+        chosenOptionKey: e.chosenOptionKey,
+        wasChosenActuallyAccepted: e.wasChosenActuallyAccepted,
+      })),
+    // TODO: Add comments when available
+  };
 
   return <EntryDetailPageView entry={entryData} />;
 }

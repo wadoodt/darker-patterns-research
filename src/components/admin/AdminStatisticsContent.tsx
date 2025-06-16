@@ -1,16 +1,28 @@
 // components/admin/AdminStatisticsContent.tsx
+import { getStatisticsData } from '@/lib/firestore/queries/admin';
 import React from 'react';
 import AdminHeader from './AdminHeader';
+import DemographicsDisplayAdmin from './DemographicsDisplayAdmin';
+import ResponseAnalyticsDisplay from './ResponseAnalyticsDisplay';
 
-const AdminStatisticsContent = () => {
+const AdminStatisticsContent = async () => {
+  const { demographicsSummary, overviewStats, responseAggregates } = await getStatisticsData();
+
   return (
     <>
       <AdminHeader
         title="Survey Statistics & Analytics"
         objective="View aggregated statistics from participant surveys, analyze trends, and export data."
       />
-      <div className="admin-card">
-        <p className="text-dark-text-secondary">(Detailed aggregated statistics, charts, data export will go here)</p>
+      <div className="space-y-8">
+        <div>
+          <h2 className="text-dark-text-primary mb-4 text-2xl font-bold">Response Analytics</h2>
+          <ResponseAnalyticsDisplay overviewStats={overviewStats} responseAggregates={responseAggregates} />
+        </div>
+        <div>
+          <h2 className="text-dark-text-primary mb-4 text-2xl font-bold">Participant Demographics</h2>
+          <DemographicsDisplayAdmin summary={demographicsSummary} />
+        </div>
       </div>
     </>
   );
