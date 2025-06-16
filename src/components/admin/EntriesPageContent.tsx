@@ -2,7 +2,7 @@
 import { useAdminEntries } from '@/hooks/useAdminEntries';
 import { useAuth } from '@/hooks/useAuth';
 import { db } from '@/lib/firebase';
-import { getMockEntries } from '@/lib/mocks/entries';
+import { getMockEntries } from '@/lib/firestore/mocks/entries';
 import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
 import { EntriesPageView } from './EntriesPageView';

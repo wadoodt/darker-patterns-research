@@ -1,6 +1,6 @@
 import EntryDetailPageView from '@/components/admin/EntryDetailPageView';
 import { getEntry } from '@/lib/entries';
-import { getMockEntryDetails } from '@/lib/mocks/entryDetails';
+import { getMockEntryDetails } from '@/lib/firestore/mocks/entryDetails';
 import type { EntryWithDetails } from '@/types/entryDetails';
 import type { Metadata } from 'next';
 

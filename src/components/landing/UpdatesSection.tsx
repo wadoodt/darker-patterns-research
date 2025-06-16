@@ -1,54 +1,6 @@
 // components/landing/UpdatesSection.tsx
-import { db } from '@/lib/firebase';
-import { doc, getDoc, Timestamp } from 'firebase/firestore';
+import { getLandingUpdates } from '@/lib/landing/database';
 import UpdateList from './UpdateList';
-import type { LandingUpdate } from './types';
-
-interface AdminSettings {
-  landingPageUpdates?: LandingUpdate[];
-}
-
-const mockUpdatesData: LandingUpdate[] = [
-  {
-    id: 'mock-update-1',
-    title: 'Test Mode: Project Kickoff!',
-    date: { seconds: Math.floor(Date.now() / 1000) - 86400 * 7, nanoseconds: 0 },
-    description: 'This is a mock update for test environment. The DPV project has officially started.',
-    iconName: 'Milestone',
-  },
-  {
-    id: 'mock-update-2',
-    title: 'Test Mode: Alpha Version Released',
-    date: { seconds: Math.floor(Date.now() / 1000) - 86400 * 2, nanoseconds: 0 },
-    description: 'Alpha version is now available for internal testing. Features include X, Y, Z.',
-    iconName: 'Newspaper',
-  },
-];
-
-async function getLandingUpdates(): Promise<LandingUpdate[]> {
-  if (process.env.NODE_ENV === 'test' || !db) {
-    console.warn('UpdatesSection: Test mode or DB not available, returning mock updates.');
-    return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
-  }
-  try {
-    const settingsDocRef = doc(db, 'admin_settings', 'global_config');
-    const docSnap = await getDoc(settingsDocRef);
-    if (docSnap.exists()) {
-      const settings = docSnap.data() as AdminSettings;
-      const updates = settings.landingPageUpdates || [];
-      return updates.sort((a, b) => {
-        const dateA = a.date instanceof Timestamp ? a.date.toMillis() : new Date(a.date.seconds * 1000).getTime();
-        const dateB = b.date instanceof Timestamp ? b.date.toMillis() : new Date(b.date.seconds * 1000).getTime();
-        return dateB - dateA;
-      });
-    }
-    console.warn('UpdatesSection: No admin_settings/global_config document found! Returning mock data.');
-    return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
-  } catch (error) {
-    console.error('UpdatesSection: Error fetching landing updates:', error);
-    return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
-  }
-}
 
 const UpdatesSection = async () => {
   const updates = await getLandingUpdates();

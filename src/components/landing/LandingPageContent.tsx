@@ -12,18 +12,18 @@ const LandingPageContent = () => {
     <>
       <h1 className="sr-only">Dark Pattern Validation Project - Landing Page</h1>
       <HeroSection />
-      <StatsSection />
+      <ResearchersSection />
+      <LazyLoadOnScroll className="min-h-[30rem]">
+        <BenefitsSection />
+      </LazyLoadOnScroll>
+      <LazyLoadOnScroll className="min-h-[30rem]">
+        <StatsSection />
+      </LazyLoadOnScroll>
       <LazyLoadOnScroll className="min-h-[25rem]">
         <ProgressSection />
       </LazyLoadOnScroll>
       <LazyLoadOnScroll className="min-h-[25rem]">
         <UpdatesSection />
-      </LazyLoadOnScroll>
-      <LazyLoadOnScroll className="min-h-[30rem]">
-        <BenefitsSection />
-      </LazyLoadOnScroll>
-      <LazyLoadOnScroll className="min-h-[30rem]">
-        <ResearchersSection />
       </LazyLoadOnScroll>
     </>
   );

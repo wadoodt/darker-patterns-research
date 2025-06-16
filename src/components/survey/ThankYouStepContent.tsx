@@ -138,7 +138,7 @@ const ThankYouStepContent = () => {
         {surveyCompleted && !isSubmittingSurvey && (
           <div className="mt-6 text-center">
             <p className="mb-3 text-sm font-semibold text-green-600">Survey submitted successfully!</p>
-            <Link href="/" className="btn-secondary-light text-xs">
+            <Link href="/" className="btn-base btn-primary-light text-xs">
               <Home size={14} className="mr-1.5" /> Return to Homepage
             </Link>
           </div>

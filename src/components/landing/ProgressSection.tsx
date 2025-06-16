@@ -1,17 +1,31 @@
 // src/components/landing/ProgressSection.tsx
 'use client';
-import React from 'react';
-import LandingProgressBar from './LandingProgressBar';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
+import { db } from '@/lib/firebase';
+import { getProjectProgress } from '@/lib/landing/database';
+import React, { useEffect, useState } from 'react';
+import LandingProgressBar from './LandingProgressBar';
+
+const mockProgressData = [
+  { label: 'Overall Dataset Annotation', percentage: 75, colorClass: 'bg-brand-purple-500' },
+  { label: 'Ethics & Safety Review Coverage', percentage: 90, colorClass: 'bg-accent-cyan' },
+  { label: 'Min. 10 Reviews per Entry Target', percentage: 60, colorClass: 'bg-accent-pink' },
+];
 
 const ProgressSection = () => {
   const sectionRef = useScrollAnimation({ animationClass: 'anim-fade-in-up', threshold: 0.2, triggerOnce: true });
+  const [progressData, setProgressData] = useState(mockProgressData);
 
-  const progressData = [
-    { label: 'Overall Dataset Annotation', percentage: 75, colorClass: 'bg-brand-purple-500' },
-    { label: 'Ethics & Safety Review Coverage', percentage: 90, colorClass: 'bg-accent-cyan' },
-    { label: 'Min. 10 Reviews per Entry Target', percentage: 60, colorClass: 'bg-accent-pink' },
-  ];
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development' || !db) {
+      setProgressData(mockProgressData);
+    } else {
+      getProjectProgress()
+        .then(setProgressData)
+        .catch(() => setProgressData(mockProgressData));
+    }
+  }, []);
+
   return (
     <section id="progress" className="bg-dark-bg-primary py-16 sm:py-24">
       <div
