@@ -7,6 +7,7 @@ export function buildEvaluationDraft({
   userComment,
   timeStarted,
   optionAisDPOAccepted,
+  selectedCategories,
 }: {
   currentDisplayEntry: { id: string } | null;
   selectedOptionKey: 'A' | 'B' | null;
@@ -14,6 +15,7 @@ export function buildEvaluationDraft({
   userComment: string;
   timeStarted: number;
   optionAisDPOAccepted: boolean;
+  selectedCategories: string[];
 }): EvaluationDraft | string {
   if (!selectedOptionKey) {
     return 'Please select either Option A or Option B.';
@@ -34,5 +36,6 @@ export function buildEvaluationDraft({
     comment: userComment.trim(),
     timeSpentMs,
     wasChosenActuallyAccepted,
+    dpoEntryCategories: selectedCategories,
   };
 }

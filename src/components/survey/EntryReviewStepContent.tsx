@@ -33,6 +33,8 @@ const EntryReviewStepContent: React.FC<{ entryId?: string }> = () => {
     setUserRating,
     userComment,
     setUserComment,
+    selectedCategories,
+    setSelectedCategories,
     timeStarted,
     localError,
     setLocalError,
@@ -55,6 +57,7 @@ const EntryReviewStepContent: React.FC<{ entryId?: string }> = () => {
       userComment,
       timeStarted,
       optionAisDPOAccepted,
+      selectedCategories,
     });
     if (typeof result === 'string') {
       setLocalError(result);
@@ -101,6 +104,7 @@ const EntryReviewStepContent: React.FC<{ entryId?: string }> = () => {
       selectedOptionKey={selectedOptionKey}
       userRating={userRating}
       userComment={userComment}
+      selectedCategories={selectedCategories}
       localError={localError}
       contextError={contextError}
       isFlagModalOpen={isFlagModalOpen}
@@ -112,6 +116,7 @@ const EntryReviewStepContent: React.FC<{ entryId?: string }> = () => {
       handleOptionSelect={handleOptionSelect}
       setUserRating={setUserRating}
       setUserComment={setUserComment}
+      setSelectedCategories={setSelectedCategories}
       handleLocalSubmitAndReveal={handleLocalSubmitAndReveal}
       setIsFlagModalOpen={setIsFlagModalOpen}
       handleSubmitFlag={handleSubmitFlag}

@@ -19,6 +19,7 @@ export function useEntryReviewState() {
   const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(null);
   const [userRating, setUserRating] = useState<number>(0);
   const [userComment, setUserComment] = useState<string>('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [timeStarted, setTimeStarted] = useState<number>(0);
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -34,6 +35,7 @@ export function useEntryReviewState() {
       setSelectedOptionKey(null);
       setUserRating(0);
       setUserComment('');
+      setSelectedCategories(entry.categories || []);
       setTimeStarted(Date.now());
       resetCurrentEvaluationSubmitted();
       setLocalError(null);
@@ -68,6 +70,8 @@ export function useEntryReviewState() {
     setUserRating,
     userComment,
     setUserComment,
+    selectedCategories,
+    setSelectedCategories,
     timeStarted,
     setTimeStarted,
     localError,

@@ -1,4 +1,5 @@
 import type { DisplayEntry } from '@/types/entries';
+import { HARM_CATEGORIES } from '@/lib/harm-categories';
 
 export function getMockEntries(count: number = 10): DisplayEntry[] {
   return Array.from({ length: count }).map((_, i) => {
@@ -12,7 +13,10 @@ export function getMockEntries(count: number = 10): DisplayEntry[] {
       prompt: `Mock prompt for entry ${i + 1}`,
       acceptedResponse: `Mock accepted response for entry ${i + 1}`,
       rejectedResponse: `Mock rejected response for entry ${i + 1}`,
-      category: i % 3 === 0 ? 'Obscuring Information' : i % 3 === 1 ? 'Misleading Content' : 'Privacy Harm',
+      categories: [
+        HARM_CATEGORIES[i % HARM_CATEGORIES.length].id,
+        HARM_CATEGORIES[(i + 1) % HARM_CATEGORIES.length].id,
+      ],
       discussion: `Mock discussion for entry ${i + 1}`,
       reviewCount,
       targetReviewCount,

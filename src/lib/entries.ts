@@ -103,10 +103,13 @@ export function buildEntriesQuery(
 
   // Apply filters
   const filterConstraints = [];
-  if (filters.category) {
-    filterConstraints.push(where('category', '==', filters.category));
-  }
-  if (filters.status) {
+  if (filters.category && filters.category.length > 0) {
+    if (filters.category.length > 10) {
+      console.warn('Category filter is limited to 10 selections, taking the first 10.');
+      filters.category = filters.category.slice(0, 10);
+    }
+    filterConstraints.push(where('categories', 'array-contains-any', filters.category));
+  } else if (filters.status) {
     if (filters.status === 'needs_reviews') {
       filterConstraints.push(where('reviewCount', '<', targetReviews));
     } else if (filters.status === 'completed') {

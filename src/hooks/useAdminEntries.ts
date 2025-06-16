@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 export const ITEMS_PER_PAGE = 20;
 
 export interface AdminEntriesFilter {
-  category?: string;
+  category?: string[];
   status?: string;
   searchTerm?: string;
 }

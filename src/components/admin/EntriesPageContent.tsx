@@ -3,12 +3,13 @@ import { useAdminEntries } from '@/hooks/useAdminEntries';
 import { useAuth } from '@/hooks/useAuth';
 import { db } from '@/lib/firebase';
 import { getMockEntries } from '@/lib/firestore/mocks/entries';
-import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
+import { HARM_CATEGORIES } from '@/lib/harm-categories';
+import { doc, getDoc } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
 import { EntriesPageView } from './EntriesPageView';
 
 export default function EntriesPageContent() {
-  const [categories, setCategories] = useState<string[]>([]);
+  const categories = HARM_CATEGORIES.map((c) => c.name);
   const [defaultTargetReviews, setDefaultTargetReviews] = useState(10);
   const [initialDataLoading, setInitialDataLoading] = useState(true);
   const { isAdmin } = useAuth();
@@ -28,10 +29,6 @@ export default function EntriesPageContent() {
         return;
       }
       try {
-        const catSnapshot = await getDocs(query(collection(db, 'dpo_entries')));
-        const uniqueCategories = Array.from(new Set(catSnapshot.docs.map((doc) => doc.data().category as string)));
-        setCategories(uniqueCategories.sort());
-
         const settingsDocSnap = await getDoc(doc(db, 'admin_settings', 'global_config'));
         if (settingsDocSnap.exists()) {
           setDefaultTargetReviews(settingsDocSnap.data().minTargetReviewsPerEntry || 10);
@@ -42,14 +39,14 @@ export default function EntriesPageContent() {
         setInitialDataLoading(false);
       }
     };
-    if (isDev) {
-      console.warn('Using mock data in development mode. Categories and default reviews will be set manually.');
-      setCategories(['Obscuring Information', 'Misleading Content', 'Privacy Har']);
+
+    if (!isDev) {
+      fetchInitialSetupData();
+    } else {
+      console.warn('Using mock data in development mode. Default reviews will be set manually.');
       setInitialDataLoading(false);
-      return;
     }
-    fetchInitialSetupData();
-  }, []);
+  }, [isDev]);
 
   // Use mock data in dev, otherwise use real data
   const entries = isDev ? mockEntries() : adminEntries.entries;

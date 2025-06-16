@@ -6,4 +6,4 @@ export interface DisplayEntry extends DPOEntry {
   statusText?: string;
 }
 
-export type SortableEntryKeys = keyof Pick<DisplayEntry, 'id' | 'category' | 'reviewCount'>;
+export type SortableEntryKeys = keyof Pick<DisplayEntry, 'id' | 'categories' | 'reviewCount'>;

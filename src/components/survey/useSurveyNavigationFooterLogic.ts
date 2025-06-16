@@ -69,12 +69,10 @@ export function useSurveyNavigationFooterLogic(): NavigationProps {
     error: contextError,
     surveyCompleted,
     setGlobalError,
-    hasUnsavedChanges,
   } = useSurveyProgress();
   const router = useRouter();
 
   useEffect(() => {
-    console.log('unsaved:', hasUnsavedChanges);
     handleStepNavigation(currentStepNumber || 1, router, setGlobalError);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStepNumber]);

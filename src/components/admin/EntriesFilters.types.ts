@@ -4,7 +4,7 @@ export type StatusOption = {
 };
 
 export type EntryFilterValues = {
-  category?: string;
+  category?: string[];
   status?: string;
 };
 

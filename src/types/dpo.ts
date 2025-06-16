@@ -12,7 +12,7 @@ export interface DPOEntry {
   prompt?: string;
   acceptedResponse: string;
   rejectedResponse: string;
-  category: string;
+  categories: string[];
   discussion?: string; // Optional explanation/discussion visible after evaluation
   reviewCount: number;
   targetReviewCount?: number;
@@ -43,7 +43,7 @@ export interface EvaluationData {
   id?: string;
   participantSessionUid: string;
   dpoEntryId: string;
-  dpoEntryCategory: string;
+  dpoEntryCategories: string[];
   chosenOptionKey: 'A' | 'B';
   wasChosenActuallyAccepted: boolean;
   rating: number;
@@ -53,7 +53,7 @@ export interface EvaluationData {
 }
 
 // For EvaluationDraft used in SurveyProgressContext and EntryReviewStep
-export type EvaluationDraft = Omit<EvaluationData, 'participantSessionUid' | 'dpoEntryCategory' | 'submittedAt' | 'id'>;
+export type EvaluationDraft = Omit<EvaluationData, 'participantSessionUid' | 'submittedAt' | 'id'>;
 
 export interface ParticipantSession {
   // id: string; // Document ID in Firestore is participantSessionUid
@@ -75,5 +75,5 @@ export interface ParticipantFlag {
   reason: string; // Could be one of predefined or "Other"
   comment?: string | null; // Detailed comment if reason is "Other" or additional notes
   flaggedAt: Timestamp | Date;
-  dpoEntryCategory?: string;
+  dpoEntryCategories?: string[];
 }

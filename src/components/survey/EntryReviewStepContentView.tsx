@@ -1,5 +1,7 @@
+/* eslint-disable max-lines-per-function */
 import type { DPOEntry } from '@/types/dpo';
 import type React from 'react';
+import CategoriesSection from './CategoriesSection';
 import CommentsSection from './CommentsSection';
 import ErrorMessages from './ErrorMessages';
 import FlagEntryModal from './FlagEntryModal';
@@ -28,6 +30,7 @@ interface EntryReviewStepContentViewProps {
   selectedOptionKey: 'A' | 'B' | null;
   userRating: number;
   userComment: string;
+  selectedCategories: string[];
   localError: string | null;
   contextError: string | null;
   isFlagModalOpen: boolean;
@@ -40,6 +43,7 @@ interface EntryReviewStepContentViewProps {
   handleOptionSelect: (optionKey: 'A' | 'B') => void;
   setUserRating: (rating: number) => void;
   setUserComment: (comment: string) => void;
+  setSelectedCategories: (categories: string[]) => void;
   handleLocalSubmitAndReveal: () => void;
   setIsFlagModalOpen: (open: boolean) => void;
   handleSubmitFlag: (reason: string, comment: string) => void;
@@ -96,6 +100,11 @@ const EntryReviewStepContentView: React.FC<EntryReviewStepContentViewProps> = (p
         isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
         userRating={props.userRating}
         setUserRating={props.setUserRating}
+      />
+      <CategoriesSection
+        selectedCategories={props.selectedCategories}
+        setSelectedCategories={props.setSelectedCategories}
+        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
       />
       <CommentsSection
         selectedOptionKey={props.selectedOptionKey}
