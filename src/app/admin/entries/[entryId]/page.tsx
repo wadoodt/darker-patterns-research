@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: { entryId: string }
 }
 
 export default async function EntryDetailRoutePage({ params }: { params: { entryId: string } }) {
-  const { entryId } = params;
+  const { entryId } = await params;
   const { entry, evaluations, flags } = await getDpoEntry(entryId);
 
   const entryData: EntryWithDetails = {

@@ -3,6 +3,7 @@ import type { Timestamp as FirebaseAdminTimestamp } from 'firebase-admin/firesto
 import { getStorage } from 'firebase-admin/storage';
 import * as functions from 'firebase-functions/v2';
 import { onDocumentCreated, onDocumentWritten } from 'firebase-functions/v2/firestore';
+import { DpoEntryData, ingestDpoDatasetSchema } from './schemas/dpo_entry';
 import type {
   ActivityLogItemFc,
   AdminSettingsData,
@@ -438,5 +439,74 @@ export const exportData = onCall({ region: 'us-central1' }, async (req: Callable
     functions.logger.error(`Error during export for dataType ${dataType}:`, error, { uid: req.auth?.uid });
     if (error instanceof functions.https.HttpsError) throw error;
     throw new functions.https.HttpsError('internal', error.message || 'Failed to generate export file.');
+  }
+});
+
+// --- Callable function to ingest a dataset of DPO entries ---
+export const ingestDpoDataset = onCall(async (request) => {
+  // 1. Authentication & Authorization
+  if (!request.auth) {
+    // This checks if the user is authenticated at all.
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called by an authenticated user.');
+  }
+
+  // Check if the authenticated user is an administrator by reading their Firestore document.
+  const userDoc = await db.collection('users').doc(request.auth.uid).get();
+  const userData = userDoc.data();
+  if (!userDoc.exists || !Array.isArray(userData?.roles) || !userData.roles.includes('admin')) {
+    // The user is authenticated, but not an admin.
+    throw new functions.https.HttpsError(
+      'permission-denied',
+      `The function must be called by an administrator. Current roles for user ${request.auth.uid}: ${userData?.roles}`,
+    );
+  }
+
+  // 2. Data Validation
+  const parseResult = ingestDpoDatasetSchema.safeParse(request.data);
+  if (!parseResult.success) {
+    throw new functions.https.HttpsError('invalid-argument', 'The provided data does not match the expected format.', {
+      errors: parseResult.error.flatten(),
+    });
+  }
+
+  const entries = parseResult.data;
+
+  // 3. Batch Writes to Firestore
+  const batch = db.batch();
+  const dpoEntriesRef = db.collection('dpo_entries');
+  const adminSettingsRef = db.doc('admin_settings/global_config');
+
+  try {
+    const adminSettingsDoc = await adminSettingsRef.get();
+    const defaultTargetReviewCount = adminSettingsDoc.exists
+      ? adminSettingsDoc.data()?.minTargetReviewsPerEntry || 10
+      : 10;
+
+    entries.forEach((entryData: DpoEntryData) => {
+      const newEntryRef = dpoEntriesRef.doc(); // Auto-generate ID
+      const newEntry: DPOEntry = {
+        id: newEntryRef.id,
+        instruction: entryData.instruction,
+        acceptedResponse: entryData.acceptedResponse,
+        rejectedResponse: entryData.rejectedResponse,
+        categories: entryData.categories,
+        prompt: entryData.prompt ?? '',
+        discussion: entryData.discussion ?? '',
+        reviewCount: 0,
+        targetReviewCount: defaultTargetReviewCount,
+        createdAt: admin.firestore.FieldValue.serverTimestamp() as FirebaseAdminTimestamp,
+        isFlaggedCount: 0,
+        isArchived: false,
+      };
+      batch.set(newEntryRef, newEntry);
+    });
+
+    await batch.commit();
+
+    // 4. Feedback
+    return { success: true, message: `Successfully ingested ${entries.length} DPO entries.` };
+  } catch (error) {
+    functions.logger.error('Error ingesting DPO dataset:', error);
+    throw new functions.https.HttpsError('internal', 'An error occurred while ingesting the dataset.', error);
   }
 });

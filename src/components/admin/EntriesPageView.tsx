@@ -77,11 +77,11 @@ const tableColumns: Column<DisplayEntry>[] = [
     ),
   },
   {
-    key: 'category',
+    key: 'categories',
     header: 'Category',
     sortable: true,
     icon: Tag,
-    renderCell: (entry: DisplayEntry) => <span className="text-sm">{entry.category}</span>,
+    renderCell: (entry: DisplayEntry) => <span className="text-sm">{entry.categories.join(', ')}</span>,
   },
   {
     key: 'reviewCount',

@@ -148,11 +148,28 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (key: keyof DisplayEntry | 'id') => {
-    const newDirection = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
-    setSortConfig({ key: key as SortableEntryKeys, direction: newDirection });
+  const handleSortChange = (key: SortableEntryKeys | 'id') => {
+    setSortConfig((prev) => ({
+      key,
+      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+    }));
     setCurrentPage(1);
   };
+
+  const refetchEntries = useCallback(() => {
+    setCurrentPage(1);
+    setFirstDocOfCurrentPage(null);
+    setLastDocOfCurrentPage(null);
+    fetchEntries(1, activeFilters, sortConfig, defaultTargetReviews, 'current');
+  }, [
+    activeFilters,
+    sortConfig,
+    defaultTargetReviews,
+    fetchEntries,
+    setCurrentPage,
+    setFirstDocOfCurrentPage,
+    setLastDocOfCurrentPage,
+  ]);
 
   const handlePageChange = (newPage: number) => {
     const direction = newPage > currentPage ? 'next' : newPage < currentPage ? 'prev' : 'current';
@@ -169,5 +186,6 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
     handleFilterChange,
     handleSortChange,
     handlePageChange,
+    refetchEntries,
   };
 };

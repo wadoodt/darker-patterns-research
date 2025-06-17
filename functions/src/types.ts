@@ -9,7 +9,7 @@ export interface DPOEntry {
   prompt?: string;
   acceptedResponse: string;
   rejectedResponse: string;
-  category: string;
+  categories: string[];
   discussion?: string;
   reviewCount: number;
   targetReviewCount?: number;
@@ -41,7 +41,7 @@ export interface EvaluationData {
   id?: string; // Firestore document ID, added during fetch client-side
   participantSessionUid: string;
   dpoEntryId: string;
-  dpoEntryCategory: string;
+  dpoEntryCategories: string[];
   chosenOptionKey: 'A' | 'B';
   wasChosenActuallyAccepted: boolean;
   rating: number;
@@ -69,7 +69,7 @@ export interface ParticipantFlag {
   reason: string;
   comment?: string | null;
   flaggedAt: FirebaseAdminTimestamp | Date; // Use FirebaseAdminTimestamp
-  dpoEntryCategory?: string; // Optional: store category for context/filtering flags
+  dpoEntryCategories?: string[]; // Optional: store category for context/filtering flags
 }
 
 export interface AdminSettingsData {
