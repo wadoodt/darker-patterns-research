@@ -2,18 +2,19 @@
 import type { ChartConfig } from '@/components/ui/chart.types';
 
 export interface ChartDataItem {
-  name: string;
-  value: number;
-  fill: string;
+  name: string; // Required for all chart items
+  fill: string; // Required for all charts
+  value?: number; // For pie charts
+  count?: number; // For bar charts
+  [key: string]: string | number | undefined; // Allow additional properties
 }
 
-export interface PieChartData extends ChartDataItem {
-  [key: string]: unknown; // For flexible key-value pairs
+export interface PieChartData extends Omit<ChartDataItem, 'value'> {
+  value: number; // Make value required for pie charts
 }
 
-export interface BarChartData extends ChartDataItem {
-  count: number;
-  [key: string]: unknown; // For flexible key-value pairs
+export interface BarChartData extends Omit<ChartDataItem, 'count'> {
+  count: number; // Make count required for bar charts
 }
 
 export interface ChartCardBaseProps {
@@ -31,4 +32,9 @@ export interface DemographicsBarChartProps extends ChartCardBaseProps {
 
 export interface PieChartCardProps extends ChartCardBaseProps {
   data: PieChartData[];
+}
+
+export interface ChartCardProps extends ChartCardBaseProps {
+  height?: string;
+  children?: React.ReactElement;
 }

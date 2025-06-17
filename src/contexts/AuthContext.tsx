@@ -1,11 +1,11 @@
 'use client';
 
 import { auth, db } from '@/lib/firebase';
-import { fetchOrCreateUserProfile } from '@/lib/userProfile';
+import { fetchOrCreateUserProfile } from '@/lib/firestore/queries/users';
+import { UserDataFromFirestore } from '@/types/user';
+import { Firestore } from '@google-cloud/firestore';
 import type { User as FirebaseUser } from 'firebase/auth';
 import { signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
-import { UserDataFromFirestore } from '@/types/user';
-import { Firestore } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { createContext, useEffect, useState } from 'react';
 
@@ -57,7 +57,7 @@ async function handleAuthState(
   setUser(firebaseUser);
   if (firebaseUser) {
     try {
-      const combinedProfile = await fetchOrCreateUserProfile(db, firebaseUser);
+      const combinedProfile = await fetchOrCreateUserProfile(firebaseUser);
       setProfile(combinedProfile);
       const { isAdmin, isResearcher } = getRoleFlags(combinedProfile.roles);
       setIsAdmin(isAdmin);
@@ -102,7 +102,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) =>
-      handleAuthState(firebaseUser, db as Firestore, setUser, setProfile, setIsAdmin, setIsResearcher, setLoading),
+      handleAuthState(
+        firebaseUser,
+        db as unknown as Firestore,
+        setUser,
+        setProfile,
+        setIsAdmin,
+        setIsResearcher,
+        setLoading,
+      ),
     );
 
     return () => unsubscribe();

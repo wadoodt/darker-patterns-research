@@ -1,6 +1,5 @@
-import { db } from '@/lib/firebase';
-import { DPOEntry } from '@/types/dpo';
-import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { submitFlagForEntry as submitFlag } from '@/lib/firestore/mutations/survey';
+import type { DPOEntry } from '@/types/dpo';
 
 export async function submitFlagForEntry({
   currentDisplayEntry,
@@ -19,30 +18,31 @@ export async function submitFlagForEntry({
   onError?: (err: unknown) => void;
   onFinally?: () => void;
 }) {
-  if (!currentDisplayEntry || !currentDisplayEntry.id || !participantSessionUid) {
-    alert('Cannot submit flag: missing entry data or session information.');
+  if (
+    !currentDisplayEntry ||
+    !currentDisplayEntry.id ||
+    !participantSessionUid ||
+    !currentDisplayEntry.categories ||
+    currentDisplayEntry.categories.length === 0
+  ) {
+    alert('Cannot submit flag: missing entry data, session information, or category.');
     onFinally?.();
     return;
   }
-  if (process.env.NODE_ENV === 'test' || !db) {
+  if (process.env.NODE_ENV === 'test') {
     alert('Flagging is currently simulated. Your feedback is noted.');
+    onSuccess?.();
     onFinally?.();
     return;
   }
-  const flagData = {
-    participantSessionUid,
-    reason,
-    comment: comment.trim() || null,
-    flaggedAt: serverTimestamp(),
-    dpoEntryCategory: currentDisplayEntry.category,
-  };
-  const entryDocRef = doc(db, 'dpo_entries', currentDisplayEntry.id);
-  const flagsCollectionRef = collection(entryDocRef, 'participant_flags');
+
   try {
-    await addDoc(flagsCollectionRef, flagData);
-    await updateDoc(entryDocRef, {
-      isFlaggedCount: increment(1),
-      lastFlaggedAt: serverTimestamp(),
+    await submitFlag({
+      dpoEntryId: currentDisplayEntry.id,
+      dpoEntryCategory: currentDisplayEntry.categories[0], // Use the first category
+      participantSessionUid,
+      reason,
+      comment,
     });
     alert('Entry flagged successfully. Thank you for your feedback.');
     onSuccess?.();

@@ -1,16 +1,14 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { ChartConfig } from '@/components/ui/chart';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ChartConfig } from './types';
+
+import type { BarChartData } from '@/types/charts';
 
 interface RatingBarChartProps {
-  data: Array<{
-    name: string;
-    count: number;
-    fill: string;
-  }>;
+  data: BarChartData[];
   chartConfig: ChartConfig;
 }
 
@@ -60,7 +58,11 @@ export function RatingBarChart({ data, chartConfig }: RatingBarChartProps) {
               />
               <Bar dataKey="count" name="Submissions" radius={[4, 4, 0, 0]}>
                 {data.map((entry) => (
-                  <Cell key={`cell-${entry.name}`} fill={entry.fill} name={entry.name} />
+                  <Cell
+                    key={`cell-${entry.name}`}
+                    fill={entry.fill as string}
+                    name={String(entry.name)} // Ensure name is always a string
+                  />
                 ))}
               </Bar>
             </BarChart>

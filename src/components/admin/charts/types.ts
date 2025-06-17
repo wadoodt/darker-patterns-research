@@ -1,17 +1,6 @@
 // src/components/admin/charts/types.ts
 import type { ChartConfig } from '@/components/ui/chart.types';
-
-export interface ChartDataItem {
-  fill: string;
-  name: string;
-  value?: number;
-  count?: number;
-  [key: string]: string | number | undefined;
-}
-
-export interface PieChartData extends Omit<ChartDataItem, 'value'> {
-  value: number; // Make value required for pie charts
-}
+import type { ChartDataItem, PieChartData } from '@/types/charts';
 
 export interface ChartCardBaseProps {
   title: string;

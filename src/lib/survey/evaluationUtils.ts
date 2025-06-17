@@ -34,7 +34,7 @@ export function createNewEvaluation(
     id: crypto.randomUUID(),
     ...evaluationDraft,
     participantSessionUid,
-    dpoEntryCategory: dpoEntry.category,
+    dpoEntryCategories: dpoEntry.categories,
     submittedAt: new Date(),
   };
 }

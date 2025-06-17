@@ -1,6 +1,15 @@
 import { db } from '@/lib/firebase';
 import type { EvaluationData, ParticipantSession } from '@/types/dpo';
-import { collection, doc, Firestore, increment, runTransaction, serverTimestamp } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  Firestore,
+  increment,
+  runTransaction,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 
 // Firestore survey-related mutations (writes/updates/deletes)
 // Move survey mutation functions here from src/lib/survey/database.ts
@@ -37,5 +46,39 @@ export async function persistSurveyData(
         });
       }
     }
+  });
+}
+
+export async function submitFlagForEntry({
+  dpoEntryId,
+  dpoEntryCategory,
+  participantSessionUid,
+  reason,
+  comment,
+}: {
+  dpoEntryId: string;
+  dpoEntryCategory: string;
+  participantSessionUid: string;
+  reason: string;
+  comment: string;
+}) {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const flagData = {
+    dpoEntryId,
+    dpoEntryCategory,
+    participantSessionUid,
+    reason,
+    comment: comment.trim() || null,
+    flaggedAt: serverTimestamp(),
+  };
+
+  const flagsCollectionRef = collection(db, 'participant_flags');
+  await addDoc(flagsCollectionRef, flagData);
+
+  const entryDocRef = doc(db, 'dpo_entries', dpoEntryId);
+  await updateDoc(entryDocRef, {
+    isFlaggedCount: increment(1),
+    lastFlaggedAt: serverTimestamp(),
   });
 }

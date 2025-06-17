@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { toast } from 'sonner';
-import { db, functions } from '@/lib/firebase';
+import { functions } from '@/lib/firebase';
+import { getAdminSettings } from '@/lib/firestore/queries/admin';
 
 export function useAdminPageSetup() {
   const [defaultTargetReviews, setDefaultTargetReviews] = useState(10);
@@ -17,17 +17,16 @@ export function useAdminPageSetup() {
 
   useEffect(() => {
     const fetchInitialSetupData = async () => {
-      if (isDev || !db) {
+      if (isDev) {
         setInitialDataLoading(false);
-        if (!db) console.error('Firebase db is not initialized.');
         return;
       }
 
       setInitialDataLoading(true);
       try {
-        const settingsDocSnap = await getDoc(doc(db, 'admin_settings', 'global_config'));
-        if (settingsDocSnap.exists()) {
-          setDefaultTargetReviews(settingsDocSnap.data().minTargetReviewsPerEntry || 10);
+        const settings = await getAdminSettings();
+        if (settings.minTargetReviewsPerEntry) {
+          setDefaultTargetReviews(settings.minTargetReviewsPerEntry);
         }
       } catch (err) {
         console.error('Error fetching initial setup data for entries page:', err);

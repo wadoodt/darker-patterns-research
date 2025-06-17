@@ -43,7 +43,7 @@ export function PieChartCard({ data, title, description, chartConfig }: PieChart
                 label={({ percent, name }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
                 {data.map((entry) => (
-                  <Cell key={`cell-${entry.name}`} fill={entry.fill} />
+                  <Cell key={`cell-${entry.name}`} fill={entry.fill as string} />
                 ))}
               </Pie>
               <Legend

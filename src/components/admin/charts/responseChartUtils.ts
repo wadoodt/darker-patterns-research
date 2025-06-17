@@ -1,6 +1,6 @@
 'use client';
 
-import type { ChartConfig } from '@/components/ui/chart';
+import { ChartConfig } from './types';
 
 export const chartColors = [
   'hsl(var(--chart-1))',

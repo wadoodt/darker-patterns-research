@@ -1,13 +1,14 @@
+// src/lib/firestore/queries/users.ts
+import { db } from '@/lib/firebase';
 import type { UserDataFromFirestore } from '@/types/user';
 import type { User as FirebaseUser } from 'firebase/auth';
-import { doc, Firestore, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 
-export async function fetchOrCreateUserProfile(
-  db: Firestore,
-  firebaseUser: FirebaseUser,
-): Promise<UserDataFromFirestore> {
+export async function fetchOrCreateUserProfile(firebaseUser: FirebaseUser): Promise<UserDataFromFirestore> {
+  if (!db) throw new Error('Firebase is not initialized');
   const userDocRef = doc(db, 'users', firebaseUser.uid);
   const userDocSnap = await getDoc(userDocRef);
+
   if (userDocSnap.exists()) {
     const fetchedUserData = userDocSnap.data() as UserDataFromFirestore;
     const combinedProfile: UserDataFromFirestore = {
@@ -18,7 +19,8 @@ export async function fetchOrCreateUserProfile(
       photoURL: firebaseUser.photoURL || fetchedUserData.photoURL,
     };
     // Update last login timestamp
-    updateDoc(userDocRef, { lastLoginAt: serverTimestamp() }).catch(console.error);
+    const userDocRef = doc(db, 'users', firebaseUser.uid);
+    setDoc(userDocRef, { lastLoginAt: serverTimestamp() }, { merge: true }).catch(console.error);
     return combinedProfile;
   } else {
     const newProfileData: UserDataFromFirestore = {

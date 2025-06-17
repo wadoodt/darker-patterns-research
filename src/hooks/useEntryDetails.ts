@@ -1,9 +1,9 @@
 // src/hooks/useEntryDetails.ts
 'use client';
-import { db } from '@/lib/firebase';
 import type { DPOEntry, EvaluationData, ParticipantFlag } from '@/types/dpo';
-import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { getEntryDetails } from '@/lib/firestore/queries/survey';
 import { useCallback, useEffect, useState } from 'react';
+import type { Timestamp } from 'firebase/firestore';
 
 // Helper function to format time spent in a human readable format
 const formatTimeSpent = (timeSpentMs: number): string => {
@@ -39,11 +39,6 @@ export const useEntryDetails = (entryId: string): UseEntryDetailsReturn => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!db) {
-      setError('Firebase is not initialized. Cannot fetch entry details.');
-      setIsLoading(false);
-      return;
-    }
     if (!entryId) {
       setError('Entry ID is missing. Cannot fetch details.');
       setIsLoading(false);
@@ -57,48 +52,49 @@ export const useEntryDetails = (entryId: string): UseEntryDetailsReturn => {
     setFlags([]);
 
     try {
-      // Fetch DPO Entry
-      const entryDocRef = doc(db, 'dpo_entries', entryId);
-      const entrySnap = await getDoc(entryDocRef);
-      if (!entrySnap.exists()) {
+      // Fetch entry details, evaluations, and flags using the centralized function
+      const { entry: entryData, evaluations: fetchedEvaluations, flags: fetchedFlags } = await getEntryDetails(entryId);
+
+      if (!entryData) {
         setError(`Entry with ID ${entryId} not found.`);
-        setEntry(null);
         setIsLoading(false);
         return;
       }
+
       // Ensure targetReviewCount has a default if undefined
-      const entryDataFirebase = entrySnap.data();
-      const entryData = {
-        id: entrySnap.id,
-        ...entryDataFirebase,
-        targetReviewCount: entryDataFirebase.targetReviewCount || 10, // Default if not set
-      } as DPOEntry;
-      setEntry(entryData);
+      const entryWithDefaults = {
+        ...entryData,
+        targetReviewCount: entryData.targetReviewCount || 10, // Default if not set
+      };
 
-      // Fetch Evaluations for this entry
-      const evalsQuery = query(
-        collection(db, 'evaluations'),
-        where('dpoEntryId', '==', entryId),
-        orderBy('submittedAt', 'desc'),
-      );
-      const evalsSnap = await getDocs(evalsQuery);
-      const fetchedEvaluations = evalsSnap.docs.map((d) => {
-        const evalData = d.data();
+      setEntry(entryWithDefaults);
+
+      // Format evaluations for display
+      const formattedEvaluations = fetchedEvaluations.map((evalData) => {
+        // Handle both Timestamp and Date objects for submittedAt
+        let submittedAt: Date | null = null;
+        if (evalData.submittedAt) {
+          // Type guard to check if it's a Firestore Timestamp
+          const isTimestamp = (val: unknown): val is Timestamp =>
+            val !== null &&
+            typeof val === 'object' &&
+            'toDate' in val &&
+            typeof (val as Timestamp).toDate === 'function';
+
+          submittedAt = isTimestamp(evalData.submittedAt)
+            ? evalData.submittedAt.toDate()
+            : new Date(evalData.submittedAt);
+        }
+
         return {
-          id: d.id,
           ...evalData,
-          participantType: 'anonymous', // Default to anonymous unless we fetch participant info
-          formattedSubmittedAt: evalData.submittedAt.toDate().toLocaleString(),
-          timeSpentFormatted: formatTimeSpent(evalData.timeSpentMs),
-        } as DisplayEvaluation;
+          participantType: 'anonymous' as const, // Explicitly type as 'anonymous' literal
+          formattedSubmittedAt: submittedAt ? submittedAt.toLocaleString() : 'Unknown date',
+          timeSpentFormatted: formatTimeSpent(evalData.timeSpentMs || 0),
+        };
       });
-      setEvaluations(fetchedEvaluations);
 
-      // Fetch Participant Flags for this entry
-      const flagsCollectionRef = collection(db, `dpo_entries/${entryId}/participant_flags`);
-      const flagsQuery = query(flagsCollectionRef, orderBy('flaggedAt', 'desc'));
-      const flagsSnap = await getDocs(flagsQuery);
-      const fetchedFlags = flagsSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as ParticipantFlag);
+      setEvaluations(formattedEvaluations);
       setFlags(fetchedFlags);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';

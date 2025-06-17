@@ -23,6 +23,20 @@ import {
 } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
 
+export interface AdminSettings {
+  minTargetReviewsPerEntry?: number;
+  // Add other admin settings as needed
+}
+
+export async function getAdminSettings(): Promise<AdminSettings> {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const settingsDocRef = doc(db, 'admin_settings', 'global_config');
+  const settingsSnap = await getDoc(settingsDocRef);
+
+  return settingsSnap.exists() ? (settingsSnap.data() as AdminSettings) : {};
+}
+
 export interface GetDpoEntryResult {
   entry: DPOEntry;
   evaluations: EvaluationData[];

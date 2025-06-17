@@ -15,7 +15,7 @@ const LandingProgressBar: React.FC<LandingProgressBarProps> = ({
   colorClass = 'bg-brand-purple-500',
 }) => {
   const [currentPercentage, setCurrentPercentage] = useState(0);
-  const barRef = useScrollAnimation({ animationClass: 'anim-fade-in-up' });
+  const barRef = useScrollAnimation<HTMLDivElement>({ animationClass: 'anim-fade-in-up' });
 
   useEffect(() => {
     const node = barRef.current;

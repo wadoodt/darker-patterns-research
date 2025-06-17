@@ -1,6 +1,7 @@
 // src/components/admin/charts/utils.ts
+import { ChartDataItem } from '@/types/charts';
 import { DemographicsDistribution } from '@/types/stats';
-import { chartColors, type ChartDataItem } from './types';
+import { chartColors } from './types';
 
 export function transformDistributionData(
   distribution: DemographicsDistribution | undefined,

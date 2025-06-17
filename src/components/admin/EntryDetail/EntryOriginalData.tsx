@@ -19,7 +19,7 @@ export function EntryOriginalData({ entry }: EntryOriginalDataProps) {
             </div>
           )}
           <div>
-            <strong>Category:</strong> {entry.category}
+            <strong>Categories:</strong> {entry.categories.join(', ')}
           </div>
           <div>
             <strong>Accepted Response:</strong> {entry.acceptedResponse}

@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer } from '@/components/ui/chart';
+import { ChartCardProps } from '@/types/charts';
 import React from 'react';
-import type { ChartCardProps } from './ChartCard.types';
 
 export function ChartCard({ title, description, height = '280px', children, chartConfig }: ChartCardProps) {
   if (!children) {

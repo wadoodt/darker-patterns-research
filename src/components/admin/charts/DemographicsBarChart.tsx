@@ -2,8 +2,8 @@
 'use client';
 
 import { ChartTooltipContent } from '@/components/ui/chart';
-import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import type { DemographicsBarChartProps } from '@/types/charts';
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ChartCard } from './ChartCard';
 
 export function DemographicsBarChart({
@@ -73,7 +73,7 @@ export function DemographicsBarChart({
             barSize={layout === 'vertical' ? undefined : 20}
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.fill} name={String(entry[dataKey])} />
+              <Cell key={`cell-${index}`} fill={entry.fill as string} name={String(entry[dataKey])} />
             ))}
           </Bar>
         </BarChart>

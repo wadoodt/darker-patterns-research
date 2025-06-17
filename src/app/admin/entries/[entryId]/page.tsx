@@ -4,14 +4,14 @@ import type { EntryWithDetails } from '@/types/entryDetails';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: { entryId: string } }): Promise<Metadata> {
-  const { entryId } = await params;
+  const { entryId } = params;
   return {
     title: `Entry Details: ${entryId}`,
   };
 }
 
 export default async function EntryDetailRoutePage({ params }: { params: { entryId: string } }) {
-  const { entryId } = await params;
+  const { entryId } = params;
   const { entry, evaluations, flags } = await getDpoEntry(entryId);
 
   const entryData: EntryWithDetails = {

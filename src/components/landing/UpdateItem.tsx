@@ -1,10 +1,10 @@
 // src/components/landing/UpdateItem.tsx
 'use client'; // Child of client component, or uses hooks
-import type { LucideProps } from 'lucide-react';
-import React from 'react'; // Explicitly import React
-import { Zap } from 'lucide-react'; // Default icon
 import useScrollAnimation from '@/hooks/useScrollAnimation';
 import { cn } from '@/lib/utils'; // Added missing import
+import type { LucideProps } from 'lucide-react';
+import { Zap } from 'lucide-react'; // Default icon
+import React from 'react'; // Explicitly import React
 
 interface UpdateItemProps {
   title: string;
@@ -15,7 +15,11 @@ interface UpdateItemProps {
 }
 
 const UpdateItem: React.FC<UpdateItemProps> = ({ title, date, description, icon, animationDelay }) => {
-  const itemRef = useScrollAnimation({ animationClass: 'anim-fade-in-left', threshold: 0.1, triggerOnce: true });
+  const itemRef = useScrollAnimation<HTMLDivElement>({
+    animationClass: 'anim-fade-in-left',
+    threshold: 0.1,
+    triggerOnce: true,
+  });
 
   const iconToRender = icon ? (
     React.cloneElement(icon, { size: icon.props.size || 14, className: cn(icon.props.className) })
