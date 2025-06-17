@@ -1,12 +1,13 @@
+/* eslint-disable max-lines-per-function */
 import type { DemographicData, DPOEntry, EvaluationDraft } from '@/types/dpo';
 import type { SurveyState } from '@/types/survey';
 import type { Dispatch } from 'react';
 import { useCallback } from 'react';
 import { SurveyAction, SurveyActionType } from '../actions';
-import { persistSurveyData } from '../database';
+import { persistSurveyData, updateParticipantEmail } from '../database';
 import { buildParticipantData, calculateTotalTimeSpent, createNewEvaluation } from '../evaluationUtils';
 import { handleDispatchError, validateSessionExists } from '../surveyUtils';
-import { validateDemographics, validateEmail, validateParticipationDetails } from '../validators';
+import { validateDemographics, validateParticipationDetails } from '../validators';
 
 export interface UseSurveyMutations {
   setParticipationDetails: (details: { type: 'email' | 'anonymous'; email?: string; termsAgreed: boolean }) => void;
@@ -30,14 +31,24 @@ export function useSurveyMutations(state: SurveyState, dispatch: Dispatch<Survey
   );
 
   const setParticipantEmail = useCallback(
-    (email: string) => {
-      if (!validateEmail(email)) {
+    async (email: string) => {
+      if (email.trim().length === 0) {
         dispatch({ type: SurveyActionType.SET_ERROR, payload: 'Please provide a valid email address.' });
         return;
       }
+      if (!validateSessionExists(state.participantSessionUid, dispatch)) {
+        return;
+      }
+
       dispatch({ type: SurveyActionType.SET_PARTICIPANT_EMAIL, payload: email });
+
+      try {
+        await updateParticipantEmail(state.participantSessionUid!, email);
+      } catch (error) {
+        handleDispatchError(dispatch, error);
+      }
     },
-    [dispatch],
+    [state.participantSessionUid, dispatch],
   );
 
   const updateDemographicsInContext = useCallback(

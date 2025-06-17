@@ -82,3 +82,18 @@ export async function submitFlagForEntry({
     lastFlaggedAt: serverTimestamp(),
   });
 }
+
+export async function updateParticipantEmail(participantSessionUid: string, email: string): Promise<void> {
+  if (!db) throw new Error('Firebase is not initialized');
+  if (!participantSessionUid) {
+    throw new Error('Participant session UID is required to update email.');
+  }
+
+  const participantDocRef = doc(db as Firestore, 'survey_participants', participantSessionUid);
+
+  await updateDoc(participantDocRef, {
+    email,
+    participationType: 'email',
+    optedInForPaper: true,
+  });
+}

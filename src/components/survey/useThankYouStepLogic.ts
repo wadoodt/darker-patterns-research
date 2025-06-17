@@ -1,3 +1,4 @@
+import { validateEmail } from '@/lib/survey/validators';
 import React, { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 import { ThankYouStepLogic } from './useThankYouStepLogic.types';
@@ -33,8 +34,9 @@ export function useThankYouStepLogic(): ThankYouStepLogic {
   const handleEmailForUpdatesSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLocalEmailError(null);
-    if (!localEmailForUpdates || !/\S+@\S+\.\S+/.test(localEmailForUpdates)) {
-      setLocalEmailError('Please enter a valid email address.');
+    const error = validateEmail(localEmailForUpdates);
+    if (error) {
+      setLocalEmailError(error);
       setHasUnsavedChanges(true); // User attempted interaction
       return;
     }

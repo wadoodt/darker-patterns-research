@@ -453,7 +453,7 @@ export const ingestDpoDataset = onCall(async (request) => {
   // Check if the authenticated user is an administrator by reading their Firestore document.
   const userDoc = await db.collection('users').doc(request.auth.uid).get();
   const userData = userDoc.data();
-  if (!userDoc.exists || !Array.isArray(userData?.roles) || !userData.roles.includes('admin')) {
+  if (!userDoc.exists || !Array.isArray(userData?.roles) || !userData?.roles.includes('admin')) {
     // The user is authenticated, but not an admin.
     throw new functions.https.HttpsError(
       'permission-denied',
@@ -464,9 +464,21 @@ export const ingestDpoDataset = onCall(async (request) => {
   // 2. Data Validation
   const parseResult = ingestDpoDatasetSchema.safeParse(request.data);
   if (!parseResult.success) {
-    throw new functions.https.HttpsError('invalid-argument', 'The provided data does not match the expected format.', {
-      errors: parseResult.error.flatten(),
-    });
+    const formattedErrors = parseResult.error.errors
+      .map((err) => {
+        const path = err.path.length > 0 ? ` at path "${err.path.join('.')}"` : '';
+        return `- ${err.message}${path}`;
+      })
+      .join('\n');
+
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'The provided data does not match the expected format. Please check the following issues:',
+      {
+        errors: parseResult.error.flatten(),
+        message: `Validation failed:\n${formattedErrors}`,
+      },
+    );
   }
 
   const entries = parseResult.data;
