@@ -167,6 +167,7 @@
   @apply mt-1 text-xs text-[color:var(--color-dark-text-tertiary)/0.8];
 }
 
-.bg-popover {
+.bg-popover,
+bg-background {
   @apply bg-[color:var(--color-dark-bg-secondary)];
 }
