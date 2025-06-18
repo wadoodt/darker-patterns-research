@@ -22,11 +22,7 @@ export function EntryEvaluations({ evaluations }: EntryEvaluationsProps) {
                     {evaluation.wasChosenActuallyAccepted ? 'Accepted' : 'Rejected'})
                   </span>
                 </div>
-                <span className="text-sm text-gray-500">
-                  {evaluation.submittedAt instanceof Date
-                    ? evaluation.submittedAt.toLocaleDateString()
-                    : new Date(evaluation.submittedAt.seconds * 1000).toLocaleDateString()}
-                </span>
+                <span className="text-sm text-gray-500">{evaluation.submittedAt.toLocaleDateString()}</span>
               </div>
               {evaluation.comment && <p className="mt-1">{evaluation.comment}</p>}
               {evaluation.categories && (

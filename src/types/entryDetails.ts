@@ -1,4 +1,3 @@
-import type { Timestamp } from 'firebase/firestore';
 import type { DPOEntry } from './dpo';
 import type { DemographicsSummary, ResponseAggregates } from './stats';
 
@@ -6,7 +5,7 @@ export interface EntryComment {
   id: string;
   userId: string;
   comment: string;
-  createdAt: Timestamp | Date;
+  createdAt: Date;
 }
 
 export interface EntryAnalytics {
@@ -17,7 +16,6 @@ export interface EntryAnalytics {
   averageRating: number;
   ratingDistribution: Record<number, number>;
   categoryDistribution: Record<string, number>;
-  lastViewedAt?: Timestamp | Date;
 }
 
 export interface EntryEvaluationDetail {
@@ -25,13 +23,15 @@ export interface EntryEvaluationDetail {
   rating: number;
   comment?: string | null;
   categories: string[];
-  submittedAt: Timestamp | Date;
+  submittedAt: Date;
   chosenOptionKey: 'A' | 'B';
   wasChosenActuallyAccepted: boolean;
 }
 
-export interface EntryWithDetails extends DPOEntry {
-  analytics?: EntryAnalytics;
+export interface EntryWithDetails extends Omit<DPOEntry, 'createdAt' | 'lastReviewedAt'> {
+  createdAt: Date;
+  lastReviewedAt?: Date;
+  analytics: EntryAnalytics;
   comments?: EntryComment[];
   evaluations?: EntryEvaluationDetail[];
   demographics?: DemographicsSummary;

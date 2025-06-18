@@ -4,6 +4,7 @@ import { getStorage } from 'firebase-admin/storage';
 import * as functions from 'firebase-functions/v2';
 import { onDocumentCreated, onDocumentWritten } from 'firebase-functions/v2/firestore';
 import { DpoEntryData, ingestDpoDatasetSchema } from './schemas/dpo_entry';
+import { processEntryDetails } from './entry-details';
 import type {
   ActivityLogItemFc,
   AdminSettingsData,
@@ -731,16 +732,20 @@ export const exportDpoDataset = onCall(async (request) => {
       const evaluationsSnapshot = await db.collection('evaluations').where('dpoEntryId', '==', entry.id).get();
       const evaluations = evaluationsSnapshot.docs.map((doc) => doc.data() as EvaluationData);
 
-      const totalEvals = evaluations.length;
+      const flagsSnapshot = await db.collection('participant_flags').where('dpoEntryId', '==', entry.id).get();
+      const flags = flagsSnapshot.docs.map((doc) => doc.data() as ParticipantFlag);
+
+      const processedData = processEntryDetails(entry, evaluations, flags);
       const chosenCount = evaluations.filter((e) => e.chosenOptionKey === 'A').length;
-      const agreementCount = evaluations.filter((e) => e.wasChosenActuallyAccepted).length;
-      const agreementRate = totalEvals > 0 ? (agreementCount / totalEvals) * 100 : 0;
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { analytics, evaluations: processedEvals, ...restOfEntry } = processedData;
 
       augmentedEntries.push({
-        ...entry,
-        evaluationCount: totalEvals,
+        ...restOfEntry,
+        evaluationCount: analytics.totalEvaluations,
         chosenOverPairCount: chosenCount,
-        agreementRate: parseFloat(agreementRate.toFixed(2)),
+        agreementRate: parseFloat(analytics.correctness.toFixed(2)),
       });
     }
 
@@ -795,5 +800,51 @@ export const exportDpoDataset = onCall(async (request) => {
     functions.logger.error('Error exporting DPO dataset:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during export.';
     throw new functions.https.HttpsError('internal', errorMessage, error);
+  }
+});
+
+// --- Callable function to get full entry details ---
+export const getEntryDetails = onCall(async (request) => {
+  if (!request.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called by an authenticated user.');
+  }
+
+  const { entryId } = request.data;
+  if (!entryId || typeof entryId !== 'string') {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'The function must be called with a valid "entryId" argument.',
+    );
+  }
+
+  try {
+    const entryRef = db.doc(`dpo_entries/${entryId}`);
+    const evaluationsQuery = db.collection('evaluations').where('dpoEntryId', '==', entryId);
+    const flagsQuery = db.collection('participant_flags').where('dpoEntryId', '==', entryId);
+
+    const [entryDoc, evaluationsSnapshot, flagsSnapshot] = await Promise.all([
+      entryRef.get(),
+      evaluationsQuery.get(),
+      flagsQuery.get(),
+    ]);
+
+    if (!entryDoc.exists) {
+      throw new functions.https.HttpsError('not-found', `Entry with ID ${entryId} not found.`);
+    }
+
+    const entry = { id: entryDoc.id, ...entryDoc.data() } as DPOEntry;
+    const evaluations = evaluationsSnapshot.docs.map((doc) => doc.data() as EvaluationData);
+    const flags = flagsSnapshot.docs.map((doc) => doc.data() as ParticipantFlag);
+
+    const entryDetails = processEntryDetails(entry, evaluations, flags);
+
+    // The callable function SDKs automatically serialize Date objects, so no conversion needed here.
+    return { entryDetails };
+  } catch (error) {
+    functions.logger.error(`Error getting entry details for ${entryId}:`, error);
+    if (error instanceof (functions.https.HttpsError as any)) {
+      throw error;
+    }
+    throw new functions.https.HttpsError('internal', 'An error occurred while fetching entry details.');
   }
 });

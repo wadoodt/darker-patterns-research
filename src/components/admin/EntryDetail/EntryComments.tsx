@@ -16,11 +16,7 @@ export function EntryComments({ comments }: EntryCommentsProps) {
             <li key={comment.id} className="border-b border-gray-200 pb-2 last:border-0">
               <div className="flex items-start justify-between">
                 <strong>{comment.userId}</strong>
-                <span className="text-sm text-gray-500">
-                  {comment.createdAt instanceof Date
-                    ? comment.createdAt.toLocaleDateString()
-                    : new Date(comment.createdAt.seconds * 1000).toLocaleDateString()}
-                </span>
+                <span className="text-sm text-gray-500">{comment.createdAt.toLocaleDateString()}</span>
               </div>
               <p className="mt-1">{comment.comment}</p>
             </li>

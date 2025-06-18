@@ -2,9 +2,7 @@ import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/
 import { LogOut, Settings, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 
-interface UserProfile {
-  roles?: string[];
-}
+import { type UserProfile } from '@/types/auth';
 
 interface UserProfileDropdownProps {
   profile: UserProfile;

@@ -1,12 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronDown } from 'lucide-react';
 
-interface UserProfile {
-  displayName?: string | null;
-  email?: string | null;
-  photoURL?: string | null;
-  roles?: string[];
-}
+import { type UserProfile } from '@/types/auth';
 
 interface UserProfileAvatarProps {
   profile: UserProfile;
