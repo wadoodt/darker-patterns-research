@@ -2,7 +2,7 @@
 import { getCachedStats } from '@/lib/landing/database';
 import { Timestamp } from 'firebase/firestore';
 import { CheckCircle, TrendingUp, Users, Zap } from 'lucide-react';
-import StatCard from './StatCard';
+import StatCard from '@/components/common/StatCard';
 
 const StatsSection = async () => {
   const statsData = await getCachedStats();
@@ -55,6 +55,7 @@ const StatsSection = async () => {
                 changeColor={stat.changeColor}
                 unit={stat.unit}
                 className="scroll-animate-item"
+                animated
               />
             ))}
           </div>

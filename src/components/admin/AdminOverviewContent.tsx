@@ -3,7 +3,7 @@ import { getDashboardData } from '@/lib/firestore/queries/admin';
 import { BookOpen, ClipboardCheck, Percent, Users } from 'lucide-react';
 import React from 'react';
 import AdminHeader from './AdminHeader';
-import { StatCard } from './StatCard';
+import StatCard from '@/components/common/StatCard';
 
 const AdminOverviewContent = async () => {
   const dashboardData = await getDashboardData();
