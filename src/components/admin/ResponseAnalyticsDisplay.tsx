@@ -4,12 +4,7 @@
 import type { OverviewStats, ResponseAggregates } from '@/types/stats';
 import { PieChartCard } from './charts/PieChartCard';
 import { RatingBarChart } from './charts/RatingBarChart';
-import {
-  createPieChartConfig,
-  createPieChartData,
-  createRatingChartConfig,
-  transformRatingData,
-} from './charts/responseChartUtils';
+import { createPieChartConfig, createPieChartData, createRatingChartConfig, transformRatingData } from './charts/utils';
 
 interface ResponseAnalyticsDisplayProps {
   overviewStats: OverviewStats | null;

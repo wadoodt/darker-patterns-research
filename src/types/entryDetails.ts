@@ -20,18 +20,20 @@ export interface EntryAnalytics {
   lastViewedAt?: Timestamp | Date;
 }
 
+export interface EntryEvaluationDetail {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  categories: string[];
+  submittedAt: Timestamp | Date;
+  chosenOptionKey: 'A' | 'B';
+  wasChosenActuallyAccepted: boolean;
+}
+
 export interface EntryWithDetails extends DPOEntry {
   analytics?: EntryAnalytics;
   comments?: EntryComment[];
-  evaluations?: Array<{
-    id: string;
-    rating: number;
-    comment?: string | null;
-    categories: string[];
-    submittedAt: Timestamp | Date;
-    chosenOptionKey: 'A' | 'B';
-    wasChosenActuallyAccepted: boolean;
-  }>;
+  evaluations?: EntryEvaluationDetail[];
   demographics?: DemographicsSummary;
   responseAggregates?: ResponseAggregates;
 }

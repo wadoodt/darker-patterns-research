@@ -1,7 +1,22 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import MultiSelect from '@/components/ui/MultiSelect';
 import React from 'react';
-import type { EntriesFiltersProps } from './EntriesFilters.types';
+export type StatusOption = {
+  value: string;
+  label: string;
+};
+
+export type EntryFilterValues = {
+  category?: string[];
+  status?: string;
+};
+
+export interface EntriesFiltersProps {
+  currentFilters: EntryFilterValues;
+  onFilterChange: (filters: EntryFilterValues) => void;
+  categories: string[];
+  statusOptions: StatusOption[];
+}
 
 const EntriesFilters: React.FC<EntriesFiltersProps> = ({
   currentFilters,
