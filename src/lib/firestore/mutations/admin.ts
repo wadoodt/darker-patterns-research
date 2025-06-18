@@ -1,5 +1,7 @@
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
-import { functions } from '@/lib/firebase';
+import { db, functions } from '@/lib/firebase';
+import type { DPOEntry } from '@/types/dpo';
 
 export async function ingestDpoDataset(fileContent: string): Promise<{ success: boolean; message: string }> {
   if (!functions) {
@@ -21,3 +23,20 @@ export async function ingestDpoDataset(fileContent: string): Promise<{ success: 
     return { success: false, message: errorMessage };
   }
 }
+
+export const addDPOEntry = async (entry: Omit<DPOEntry, 'id'>) => {
+  if (!db) {
+    throw new Error('Firestore is not initialized');
+  }
+
+  try {
+    const docRef = await addDoc(collection(db, 'dpoEntries'), {
+      ...entry,
+      createdAt: serverTimestamp(),
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Error adding DPO entry: ', error);
+    throw new Error('Failed to add DPO entry to the database.');
+  }
+};

@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-import { HARM_CATEGORIES } from '@/lib/harm-categories';
 import { useAdminEntries } from '@/hooks/useAdminEntries';
 import { useAdminPageSetup } from '@/hooks/useAdminPageSetup';
 import { useAuth } from '@/hooks/useAuth';
+import { HARM_CATEGORIES } from '@/lib/harm-categories';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { EntriesPageView } from './EntriesPageView';
 import { IngestDatasetModal } from './IngestDatasetModal';
 
@@ -46,8 +47,10 @@ export default function EntriesPageContent() {
     handlePageChange,
   } = adminEntries;
 
+  const router = useRouter();
+
   const handleAddNewEntry = () => {
-    alert("Admin Action: 'Add New DPO Entry' functionality to be implemented.");
+    router.push('/admin/entries/new');
   };
 
   return (
