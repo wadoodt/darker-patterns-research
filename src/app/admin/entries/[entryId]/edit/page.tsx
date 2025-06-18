@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { DPOEntryForm } from '@/components/admin/DPOEntryForm';
 import { DPOEntry } from '@/types/dpo';
 import { getDpoEntry } from '@/lib/firestore/queries/admin';
-import { reviseDpoEntry, updateDPOEntry } from '@/lib/firestore/mutations/admin';
+import { reviseDpoEntry, updateDPOEntry } from '@/lib/firestore/mutations/dpo';
 
 export default function EditDPOEntryPage() {
   const router = useRouter();

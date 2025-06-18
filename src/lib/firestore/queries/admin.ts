@@ -166,21 +166,61 @@ export async function fetchDpoEntriesData(mainQuery: Query, targetReviews: numbe
   };
 }
 
-// A new function for dashboard data
 export async function getDashboardData() {
-  // For now, let's just return some mock data.
-  // We can implement the real data fetching later.
   if (process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true') {
     return getMockDashboardData();
   }
 
-  // TODO: Replace with real data fetching logic
-  return {
-    totalEntries: 0,
-    totalReviews: 0,
-    averageReviews: 0,
-    completionPercentage: 0,
-  };
+  if (!db) {
+    console.error('Firebase is not initialized.');
+    // Return a default or empty state
+    return {
+      totalEntries: 0,
+      totalReviews: 0,
+      averageReviews: 0,
+      completionPercentage: 0,
+    };
+  }
+
+  try {
+    const overviewStatsRef = doc(db, 'cached_statistics', 'overview_stats');
+    const overviewStatsSnap = await getDoc(overviewStatsRef);
+
+    if (!overviewStatsSnap.exists()) {
+      console.warn('Overview stats document not found.');
+      return {
+        totalEntries: 0,
+        totalReviews: 0,
+        averageReviews: 0,
+        completionPercentage: 0,
+      };
+    }
+
+    const stats = overviewStatsSnap.data() as OverviewStats;
+
+    const totalEntries = stats.totalEntriesInDataset || 0;
+    const totalReviews = stats.totalEvaluationsSubmitted || 0;
+    const fullyReviewed = stats.fullyReviewedEntriesCount || 0;
+
+    const averageReviews = totalEntries > 0 ? totalReviews / totalEntries : 0;
+    const completionPercentage = totalEntries > 0 ? (fullyReviewed / totalEntries) * 100 : 0;
+
+    return {
+      totalEntries,
+      totalReviews,
+      averageReviews,
+      completionPercentage,
+    };
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+    // Return a default or empty state in case of error
+    return {
+      totalEntries: 0,
+      totalReviews: 0,
+      averageReviews: 0,
+      completionPercentage: 0,
+    };
+  }
 }
 
 export async function getStatisticsData() {

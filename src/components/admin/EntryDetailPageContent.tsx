@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { flagDPOEntry } from '@/lib/firestore/mutations/admin';
+import { flagDPOEntry } from '@/lib/firestore/mutations/dpo';
 import { EntryActions } from './EntryDetail/EntryActions';
 import { EntryAnalytics } from './EntryDetail/EntryAnalytics';
 import { EntryComments } from './EntryDetail/EntryComments';

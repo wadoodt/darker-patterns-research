@@ -4,7 +4,7 @@ import { DPOEntryForm } from '@/components/admin/DPOEntryForm';
 import { DPOEntry } from '@/types/dpo';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { addDPOEntry } from '@/lib/firestore/mutations/admin';
+import { addDPOEntry } from '@/lib/firestore/mutations/dpo';
 
 export default function NewDPOEntryPage() {
   const router = useRouter();

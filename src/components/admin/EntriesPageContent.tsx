@@ -75,6 +75,7 @@ export default function EntriesPageContent() {
         handlePageChange={handlePageChange}
         showArchived={showArchived}
         setShowArchived={setShowArchived}
+        setNeedsRefetch={setNeedsRefetch}
       />
       <IngestDatasetModal
         isOpen={isIngestModalOpen}

@@ -1,9 +1,9 @@
 import type { DisplayEntry } from '@/types/entries';
 import type { Column } from '@/types/table';
-import { Eye, Tag, Archive } from 'lucide-react';
-import Link from 'next/link';
+import { Archive, Tag } from 'lucide-react';
+import { EntriesTableActions } from './EntriesTableActions';
 
-export const tableColumns: Column<DisplayEntry>[] = [
+export const getTableColumns = (onDelete: (entryId: string) => void): Column<DisplayEntry>[] => [
   {
     key: 'id',
     header: 'ID',
@@ -56,13 +56,6 @@ export const tableColumns: Column<DisplayEntry>[] = [
   {
     key: 'actions',
     header: 'Actions',
-    renderCell: (entry: DisplayEntry) => (
-      <Link
-        href={`/admin/entries/${entry.id}`}
-        className="text-brand-purple-400 flex items-center gap-1 text-sm font-medium hover:underline"
-      >
-        <Eye size={16} /> View
-      </Link>
-    ),
+    renderCell: (entry: DisplayEntry) => <EntriesTableActions entry={entry} onDelete={onDelete} />,
   },
 ];

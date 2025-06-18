@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
@@ -8,7 +10,11 @@ import AdminTable from '../common/AdminTable';
 import Pagination from '../common/Pagination';
 import AdminHeader from './AdminHeader';
 import EntriesFilters from './EntriesFilters';
-import { tableColumns } from './entries/EntriesTableColumns';
+import { getTableColumns } from './entries/EntriesTableColumns';
+
+import { ConfirmationModal } from '../common/ConfirmationModal';
+import { deleteDpoEntry } from '@/lib/firestore/mutations/dpo';
+import { toast } from 'sonner';
 
 // --- PROPS ---
 interface EntriesPageViewProps {
@@ -30,6 +36,7 @@ interface EntriesPageViewProps {
   handlePageChange: (page: number) => void;
   showArchived: boolean;
   setShowArchived: (value: boolean) => void;
+  setNeedsRefetch: (value: boolean) => void;
 }
 
 // --- SUB-COMPONENTS ---
@@ -120,7 +127,12 @@ const EntriesPageToolbar = ({
   </>
 );
 
-const EntriesTableContent = (props: EntriesPageViewProps) => {
+const EntriesTableContent = ({
+  onDelete,
+  ...props
+}: EntriesPageViewProps & { onDelete: (entryId: string) => void }) => {
+  const columns = getTableColumns(onDelete);
+
   if (props.isLoadingEntries) {
     return <LoadingView />;
   }
@@ -134,7 +146,7 @@ const EntriesTableContent = (props: EntriesPageViewProps) => {
     <>
       <div className="admin-card mt-6 overflow-x-auto p-0">
         <AdminTable
-          columns={tableColumns}
+          columns={columns}
           data={props.entries}
           onSort={props.handleSortChange}
           currentSortKey={props.sortConfig.key}
@@ -156,6 +168,38 @@ const EntriesTableContent = (props: EntriesPageViewProps) => {
 // --- MAIN COMPONENT ---
 
 export function EntriesPageView(props: EntriesPageViewProps) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+
+  const openModal = (entryId: string) => {
+    setSelectedEntryId(entryId);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedEntryId(null);
+    setModalOpen(false);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedEntryId) return;
+
+    const toastId = toast.loading('Deleting DPO entry...');
+    try {
+      const result = await deleteDpoEntry(selectedEntryId);
+      if (result.success) {
+        toast.success('DPO entry deleted successfully.', { id: toastId });
+        props.setNeedsRefetch(true);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.error('Deletion failed:', error);
+      toast.error(`Deletion failed: ${error instanceof Error ? error.message : 'Unknown error'}`, { id: toastId });
+    }
+
+    closeModal();
+  };
   if (props.initialDataLoading) {
     return (
       <main className="flex-1 overflow-y-auto p-6 sm:p-8">
@@ -178,7 +222,16 @@ export function EntriesPageView(props: EntriesPageViewProps) {
         showArchived={props.showArchived}
         setShowArchived={props.setShowArchived}
       />
-      <EntriesTableContent {...props} />
+      <EntriesTableContent {...props} onDelete={openModal} />
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleDeleteConfirm}
+        onCancel={closeModal}
+        title="Confirm Deletion"
+        description="Are you sure you want to delete this DPO entry? This will also delete all associated evaluations and flags. This action cannot be undone."
+        confirmText="Delete"
+        variant="destructive"
+      />
     </main>
   );
 }
