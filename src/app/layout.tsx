@@ -52,7 +52,6 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
     shortcut: '/favicon-16x16.png',
     other: [
       {
@@ -84,7 +83,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

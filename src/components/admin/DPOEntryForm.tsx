@@ -8,15 +8,16 @@ import { FormField, TextArea, TextInput } from './FormElements';
 interface DPOEntryFormProps {
   onSubmit: (entry: Partial<DPOEntry>) => Promise<void>;
   isSubmitting: boolean;
+  entry?: Partial<DPOEntry>;
 }
 
-export function DPOEntryForm({ onSubmit, isSubmitting }: DPOEntryFormProps) {
+export function DPOEntryForm({ onSubmit, isSubmitting, entry }: DPOEntryFormProps) {
   const router = useRouter();
-  const [instruction, setInstruction] = useState('');
-  const [prompt, setPrompt] = useState('');
-  const [acceptedResponse, setAcceptedResponse] = useState('');
-  const [rejectedResponse, setRejectedResponse] = useState('');
-  const [categories, setCategories] = useState<string[]>([]);
+  const [instruction, setInstruction] = useState(entry?.instruction || '');
+  const [prompt, setPrompt] = useState(entry?.prompt || '');
+  const [acceptedResponse, setAcceptedResponse] = useState(entry?.acceptedResponse || '');
+  const [rejectedResponse, setRejectedResponse] = useState(entry?.rejectedResponse || '');
+  const [categories, setCategories] = useState<string[]>(entry?.categories || []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,7 +90,7 @@ export function DPOEntryForm({ onSubmit, isSubmitting }: DPOEntryFormProps) {
           disabled={isSubmitting}
           className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50"
         >
-          {isSubmitting ? 'Adding...' : 'Add Entry'}
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </button>
       </div>
     </form>

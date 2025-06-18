@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, increment, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, increment, runTransaction, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '@/lib/firebase';
 import type { DPOEntry, ParticipantFlag } from '@/types/dpo';
@@ -38,6 +38,23 @@ export const addDPOEntry = async (entry: Omit<DPOEntry, 'id'>) => {
   } catch (error) {
     console.error('Error adding DPO entry: ', error);
     throw new Error('Failed to add DPO entry to the database.');
+  }
+};
+
+export const updateDPOEntry = async (entryId: string, entry: Partial<DPOEntry>) => {
+  if (!db) {
+    throw new Error('Firestore is not initialized');
+  }
+
+  try {
+    const entryRef = doc(db, 'dpoEntries', entryId);
+    await updateDoc(entryRef, {
+      ...entry,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error('Error updating DPO entry: ', error);
+    throw new Error('Failed to update DPO entry in the database.');
   }
 };
 

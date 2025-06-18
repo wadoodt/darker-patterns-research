@@ -3,6 +3,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { flagDPOEntry } from '@/lib/firestore/mutations/admin';
 import { EntryActions } from './EntryDetail/EntryActions';
@@ -14,13 +15,13 @@ import { FlagEntryModal } from './EntryDetail/FlagEntryModal';
 import type { EntryDetailPageContentProps } from './EntryDetailPageContent.types';
 
 const EntryDetailPageContent: React.FC<EntryDetailPageContentProps> = ({ entry }) => {
+  const router = useRouter();
   const { user } = useAuth();
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const handleEdit = () => {
-    // TODO: Implement edit functionality
-    alert('Edit functionality to be implemented');
+    router.push(`/admin/entries/${entry.id}/edit`);
   };
 
   const handleFlag = () => {
