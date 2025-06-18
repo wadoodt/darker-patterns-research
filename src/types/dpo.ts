@@ -26,6 +26,7 @@ export interface DPOEntry {
   archivedAt?: Timestamp | Date; // When it was archived
   originalEntryId?: string; // If this entry is a new version, this links to the ID of the entry it corrects/revises
   supersededByEntryId?: string; // If this entry is archived, this links to the ID of the new entry that replaces it
+  viewCount?: number;
 }
 
 export interface DemographicData {

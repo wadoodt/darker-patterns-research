@@ -24,6 +24,7 @@ export interface DPOEntry {
   archivedAt?: FirebaseAdminTimestamp | Date;
   originalEntryId?: string;
   supersededByEntryId?: string;
+  viewCount?: number;
 }
 
 export interface DemographicData {

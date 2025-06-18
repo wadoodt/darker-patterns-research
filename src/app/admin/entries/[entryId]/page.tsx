@@ -1,5 +1,5 @@
 import EntryDetailPageView from '@/components/admin/EntryDetailPageView';
-import { getDpoEntry } from '@/lib/firestore/queries/admin';
+import { getDpoEntry, incrementEntryViewCount } from '@/lib/firestore/queries/admin';
 import type { EntryWithDetails } from '@/types/entryDetails';
 import { Timestamp } from 'firebase/firestore';
 import type { Metadata } from 'next';
@@ -20,7 +20,10 @@ function convertTimestamp(field: Date | Timestamp): any {
 }
 
 export default async function EntryDetailRoutePage({ params }: { params: { entryId: string } }) {
-  const { entryId } = await params;
+  const { entryId } = params;
+
+  // Increment the view count and then fetch the data
+  await incrementEntryViewCount(entryId);
   const { entry, evaluations, flags } = await getDpoEntry(entryId);
 
   // Convert Firestore Timestamps to Date objects
@@ -55,7 +58,7 @@ export default async function EntryDetailRoutePage({ params }: { params: { entry
   const entryData: EntryWithDetails = {
     ...processedEntry,
     analytics: {
-      views: 0, // TODO: Implement view tracking
+      views: entry.viewCount || 1,
       flags: flags.length,
       totalEvaluations,
       correctness: totalEvaluations > 0 ? (correctEvaluations / totalEvaluations) * 100 : 0,

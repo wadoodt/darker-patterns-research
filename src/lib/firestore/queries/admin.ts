@@ -13,6 +13,7 @@ import {
   getCountFromServer,
   getDoc,
   getDocs,
+  increment,
   limit,
   limitToLast,
   orderBy,
@@ -20,6 +21,7 @@ import {
   type Query,
   type QueryDocumentSnapshot,
   startAfter,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
@@ -78,6 +80,14 @@ export async function getDpoEntry(entryId: string): Promise<GetDpoEntryResult> {
   const responseAggregates = aggregatesSnap.data() as ResponseAggregates | undefined;
 
   return { entry, evaluations, flags, demographics, responseAggregates };
+}
+
+export async function incrementEntryViewCount(entryId: string): Promise<void> {
+  if (!db) throw new Error('Firebase is not initialized');
+  const entryRef = doc(db, 'dpo_entries', entryId);
+  await updateDoc(entryRef, {
+    viewCount: increment(1),
+  });
 }
 
 export function buildDpoEntriesQuery(

@@ -461,7 +461,7 @@ export const logParticipantFlagActivity = onDocumentCreated(
 );
 
 import type { CallableRequest } from 'firebase-functions/v2/https';
-import { onCall } from 'firebase-functions/v2/https';
+import { onCall, HttpsError } from 'firebase-functions/v2/https';
 
 export const exportData = onCall({ region: 'us-central1' }, async (req: CallableRequest<any>) => {
   if (!req.auth || !(req.auth.token as any).admin) {
@@ -667,6 +667,27 @@ export const ingestDpoDataset = onCall(async (request) => {
   } catch (error) {
     functions.logger.error('Error ingesting DPO dataset:', error);
     throw new functions.https.HttpsError('internal', 'An error occurred while ingesting the dataset.', error);
+  }
+});
+
+// --- Callable function to increment view count ---
+export const incrementEntryViewCount = onCall(async (request) => {
+  const { entryId } = request.data;
+
+  if (!entryId) {
+    throw new HttpsError('invalid-argument', 'The function must be called with an "entryId" argument.');
+  }
+
+  const entryRef = db.collection('dpo_entries').doc(entryId);
+
+  try {
+    await entryRef.update({
+      viewCount: admin.firestore.FieldValue.increment(1),
+    });
+    return { success: true };
+  } catch (error) {
+    functions.logger.error(`Error incrementing view count for entry ${entryId}:`, error);
+    throw new HttpsError('internal', 'An error occurred while updating the view count.');
   }
 });
 
