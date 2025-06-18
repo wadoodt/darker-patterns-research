@@ -4,7 +4,7 @@ import { db } from '@/lib/firebase';
 import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
 import type { DPOEntry, EvaluationData, ParticipantFlag } from '@/types/dpo';
 import type { DisplayEntry } from '@/types/entries';
-import type { DemographicsSummary, ResponseAggregates } from '@/types/stats';
+import type { DemographicsSummary, OverviewStats, ResponseAggregates } from '@/types/stats';
 import {
   collection,
   doc,
@@ -188,10 +188,41 @@ export async function getStatisticsData() {
     return getMockStatisticsData();
   }
 
-  // TODO: Replace with real data fetching logic from Firestore
-  return {
-    demographicsSummary: null,
-    overviewStats: null,
-    responseAggregates: null,
-  };
+  if (!db) {
+    console.error('Firebase is not initialized.');
+    return {
+      demographicsSummary: null,
+      overviewStats: null,
+      responseAggregates: null,
+    };
+  }
+
+  try {
+    const overviewRef = doc(db, 'stats_overview', 'global_stats');
+    const responsesRef = doc(db, 'stats_responses', 'global_stats');
+    const demographicsRef = doc(db, 'stats_demographics', 'global_stats');
+
+    const [overviewSnap, responsesSnap, demographicsSnap] = await Promise.all([
+      getDoc(overviewRef),
+      getDoc(responsesRef),
+      getDoc(demographicsRef),
+    ]);
+
+    const overviewStats = overviewSnap.exists() ? (overviewSnap.data() as OverviewStats) : null;
+    const responseAggregates = responsesSnap.exists() ? (responsesSnap.data() as ResponseAggregates) : null;
+    const demographicsSummary = demographicsSnap.exists() ? (demographicsSnap.data() as DemographicsSummary) : null;
+
+    return {
+      overviewStats,
+      responseAggregates,
+      demographicsSummary,
+    };
+  } catch (error) {
+    console.error('Error fetching statistics data:', error);
+    return {
+      demographicsSummary: null,
+      overviewStats: null,
+      responseAggregates: null,
+    };
+  }
 }

@@ -1,6 +1,5 @@
 // components/admin/AdminStatisticsContent.tsx
 import { getStatisticsData } from '@/lib/firestore/queries/admin';
-import React from 'react';
 import AdminHeader from './AdminHeader';
 import DemographicsDisplayAdmin from './DemographicsDisplayAdmin';
 import ResponseAnalyticsDisplay from './ResponseAnalyticsDisplay';
