@@ -12,7 +12,11 @@ export interface EntryComment {
 export interface EntryAnalytics {
   views: number;
   flags: number;
-  upvotes: number;
+  totalEvaluations: number;
+  correctness: number;
+  averageRating: number;
+  ratingDistribution: Record<number, number>;
+  categoryDistribution: Record<string, number>;
   lastViewedAt?: Timestamp | Date;
 }
 
@@ -23,6 +27,7 @@ export interface EntryWithDetails extends DPOEntry {
     id: string;
     rating: number;
     comment?: string | null;
+    categories: string[];
     submittedAt: Timestamp | Date;
     chosenOptionKey: 'A' | 'B';
     wasChosenActuallyAccepted: boolean;

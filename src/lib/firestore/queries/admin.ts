@@ -1,6 +1,7 @@
 // src/lib/firestore/queries/admin.ts
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import { db } from '@/lib/firebase';
+import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
 import type { DPOEntry, EvaluationData, ParticipantFlag } from '@/types/dpo';
 import type { DisplayEntry } from '@/types/entries';
 import type { DemographicsSummary, ResponseAggregates } from '@/types/stats';
@@ -158,8 +159,6 @@ export async function fetchDpoEntriesData(mainQuery: Query, targetReviews: numbe
     },
   };
 }
-
-import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
 
 // A new function for dashboard data
 export async function getDashboardData() {

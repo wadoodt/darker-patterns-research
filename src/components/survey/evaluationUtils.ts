@@ -36,6 +36,6 @@ export function buildEvaluationDraft({
     comment: userComment.trim(),
     timeSpentMs,
     wasChosenActuallyAccepted,
-    dpoEntryCategories: selectedCategories,
+    categories: selectedCategories,
   };
 }

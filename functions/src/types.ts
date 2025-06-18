@@ -41,7 +41,7 @@ export interface EvaluationData {
   id?: string; // Firestore document ID, added during fetch client-side
   participantSessionUid: string;
   dpoEntryId: string;
-  dpoEntryCategories: string[];
+  categories: string[];
   chosenOptionKey: 'A' | 'B';
   wasChosenActuallyAccepted: boolean;
   rating: number;
@@ -69,7 +69,7 @@ export interface ParticipantFlag {
   reason: string;
   comment?: string | null;
   flaggedAt: FirebaseAdminTimestamp | Date; // Use FirebaseAdminTimestamp
-  dpoEntryCategories?: string[]; // Optional: store category for context/filtering flags
+  categories?: string[]; // Optional: store category for context/filtering flags
 }
 
 export interface AdminSettingsData {

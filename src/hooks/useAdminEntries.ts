@@ -73,6 +73,8 @@ async function fetchAndSetEntries(
 
   setIsLoading(true);
   setError(null);
+
+  debugger;
   try {
     const { mainQuery, countQuery } = buildDpoEntriesQuery(
       filters,
@@ -134,14 +136,8 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
     setFirstDocOfCurrentPage(null);
     setLastDocOfCurrentPage(null);
     fetchEntries(1, activeFilters, sortConfig, defaultTargetReviews, 'current');
-  }, [
-    activeFilters,
-    sortConfig,
-    defaultTargetReviews,
-    fetchEntries,
-    setFirstDocOfCurrentPage,
-    setLastDocOfCurrentPage,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFilters, sortConfig, defaultTargetReviews]);
 
   const handleFilterChange = (newFilters: AdminEntriesFilter) => {
     setActiveFilters(newFilters);

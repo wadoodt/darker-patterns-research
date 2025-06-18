@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { httpsCallable } from 'firebase/functions';
-import { toast } from 'sonner';
 import { functions } from '@/lib/firebase';
 import { getAdminSettings } from '@/lib/firestore/queries/admin';
+import { ingestDpoDataset } from '@/lib/firestore/mutations/admin';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export function useAdminPageSetup() {
   const [defaultTargetReviews, setDefaultTargetReviews] = useState(10);
@@ -45,17 +45,15 @@ export function useAdminPageSetup() {
       return;
     }
     setIsIngesting(true);
-    const ingestDpoDataset = httpsCallable(functions, 'ingestDpoDataset');
 
     try {
-      const data = JSON.parse(fileContent);
-      const result = (await ingestDpoDataset(data)) as { data: { success: boolean; message: string } };
+      const { success, message } = await ingestDpoDataset(fileContent);
 
-      if (result.data.success) {
-        toast.success(result.data.message);
+      if (success) {
+        toast.success(message);
         setNeedsRefetch(true);
       } else {
-        toast.error(result.data.message || 'Ingestion failed. Please check the logs.');
+        toast.error(message || 'Ingestion failed. Please check the logs.');
       }
     } catch (error) {
       console.error('Error ingesting dataset:', error);

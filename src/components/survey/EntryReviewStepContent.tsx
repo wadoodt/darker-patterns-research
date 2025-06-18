@@ -8,7 +8,7 @@ import { buildEvaluationDraft } from './evaluationUtils';
 import { submitFlagForEntry } from './flagUtils';
 import { useEntryReviewState } from './useEntryReviewState';
 
-const EntryReviewStepContent: React.FC<{ entryId?: string }> = () => {
+const EntryReviewStepContent: React.FC = () => {
   const {
     currentStepNumber,
     totalSteps,

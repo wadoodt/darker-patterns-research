@@ -40,7 +40,7 @@ export default function RevealSection({
             />
           </div>
         )}
-        <div className="mt-3 space-y-2 text-xs">
+        {/* <div className="mt-3 space-y-2 text-xs">
           <details className="reveal-details-box rounded border border-green-300 bg-green-50/50 p-2">
             <summary className="cursor-pointer font-semibold text-green-700 hover:underline">
               Show Researchers&apos; Preferred Response
@@ -59,7 +59,7 @@ export default function RevealSection({
               dangerouslySetInnerHTML={{ __html: currentDisplayEntry.rejectedResponse.replace(/\n/g, '<br/>') }}
             />
           </details>
-        </div>
+        </div> */}
         <p className="mt-4 text-center text-xs text-gray-500">
           {currentDpoEntryIndex < dpoEntriesToReview.length - 1
             ? "Click 'Next Entry' below to continue."

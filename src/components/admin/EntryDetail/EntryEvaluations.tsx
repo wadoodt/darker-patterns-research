@@ -29,6 +29,18 @@ export function EntryEvaluations({ evaluations }: EntryEvaluationsProps) {
                 </span>
               </div>
               {evaluation.comment && <p className="mt-1">{evaluation.comment}</p>}
+              {evaluation.categories && (
+                <div className="mt-2">
+                  <strong className="text-sm">Categories:</strong>
+                  <div className="mt-1 flex flex-wrap gap-2">
+                    {evaluation.categories.map((category) => (
+                      <span key={category} className="rounded-full bg-gray-700 px-2 py-1 text-xs">
+                        {category}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </li>
           ))}
         </ul>

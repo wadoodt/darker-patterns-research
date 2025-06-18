@@ -1,10 +1,10 @@
 // src/lib/firestore/mocks/admin.ts
-import { HARM_CATEGORIES } from '@/lib/harm-categories';
 import type { GetDpoEntryResult } from '@/lib/firestore/queries/admin';
-import type { DemographicsSummary, OverviewStats, ResponseAggregates } from '@/types/stats';
+import { HARM_CATEGORIES } from '@/lib/harm-categories';
 import type { DPOEntry, EvaluationData, ParticipantFlag } from '@/types/dpo';
-import { Timestamp } from 'firebase/firestore';
 import type { DisplayEntry } from '@/types/entries';
+import type { DemographicsSummary, OverviewStats, ResponseAggregates } from '@/types/stats';
+import { Timestamp } from 'firebase/firestore';
 
 export function getMockDpoEntries(count: number = 10): DisplayEntry[] {
   return Array.from({ length: count }).map((_, i) => {
@@ -65,7 +65,7 @@ export function getMockDpoEntryDetails(entryId: string): GetDpoEntryResult {
       submittedAt: lastWeek,
       chosenOptionKey: 'A',
       wasChosenActuallyAccepted: true,
-      dpoEntryCategories: entry.categories,
+      categories: entry.categories,
       timeSpentMs: randomInt(10000, 60000),
     },
     {
@@ -77,8 +77,8 @@ export function getMockDpoEntryDetails(entryId: string): GetDpoEntryResult {
       submittedAt: now,
       chosenOptionKey: 'B',
       wasChosenActuallyAccepted: false,
-      dpoEntryCategories: entry.categories,
       timeSpentMs: randomInt(10000, 60000),
+      categories: entry.categories,
     },
   ];
 
@@ -88,7 +88,7 @@ export function getMockDpoEntryDetails(entryId: string): GetDpoEntryResult {
     participantSessionUid: `participant${randomInt(1, 5)}`,
     reason: 'This is a mock flag reason.',
     flaggedAt: now,
-    dpoEntryCategories: entry.categories,
+    categories: entry.categories,
   }));
 
   return {

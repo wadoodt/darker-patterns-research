@@ -43,10 +43,10 @@ export interface EvaluationData {
   id?: string;
   participantSessionUid: string;
   dpoEntryId: string;
-  dpoEntryCategories: string[];
   chosenOptionKey: 'A' | 'B';
   wasChosenActuallyAccepted: boolean;
   rating: number;
+  categories: string[];
   comment?: string | null;
   timeSpentMs: number;
   submittedAt: Timestamp | Date;
@@ -75,5 +75,5 @@ export interface ParticipantFlag {
   reason: string; // Could be one of predefined or "Other"
   comment?: string | null; // Detailed comment if reason is "Other" or additional notes
   flaggedAt: Timestamp | Date;
-  dpoEntryCategories?: string[];
+  categories?: string[];
 }
