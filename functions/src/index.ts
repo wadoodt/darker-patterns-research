@@ -669,3 +669,110 @@ export const ingestDpoDataset = onCall(async (request) => {
     throw new functions.https.HttpsError('internal', 'An error occurred while ingesting the dataset.', error);
   }
 });
+
+// --- Callable function to export the DPO dataset ---
+export const exportDpoDataset = onCall(async (request) => {
+  // 1. Authentication & Authorization
+  if (!request.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called by an authenticated user.');
+  }
+
+  const userDoc = await db.collection('users').doc(request.auth.uid).get();
+  const userData = userDoc.data();
+  if (!userDoc.exists || !Array.isArray(userData?.roles) || !userData?.roles.includes('admin')) {
+    throw new functions.https.HttpsError(
+      'permission-denied',
+      `The function must be called by an administrator. Current roles for user ${request.auth.uid}: ${userData?.roles}`,
+    );
+  }
+
+  // 2. Input Validation
+  const { format = 'json', includeArchived = false } = request.data;
+  if (format !== 'json' && format !== 'csv') {
+    throw new functions.https.HttpsError('invalid-argument', "The 'format' parameter must be 'json' or 'csv'.");
+  }
+
+  try {
+    // 3. Data Fetching
+    let query: admin.firestore.Query<admin.firestore.DocumentData> = db.collection('dpo_entries');
+    if (!includeArchived) {
+      query = query.where('isArchived', '!=', true);
+    }
+
+    const snapshot = await query.get();
+    const dpoEntries = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as DPOEntry[];
+
+    // 4. Data Augmentation & Formatting
+    let fileContent: string;
+    const augmentedEntries = [];
+
+    for (const entry of dpoEntries) {
+      const evaluationsSnapshot = await db.collection('evaluations').where('dpoEntryId', '==', entry.id).get();
+      const evaluations = evaluationsSnapshot.docs.map((doc) => doc.data() as EvaluationData);
+
+      const totalEvals = evaluations.length;
+      const chosenCount = evaluations.filter((e) => e.chosenOptionKey === 'A').length;
+      const agreementCount = evaluations.filter((e) => e.wasChosenActuallyAccepted).length;
+      const agreementRate = totalEvals > 0 ? (agreementCount / totalEvals) * 100 : 0;
+
+      augmentedEntries.push({
+        ...entry,
+        evaluationCount: totalEvals,
+        chosenOverPairCount: chosenCount,
+        agreementRate: parseFloat(agreementRate.toFixed(2)),
+      });
+    }
+
+    if (format === 'json') {
+      fileContent = JSON.stringify(augmentedEntries, null, 2);
+    } else {
+      // CSV format
+      if (augmentedEntries.length === 0) {
+        fileContent = '';
+      } else {
+        const headers = Object.keys(augmentedEntries[0]).join(',');
+        const rows = augmentedEntries.map((entry: any) => {
+          return Object.values(entry)
+            .map((value: any) => {
+              if (value === null || value === undefined) {
+                return '';
+              }
+              if (typeof value === 'string') {
+                return `\"${value.replace(/"/g, '""')}\"`;
+              }
+              if (Array.isArray(value)) {
+                return `\"${value.join(';')}\"`;
+              }
+              if (typeof value === 'object' && value.hasOwnProperty('_seconds')) {
+                return new Date(value._seconds * 1000).toISOString();
+              }
+              return value;
+            })
+            .join(',');
+        });
+        fileContent = `${headers}\n${rows.join('\n')}`;
+      }
+    }
+
+    // 5. File Generation & Storage
+    const bucket = getStorage().bucket();
+    const fileName = `admin_exports/datasets/dpo_dataset_augmented_${Date.now()}.${format}`;
+    const file = bucket.file(fileName);
+
+    await file.save(fileContent, {
+      contentType: format === 'json' ? 'application/json' : 'text/csv',
+    });
+
+    // 6. Return Download URL
+    const [url] = await file.getSignedUrl({
+      action: 'read',
+      expires: Date.now() + 1000 * 60 * 15, // 15 minutes
+    });
+
+    return { success: true, downloadUrl: url };
+  } catch (error) {
+    functions.logger.error('Error exporting DPO dataset:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during export.';
+    throw new functions.https.HttpsError('internal', errorMessage, error);
+  }
+});
