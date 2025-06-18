@@ -5,12 +5,13 @@ import { useAdminPageSetup } from '@/hooks/useAdminPageSetup';
 import { useAuth } from '@/hooks/useAuth';
 import { HARM_CATEGORIES } from '@/lib/harm-categories';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EntriesPageView } from './EntriesPageView';
 import { IngestDatasetModal } from './IngestDatasetModal';
 
 export default function EntriesPageContent() {
   const { isAdmin } = useAuth();
+  const [showArchived, setShowArchived] = useState(false);
   const categories = HARM_CATEGORIES.map((c: { name: string }) => c.name);
 
   const {
@@ -24,7 +25,7 @@ export default function EntriesPageContent() {
     setNeedsRefetch,
   } = useAdminPageSetup();
 
-  const { refetchEntries, ...adminEntries } = useAdminEntries(defaultTargetReviews);
+  const { refetchEntries, ...adminEntries } = useAdminEntries(defaultTargetReviews, showArchived);
 
   useEffect(() => {
     if (needsRefetch && refetchEntries) {
@@ -72,6 +73,8 @@ export default function EntriesPageContent() {
         handleFilterChange={handleFilterChange}
         handleSortChange={handleSortChange}
         handlePageChange={handlePageChange}
+        showArchived={showArchived}
+        setShowArchived={setShowArchived}
       />
       <IngestDatasetModal
         isOpen={isIngestModalOpen}

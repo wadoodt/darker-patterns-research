@@ -12,6 +12,7 @@ import { EntryComments } from './EntryDetail/EntryComments';
 import { EntryEvaluations } from './EntryDetail/EntryEvaluations';
 import { EntryOriginalData } from './EntryDetail/EntryOriginalData';
 import { FlagEntryModal } from './EntryDetail/FlagEntryModal';
+import { RevisionInfoBanner } from './EntryDetail/RevisionInfoBanner';
 import type { EntryDetailPageContentProps } from './EntryDetailPageContent.types';
 
 const EntryDetailPageContent: React.FC<EntryDetailPageContentProps> = ({ entry }) => {
@@ -62,6 +63,7 @@ const EntryDetailPageContent: React.FC<EntryDetailPageContentProps> = ({ entry }
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-4 text-2xl font-bold">Details for Entry: {entry.id}</h1>
+      <RevisionInfoBanner entry={entry} />
 
       {message && (
         <div

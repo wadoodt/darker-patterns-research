@@ -1,14 +1,16 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
-import { AdminEntriesFilter } from '@/hooks/useAdminEntries';
+import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
-import { Column } from '@/types/table';
-import { Eye, Loader2, PlusCircle, Tag, UploadCloud } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2, PlusCircle, UploadCloud } from 'lucide-react';
 import AdminTable from '../common/AdminTable';
 import Pagination from '../common/Pagination';
 import AdminHeader from './AdminHeader';
 import EntriesFilters from './EntriesFilters';
+import { tableColumns } from './entries/EntriesTableColumns';
 
+// --- PROPS ---
 interface EntriesPageViewProps {
   isAdmin: boolean;
   initialDataLoading: boolean;
@@ -20,13 +22,17 @@ interface EntriesPageViewProps {
   ITEMS_PER_PAGE: number;
   categories: string[];
   activeFilters: AdminEntriesFilter;
-  sortConfig: { key: SortableEntryKeys | null; direction: 'asc' | 'desc' | null };
+  sortConfig: AdminEntriesSortConfig;
   handleAddNewEntry: () => void;
   handleIngestDataset: () => void;
   handleFilterChange: (filters: AdminEntriesFilter) => void;
   handleSortChange: (key: SortableEntryKeys) => void;
   handlePageChange: (page: number) => void;
+  showArchived: boolean;
+  setShowArchived: (value: boolean) => void;
 }
+
+// --- SUB-COMPONENTS ---
 
 const LoadingView = () => (
   <div className="flex h-64 items-center justify-center">
@@ -60,78 +66,97 @@ const EmptyStateView = ({ isAdmin, onIngest }: { isAdmin: boolean; onIngest: () 
   </div>
 );
 
-const tableColumns: Column<DisplayEntry>[] = [
-  {
-    key: 'id',
-    header: 'ID',
-    sortable: true,
-    renderCell: (entry: DisplayEntry) => <span className="font-mono text-xs">{entry.id.substring(0, 12)}...</span>,
-  },
-  {
-    key: 'instruction',
-    header: 'Instruction',
-    renderCell: (entry: DisplayEntry) => (
-      <span className="block max-w-xs truncate text-sm" title={entry.instruction}>
-        {entry.instruction}
-      </span>
-    ),
-  },
-  {
-    key: 'categories',
-    header: 'Category',
-    sortable: true,
-    icon: Tag,
-    renderCell: (entry: DisplayEntry) => <span className="text-sm">{entry.categories.join(', ')}</span>,
-  },
-  {
-    key: 'reviewCount',
-    header: 'Reviews',
-    sortable: true,
-    renderCell: (entry: DisplayEntry) => (
-      <div className="flex items-center gap-2 text-sm">
-        <span>{entry.statusText}</span>
-        <div className="bg-dark-bg-tertiary h-2 w-20 overflow-hidden rounded-full">
-          <div
-            className={`h-full rounded-full ${entry.reviewProgress && entry.reviewProgress >= 100 ? 'bg-green-500' : 'bg-brand-purple-500'}`}
-            style={{ width: `${entry.reviewProgress || 0}%` }}
-          ></div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    key: 'actions',
-    header: 'Actions',
-    renderCell: (entry: DisplayEntry) => (
-      <Link
-        href={`/admin/entries/${entry.id}`}
-        className="text-brand-purple-400 flex items-center gap-1 text-sm font-medium hover:underline"
-      >
-        <Eye size={16} /> View
-      </Link>
-    ),
-  },
-];
+const EntriesPageHeader = ({ isAdmin, onAddNew }: { isAdmin: boolean; onAddNew: () => void }) => (
+  <div className="mb-6 flex items-center justify-between">
+    <AdminHeader
+      title="DPO Entries Management"
+      objective="Browse, filter, and review submitted human evaluations for each DPO entry."
+      className="mb-0"
+    />
+    {isAdmin && (
+      <Button onClick={onAddNew} className="btn-primary-dark px-4 py-2 text-sm">
+        <PlusCircle size={18} className="mr-2" /> Add New DPO Entry
+      </Button>
+    )}
+  </div>
+);
 
-export function EntriesPageView({
-  isAdmin,
-  initialDataLoading,
-  isLoadingEntries,
-  error,
-  entries,
-  totalEntriesCount,
-  currentPage,
-  ITEMS_PER_PAGE,
-  categories,
+const EntriesPageToolbar = ({
   activeFilters,
-  sortConfig,
-  handleAddNewEntry,
-  handleIngestDataset,
   handleFilterChange,
-  handleSortChange,
-  handlePageChange,
-}: EntriesPageViewProps) {
-  if (initialDataLoading) {
+  categories,
+  showArchived,
+  setShowArchived,
+}: {
+  activeFilters: AdminEntriesFilter;
+  handleFilterChange: (filters: AdminEntriesFilter) => void;
+  categories: string[];
+  showArchived: boolean;
+  setShowArchived: (value: boolean) => void;
+}) => (
+  <>
+    <EntriesFilters
+      currentFilters={activeFilters}
+      onFilterChange={handleFilterChange}
+      categories={categories}
+      statusOptions={[
+        { value: '', label: 'All Statuses' },
+        { value: 'needs_reviews', label: 'Needs Reviews' },
+        { value: 'completed', label: 'Completed' },
+      ]}
+    />
+    <div className="mt-4 flex items-center justify-end">
+      <label htmlFor="show-archived" className="mr-2 text-sm font-medium text-gray-700">
+        Show Archived
+      </label>
+      <input
+        id="show-archived"
+        type="checkbox"
+        checked={showArchived}
+        onChange={(e) => setShowArchived(e.target.checked)}
+        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+      />
+    </div>
+  </>
+);
+
+const EntriesTableContent = (props: EntriesPageViewProps) => {
+  if (props.isLoadingEntries) {
+    return <LoadingView />;
+  }
+  if (props.error) {
+    return <p className="py-10 text-center text-red-400">{props.error}</p>;
+  }
+  if (props.totalEntriesCount === 0) {
+    return <EmptyStateView isAdmin={props.isAdmin} onIngest={props.handleIngestDataset} />;
+  }
+  return (
+    <>
+      <div className="admin-card mt-6 overflow-x-auto p-0">
+        <AdminTable
+          columns={tableColumns}
+          data={props.entries}
+          onSort={props.handleSortChange}
+          currentSortKey={props.sortConfig.key}
+          currentSortDirection={props.sortConfig.direction}
+        />
+      </div>
+      {props.totalEntriesCount > props.ITEMS_PER_PAGE && (
+        <Pagination
+          currentPage={props.currentPage}
+          totalItems={props.totalEntriesCount}
+          itemsPerPage={props.ITEMS_PER_PAGE}
+          onPageChange={props.handlePageChange}
+        />
+      )}
+    </>
+  );
+};
+
+// --- MAIN COMPONENT ---
+
+export function EntriesPageView(props: EntriesPageViewProps) {
+  if (props.initialDataLoading) {
     return (
       <main className="flex-1 overflow-y-auto p-6 sm:p-8">
         <AdminHeader
@@ -145,56 +170,15 @@ export function EntriesPageView({
 
   return (
     <main className="flex-1 overflow-y-auto p-6 sm:p-8">
-      <div className="mb-6 flex items-center justify-between">
-        <AdminHeader
-          title="DPO Entries Management"
-          objective="Browse, filter, and review submitted human evaluations for each DPO entry."
-          className="mb-0"
-        />
-        {isAdmin && (
-          <Button onClick={handleAddNewEntry} className="btn-primary-dark px-4 py-2 text-sm">
-            <PlusCircle size={18} className="mr-2" /> Add New DPO Entry
-          </Button>
-        )}
-      </div>
-
-      <EntriesFilters
-        currentFilters={activeFilters}
-        onFilterChange={handleFilterChange}
-        categories={categories}
-        statusOptions={[
-          { value: '', label: 'All Statuses' },
-          { value: 'needs_reviews', label: 'Needs Reviews' },
-          { value: 'completed', label: 'Completed' },
-        ]}
+      <EntriesPageHeader isAdmin={props.isAdmin} onAddNew={props.handleAddNewEntry} />
+      <EntriesPageToolbar
+        activeFilters={props.activeFilters}
+        handleFilterChange={props.handleFilterChange}
+        categories={props.categories}
+        showArchived={props.showArchived}
+        setShowArchived={props.setShowArchived}
       />
-
-      {isLoadingEntries && <LoadingView />}
-      {!isLoadingEntries && error && <p className="py-10 text-center text-red-400">{error}</p>}
-      {!isLoadingEntries && !error && totalEntriesCount === 0 && (
-        <EmptyStateView isAdmin={isAdmin} onIngest={handleIngestDataset} />
-      )}
-
-      {!isLoadingEntries && !error && totalEntriesCount > 0 && (
-        <div className="admin-card mt-6 overflow-x-auto p-0">
-          <AdminTable
-            columns={tableColumns}
-            data={entries}
-            onSort={handleSortChange}
-            currentSortKey={sortConfig.key}
-            currentSortDirection={sortConfig.direction}
-          />
-        </div>
-      )}
-
-      {!isLoadingEntries && totalEntriesCount > ITEMS_PER_PAGE && (
-        <Pagination
-          currentPage={currentPage}
-          totalItems={totalEntriesCount}
-          itemsPerPage={ITEMS_PER_PAGE}
-          onPageChange={handlePageChange}
-        />
-      )}
+      <EntriesTableContent {...props} />
     </main>
   );
 }

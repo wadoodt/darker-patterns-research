@@ -90,6 +90,7 @@ export function buildDpoEntriesQuery(
     first: QueryDocumentSnapshot | null;
     last: QueryDocumentSnapshot | null;
   },
+  showArchived: boolean,
 ) {
   if (!db) throw new Error('Firebase is not initialized');
 
@@ -97,6 +98,11 @@ export function buildDpoEntriesQuery(
   let baseQuery = query(dpoEntriesRef);
 
   const filterConstraints = [];
+  // By default, filter out archived entries unless explicitly requested
+  if (!showArchived) {
+    filterConstraints.push(where('isArchived', '==', false));
+  }
+
   if (filters.category && filters.category.length > 0) {
     filterConstraints.push(where('categories', 'array-contains-any', filters.category.slice(0, 10)));
   } else if (filters.status) {

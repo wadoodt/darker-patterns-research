@@ -6,14 +6,16 @@ interface FormFieldProps {
   id: string;
   label: string;
   children: React.ReactNode;
+  description?: string;
 }
 
-export function FormField({ id, label, children }: FormFieldProps) {
+export function FormField({ id, label, children, description }: FormFieldProps) {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
+      {description && <p className="mt-1 text-sm text-gray-500">{description}</p>}
       <div className="mt-1">{children}</div>
     </div>
   );

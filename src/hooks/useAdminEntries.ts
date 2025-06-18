@@ -58,6 +58,7 @@ async function fetchAndSetEntries(
   targetReviews: number,
   pageDirection: 'next' | 'prev' | 'current',
   state: ReturnType<typeof useAdminEntriesState>,
+  showArchived: boolean,
 ) {
   const {
     setIsLoading,
@@ -86,6 +87,7 @@ async function fetchAndSetEntries(
         first: firstDocOfCurrentPage,
         last: lastDocOfCurrentPage,
       },
+      showArchived,
     );
 
     const [totalCount, { entries: fetchedEntries, cursors }] = await Promise.all([
@@ -106,7 +108,7 @@ async function fetchAndSetEntries(
   }
 }
 
-export const useAdminEntries = (defaultTargetReviews: number) => {
+export const useAdminEntries = (defaultTargetReviews: number, showArchived: boolean) => {
   const state = useAdminEntriesState();
   const {
     activeFilters,
@@ -127,9 +129,9 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
       targetReviews: number,
       pageDirection: 'next' | 'prev' | 'current' = 'current',
     ) => {
-      fetchAndSetEntries(page, filters, sort, targetReviews, pageDirection, state);
+      fetchAndSetEntries(page, filters, sort, targetReviews, pageDirection, state, showArchived);
     },
-    [state],
+    [state, showArchived],
   );
 
   useEffect(() => {
@@ -137,7 +139,7 @@ export const useAdminEntries = (defaultTargetReviews: number) => {
     setLastDocOfCurrentPage(null);
     fetchEntries(1, activeFilters, sortConfig, defaultTargetReviews, 'current');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFilters, sortConfig, defaultTargetReviews]);
+  }, [activeFilters, sortConfig, defaultTargetReviews, showArchived]);
 
   const handleFilterChange = (newFilters: AdminEntriesFilter) => {
     setActiveFilters(newFilters);

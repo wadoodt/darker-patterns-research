@@ -58,6 +58,26 @@ export const updateDPOEntry = async (entryId: string, entry: Partial<DPOEntry>) 
   }
 };
 
+export const reviseDpoEntry = async (originalEntryId: string, correctedData: Partial<DPOEntry>) => {
+  if (!functions) {
+    throw new Error('Firebase Functions is not initialized');
+  }
+
+  const reviseDpoEntryFn = httpsCallable<unknown, { success: boolean; newEntryId: string; message: string }>(
+    functions,
+    'reviseDpoEntry',
+  );
+
+  try {
+    const result = await reviseDpoEntryFn({ originalEntryId, correctedData });
+    return result.data;
+  } catch (error) {
+    console.error('Error revising DPO entry:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during revision.';
+    return { success: false, newEntryId: '', message: errorMessage };
+  }
+};
+
 export const flagDPOEntry = async (entryId: string, flagData: Omit<ParticipantFlag, 'id' | 'flaggedAt'>) => {
   if (!db) {
     throw new Error('Firestore is not initialized');

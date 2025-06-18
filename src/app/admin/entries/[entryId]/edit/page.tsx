@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { DPOEntryForm } from '@/components/admin/DPOEntryForm';
 import { DPOEntry } from '@/types/dpo';
 import { getDpoEntry } from '@/lib/firestore/queries/admin';
-import { updateDPOEntry } from '@/lib/firestore/mutations/admin';
+import { reviseDpoEntry, updateDPOEntry } from '@/lib/firestore/mutations/admin';
 
 export default function EditDPOEntryPage() {
   const router = useRouter();
@@ -37,14 +37,24 @@ export default function EditDPOEntryPage() {
     }
   }, [entryId, router]);
 
-  const handleSubmit = async (updatedEntry: Partial<DPOEntry>) => {
+  const handleSubmit = async (updatedEntry: Partial<DPOEntry>, isRevision: boolean) => {
     setIsSubmitting(true);
     try {
-      await updateDPOEntry(entryId, updatedEntry);
-      router.push(`/admin/entries/${entryId}`);
+      if (isRevision) {
+        const result = await reviseDpoEntry(entryId, updatedEntry);
+        if (result.success) {
+          router.push(`/admin/entries/${result.newEntryId}`);
+        } else {
+          throw new Error(result.message);
+        }
+      } else {
+        await updateDPOEntry(entryId, updatedEntry);
+        router.push(`/admin/entries/${entryId}`);
+      }
     } catch (error) {
       console.error('Failed to update DPO entry:', error);
-      alert('Failed to update DPO entry.');
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+      alert(`Failed to update DPO entry: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
