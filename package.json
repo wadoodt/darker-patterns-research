@@ -9,8 +9,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "prepare": "husky install",
-    "gitleaks": "gitleaks . --verbose"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.0",
