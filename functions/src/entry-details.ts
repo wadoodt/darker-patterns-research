@@ -1,5 +1,4 @@
-import type { DPOEntry, EvaluationData, ParticipantFlag } from './types';
-import type { EntryWithDetails } from '../../src/types/entryDetails';
+import type { DPOEntry, EvaluationData, ParticipantFlag, EntryWithDetails } from './types';
 import { Timestamp } from 'firebase-admin/firestore';
 
 /**

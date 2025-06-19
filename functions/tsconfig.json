@@ -9,8 +9,9 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "rootDir": "./src"
   },
   "compileOnSave": true,
-  "include": ["src"]
+  "include": ["./src"]
 }

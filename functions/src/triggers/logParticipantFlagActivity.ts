@@ -23,10 +23,12 @@ export const logParticipantFlagActivity = onDocumentCreated(
       return null;
     }
     const activityLogRef = db.collection('activity_log').doc();
-    const displayText = `Entry ${context.params.entryId.substring(0, 6)}... flagged by PUID ${flagData.participantSessionUid.substring(
-      0,
-      6,
-    )}... Reason: ${flagData.reason.substring(0, 30)}...`;
+    const entryIdShort = context.params.entryId.substring(0, 6);
+    const participantSessionShortId = flagData.participantSessionUid.substring(0, 6);
+    const reasonShort = flagData.reason.substring(0, 30);
+    let displayText = `Entry ${entryIdShort}...`;
+    displayText += `flagged by PUID ${participantSessionShortId}...`;
+    displayText += `Reason: ${reasonShort}...`;
     const iconName = 'Flag';
     try {
       await activityLogRef.set({

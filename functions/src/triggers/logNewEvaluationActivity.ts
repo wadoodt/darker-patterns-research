@@ -20,10 +20,10 @@ export const logNewEvaluationActivity = onDocumentCreated('evaluations/{evaluati
     return null;
   }
   const activityLogRef = db.collection('activity_log').doc();
-  const displayText = `Evaluation for entry ${evalData.dpoEntryId.substring(0, 6)}... by PUID ${evalData.participantSessionUid.substring(
-    0,
-    6,
-  )}...`;
+  const entryShortId = evalData.dpoEntryId.substring(0, 6);
+  const participantSessionShortId = evalData.participantSessionUid.substring(0, 6);
+  let displayText = `Evaluation for entry ${entryShortId}...`;
+  displayText += ` by PUID ${participantSessionShortId}...`;
   const iconName = 'CheckSquare';
   try {
     await activityLogRef.set({
