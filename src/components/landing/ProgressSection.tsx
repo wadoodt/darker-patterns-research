@@ -1,7 +1,6 @@
 // src/components/landing/ProgressSection.tsx
 'use client';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
-import { db } from '@/lib/firebase';
 import { getProjectProgress } from '@/lib/landing/database';
 import React, { useEffect, useState } from 'react';
 import LandingProgressBar from './LandingProgressBar';
@@ -17,13 +16,9 @@ const ProgressSection = () => {
   const [progressData, setProgressData] = useState(mockProgressData);
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development' || !db) {
-      setProgressData(mockProgressData);
-    } else {
-      getProjectProgress()
-        .then(setProgressData)
-        .catch(() => setProgressData(mockProgressData));
-    }
+    getProjectProgress()
+      .then(setProgressData)
+      .catch(() => setProgressData(mockProgressData));
   }, []);
 
   return (

@@ -1,11 +1,60 @@
 'use client';
+
+import { useState, useEffect } from 'react';
 import EntryDetailPageContent from '@/components/admin/EntryDetailPageContent';
 import type { EntryWithDetails } from '@/types/entryDetails';
+import { getEntryDetails } from '@/lib/callable-functions';
+import { incrementEntryViewCount } from '@/lib/firestore/queries/admin';
+import { notFound } from 'next/navigation';
 
 interface EntryDetailPageViewProps {
-  entry: EntryWithDetails;
+  entryId: string;
 }
 
-export default function EntryDetailPageView({ entry }: EntryDetailPageViewProps) {
+export default function EntryDetailPageView({ entryId }: EntryDetailPageViewProps) {
+  const [entry, setEntry] = useState<EntryWithDetails | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEntryData = async () => {
+      try {
+        setLoading(true);
+        // Run these in parallel for better performance
+        const [entryData] = await Promise.all([
+          // Get entry details first
+          getEntryDetails(entryId),
+          // Increment view count (fire and forget)
+          incrementEntryViewCount(entryId).catch(console.error),
+        ]);
+        setEntry(entryData);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching entry details:', err);
+        setError('Failed to load entry details.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (entryId) {
+      fetchEntryData();
+    }
+  }, [entryId]);
+
+  if (loading) {
+    return <div>Loading entry...</div>;
+  }
+
+  if (error) {
+    // This will trigger the not-found UI for the route
+    return notFound();
+  }
+
+  if (!entry) {
+    // This can happen if the fetch completes but there's no data
+    return notFound();
+  }
+
   return <EntryDetailPageContent entry={entry} />;
 }

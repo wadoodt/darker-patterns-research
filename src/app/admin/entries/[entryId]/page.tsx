@@ -1,42 +1,31 @@
-import { notFound } from 'next/navigation';
 import EntryDetailPageView from '@/components/admin/EntryDetailPageView';
-import { incrementEntryViewCount } from '@/lib/firestore/queries/admin';
-import { getEntryDetails } from '@/lib/callable-functions';
+import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60; // Revalidate every 60 seconds
 
+// Correctly type the props for a Page component in the App Router
 type EntryDetailRoutePageProps = {
   params: { entryId: string };
 };
 
+// This function can remain on the server to generate metadata
 export async function generateMetadata({ params }: EntryDetailRoutePageProps) {
-  const entryId = params.entryId;
+  const { entryId } = await params;
   return {
     title: `Entry Details: ${entryId}`,
   };
 }
 
+// This is now a standard Server Component that renders a Client Component.
 export default async function EntryDetailRoutePage({ params }: EntryDetailRoutePageProps) {
-  const { entryId } = params;
+  const { entryId } = await params;
 
-  // Don't try to fetch data during static generation
-  if (typeof window === 'undefined') {
-    return <div>Loading...</div>;
-  }
-
-  try {
-    // Run these in parallel for better performance
-    const [entryData] = await Promise.all([
-      // Get entry details first
-      getEntryDetails(entryId),
-      // Increment view count (fire and forget)
-      incrementEntryViewCount(entryId).catch(console.error),
-    ]);
-
-    return <EntryDetailPageView entry={entryData} />;
-  } catch (error) {
-    console.error('Error in EntryDetailRoutePage:', error);
+  if (!entryId) {
+    console.error({ params, entryId, paco: params.entryId });
     return notFound();
   }
+
+  // The EntryDetailPageView component will handle its own data fetching on the client.
+  return <EntryDetailPageView entryId={entryId} />;
 }

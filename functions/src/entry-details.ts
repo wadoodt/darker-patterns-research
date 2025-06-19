@@ -2,14 +2,27 @@ import type { DPOEntry, EvaluationData, ParticipantFlag } from './types';
 import type { EntryWithDetails } from '../../src/types/entryDetails';
 import { Timestamp } from 'firebase-admin/firestore';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function convertTimestamp(field: any): any {
+/**
+ * Converts a Firestore Timestamp to a JavaScript Date object.
+ * If the field is not a Timestamp, it returns the field unchanged.
+ * @param {unknown} field The field to convert.
+ * @return {Date | unknown} The converted Date object or the original field.
+ */
+function convertTimestamp(field: unknown): Date | unknown {
   if (field instanceof Timestamp) {
     return field.toDate();
   }
   return field;
 }
 
+/**
+ * Processes a DPO entry and its associated evaluations and flags to create a detailed object.
+ * This object includes calculated analytics and formatted data suitable for display.
+ * @param {DPOEntry} entry The DPO entry to process.
+ * @param {EvaluationData[]} evaluations An array of evaluations for the entry.
+ * @param {ParticipantFlag[]} flags An array of flags for the entry.
+ * @return {EntryWithDetails} A detailed entry object with analytics.
+ */
 export function processEntryDetails(
   entry: DPOEntry,
   evaluations: EvaluationData[],
@@ -44,7 +57,7 @@ export function processEntryDetails(
   );
 
   const result = {
-    ...(processedEntry as DPOEntry),
+    ...(processedEntry as unknown as DPOEntry),
     analytics: {
       views: entry.viewCount || 1,
       flags: flags.length,
@@ -55,9 +68,9 @@ export function processEntryDetails(
       categoryDistribution,
     },
     evaluations: evaluations
-      .filter((e) => e.id)
+      .filter((e): e is typeof e & { id: string } => !!e.id)
       .map((e) => ({
-        id: e.id!,
+        id: e.id,
         rating: e.rating,
         comment: e.comment,
         categories: e.categories,
