@@ -2,14 +2,14 @@ import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/
 import { LogOut, Settings, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 
-import { type UserProfile } from '@/types/auth';
+import type { AppUser } from '@/types/user';
 
 interface UserProfileDropdownProps {
-  profile: UserProfile;
+  user: AppUser;
   handleLogout: () => void;
 }
 
-export default function UserProfileDropdown({ profile, handleLogout }: UserProfileDropdownProps) {
+export default function UserProfileDropdown({ user, handleLogout }: UserProfileDropdownProps) {
   return (
     <DropdownMenuContent
       className="w-56 bg-[color:var(--color-dark-bg-secondary)]"
@@ -23,7 +23,7 @@ export default function UserProfileDropdown({ profile, handleLogout }: UserProfi
           <span>Profile</span>
         </Link>
       </DropdownMenuItem>
-      {profile?.roles?.includes('admin') && (
+      {user?.roles?.includes('admin') && (
         <DropdownMenuItem asChild>
           <Link href="/admin/settings" className="admin-sidebar-navlink">
             <Settings className="mr-2 h-4 w-4" />

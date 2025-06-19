@@ -1,12 +1,12 @@
-import { type FieldValue, type Timestamp as FirebaseClientTimestamp } from 'firebase/firestore';
+import type { User as FirebaseUser } from 'firebase/auth';
+import type { FieldValue, Timestamp as FirebaseClientTimestamp } from 'firebase/firestore';
 
-export interface UserDataFromFirestore {
-  // Structure of your /users/{uid} document
-  uid: string;
-  email?: string | null;
+/**
+ * Represents the canonical user object in the application.
+ * It combines the Firebase Auth user object with the user profile data from Firestore.
+ */
+export interface AppUser extends FirebaseUser {
   roles?: string[]; // e.g., ['researcher'] or ['admin']
-  createdAt?: FirebaseClientTimestamp | string | Date | FieldValue; // Firestore Timestamp (client), ISO string, Date, or FieldValue
-  lastLoginAt?: FirebaseClientTimestamp | string | Date | FieldValue; // Firestore Timestamp (client), ISO string, Date, or FieldValue
-  displayName?: string | null; // User's display name
-  photoURL?: string | null;
+  createdAt?: FirebaseClientTimestamp | string | Date | FieldValue;
+  lastLoginAt?: FirebaseClientTimestamp | string | Date | FieldValue;
 }

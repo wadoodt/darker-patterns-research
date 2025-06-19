@@ -4,18 +4,19 @@ import type { SignupFormValues } from '@/lib/validations/signup';
 import { type Auth, createUserWithEmailAndPassword, updateProfile as updateFirebaseProfile } from 'firebase/auth';
 
 export async function createUserAccount(data: SignupFormValues) {
-  const firebaseUser = await createUser(data.email, data.password);
+  const firebaseUser = await createUser(data.email, data.password, data.displayName);
   await createUserProfile(firebaseUser, data);
 
   return firebaseUser;
 }
 
-async function createUser(email: string, password: string) {
+async function createUser(email: string, password: string, displayName: string) {
   const userCredential = await createUserWithEmailAndPassword(auth as Auth, email, password);
   const firebaseUser = userCredential.user;
 
+  // Update the Firebase Auth user profile with the display name.
   await updateFirebaseProfile(firebaseUser, {
-    displayName: 'Default Display Name', // You might want to pass this as an argument
+    displayName,
   });
 
   return firebaseUser;
