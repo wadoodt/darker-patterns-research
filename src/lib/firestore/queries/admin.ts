@@ -177,19 +177,10 @@ export async function fetchDpoEntriesData(mainQuery: Query, targetReviews: numbe
 }
 
 export async function getDashboardData() {
-  if (process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true') {
-    return getMockDashboardData();
-  }
-
   if (!db) {
     console.error('Firebase is not initialized.');
     // Return a default or empty state
-    return {
-      totalEntries: 0,
-      totalReviews: 0,
-      averageReviews: 0,
-      completionPercentage: 0,
-    };
+    return getMockDashboardData();
   }
 
   try {
@@ -234,17 +225,9 @@ export async function getDashboardData() {
 }
 
 export async function getStatisticsData() {
-  if (process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true') {
-    return getMockStatisticsData();
-  }
-
   if (!db) {
     console.error('Firebase is not initialized.');
-    return {
-      demographicsSummary: null,
-      overviewStats: null,
-      responseAggregates: null,
-    };
+    return getMockStatisticsData();
   }
 
   try {

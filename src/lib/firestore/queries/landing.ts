@@ -34,8 +34,8 @@ interface AdminSettings {
 }
 
 export async function getCachedStats(): Promise<LandingStats | null> {
-  if (process.env.NODE_ENV === 'test' || !db) {
-    console.warn('StatsSection: Test mode or DB not available, returning mock stats.');
+  if (!db) {
+    console.warn('StatsSection: DB not available, returning mock stats.');
     return mockStatsData;
   }
   try {
@@ -82,8 +82,8 @@ export async function getProjectProgress(): Promise<{ label: string; percentage:
 }
 
 export async function getLandingUpdates(): Promise<LandingUpdate[]> {
-  if (process.env.NODE_ENV === 'development' || !db) {
-    console.warn('UpdatesSection: Development mode or DB not available, returning mock updates.');
+  if (!db) {
+    console.warn('UpdatesSection: DB not available, returning mock updates.');
     return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
   }
   try {

@@ -13,15 +13,8 @@ export function useAdminPageSetup() {
   const [isIngestModalOpen, setIngestModalOpen] = useState(false);
   const [needsRefetch, setNeedsRefetch] = useState(false);
 
-  const isDev = process.env.NODE_ENV === 'development';
-
   useEffect(() => {
     const fetchInitialSetupData = async () => {
-      if (isDev) {
-        setInitialDataLoading(false);
-        return;
-      }
-
       setInitialDataLoading(true);
       try {
         const settings = await getAdminSettings();
@@ -37,7 +30,7 @@ export function useAdminPageSetup() {
     };
 
     fetchInitialSetupData();
-  }, [isDev]);
+  }, []);
 
   const handleIngestSubmit = async (fileContent: string) => {
     if (!functions) {
