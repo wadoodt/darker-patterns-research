@@ -10,6 +10,8 @@ export interface OverviewStats {
   participantFlagCount?: number; // Total flags across all entries
   totalAgreementCount?: number; // Sum of evaluations where user choice matched DPO accepted
   agreementRate?: number; // Percentage, e.g., 75 for 75%
+  totalAnnotatedEntries?: number;
+  totalEntriesWithUnresolvedFlags?: number;
   lastEvaluationAt?: Timestamp;
   lastUpdatedAt?: Timestamp;
 }
@@ -39,6 +41,9 @@ export interface ResponseAggregates {
   };
   commentSubmissions?: number; // Total count of evaluations with comments
   commentSubmissionRatePercent?: number; // Percentage
+  overallAnnotationPercent?: number;
+  min10ReviewsPercent?: number;
+  unresolvedFlagsPercent?: number;
   lastUpdatedAt?: Timestamp;
 }
 
