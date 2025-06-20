@@ -73,9 +73,13 @@ export interface ActivityLogItem {
 }
 
 export interface LandingStats {
-  totalParticipants?: number;
-  totalEvaluationsSubmitted?: number;
-  averageCompletionRate?: number;
-  modelsImpacted?: number;
+  agreementRate?: number;
+  averageTimePerEvaluationMs?: number;
+  evaluationsCountForAvg?: number;
+  fullyReviewedEntriesCount?: number;
+  lastEvaluationAt?: Timestamp | { seconds: number; nanoseconds: number };
   lastUpdatedAt?: Timestamp | { seconds: number; nanoseconds: number };
+  totalAgreementCount?: number;
+  totalEvaluationsSubmitted?: number;
+  usersWithEmailAddressCount?: number;
 }

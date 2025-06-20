@@ -5,10 +5,11 @@ import { collection, doc, getDoc, getDocs, Timestamp } from 'firebase/firestore'
 
 // Mock data for test environment or if Firestore fetch fails
 const mockStatsData: LandingStats = {
-  totalParticipants: 1247,
   totalEvaluationsSubmitted: 8500,
-  averageCompletionRate: 92,
-  modelsImpacted: 3,
+  agreementRate: 92,
+  totalAgreementCount: 3,
+  usersWithEmailAddressCount: 1,
+  fullyReviewedEntriesCount: 1,
   lastUpdatedAt: { seconds: Math.floor(Date.now() / 1000) - 3600, nanoseconds: 0 },
 };
 
