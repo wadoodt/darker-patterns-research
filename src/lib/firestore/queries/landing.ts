@@ -1,7 +1,8 @@
 import type { LandingUpdate } from '@/components/landing/types';
 import { db } from '@/lib/firebase';
 import type { LandingStats, ResponseAggregates } from '@/types/stats';
-import { doc, getDoc, Timestamp } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+import { getGlobalConfig } from './admin';
 
 // Mock data for test environment or if Firestore fetch fails
 const mockStatsData: LandingStats = {
@@ -17,22 +18,26 @@ const mockUpdatesData: LandingUpdate[] = [
   {
     id: 'mock-update-1',
     title: 'Test Mode: Project Kickoff!',
-    date: { seconds: Math.floor(Date.now() / 1000) - 86400 * 7, nanoseconds: 0 },
+    date: new Date(Date.now() - 86400 * 7 * 1000).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
     description: 'This is a mock update for test environment. The DPV project has officially started.',
     iconName: 'Milestone',
   },
   {
     id: 'mock-update-2',
     title: 'Test Mode: Alpha Version Released',
-    date: { seconds: Math.floor(Date.now() / 1000) - 86400 * 2, nanoseconds: 0 },
+    date: new Date(Date.now() - 86400 * 2 * 1000).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
     description: 'Alpha version is now available for internal testing. Features include X, Y, Z.',
     iconName: 'Newspaper',
   },
 ];
-
-interface AdminSettings {
-  landingPageUpdates?: LandingUpdate[];
-}
 
 export async function getCachedStats(): Promise<LandingStats | null> {
   if (!db) {
@@ -94,26 +99,24 @@ export async function getProjectProgress(): Promise<{ label: string; percentage:
 }
 
 export async function getLandingUpdates(): Promise<LandingUpdate[]> {
-  if (!db) {
-    console.warn('UpdatesSection: DB not available, returning mock updates.');
-    return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
-  }
   try {
-    const settingsDocRef = doc(db, 'admin_settings', 'global_config');
-    const docSnap = await getDoc(settingsDocRef);
-    if (docSnap.exists()) {
-      const settings = docSnap.data() as AdminSettings;
-      const updates = settings.landingPageUpdates || [];
-      return updates.sort((a, b) => {
-        const dateA = a.date instanceof Timestamp ? a.date.toMillis() : new Date(a.date.seconds * 1000).getTime();
-        const dateB = b.date instanceof Timestamp ? b.date.toMillis() : new Date(b.date.seconds * 1000).getTime();
-        return dateB - dateA;
-      });
-    }
-    console.warn('UpdatesSection: No admin_settings/global_config document found! Returning mock data.');
-    return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
+    const config = await getGlobalConfig();
+    const landingUpdates: LandingUpdate[] = config.updates.map((update, index) => ({
+      id: `update-${index}`,
+      title: update.title,
+      description: update.description,
+      date: update.date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+      iconName: 'Newspaper', // Default icon
+    }));
+
+    return landingUpdates.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   } catch (error) {
     console.error('UpdatesSection: Error fetching landing updates:', error);
-    return mockUpdatesData.sort((a, b) => b.date.seconds - a.date.seconds);
+    // Fallback to mock data in case of an error
+    return mockUpdatesData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 }

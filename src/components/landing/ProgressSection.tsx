@@ -17,7 +17,10 @@ const ProgressSection = () => {
 
   useEffect(() => {
     getProjectProgress()
-      .then(setProgressData)
+      .then((data) => {
+        console.log(data);
+        setProgressData(data);
+      })
       .catch(() => setProgressData(mockProgressData));
   }, []);
 

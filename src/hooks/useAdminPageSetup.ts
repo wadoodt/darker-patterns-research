@@ -1,7 +1,7 @@
 'use client';
 
 import { functions } from '@/lib/firebase';
-import { getAdminSettings } from '@/lib/firestore/queries/admin';
+import { getGlobalConfig } from '@/lib/firestore/queries/admin';
 import { ingestDpoDataset } from '@/lib/firestore/mutations/admin';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -17,9 +17,9 @@ export function useAdminPageSetup() {
     const fetchInitialSetupData = async () => {
       setInitialDataLoading(true);
       try {
-        const settings = await getAdminSettings();
-        if (settings.minTargetReviewsPerEntry) {
-          setDefaultTargetReviews(settings.minTargetReviewsPerEntry);
+        const config = await getGlobalConfig();
+        if (config.targetReviews) {
+          setDefaultTargetReviews(config.targetReviews);
         }
       } catch (err) {
         console.error('Error fetching initial setup data for entries page:', err);
