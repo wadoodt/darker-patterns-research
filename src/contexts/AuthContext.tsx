@@ -14,6 +14,7 @@ interface AuthContextType {
   isResearcher: boolean;
   loading: boolean;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,6 +56,19 @@ async function handleAuthState(
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AppUser | null>(null);
+
+  const refreshUser = async () => {
+    if (!auth) return;
+    const firebaseUser = auth.currentUser;
+    if (firebaseUser) {
+      await firebaseUser.reload();
+      const refreshedUser = auth.currentUser;
+      if (refreshedUser) {
+        const userProfile = await fetchOrCreateUserProfile(refreshedUser);
+        setUser(userProfile);
+      }
+    }
+  };
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isResearcher, setIsResearcher] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
@@ -82,7 +96,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const value = { user, isAdmin, isResearcher, loading, logout };
+  const value = { user, isAdmin, isResearcher, loading, logout, refreshUser };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

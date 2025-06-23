@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button';
 import { AuthCard } from '@/components/auth/AuthCard';
-import type { LoginViewProps } from './LoginView.types';
+import { Button } from '@/components/ui/button';
 import { AlertTriangle, User } from 'lucide-react';
 import Link from 'next/link';
 import { LoginForm } from './LoginForm';
+import type { LoginViewProps } from './LoginView.types';
 
 export function LoginView({
   form,
@@ -17,7 +17,7 @@ export function LoginView({
   const footer = (
     <div className="flex flex-col items-center space-y-2">
       <Button variant="link" className="text-dark-text-secondary hover:text-dark-text-primary h-auto text-sm" asChild>
-        <Link href="/forgot-password">Forgot your password? Contact an administrator</Link>
+        <Link href="/contact-us">Forgot your password? Contact an administrator</Link>
       </Button>
     </div>
   );

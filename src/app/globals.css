@@ -38,13 +38,13 @@
   --color-accent-pink: oklch(0.656 0.241 354.308);
   --color-accent-violet: oklch(0.606 0.25 292.717);
 
-  /* --- Dark Theme Specific Colors --- */
-  --color-dark-bg-primary: oklch(0.1 0.01 290);
-  --color-dark-bg-secondary: oklch(0.13 0.015 295);
-  --color-dark-bg-tertiary: oklch(0.18 0.018 293);
-  --color-dark-text-primary: oklch(0.96 0.005 290);
-  --color-dark-text-secondary: oklch(0.72 0.013 290);
-  --color-dark-text-tertiary: oklch(0.5 0.011 290);
+  /* --- Dark Theme Specific Colors (Refined Slate Palette) --- */
+  --color-dark-bg-primary: oklch(0.15 0.02 250);
+  --color-dark-bg-secondary: oklch(0.2 0.025 250);
+  --color-dark-bg-tertiary: oklch(0.25 0.03 250);
+  --color-dark-text-primary: oklch(0.98 0.005 250);
+  --color-dark-text-secondary: oklch(0.75 0.015 250);
+  --color-dark-text-tertiary: oklch(0.55 0.01 250);
 
   /* --- Light Theme Specific Colors --- */
   --color-light-bg-primary: oklch(0.982 0.003 240);
@@ -106,7 +106,7 @@
   --card: var(--color-dark-bg-secondary);
   --card-foreground: var(--color-dark-text-primary);
 
-  --popover: oklch(0.147 0.019 288.75);
+  --popover: var(--color-dark-bg-tertiary);
   --popover-foreground: var(--color-dark-text-primary);
 
   --primary: var(--color-brand-purple-500);
@@ -124,8 +124,8 @@
   --destructive: var(--color-danger);
   --destructive-foreground: oklch(0.982 0 0);
 
-  --border: oklch(0.293 0.025 289.26);
-  --input: oklch(0.245 0.023 289.43);
+  --border: oklch(0.3 0.03 250);
+  --input: var(--color-dark-bg-tertiary);
   --ring: var(--color-accent-violet);
 
   --radius: var(--radius-card-default);
