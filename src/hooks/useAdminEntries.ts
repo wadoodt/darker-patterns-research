@@ -75,7 +75,6 @@ async function fetchAndSetEntries(
   setIsLoading(true);
   setError(null);
 
-  debugger;
   try {
     const { mainQuery, countQuery } = buildDpoEntriesQuery(
       filters,
