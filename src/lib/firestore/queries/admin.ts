@@ -3,7 +3,7 @@ import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdmi
 import { db } from '@/lib/firebase';
 import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
 import { GlobalConfig } from '@/lib/firestore/schemas';
-import type { DPOEntry, EvaluationData, ParticipantFlag } from '@/types/dpo';
+import type { DPOEntry, DPORevision, EvaluationData, ParticipantFlag } from '@/types/dpo';
 import type { DisplayEntry } from '@/types/entries';
 import type { DemographicsSummary, OverviewStats, ResponseAggregates } from '@/types/stats';
 import {
@@ -193,6 +193,43 @@ export async function fetchDpoEntriesData(mainQuery: Query, targetReviews: numbe
       last: querySnapshot.docs[querySnapshot.docs.length - 1] || null,
     },
   };
+}
+
+export async function getRevisionById(revisionId: string): Promise<DPORevision | null> {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const revisionRef = doc(db, 'dpo_revisions', revisionId);
+  const revisionSnap = await getDoc(revisionRef);
+
+  if (!revisionSnap.exists()) {
+    return null;
+  }
+
+  return { id: revisionSnap.id, ...revisionSnap.data() } as DPORevision;
+}
+
+export async function getPendingRevisions(): Promise<DPORevision[]> {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const revisionsQuery = query(collection(db, 'dpo_revisions'), where('status', '==', 'pending'));
+
+  const querySnapshot = await getDocs(revisionsQuery);
+  const revisions = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as DPORevision[];
+
+  // Sort by date on the client-side to avoid composite index
+  return revisions.sort((a, b) => {
+    const getMillis = (ts: DPORevision['submittedAt']): number => {
+      if (ts instanceof Timestamp) {
+        return ts.toMillis();
+      }
+      if (ts instanceof Date) {
+        return ts.getTime();
+      }
+      // FieldValue cannot be processed on the client, return a neutral value
+      return 0;
+    };
+    return getMillis(b.submittedAt) - getMillis(a.submittedAt);
+  });
 }
 
 export async function getDashboardData() {

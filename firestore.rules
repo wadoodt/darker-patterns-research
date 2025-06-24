@@ -3,69 +3,101 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper function to check for admin role.
-    function isAdmin() {
-      let userRoles = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles;
+    // =================================================================
+    // Helper Functions
+    // =================================================================
+    function hasRole(role) {
       return exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             'admin' in userRoles;
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles[role] == true;
+    }
+
+    function isAdmin() {
+      return hasRole('admin');
+    }
+
+    function isResearcher() {
+      return hasRole('researcher');
+    }
+
+    function canReadData() {
+      return isAdmin() || isResearcher();
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
     }
 
     // =================================================================
-    // Publicly Readable Collections for Landing Page
+    // Publicly Readable Collections
     // =================================================================
     match /landing_updates/{docId} {
       allow read: if true;
-      allow write: if isAdmin(); // Only admins can write updates
+      allow write: if isAdmin();
     }
 
     match /cached_stats/{docId} {
       allow read: if true;
-      allow write: if false; // Stats are updated by backend functions, not clients
+      allow write: if false; // Updated by backend functions
     }
 
     // =================================================================
-    // Collection: dpo_entries
+    // Core Project Collections
     // =================================================================
     match /dpo_entries/{entry} {
-      // Any authenticated user can read.
-      allow read: if request.auth != null;
-      // Only admins can create, update, or delete.
-      allow write: if isAdmin();
+      allow read: if canReadData();
+      // Admins can write to any field.
+      // Researchers can only update specific fields when creating a new revision.
+      allow write: if isAdmin() || 
+                   (isResearcher() && request.resource.data.keys().hasOnly(['instruction', 'prompt', 'acceptedResponse', 'rejectedResponse', 'categories', 'reviewCount', 'lastReviewedAt', 'createdAt', 'isFlaggedCount', 'version', 'isArchived', 'originalEntryId', 'updatedAt']));
+    }
+
+    match /dpo_revisions/{revisionId} {
+      // Admins can read all revisions. Researchers can read their own.
+      allow read: if isAdmin() || (isResearcher() && resource.data.submittedBy == request.auth.uid);
+      // Researchers can create revisions for themselves.
+      allow create: if isResearcher() && request.resource.data.submittedBy == request.auth.uid;
+      // Admins can update revisions (e.g., to approve/reject).
+      allow update: if isAdmin();
+      // Admins can delete revisions.
+      allow delete: if isAdmin();
+    }
+
+    match /evaluations/{evaluationId} {
+      allow read: if canReadData();
+      allow create: if isAuthenticated() && request.resource.data.participantSessionUid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    match /participant_flags/{flagId} {
+      allow read: if canReadData();
+      allow create: if isAuthenticated() && request.resource.data.participantSessionUid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    match /survey_participants/{participantId} {
+      allow read: if canReadData() || isOwner(participantId);
+      allow create, update: if isOwner(participantId) || isAdmin();
+      allow delete: if isAdmin();
     }
 
     // =================================================================
-    // Collection: users
+    // User and Admin Collections
     // =================================================================
     match /users/{userId} {
-      // A user can read their own data. Admins can read any user's data.
-      allow read: if request.auth.uid == userId || isAdmin();
-      // A user can update their own data. Admins can update any user's data.
-      allow write: if request.auth.uid == userId || isAdmin();
+      allow read, write: if isOwner(userId) || isAdmin();
     }
 
-    // =================================================================
-    // Collection: admin_settings
-    // =================================================================
     match /admin_settings/{config} {
-      // Only admins can read or write settings.
       allow read, write: if isAdmin();
     }
 
-    // By default, all other collections are locked down.
-    // Add specific rules for other collections as needed.
-  }
-
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
+    // Default-deny all other collections
     match /{document=**} {
       allow read, write: if request.time < timestamp.date(2025, 7, 12);
     }
-
+  }
 }

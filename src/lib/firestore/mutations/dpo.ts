@@ -1,7 +1,6 @@
-import { db, functions } from '@/lib/firebase';
-import type { DPOEntry, ParticipantFlag } from '@/types/dpo';
+import { auth, db } from '@/lib/firebase';
+import type { DPOEntry, DPORevision, ParticipantFlag } from '@/types/dpo';
 import { addDoc, collection, doc, increment, runTransaction, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { httpsCallable } from 'firebase/functions';
 
 export const addDPOEntry = async (entry: Omit<DPOEntry, 'id'>) => {
   if (!db) {
@@ -11,6 +10,7 @@ export const addDPOEntry = async (entry: Omit<DPOEntry, 'id'>) => {
   try {
     const docRef = await addDoc(collection(db, 'dpoEntries'), {
       ...entry,
+      isArchived: false,
       createdAt: serverTimestamp(),
     });
     return docRef.id;
@@ -37,23 +37,95 @@ export const updateDPOEntry = async (entryId: string, entry: Partial<DPOEntry>) 
   }
 };
 
-export const reviseDpoEntry = async (originalEntryId: string, correctedData: Partial<DPOEntry>) => {
-  if (!functions) {
-    throw new Error('Firebase Functions is not initialized');
+export const reviseDpoEntry = async (
+  originalEntryId: string,
+  proposedChanges: Partial<DPOEntry>,
+): Promise<{ success: boolean; revisionId?: string; message: string }> => {
+  if (!db || !auth || !auth.currentUser) {
+    return {
+      success: false,
+      message: 'You must be logged in to submit a revision.',
+    };
   }
 
-  const reviseDpoEntryFn = httpsCallable<unknown, { success: boolean; newEntryId: string; message: string }>(
-    functions,
-    'reviseDpoEntry',
-  );
+  const revisionData: Omit<DPORevision, 'id'> = {
+    originalEntryId,
+    proposedChanges,
+    submittedBy: auth.currentUser.uid,
+    submittedAt: serverTimestamp(),
+    status: 'pending',
+  };
 
   try {
-    const result = await reviseDpoEntryFn({ originalEntryId, correctedData });
-    return result.data;
+    const docRef = await addDoc(collection(db, 'dpo_revisions'), revisionData);
+    return { success: true, revisionId: docRef.id, message: 'Revision submitted for review.' };
   } catch (error) {
-    console.error('Error revising DPO entry:', error);
-    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during revision.';
-    return { success: false, newEntryId: '', message: errorMessage };
+    console.error('Error submitting DPO entry revision:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unknown error occurred during revision submission.';
+    return { success: false, message: errorMessage };
+  }
+};
+
+export const approveRevision = async (revisionId: string) => {
+  if (!db || !auth || !auth.currentUser) {
+    throw new Error('You must be logged in to approve a revision.');
+  }
+  const firestoreDb = db;
+  const currentUser = auth.currentUser;
+
+  const revisionRef = doc(firestoreDb, 'dpo_revisions', revisionId);
+
+  try {
+    await runTransaction(firestoreDb, async (transaction) => {
+      const revisionDoc = await transaction.get(revisionRef);
+      if (!revisionDoc.exists() || revisionDoc.data().status !== 'pending') {
+        throw new Error('Revision not found or already reviewed.');
+      }
+
+      const revisionData = revisionDoc.data() as DPORevision;
+      const entryRef = doc(firestoreDb, 'dpoEntries', revisionData.originalEntryId);
+
+      transaction.update(entryRef, {
+        ...revisionData.proposedChanges,
+        updatedAt: serverTimestamp(),
+      });
+
+      transaction.update(revisionRef, {
+        status: 'approved',
+        reviewedBy: currentUser.uid,
+        reviewedAt: serverTimestamp(),
+      });
+    });
+    return { success: true, message: 'Revision approved and entry updated.' };
+  } catch (error) {
+    console.error('Error approving revision:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return { success: false, message: errorMessage };
+  }
+};
+
+export const rejectRevision = async (revisionId: string, reviewComments: string) => {
+  if (!db || !auth || !auth.currentUser) {
+    throw new Error('You must be logged in to reject a revision.');
+  }
+  const firestoreDb = db;
+  const currentUser = auth.currentUser;
+
+  const revisionRef = doc(firestoreDb, 'dpo_revisions', revisionId);
+
+  try {
+    await updateDoc(revisionRef, {
+      status: 'rejected',
+      reviewedBy: currentUser.uid,
+      reviewedAt: serverTimestamp(),
+      reviewComments,
+    });
+    return { success: true, message: 'Revision has been rejected.' };
+  } catch (error) {
+    console.error('Error rejecting revision:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return { success: false, message: errorMessage };
   }
 };
 
@@ -96,18 +168,21 @@ export const flagDPOEntry = async (entryId: string, flagData: Omit<ParticipantFl
 };
 
 export const deleteDpoEntry = async (entryId: string): Promise<{ success: boolean; message: string }> => {
-  if (!functions) {
-    throw new Error('Firebase Functions is not initialized');
+  if (!db) {
+    throw new Error('Firestore is not initialized');
   }
 
-  const deleteDpoEntryFn = httpsCallable<unknown, { success: boolean; message: string }>(functions, 'deleteDpoEntry');
+  const entryRef = doc(db, 'dpoEntries', entryId);
 
   try {
-    const result = await deleteDpoEntryFn({ entryId });
-    return result.data;
+    await updateDoc(entryRef, {
+      isArchived: true,
+      archivedAt: serverTimestamp(),
+    });
+    return { success: true, message: 'Entry archived successfully.' };
   } catch (error) {
-    console.error('Error deleting DPO entry:', error);
-    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during deletion.';
+    console.error('Error archiving DPO entry:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during archival.';
     return { success: false, message: errorMessage };
   }
 };

@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/useAuth';
-import { BarChart3, FileText, Home, ListChecks, Palette, ShieldCheck, UserCircle } from 'lucide-react';
+import { BarChart3, FileText, Home, ListChecks, Palette } from 'lucide-react';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Removed useRouter as it's not used for navigation here
