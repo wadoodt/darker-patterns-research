@@ -75,7 +75,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, value, onChange, pla
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
-                <CommandItem key={option.value} onSelect={() => handleSelect(option.value)} className="cursor-pointer">
+                <CommandItem
+                  key={option.value}
+                  onSelect={() => handleSelect(option.value)}
+                  className={cn(
+                    'cursor-pointer px-2 py-1',
+                    'hover:bg-blue-500 hover:text-white',
+                    value.includes(option.value) && 'bg-blue-100 text-blue-900',
+                  )}
+                >
                   <Check className={cn('mr-2 h-4 w-4', value.includes(option.value) ? 'opacity-100' : 'opacity-0')} />
                   {option.label}
                 </CommandItem>
