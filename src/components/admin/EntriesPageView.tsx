@@ -12,9 +12,9 @@ import AdminHeader from './AdminHeader';
 import EntriesFilters from './EntriesFilters';
 import { getTableColumns } from './entries/EntriesTableColumns';
 
-import { ConfirmationModal } from '../common/ConfirmationModal';
 import { deleteDpoEntry } from '@/lib/firestore/mutations/dpo';
 import { toast } from 'sonner';
+import { ConfirmationModal } from '../common/ConfirmationModal';
 
 // --- PROPS ---
 interface EntriesPageViewProps {
@@ -101,7 +101,7 @@ const EntriesPageToolbar = ({
   showArchived: boolean;
   setShowArchived: (value: boolean) => void;
 }) => (
-  <>
+  <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
     <EntriesFilters
       currentFilters={activeFilters}
       onFilterChange={handleFilterChange}
@@ -112,7 +112,7 @@ const EntriesPageToolbar = ({
         { value: 'completed', label: 'Completed' },
       ]}
     />
-    <div className="mt-4 flex items-center justify-end">
+    <div className="flex items-center">
       <label htmlFor="show-archived" className="mr-2 text-sm font-medium text-gray-700">
         Show Archived
       </label>
@@ -124,7 +124,7 @@ const EntriesPageToolbar = ({
         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
       />
     </div>
-  </>
+  </div>
 );
 
 const EntriesTableContent = ({
