@@ -1,9 +1,9 @@
-import { Linkedin, Mail, UserCircle2 } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
 import { fetchAllResearchers } from '@/lib/firestore/queries/users';
 import type { AppUser } from '@/types/user';
+import { Linkedin, Mail, UserCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface ResearcherProfileProps {
   name: string;
@@ -17,19 +17,12 @@ interface ResearcherProfileProps {
 const ResearcherProfileCard: React.FC<ResearcherProfileProps> = ({ name, role, bio, imageUrl, linkedinUrl, email }) => {
   return (
     <div className="bg-light-bg-secondary border-light-border-primary flex flex-col items-center gap-6 rounded-lg border p-6 shadow-lg sm:flex-row sm:items-start">
-      {imageUrl ? (
-        <Image
-          src={imageUrl}
-          alt={name}
-          width={120}
-          height={120}
-          className="flex-shrink-0 rounded-full object-cover shadow-md"
-        />
-      ) : (
-        <div className="bg-light-bg-tertiary mb-2 flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-full shadow-md">
+      <Avatar className="flex h-32 w-32 items-center justify-center rounded-lg">
+        <AvatarImage src={imageUrl || undefined} alt={name} className="object-cover" />
+        <AvatarFallback className="bg-light-bg-tertiary flex h-32 w-32">
           <UserCircle2 size={60} className="text-brand-purple-400" />
-        </div>
-      )}
+        </AvatarFallback>
+      </Avatar>
       <div className="text-center sm:text-left">
         <h3 className="font-lora text-light-text-primary text-xl font-semibold">{name}</h3>
         <p className="text-brand-purple-600 text-sm font-medium">{role}</p>

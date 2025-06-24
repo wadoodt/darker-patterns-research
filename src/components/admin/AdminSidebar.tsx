@@ -31,8 +31,6 @@ const AdminSidebar = () => {
       adminOnly: false,
     },
     { href: '/admin/submissions', label: 'Submissions', tooltip: 'Submissions', icon: FileText, adminOnly: false },
-    { href: '/admin/users', label: 'Users', tooltip: 'User Management', icon: UserCircle, adminOnly: true },
-    { href: '/admin/patterns', label: 'Patterns', tooltip: 'Pattern Definitions', icon: ShieldCheck, adminOnly: true },
   ];
 
   return (
