@@ -90,8 +90,8 @@ async function fetchAndSetEntries(
     );
 
     const [totalCount, { entries: fetchedEntries, cursors }] = await Promise.all([
-      fetchDpoEntriesCount(countQuery),
-      fetchDpoEntriesData(mainQuery, targetReviews),
+      fetchDpoEntriesCount(countQuery, filters, targetReviews), //filters and target reviews
+      fetchDpoEntriesData(mainQuery, targetReviews, filters), //added filters for testing
     ]);
     setTotalEntriesCount(totalCount);
     setEntries(fetchedEntries);

@@ -11,7 +11,6 @@ import {
   doc,
   documentId,
   endBefore,
-  getCountFromServer,
   getDoc,
   getDocs,
   increment,
@@ -27,6 +26,60 @@ import {
   where,
 } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
+//for testing filters //
+const MOCK_ENTRIES: DisplayEntry[] = [
+  {
+    id: '1',
+    title: 'Entry 1',
+    categories: ['Psychological Harm', 'Physical Harm (Indirect)'],
+    reviewCount: 2,
+    date: new Date().toISOString(),
+    isArchived: false,
+    reviewProgress: 40,
+    statusText: '2/5',
+  },
+  {
+    id: '2',
+    title: 'Entry 2',
+    categories: ['Reputational & Legal Harm'],
+    reviewCount: 5,
+    date: new Date().toISOString(),
+    isArchived: false,
+    reviewProgress: 100,
+    statusText: 'Completed',
+  },
+  {
+    id: '3',
+    title: 'Entry 3',
+    categories: ['Economic Harm'],
+    reviewCount: 0,
+    date: new Date().toISOString(),
+    isArchived: false,
+    reviewProgress: 0,
+    statusText: '0/5',
+  },
+  {
+    id: '4',
+    title: 'Entry 4',
+    categories: ['Privacy Violations'],
+    reviewCount: 4,
+    date: new Date().toISOString(),
+    isArchived: false,
+    reviewProgress: 80,
+    statusText: '4/5',
+  },
+  {
+    id: '5',
+    title: 'Entry 5',
+    categories: ['Ecommerce', 'Privacy'],
+    reviewCount: 5,
+    date: new Date().toISOString(),
+    isArchived: false,
+    reviewProgress: 100,
+    statusText: 'Completed',
+  },
+];
+//end testing data filters
 
 export async function getGlobalConfig(): Promise<GlobalConfig<Date>> {
   if (!db) throw new Error('Firebase is not initialized');
@@ -178,19 +231,61 @@ export function transformDpoEntry(doc: QueryDocumentSnapshot, targetReviews: num
   } as DisplayEntry;
 }
 
-export async function fetchDpoEntriesCount(countQuery: Query) {
-  const countSnapshot = await getCountFromServer(countQuery);
-  return countSnapshot.data().count;
+// export async function fetchDpoEntriesCount(countQuery: Query) {
+//   const countSnapshot = await getCountFromServer(countQuery);
+//   return countSnapshot.data().count;
+// }
+
+export async function fetchDpoEntriesCount(countQuery: Query, filters?: AdminEntriesFilter, targetReviews?: number) {
+  // Devuelve el conteo de los mocks filtrados
+  let entries = MOCK_ENTRIES;
+
+  if (filters?.category && filters.category.length > 0) {
+    entries = entries.filter((e) => e.categories.some((cat) => filters.category!.includes(cat)));
+  }
+  if (filters?.status === 'needs_reviews') {
+    entries = entries.filter((e) => (e.reviewCount || 0) < (targetReviews || 5));
+  } else if (filters?.status === 'completed') {
+    entries = entries.filter((e) => (e.reviewCount || 0) >= (targetReviews || 5));
+  }
+
+  return entries.length;
 }
 
-export async function fetchDpoEntriesData(mainQuery: Query, targetReviews: number) {
-  const querySnapshot = await getDocs(mainQuery);
-  const entries = querySnapshot.docs.map((doc) => transformDpoEntry(doc, targetReviews));
+// export async function fetchDpoEntriesData(mainQuery: Query, targetReviews: number) {
+//   const querySnapshot = await getDocs(mainQuery);
+//   const entries = querySnapshot.docs.map((doc) => transformDpoEntry(doc, targetReviews));
+//   return {
+//     entries,
+//     cursors: {
+//       first: querySnapshot.docs[0] || null,
+//       last: querySnapshot.docs[querySnapshot.docs.length - 1] || null,
+//     },
+//   };
+// }
+
+export async function fetchDpoEntriesData(
+  mainQuery: Query,
+  targetReviews: number,
+  filters?: AdminEntriesFilter, // <-- agrega este parámetro
+) {
+  // Aplica los filtros sobre los mocks
+  let entries = MOCK_ENTRIES;
+
+  if (filters?.category && filters.category.length > 0) {
+    entries = entries.filter((e) => e.categories.some((cat) => filters.category!.includes(cat)));
+  }
+  if (filters?.status === 'needs_reviews') {
+    entries = entries.filter((e) => (e.reviewCount || 0) < targetReviews);
+  } else if (filters?.status === 'completed') {
+    entries = entries.filter((e) => (e.reviewCount || 0) >= targetReviews);
+  }
+
   return {
     entries,
     cursors: {
-      first: querySnapshot.docs[0] || null,
-      last: querySnapshot.docs[querySnapshot.docs.length - 1] || null,
+      first: entries[0] || null,
+      last: entries[entries.length - 1] || null,
     },
   };
 }
