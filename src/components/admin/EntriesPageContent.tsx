@@ -59,8 +59,7 @@ export default function EntriesPageContent() {
       <EntriesPageView
         isAdmin={isAdmin}
         initialDataLoading={initialDataLoading}
-        // isLoadingEntries={isLoadingEntries}
-        isLoadingEntries={true}
+        isLoadingEntries={isLoadingEntries}
         error={error}
         entries={entries}
         totalEntriesCount={totalEntriesCount}
