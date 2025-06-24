@@ -11,6 +11,12 @@ export type RecentActivityItem = {
   id: string;
   description: string;
   timestamp: Date;
+  href?: string;
+};
+
+export type ChartableDemographics = {
+  age: { name: string; value: number }[];
+  technicalBackground: { name: string; value: number }[];
 };
 
 export type ProjectProgressDataPoint = {
@@ -23,10 +29,7 @@ export interface DashboardData {
   entriesCompleted: number;
   avgTimePerEntry: string;
   activeParticipants: number;
-  demographics: {
-    age: { range: string; percent: number }[];
-    technicalBackground: { label: string; percent: number }[];
-  };
+  demographics: ChartableDemographics;
   recentActivity: RecentActivityItem[];
   projectProgress: ProjectProgressDataPoint[];
 }

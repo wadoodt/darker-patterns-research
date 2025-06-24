@@ -1,157 +1,86 @@
-import ActivityItem from '@/components/admin/ActivityItem';
-import AdminHeader from '@/components/admin/AdminHeader';
-import ChartPlaceholder from '@/components/admin/ChartPlaceholder';
-import DemographicsChartAdmin from '@/components/admin/DemographicsChartAdmin';
-import StatCardAdmin from '@/components/admin/StatCardAdmin';
-import { BarChartHorizontalBig, CheckCircle, CheckSquare, Clock, Flag, PieChart, UserPlus, Users } from 'lucide-react';
 import type { Metadata } from 'next';
-import {
-  getOverviewStats,
-  getDemographicsData,
-  getRecentActivity,
-  getProjectProgressData,
-} from '@/lib/firestore/queries/dashboard';
-import type { DashboardData, RecentActivityItem } from '@/types/dpo';
+import Link from 'next/link';
+import { formatDistanceToNow } from 'date-fns';
+import { CheckCircle, Clock, PieChart, Users } from 'lucide-react';
 
-export const metadata: Metadata = { title: 'Project Overview - DPV Admin' };
+import AdminHeader from '@/components/admin/AdminHeader';
+import DemographicsCharts from '@/components/admin/charts/DemographicsCharts';
+import ProjectProgressChart from '@/components/admin/charts/ProjectProgressChart';
+import StatCardAdmin from '@/components/admin/StatCardAdmin';
+import { Card, CardContent } from '@/components/ui/card';
+import { getDashboardData } from '@/lib/firestore/queries/dashboard';
 
-// Helper function to safely calculate percentage
-const calculatePercentage = (part?: number, total?: number): number => {
-  if (typeof part !== 'number' || typeof total !== 'number' || total === 0) {
-    return 0;
-  }
-  return Math.round((part / total) * 100);
+export const metadata: Metadata = { title: 'Project Overview - DPO Admin' };
+
+const AdminDashboardPage = async () => {
+  const dashboardData = await getDashboardData();
+
+  return (
+    <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+      <AdminHeader title="Project Overview" />
+
+      {/* Stats Cards */}
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <StatCardAdmin title="Total Entries" value={dashboardData.totalEntries} icon={<PieChart />} />
+        <StatCardAdmin title="Entries Completed" value={dashboardData.entriesCompleted} icon={<CheckCircle />} />
+        <StatCardAdmin title="Avg. Time per Entry" value={dashboardData.avgTimePerEntry} icon={<Clock />} />
+        <StatCardAdmin title="Active Participants" value={dashboardData.activeParticipants} icon={<Users />} />
+      </section>
+
+      {/* Charts Section */}
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardContent className="p-4">
+            <h2 className="mb-4 text-xl font-semibold">Project Progress Overview</h2>
+            <ProjectProgressChart data={dashboardData.projectProgress} />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <h2 className="mb-4 text-xl font-semibold">Participant Demographics</h2>
+            <DemographicsCharts data={dashboardData.demographics} />
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Recent Activity Section */}
+      <section>
+        <h2 className="mb-4 text-xl font-semibold">Recent Activity</h2>
+        <div className="admin-card p-0">
+          {dashboardData.recentActivity.length > 0 ? (
+            <ul className="activity-list">
+              {dashboardData.recentActivity.map((item) => {
+                const content = (
+                  <div className="activity-item-content">
+                    <div className="flex-1 space-y-1">
+                      <p className="activity-item-text-primary">{item.description}</p>
+                      <p className="activity-item-text-secondary">
+                        {formatDistanceToNow(item.timestamp, { addSuffix: true })}
+                      </p>
+                    </div>
+                  </div>
+                );
+
+                return (
+                  <li key={item.id}>
+                    {item.href ? (
+                      <Link href={item.href} className="activity-item block transition-colors hover:bg-white/5">
+                        {content}
+                      </Link>
+                    ) : (
+                      <div className="activity-item">{content}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="text-muted-foreground p-6 text-center text-sm">No recent activity to display.</p>
+          )}
+        </div>
+      </section>
+    </div>
+  );
 };
 
-function StatsCardSection({ data }: { data: Partial<DashboardData> }) {
-  const completionPercent = calculatePercentage(data.entriesCompleted, data.totalEntries);
-  return (
-    <section className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-      <StatCardAdmin
-        title="Total Entries"
-        value={(data.totalEntries ?? 0).toLocaleString()}
-        icon={<BarChartHorizontalBig className="text-dark-text-secondary" size={24} />}
-        progressPercent={100}
-        progressColor="bg-brand-purple-500"
-      />
-      <StatCardAdmin
-        title="Entries Completed"
-        value={`${(data.entriesCompleted ?? 0).toLocaleString()}`}
-        valueSecondary={`/ ${completionPercent}%`}
-        valueSecondaryColor="stat-card-value-secondary"
-        icon={<CheckCircle className="text-green-500" size={24} />}
-        progressPercent={completionPercent}
-        progressColor="bg-green-500"
-      />
-      <StatCardAdmin
-        title="Avg. Time / Entry"
-        value={`${data.avgTimePerEntry ?? 'N/A'}s`}
-        icon={<Clock className="text-dark-text-secondary" size={24} />}
-      />
-      <StatCardAdmin
-        title="Active Participants"
-        value={(data.activeParticipants ?? 0).toLocaleString()}
-        icon={<Users className="text-dark-text-secondary" size={24} />}
-      />
-    </section>
-  );
-}
-
-function ChartsSection({ data }: { data: Partial<DashboardData> }) {
-  return (
-    <section className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <div className="admin-card lg:col-span-2">
-        <h2 className="text-dark-text-primary mb-4 text-xl font-semibold">Project Progress Overview</h2>
-        {data.projectProgress && data.projectProgress.length > 0 ? (
-          <div className="h-72 rounded-md bg-gray-800 p-2">
-            <pre className="h-full overflow-auto text-xs text-white">
-              {JSON.stringify(data.projectProgress, null, 2)}
-            </pre>
-          </div>
-        ) : (
-          <ChartPlaceholder
-            description="Visual representation of data entries over time, highlighting milestones and completion trends."
-            height="h-72"
-            icon={<PieChart className="chart-placeholder-icon" />}
-          />
-        )}
-      </div>
-      <div className="admin-card">
-        <h2 className="text-dark-text-primary mb-4 text-xl font-semibold">Participant Demographics</h2>
-        {data.demographics && (data.demographics.age.length > 0 || data.demographics.technicalBackground.length > 0) ? (
-          <div className="h-72 rounded-md bg-gray-800 p-2">
-            <pre className="h-full overflow-auto text-xs text-white">{JSON.stringify(data.demographics, null, 2)}</pre>
-          </div>
-        ) : (
-          <DemographicsChartAdmin ageData={[]} techBgData={[]} />
-        )}
-      </div>
-    </section>
-  );
-}
-
-const getActivityIcon = (type: RecentActivityItem['type']) => {
-  switch (type) {
-    case 'evaluation':
-      return { Icon: CheckSquare, color: 'text-green-500' };
-    case 'flag':
-      return { Icon: Flag, color: 'text-yellow-400' };
-    case 'new_participant':
-      return { Icon: UserPlus, color: 'text-blue-400' };
-    default:
-      return { Icon: CheckSquare, color: 'text-gray-500' };
-  }
-};
-
-function RecentActivitySection({ data }: { data: Partial<DashboardData> }) {
-  return (
-    <section>
-      <h2 className="text-dark-text-primary mb-5 text-xl font-bold sm:mb-6 sm:text-2xl">Recent Activity</h2>
-      <div className="admin-card p-0">
-        {data.recentActivity && data.recentActivity.length > 0 ? (
-          <ul className="activity-list">
-            {data.recentActivity.map((activity) => {
-              const { Icon, color } = getActivityIcon(activity.type);
-              return (
-                <ActivityItem
-                  key={activity.id}
-                  icon={<Icon size={20} className={color} />}
-                  text={activity.description}
-                  time={new Date(activity.timestamp).toLocaleString()}
-                />
-              );
-            })}
-          </ul>
-        ) : (
-          <div className="text-dark-text-secondary p-6 text-center">No recent activity.</div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-export default async function ProjectOverviewPage() {
-  const overviewStats = await getOverviewStats();
-  const demographicsData = await getDemographicsData();
-  const recentActivityData = await getRecentActivity();
-  const projectProgressData = await getProjectProgressData();
-
-  const dashboardData: Partial<DashboardData> = {
-    ...overviewStats,
-    ...demographicsData,
-    ...recentActivityData,
-    ...projectProgressData,
-  };
-
-  return (
-    <>
-      <AdminHeader
-        title="Dark Pattern in LLMs - DPO dataset human Validation"
-        objective="Objective: Validate a dataset for detecting dark patterns in Large Language Models through human evaluation."
-      />
-      <StatsCardSection data={dashboardData} />
-      <ChartsSection data={dashboardData} />
-      <RecentActivitySection data={dashboardData} />
-    </>
-  );
-}
+export default AdminDashboardPage;
