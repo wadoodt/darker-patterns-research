@@ -42,9 +42,9 @@ interface EntriesPageViewProps {
 // --- SUB-COMPONENTS ---
 
 const LoadingView = () => (
-  <div className="flex h-64 items-center justify-center">
-    <Loader2 className="text-brand-purple-400 h-8 w-8 animate-spin" />
-    <span className="text-dark-text-secondary ml-3">Loading entries...</span>
+  <div className="bg-muted/50 flex min-h-[50vh] w-full flex-col items-center justify-center space-y-4 rounded-md p-6 shadow-inner">
+    <Loader2 className="text-brand-purple-500 h-20 w-20 animate-spin" />
+    <span className="text-muted-foreground text-sm font-medium tracking-wide">Loading entries, please wait...</span>
   </div>
 );
 

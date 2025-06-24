@@ -19,8 +19,11 @@ interface EntriesTableActionsProps {
 export function EntriesTableActions({ entry, onDelete }: EntriesTableActionsProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="cursor-pointer transition-transform hover:scale-130 hover:text-black">
-        <Button variant="ghost" className="h-8 w-8 p-0">
+      <DropdownMenuTrigger asChild className="cursor-pointer hover:scale-110 hover:text-black">
+        <Button
+          variant="ghost"
+          className="h-8 w-8 p-0 ring-offset-0 focus:ring-0 focus:outline-none focus-visible:ring-0"
+        >
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />
         </Button>
