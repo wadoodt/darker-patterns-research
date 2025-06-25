@@ -148,6 +148,8 @@
   --sidebar-ring: var(--sidebar-accent);
 }
 
+/* Sidebar specific colors */
+
 @keyframes cta-subtle-pulse {
   0%,
   100% {

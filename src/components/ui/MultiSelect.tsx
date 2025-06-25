@@ -43,9 +43,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, value, onChange, pla
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('h-fit w-full items-start justify-between', className)}
+          className={cn('h-12 w-full items-center justify-between', className)}
         >
-          <div className="flex flex-1 flex-wrap items-center gap-1">
+          <div className="custom-scrollbar flex flex-1 items-center gap-1 overflow-x-auto whitespace-nowrap">
             {value.length > 0 ? (
               value.map((val) => (
                 <Badge key={val} variant="secondary" className="mr-1">
@@ -65,7 +65,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, value, onChange, pla
               <span>{placeholder || 'Select...'}</span>
             )}
           </div>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 self-start opacity-50" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 self-center opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
@@ -73,7 +73,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, value, onChange, pla
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => (
+              {options.map((option, idx) => (
                 <CommandItem
                   key={option.value}
                   onSelect={() => handleSelect(option.value)}
@@ -82,6 +82,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, value, onChange, pla
                     'text-white/70',
                     '200 hover:[background-color:var(--color-dark-bg-tertiary)] hover:text-white/100',
                     value.includes(option.value) && 'text-white-200 bg-dark-100',
+                    idx !== options.length - 1 && 'border-b border-gray-700',
                   )}
                 >
                   {option.label}

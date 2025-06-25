@@ -80,7 +80,7 @@ const EntriesPageHeader = ({ isAdmin, onAddNew }: { isAdmin: boolean; onAddNew: 
       className="mb-0"
     />
     {isAdmin && (
-      <Button onClick={onAddNew} className="btn-primary-dark px-4 py-2 text-sm">
+      <Button onClick={onAddNew} className="btn-primary-dark cursor-pointer px-4 py-2 text-sm">
         <PlusCircle size={18} className="mr-2" /> Add New DPO Entry
       </Button>
     )}
@@ -101,16 +101,6 @@ const EntriesPageToolbar = ({
   setShowArchived: (value: boolean) => void;
 }) => (
   <div className="mb-12 flex flex-wrap items-center justify-start gap-4">
-    <EntriesFilters
-      currentFilters={activeFilters}
-      onFilterChange={handleFilterChange}
-      categories={categories}
-      statusOptions={[
-        { value: '', label: 'All Statuses' },
-        { value: 'needs_reviews', label: 'Needs Reviews' },
-        { value: 'completed', label: 'Completed' },
-      ]}
-    />
     <div className="flex items-center">
       <label htmlFor="show-archived" className="text-dark-text-secondary mr-2 text-sm font-medium">
         Show Archived
@@ -123,6 +113,16 @@ const EntriesPageToolbar = ({
         thumbClassName="bg-white"
       />
     </div>
+    <EntriesFilters
+      currentFilters={activeFilters}
+      onFilterChange={handleFilterChange}
+      categories={categories}
+      statusOptions={[
+        { value: '', label: 'All Statuses' },
+        { value: 'needs_reviews', label: 'Needs Reviews' },
+        { value: 'completed', label: 'Completed' },
+      ]}
+    />
   </div>
 );
 
