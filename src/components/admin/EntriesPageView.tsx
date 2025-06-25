@@ -1,10 +1,10 @@
 'use client';
-
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
 import { Loader2, PlusCircle, UploadCloud } from 'lucide-react';
+import { useState } from 'react';
 import AdminTable from '../common/AdminTable';
 import Pagination from '../common/Pagination';
 import AdminHeader from './AdminHeader';
