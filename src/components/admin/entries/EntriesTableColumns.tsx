@@ -22,7 +22,6 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
         >
           {entry.id.substring(0, 12)}...
         </Link>
-        {/* <span className="font-mono text-xs">{entry.id.substring(0, 12)}...</span> */}
       </div>
     ),
   },
@@ -37,9 +36,6 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
       >
         {entry.instruction}
       </Link>
-      // <span className="block max-w-xs truncate text-sm" title={entry.instruction}>
-      //   {entry.instruction}
-      // </span>
     ),
   },
   {

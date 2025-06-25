@@ -74,7 +74,7 @@ const EmptyStateView = ({ isAdmin, onIngest }: { isAdmin: boolean; onIngest: () 
 );
 
 const EntriesPageHeader = ({ isAdmin, onAddNew }: { isAdmin: boolean; onAddNew: () => void }) => (
-  <div className="mb-6 flex items-center justify-between">
+  <div className="flex items-center justify-between">
     <AdminHeader
       title="DPO Entries Management"
       objective="Browse, filter, and review submitted human evaluations for each DPO entry."
@@ -101,7 +101,7 @@ const EntriesPageToolbar = ({
   showArchived: boolean;
   setShowArchived: (value: boolean) => void;
 }) => (
-  <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+  <div className="mb-12 flex flex-wrap items-center justify-between gap-4">
     <EntriesFilters
       currentFilters={activeFilters}
       onFilterChange={handleFilterChange}

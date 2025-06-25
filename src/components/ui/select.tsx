@@ -96,7 +96,6 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
       className={cn(
         "[&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden transition-colors duration-200 select-none hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className,
-        // focus:bg-accent focus:text-accent-foreground "
       )}
       {...props}
     >
