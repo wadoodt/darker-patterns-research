@@ -8,6 +8,7 @@ import type { DisplayEntry } from '@/types/entries';
 import type { DemographicsSummary, OverviewStats, ResponseAggregates } from '@/types/stats';
 import {
   collection,
+  collectionGroup,
   doc,
   documentId,
   endBefore,
@@ -120,7 +121,7 @@ export function buildDpoEntriesQuery(
 ) {
   if (!db) throw new Error('Firebase is not initialized');
 
-  const dpoEntriesRef = collection(db, 'dpo_entries');
+  const dpoEntriesRef = collectionGroup(db, 'dpo_entries');
   let baseQuery = query(dpoEntriesRef);
 
   const filterConstraints = [];
@@ -144,9 +145,13 @@ export function buildDpoEntriesQuery(
   }
 
   if (sort.key) {
-    baseQuery = query(baseQuery, orderBy(sort.key, sort.direction));
+    const sortField = sort.key === 'id' ? documentId() : sort.key;
+    baseQuery = query(baseQuery, orderBy(sortField, sort.direction));
   }
-  if (sort.key !== 'id' && sort.key !== documentId().toString()) {
+
+  // Add documentId as a tie-breaker if not already the primary sort key.
+  // This ensures consistent ordering for pagination.
+  if (sort.key !== 'id') {
     baseQuery = query(baseQuery, orderBy(documentId(), sort.direction));
   }
 

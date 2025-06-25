@@ -1,121 +1,15 @@
 {
   "indexes": [
     {
-      "collectionGroup": "evaluations",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "dpoEntryId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "submittedAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "dpo_entries",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "reviewCount",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "dpo_entries",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "reviewCount",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "dpo_entries",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "categories",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "reviewCount",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "dpo_entries",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "categories",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "reviewCount",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "dpo_entries",
       "queryScope": "COLLECTION_GROUP",
       "fields": [
         {
-          "fieldPath": "isArchived",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "id",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "dpo_entries",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isArchived",
-          "order": "ASCENDING"
-        },
-        {
           "fieldPath": "categories",
           "arrayConfig": "CONTAINS"
         },
         {
-          "fieldPath": "id",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "dpo_entries",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
           "fieldPath": "isArchived",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "reviewCount",
           "order": "ASCENDING"
         }
       ]
@@ -129,11 +23,159 @@
           "arrayConfig": "CONTAINS"
         },
         {
+          "fieldPath": "isArchived",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "isArchived",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "isArchived",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "categories",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "id",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "categories",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "isArchived",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "id",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "categories",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "isArchived",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "categories",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "categories",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "id",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "__name__",
+          "fieldPath": "reviewCount",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isArchived",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "id",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dpo_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isArchived",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
           "order": "ASCENDING"
         }
       ]

@@ -7,7 +7,7 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
   {
     key: 'id',
     header: 'ID',
-    sortable: true,
+    sortable: false,
     renderCell: (entry: DisplayEntry) => (
       <div className="flex items-center">
         {entry.isArchived && (
@@ -31,7 +31,7 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
   {
     key: 'categories',
     header: 'Category',
-    sortable: true,
+    sortable: false,
     icon: Tag,
     renderCell: (entry: DisplayEntry) => <span className="text-sm">{entry.categories.join(', ')}</span>,
   },
