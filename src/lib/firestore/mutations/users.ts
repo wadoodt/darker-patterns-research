@@ -1,7 +1,7 @@
 // src/lib/firestore/mutations/users.ts
 import { db } from '@/lib/firebase';
 import type { SignupFormValues } from '@/lib/validations/signup';
-import type { AppUser } from '@/types/user';
+import type { UserProfileUpdateData } from '@/types/user';
 import type { User as FirebaseUser } from 'firebase/auth';
 import { doc, Firestore, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 
@@ -25,7 +25,7 @@ export async function createUserProfile(firebaseUser: FirebaseUser, data: Signup
 /**
  * Updates an existing user profile document in Firestore.
  */
-export async function updateUserProfile(uid: string, data: Partial<AppUser>) {
+export async function updateUserProfile(uid: string, data: UserProfileUpdateData) {
   const userDocRef = doc(db as Firestore, 'users', uid);
-  await updateDoc(userDocRef, data);
+  await updateDoc(userDocRef, { ...data });
 }

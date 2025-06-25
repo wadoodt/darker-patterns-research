@@ -1,5 +1,4 @@
 import type React from 'react';
-import { SortableEntryKeys } from './entries';
 
 export type SortDirection = 'asc' | 'desc' | null;
 
@@ -11,17 +10,17 @@ export interface Column<T> {
   renderCell: (item: T) => React.ReactNode;
 }
 
-export interface BaseTableProps<T> {
+export interface BaseTableProps<T, S extends string> {
   columns: Column<T>[];
   data: T[];
-  currentSortKey: SortableEntryKeys | null;
+  currentSortKey: S | null;
   currentSortDirection: SortDirection;
 }
 
-export interface AdminTableProps<T, K extends keyof T> extends BaseTableProps<T> {
-  onSort: (key: SortableEntryKeys | K) => void;
+export interface AdminTableProps<T, S extends string> extends BaseTableProps<T, S> {
+  onSort: (key: S) => void;
 }
 
-export interface AdminTableViewProps<T> extends BaseTableProps<T> {
-  onSortColumn: (key: SortableEntryKeys) => void;
+export interface AdminTableViewProps<T, S extends string> extends BaseTableProps<T, S> {
+  onSortColumn: (key: S) => void;
 }

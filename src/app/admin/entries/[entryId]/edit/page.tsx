@@ -43,7 +43,8 @@ export default function EditDPOEntryPage() {
       if (isRevision) {
         const result = await reviseDpoEntry(entryId, updatedEntry);
         if (result.success) {
-          router.push(`/admin/entries/${result.newEntryId}`);
+          alert('Your revision has been submitted for review.');
+          router.push('/admin/entries');
         } else {
           throw new Error(result.message);
         }

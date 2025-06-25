@@ -1,15 +1,11 @@
 // src/components/landing/ResearchersSection.tsx
-'use client';
 import Link from 'next/link';
+import { fetchAllResearchers } from '@/lib/firestore/queries/users';
 import ResearcherCard from './ResearcherCard';
 
-const ResearchersSection = () => {
-  // Dummy data for featured researchers
-  const featuredResearchers = [
-    { name: 'Israel A. Rosales L.', role: 'Principal Investigator', imageUrl: null /* "/images/israel-thumb.jpg" */ },
-    { name: 'Dr. AI Ethicist (Example)', role: 'Ethics Advisor', imageUrl: null },
-    { name: 'Data Scientist', role: 'Data Scientist', imageUrl: null },
-  ];
+const ResearchersSection = async () => {
+  const allResearchers = await fetchAllResearchers();
+  const featuredResearchers = allResearchers.slice(0, 3);
 
   return (
     <section id="researchers" className="section-alt-bg py-16 sm:py-24">
@@ -26,10 +22,10 @@ const ResearchersSection = () => {
         >
           {featuredResearchers.map((researcher, index) => (
             <ResearcherCard
-              key={researcher.name}
-              name={researcher.name}
-              role={researcher.role}
-              imageUrl={researcher.imageUrl || undefined}
+              key={researcher.uid}
+              name={researcher.displayName || 'No Name'}
+              role={researcher.role || 'Researcher'}
+              imageUrl={researcher.photoURL || undefined}
               animationDelay={`${index * 150}ms`}
             />
           ))}

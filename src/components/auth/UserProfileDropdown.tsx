@@ -18,7 +18,7 @@ export default function UserProfileDropdown({ user, handleLogout }: UserProfileD
       sideOffset={10}
     >
       <DropdownMenuItem asChild>
-        <Link href="/profile" className="admin-sidebar-navlink">
+        <Link href="/admin/profile" className="admin-sidebar-navlink">
           <UserCircle className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </Link>

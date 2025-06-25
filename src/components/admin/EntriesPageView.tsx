@@ -2,19 +2,19 @@
 
 import { useState } from 'react';
 
+import AdminTable from '@/components/common/AdminTable';
 import { Button } from '@/components/ui/button';
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
 import { Loader2, PlusCircle, UploadCloud } from 'lucide-react';
-import AdminTable from '../common/AdminTable';
 import Pagination from '../common/Pagination';
 import AdminHeader from './AdminHeader';
 import EntriesFilters from './EntriesFilters';
-import { getTableColumns } from './entries/EntriesTableColumns';
 
-import { ConfirmationModal } from '../common/ConfirmationModal';
+import { getTableColumns } from '@/components/admin/entries/EntriesTableColumns';
 import { deleteDpoEntry } from '@/lib/firestore/mutations/dpo';
 import { toast } from 'sonner';
+import { ConfirmationModal } from '../common/ConfirmationModal';
 
 // --- PROPS ---
 interface EntriesPageViewProps {
@@ -42,9 +42,9 @@ interface EntriesPageViewProps {
 // --- SUB-COMPONENTS ---
 
 const LoadingView = () => (
-  <div className="flex h-64 items-center justify-center">
-    <Loader2 className="text-brand-purple-400 h-8 w-8 animate-spin" />
-    <span className="text-dark-text-secondary ml-3">Loading entries...</span>
+  <div className="bg-muted/50 flex min-h-[50vh] w-full flex-col items-center justify-center space-y-4 rounded-md p-6 shadow-inner">
+    <Loader2 className="text-brand-purple-500 h-20 w-20 animate-spin" />
+    <span className="text-muted-foreground text-sm font-medium tracking-wide">Loading entries, please wait...</span>
   </div>
 );
 
@@ -74,7 +74,7 @@ const EmptyStateView = ({ isAdmin, onIngest }: { isAdmin: boolean; onIngest: () 
 );
 
 const EntriesPageHeader = ({ isAdmin, onAddNew }: { isAdmin: boolean; onAddNew: () => void }) => (
-  <div className="mb-6 flex items-center justify-between">
+  <div className="flex items-center justify-between">
     <AdminHeader
       title="DPO Entries Management"
       objective="Browse, filter, and review submitted human evaluations for each DPO entry."
@@ -101,7 +101,7 @@ const EntriesPageToolbar = ({
   showArchived: boolean;
   setShowArchived: (value: boolean) => void;
 }) => (
-  <>
+  <div className="mb-12 flex flex-wrap items-center justify-between gap-4">
     <EntriesFilters
       currentFilters={activeFilters}
       onFilterChange={handleFilterChange}
@@ -112,7 +112,7 @@ const EntriesPageToolbar = ({
         { value: 'completed', label: 'Completed' },
       ]}
     />
-    <div className="mt-4 flex items-center justify-end">
+    <div className="flex items-center">
       <label htmlFor="show-archived" className="mr-2 text-sm font-medium text-gray-700">
         Show Archived
       </label>
@@ -124,14 +124,16 @@ const EntriesPageToolbar = ({
         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
       />
     </div>
-  </>
+  </div>
 );
 
 const EntriesTableContent = ({
   onDelete,
   ...props
 }: EntriesPageViewProps & { onDelete: (entryId: string) => void }) => {
-  const columns = getTableColumns(onDelete);
+  const onDeleteEntry = (entryId: string) => {
+    onDelete(entryId);
+  };
 
   if (props.isLoadingEntries) {
     return <LoadingView />;
@@ -146,7 +148,7 @@ const EntriesTableContent = ({
     <>
       <div className="admin-card mt-6 overflow-x-auto p-0">
         <AdminTable
-          columns={columns}
+          columns={getTableColumns(onDeleteEntry)}
           data={props.entries}
           onSort={props.handleSortChange}
           currentSortKey={props.sortConfig.key}

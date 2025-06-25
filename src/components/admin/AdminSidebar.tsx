@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/useAuth';
-import { BarChart3, FileText, Home, ListChecks, Palette, ShieldCheck, UserCircle } from 'lucide-react';
+import { BarChart3, ClipboardList, FileCheck, FileText, Home, ListChecks, Palette } from 'lucide-react';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Removed useRouter as it's not used for navigation here
@@ -30,9 +30,9 @@ const AdminSidebar = () => {
       icon: BarChart3,
       adminOnly: false,
     },
-    { href: '/admin/submissions', label: 'Submissions', tooltip: 'Submissions', icon: FileText, adminOnly: false },
-    { href: '/admin/users', label: 'Users', tooltip: 'User Management', icon: UserCircle, adminOnly: true },
-    { href: '/admin/patterns', label: 'Patterns', tooltip: 'Pattern Definitions', icon: ShieldCheck, adminOnly: true },
+    { href: '/admin/revisions', label: 'Revisions', tooltip: 'Revisions', icon: FileText, adminOnly: true },
+    { href: '/admin/submissions', label: 'Submissions', tooltip: 'Submissions', icon: FileCheck, adminOnly: false },
+    { href: '/admin/evaluations', label: 'Evaluations', tooltip: 'Evaluations', icon: ClipboardList, adminOnly: false },
   ];
 
   return (

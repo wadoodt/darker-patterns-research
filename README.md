@@ -35,6 +35,10 @@ Before you begin, ensure you have the following installed:
 - **Firebase CLI:** Install globally using `npm install -g firebase-tools`. See [Firebase CLI Setup Guide](./docs/firebase-cli-setup-deploy.md).
 - **Git:** For cloning the repository.
 
+## Project Workflow
+
+For a detailed explanation of the project's data collection, review, and release process, please see the [Application Workflow documentation](./docs/workflow.md).
+
 ## Getting Started
 
 ### Cloning the Repository

@@ -2,7 +2,7 @@
 import { db } from '@/lib/firebase';
 import type { AppUser } from '@/types/user';
 import type { User as FirebaseUser } from 'firebase/auth';
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
 
 export async function fetchOrCreateUserProfile(firebaseUser: FirebaseUser): Promise<AppUser> {
   if (!db) throw new Error('Firebase is not initialized');
@@ -41,4 +41,19 @@ export async function fetchOrCreateUserProfile(firebaseUser: FirebaseUser): Prom
     };
     return appUser;
   }
+}
+
+export async function fetchAllResearchers(): Promise<AppUser[]> {
+  if (!db) throw new Error('Firebase is not initialized');
+  const usersCollectionRef = collection(db, 'users');
+  const q = query(usersCollectionRef, where('roles', 'array-contains', 'researcher'));
+
+  const querySnapshot = await getDocs(q);
+  const researchers: AppUser[] = [];
+
+  querySnapshot.forEach((doc) => {
+    researchers.push(doc.data() as AppUser);
+  });
+
+  return researchers;
 }

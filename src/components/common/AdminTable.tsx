@@ -1,15 +1,14 @@
-import { SortableEntryKeys } from '@/types/entries';
 import { AdminTableProps } from '@/types/table';
 import { AdminTableView } from './AdminTableView';
 
-const AdminTable = <T, K extends keyof T>({
+const AdminTable = <T, S extends string>({
   columns,
   data,
   onSort,
   currentSortKey,
   currentSortDirection,
-}: AdminTableProps<T, K>) => {
-  const handleSort = (key: SortableEntryKeys) => {
+}: AdminTableProps<T, S>) => {
+  const handleSort = (key: S) => {
     onSort(key);
   };
 

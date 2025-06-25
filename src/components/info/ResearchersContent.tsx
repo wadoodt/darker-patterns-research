@@ -1,7 +1,9 @@
+import { fetchAllResearchers } from '@/lib/firestore/queries/users';
+import type { AppUser } from '@/types/user';
 import { Linkedin, Mail, UserCircle2 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface ResearcherProfileProps {
   name: string;
@@ -15,19 +17,12 @@ interface ResearcherProfileProps {
 const ResearcherProfileCard: React.FC<ResearcherProfileProps> = ({ name, role, bio, imageUrl, linkedinUrl, email }) => {
   return (
     <div className="bg-light-bg-secondary border-light-border-primary flex flex-col items-center gap-6 rounded-lg border p-6 shadow-lg sm:flex-row sm:items-start">
-      {imageUrl ? (
-        <Image
-          src={imageUrl}
-          alt={name}
-          width={120}
-          height={120}
-          className="flex-shrink-0 rounded-full object-cover shadow-md"
-        />
-      ) : (
-        <div className="bg-light-bg-tertiary mb-2 flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-full shadow-md">
+      <Avatar className="flex h-32 w-32 items-center justify-center rounded-lg">
+        <AvatarImage src={imageUrl || undefined} alt={name} className="object-cover" />
+        <AvatarFallback className="bg-light-bg-tertiary flex h-32 w-32">
           <UserCircle2 size={60} className="text-brand-purple-400" />
-        </div>
-      )}
+        </AvatarFallback>
+      </Avatar>
       <div className="text-center sm:text-left">
         <h3 className="font-lora text-light-text-primary text-xl font-semibold">{name}</h3>
         <p className="text-brand-purple-600 text-sm font-medium">{role}</p>
@@ -59,24 +54,8 @@ const ResearcherProfileCard: React.FC<ResearcherProfileProps> = ({ name, role, b
   );
 };
 
-const ResearchersContent = () => {
-  const researchers = [
-    {
-      name: 'Israel A. Rosales L.',
-      role: 'Principal Investigator & Lead Researcher',
-      bio: 'Israel is driving this research to explore and mitigate dark patterns in LLMs, focusing on creating robust datasets and evaluation benchmarks for more ethical AI systems. His work aims to bridge the gap between AI capabilities and human-centered design principles.',
-      // imageUrl: "/path/to/israel-photo.jpg", // Placeholder if you have an image
-      linkedinUrl: 'https://www.linkedin.com/in/israel-a-rosales-l/',
-      email: 'ai.darkpatterns.research@gmail.com',
-    },
-    // {
-    //   name: "Dr. AI Ethicist (Example)",
-    //   role: "Ethics Advisor & Collaborator",
-    //   bio: "Dr. Ethicist provides crucial guidance on the ethical implications of this research and helps ensure the study aligns with best practices for responsible AI development and human subject research.",
-    //   linkedinUrl: "#",
-    // },
-    // Add more team members here
-  ];
+const ResearchersContent = async () => {
+  const researchers: AppUser[] = await fetchAllResearchers();
 
   return (
     <div className="survey-page-container">
@@ -91,8 +70,16 @@ const ResearchersContent = () => {
         <div className="not-prose space-y-8 md:space-y-10">
           {' '}
           {/* Use not-prose for custom card layout */}
-          {researchers.map((researcher, index) => (
-            <ResearcherProfileCard key={index} {...researcher} />
+          {researchers.map((researcher) => (
+            <ResearcherProfileCard
+              key={researcher.uid}
+              name={researcher.displayName || 'No Name Provided'}
+              role={researcher.role || 'Researcher'}
+              bio={researcher.bio || ''}
+              imageUrl={researcher.photoURL || undefined}
+              linkedinUrl={researcher.linkedinUrl}
+              email={researcher.email || undefined}
+            />
           ))}
         </div>
         <section id="collaboration" className="border-light-border-primary mt-12 border-t pt-8">

@@ -1,9 +1,37 @@
-import type { Timestamp } from 'firebase/firestore';
+import type { FieldValue, Timestamp } from 'firebase/firestore';
 
 export interface DPOOption {
   key: 'A' | 'B';
   content: string;
   isDatasetAccepted: boolean;
+}
+
+export type RecentActivityItem = {
+  type: 'evaluation' | 'flag' | 'new_participant';
+  id: string;
+  description: string;
+  timestamp: Date;
+  href?: string;
+};
+
+export type ChartableDemographics = {
+  age: { name: string; value: number }[];
+  technicalBackground: { name: string; value: number }[];
+};
+
+export type ProjectProgressDataPoint = {
+  date: string; // e.g., 'YYYY-MM-DD'
+  count: number;
+};
+
+export interface DashboardData {
+  totalEntries: number;
+  entriesCompleted: number;
+  avgTimePerEntry: string;
+  activeParticipants: number;
+  demographics: ChartableDemographics;
+  recentActivity: RecentActivityItem[];
+  projectProgress: ProjectProgressDataPoint[];
 }
 
 export interface DPOEntry {
@@ -18,12 +46,13 @@ export interface DPOEntry {
   targetReviewCount?: number;
   lastReviewedAt?: Timestamp | Date;
   createdAt?: Timestamp | Date;
+  date: Timestamp | Date;
   isFlaggedCount?: number;
   lastFlaggedAt?: Timestamp | Date;
 
   // Fields for "Archive & Create New Version" strategy
   isArchived?: boolean; // True if this entry is an old version and superseded
-  archivedAt?: Timestamp | Date; // When it was archived
+  archivedAt?: Timestamp | Date; // The date when the entry was archived
   originalEntryId?: string; // If this entry is a new version, this links to the ID of the entry it corrects/revises
   supersededByEntryId?: string; // If this entry is archived, this links to the ID of the new entry that replaces it
   viewCount?: number;
@@ -70,11 +99,30 @@ export interface ParticipantSession {
   surveyCompletedAt?: Timestamp | Date | null;
 }
 
+export interface DPORevision {
+  id: string;
+  originalEntryId: string;
+  submittedBy: string; // UID of the user who submitted the revision
+  submittedAt: Timestamp | Date | FieldValue;
+  status: 'pending' | 'approved' | 'rejected';
+  proposedChanges: Partial<DPOEntry>;
+  reviewedBy?: string; // UID of the admin who reviewed it
+  reviewedAt?: Timestamp | Date | FieldValue;
+  reviewComments?: string;
+}
+
 export interface ParticipantFlag {
   id?: string; // Firestore document ID, auto-generated
   participantSessionUid: string;
+  dpoEntryId: string;
   reason: string; // Could be one of predefined or "Other"
   comment?: string | null; // Detailed comment if reason is "Other" or additional notes
   flaggedAt: Timestamp | Date;
   categories?: string[];
+
+  // For remediation workflow
+  status: 'new' | 'under_review' | 'resolved' | 'rejected';
+  remediatedBy?: string; // UID of the user who remediated it
+  remediatedAt?: Timestamp | Date;
+  remediationNotes?: string;
 }

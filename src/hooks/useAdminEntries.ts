@@ -14,7 +14,7 @@ export interface AdminEntriesFilter {
 }
 
 export interface AdminEntriesSortConfig {
-  key: SortableEntryKeys | 'id';
+  key: SortableEntryKeys | null;
   direction: 'asc' | 'desc';
 }
 
@@ -27,7 +27,7 @@ const useAdminEntriesState = () => {
   const [firstDocOfCurrentPage, setFirstDocOfCurrentPage] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [lastDocOfCurrentPage, setLastDocOfCurrentPage] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [activeFilters, setActiveFilters] = useState<AdminEntriesFilter>({});
-  const [sortConfig, setSortConfig] = useState<AdminEntriesSortConfig>({ key: 'id', direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState<AdminEntriesSortConfig>({ key: 'reviewCount', direction: 'desc' });
 
   return {
     entries,
@@ -75,7 +75,6 @@ async function fetchAndSetEntries(
   setIsLoading(true);
   setError(null);
 
-  debugger;
   try {
     const { mainQuery, countQuery } = buildDpoEntriesQuery(
       filters,
@@ -146,7 +145,7 @@ export const useAdminEntries = (defaultTargetReviews: number, showArchived: bool
     setCurrentPage(1);
   };
 
-  const handleSortChange = (key: SortableEntryKeys | 'id') => {
+  const handleSortChange = (key: SortableEntryKeys | null) => {
     setSortConfig((prev) => ({
       key,
       direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',

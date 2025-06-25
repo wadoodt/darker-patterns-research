@@ -27,6 +27,11 @@ export function getMockDpoEntries(count: number = 10): DisplayEntry[] {
       targetReviewCount,
       reviewProgress,
       statusText: reviewCount >= targetReviewCount ? 'Completed' : `${reviewCount}/${targetReviewCount}`,
+      date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
       isFlaggedCount: Math.floor(Math.random() * 3),
       isArchived: false,
     };
@@ -50,6 +55,7 @@ export function getMockDpoEntryDetails(entryId: string): GetDpoEntryResult {
     targetReviewCount: 10,
     lastReviewedAt: lastWeek,
     createdAt: lastWeek,
+    date: lastWeek,
     isFlaggedCount: randomInt(0, 3),
     lastFlaggedAt: now,
     isArchived: false,
@@ -82,6 +88,7 @@ export function getMockDpoEntryDetails(entryId: string): GetDpoEntryResult {
     },
   ];
 
+  const flagStatuses: ParticipantFlag['status'][] = ['new', 'under_review', 'resolved', 'rejected'];
   const flags: ParticipantFlag[] = Array.from({ length: randomInt(0, 2) }).map((_, i) => ({
     id: `flag${i}`,
     dpoEntryId: entryId,
@@ -89,6 +96,7 @@ export function getMockDpoEntryDetails(entryId: string): GetDpoEntryResult {
     reason: 'This is a mock flag reason.',
     flaggedAt: now,
     categories: entry.categories,
+    status: flagStatuses[randomInt(0, flagStatuses.length - 1)],
   }));
 
   return {

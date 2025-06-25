@@ -1,12 +1,17 @@
 // src/lib/firestore/queries/admin.ts
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
+import type { AdminSubmissionsFilter, AdminSubmissionsSortConfig } from '@/hooks/useAdminSubmissions';
+
+import type { DisplaySubmission } from '@/types/submissions';
 import { db } from '@/lib/firebase';
 import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
-import type { DPOEntry, EvaluationData, ParticipantFlag } from '@/types/dpo';
+import { GlobalConfig } from '@/lib/firestore/schemas';
+import type { DPOEntry, DPORevision, EvaluationData, ParticipantFlag } from '@/types/dpo';
 import type { DisplayEntry } from '@/types/entries';
 import type { DemographicsSummary, OverviewStats, ResponseAggregates } from '@/types/stats';
 import {
   collection,
+  collectionGroup,
   doc,
   documentId,
   endBefore,
@@ -21,23 +26,38 @@ import {
   type Query,
   type QueryDocumentSnapshot,
   startAfter,
+  Timestamp,
   updateDoc,
   where,
 } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
 
-export interface AdminSettings {
-  minTargetReviewsPerEntry?: number;
-  // Add other admin settings as needed
-}
-
-export async function getAdminSettings(): Promise<AdminSettings> {
+export async function getGlobalConfig(): Promise<GlobalConfig<Date>> {
   if (!db) throw new Error('Firebase is not initialized');
 
-  const settingsDocRef = doc(db, 'admin_settings', 'global_config');
-  const settingsSnap = await getDoc(settingsDocRef);
+  const configDocRef = doc(db, 'admin_settings', 'global_config');
+  const configSnap = await getDoc(configDocRef);
 
-  return settingsSnap.exists() ? (settingsSnap.data() as AdminSettings) : {};
+  if (configSnap.exists()) {
+    const data = configSnap.data() as GlobalConfig<Timestamp>;
+
+    // Ensure all dates are properly converted to Date objects
+    return {
+      isSurveyActive: data.isSurveyActive ?? false,
+      targetReviews: data.targetReviews ?? 5,
+      updates: (data.updates || []).map((update) => ({
+        ...update,
+        date: update.date?.toDate?.() || new Date(),
+      })),
+    };
+  } else {
+    console.warn('getGlobalConfig: No global_config document found! Returning default data.');
+    return {
+      isSurveyActive: false,
+      targetReviews: 5,
+      updates: [],
+    };
+  }
 }
 
 export interface GetDpoEntryResult {
@@ -104,7 +124,7 @@ export function buildDpoEntriesQuery(
 ) {
   if (!db) throw new Error('Firebase is not initialized');
 
-  const dpoEntriesRef = collection(db, 'dpo_entries');
+  const dpoEntriesRef = collectionGroup(db, 'dpo_entries');
   let baseQuery = query(dpoEntriesRef);
 
   const filterConstraints = [];
@@ -128,9 +148,13 @@ export function buildDpoEntriesQuery(
   }
 
   if (sort.key) {
-    baseQuery = query(baseQuery, orderBy(sort.key, sort.direction));
+    const sortField = sort.key === 'id' ? documentId() : sort.key;
+    baseQuery = query(baseQuery, orderBy(sortField, sort.direction));
   }
-  if (sort.key !== 'id' && sort.key !== documentId().toString()) {
+
+  // Add documentId as a tie-breaker if not already the primary sort key.
+  // This ensures consistent ordering for pagination.
+  if (sort.key !== 'id') {
     baseQuery = query(baseQuery, orderBy(documentId(), sort.direction));
   }
 
@@ -154,6 +178,9 @@ export function transformDpoEntry(doc: QueryDocumentSnapshot, targetReviews: num
   return {
     ...data,
     id: doc.id,
+    // Convert Firestore Timestamp to a serializable format (ISO string) so it can be
+    // passed from Server to Client Components.
+    date: data.date instanceof Timestamp ? data.date.toDate().toISOString() : data.date,
     reviewProgress,
     statusText: (data.reviewCount || 0) >= targetReviews ? 'Completed' : `${data.reviewCount || 0}/${targetReviews}`,
   } as DisplayEntry;
@@ -176,20 +203,48 @@ export async function fetchDpoEntriesData(mainQuery: Query, targetReviews: numbe
   };
 }
 
-export async function getDashboardData() {
-  if (process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true') {
-    return getMockDashboardData();
+export async function getRevisionById(revisionId: string): Promise<DPORevision | null> {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const revisionRef = doc(db, 'dpo_revisions', revisionId);
+  const revisionSnap = await getDoc(revisionRef);
+
+  if (!revisionSnap.exists()) {
+    return null;
   }
 
+  return { id: revisionSnap.id, ...revisionSnap.data() } as DPORevision;
+}
+
+export async function getPendingRevisions(): Promise<DPORevision[]> {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const revisionsQuery = query(collection(db, 'dpo_revisions'), where('status', '==', 'pending'));
+
+  const querySnapshot = await getDocs(revisionsQuery);
+  const revisions = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as DPORevision[];
+
+  // Sort by date on the client-side to avoid composite index
+  return revisions.sort((a, b) => {
+    const getMillis = (ts: DPORevision['submittedAt']): number => {
+      if (ts instanceof Timestamp) {
+        return ts.toMillis();
+      }
+      if (ts instanceof Date) {
+        return ts.getTime();
+      }
+      // FieldValue cannot be processed on the client, return a neutral value
+      return 0;
+    };
+    return getMillis(b.submittedAt) - getMillis(a.submittedAt);
+  });
+}
+
+export async function getDashboardData() {
   if (!db) {
     console.error('Firebase is not initialized.');
     // Return a default or empty state
-    return {
-      totalEntries: 0,
-      totalReviews: 0,
-      averageReviews: 0,
-      completionPercentage: 0,
-    };
+    return getMockDashboardData();
   }
 
   try {
@@ -234,17 +289,9 @@ export async function getDashboardData() {
 }
 
 export async function getStatisticsData() {
-  if (process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true') {
-    return getMockStatisticsData();
-  }
-
   if (!db) {
     console.error('Firebase is not initialized.');
-    return {
-      demographicsSummary: null,
-      overviewStats: null,
-      responseAggregates: null,
-    };
+    return getMockStatisticsData();
   }
 
   try {
@@ -275,4 +322,95 @@ export async function getStatisticsData() {
       responseAggregates: null,
     };
   }
+}
+
+export function buildSubmissionsQuery(
+  filters: AdminSubmissionsFilter,
+  sort: AdminSubmissionsSortConfig,
+  pageSize: number,
+  pageDirection: 'next' | 'prev' | 'current',
+  cursors: {
+    first: QueryDocumentSnapshot | null;
+    last: QueryDocumentSnapshot | null;
+  },
+) {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const submissionsRef = collection(db, 'participant_flags');
+  let baseQuery: Query = query(submissionsRef);
+
+  const filterConstraints = [];
+
+  if (filters.status && filters.status.length > 0) {
+    filterConstraints.push(where('status', 'in', filters.status.slice(0, 10)));
+  }
+
+  if (filters.reason && filters.reason.length > 0) {
+    filterConstraints.push(where('reason', 'in', filters.reason.slice(0, 10)));
+  }
+
+  if (filters.searchTerm) {
+    console.warn('Search term filtering is not yet implemented for submissions.');
+  }
+
+  if (filterConstraints.length > 0) {
+    baseQuery = query(baseQuery, ...filterConstraints);
+  }
+
+  if (sort.key) {
+    baseQuery = query(baseQuery, orderBy(sort.key, sort.direction), orderBy(documentId(), sort.direction));
+  }
+
+  const countQuery = query(baseQuery);
+  let mainQuery = query(baseQuery, limit(pageSize));
+
+  if (pageDirection === 'next' && cursors.last) {
+    mainQuery = query(mainQuery, startAfter(cursors.last));
+  } else if (pageDirection === 'prev' && cursors.first) {
+    mainQuery = query(baseQuery, endBefore(cursors.first), limitToLast(pageSize));
+  }
+
+  return { mainQuery, countQuery };
+}
+
+export function transformSubmission(doc: QueryDocumentSnapshot): DisplaySubmission {
+  const data = doc.data() as ParticipantFlag;
+
+  return {
+    ...data,
+    id: doc.id,
+    flaggedAt: (data.flaggedAt as Timestamp).toDate().toISOString(),
+    remediatedAt: data.remediatedAt ? (data.remediatedAt as Timestamp).toDate().toISOString() : undefined,
+  };
+}
+
+export async function getSubmissionById(submissionId: string): Promise<DisplaySubmission | null> {
+  if (!db) {
+    console.error('Firestore not initialized');
+    return null;
+  }
+  const submissionDocRef = doc(db, 'participantFlags', submissionId);
+  const submissionDoc = await getDoc(submissionDocRef);
+
+  if (!submissionDoc.exists()) {
+    return null;
+  }
+
+  return transformSubmission(submissionDoc);
+}
+
+export async function fetchSubmissionsCount(countQuery: Query) {
+  const countSnapshot = await getCountFromServer(countQuery);
+  return countSnapshot.data().count;
+}
+
+export async function fetchSubmissionsData(mainQuery: Query) {
+  const submissionsSnapshot = await getDocs(mainQuery);
+  const submissions = submissionsSnapshot.docs.map(transformSubmission);
+
+  return {
+    submissions,
+    first: submissionsSnapshot.docs[0] ?? null,
+    last: submissionsSnapshot.docs[submissionsSnapshot.docs.length - 1] ?? null,
+  };
 }
