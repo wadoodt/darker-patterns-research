@@ -30,7 +30,7 @@ export const evaluationsTableColumns: Column<DisplayEvaluation>[] = [
     header: 'DPO Entry Instruction',
     renderCell: (item) => (
       <div className="w-[300px] truncate">
-        <Link href={`/admin/evaluations/${item.id}`} className="hover:underline">
+        <Link href={`/admin/entries/${item.dpoEntryId}`} className="hover:underline">
           {item.dpoEntryInstruction}
         </Link>
       </div>

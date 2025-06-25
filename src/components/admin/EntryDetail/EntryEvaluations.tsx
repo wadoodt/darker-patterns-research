@@ -16,13 +16,13 @@ export function EntryEvaluations({ evaluations }: EntryEvaluationsProps) {
             <li key={evaluation.id} className="border-b border-gray-200 pb-2 last:border-0">
               <div className="flex items-start justify-between">
                 <div>
-                  <strong>Rating: {evaluation.rating}/5</strong>
+                  <strong>Rating: {evaluation.agreementRating}/5</strong>
                   <span className="ml-4">
                     Choice: Option {evaluation.chosenOptionKey} (
                     {evaluation.wasChosenActuallyAccepted ? 'Accepted' : 'Rejected'})
                   </span>
                 </div>
-                <span className="text-sm text-gray-500">{evaluation.submittedAt.toLocaleDateString()}</span>
+                {/* <span className="text-sm text-gray-500">{evaluation.submittedAt.toLocaleDateString()}</span> */}
               </div>
               {evaluation.comment && <p className="mt-1">{evaluation.comment}</p>}
               {evaluation.categories && (

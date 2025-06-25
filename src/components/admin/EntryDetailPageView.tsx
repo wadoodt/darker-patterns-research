@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import EntryDetailPageContent from '@/components/admin/EntryDetailPageContent';
-import type { EntryWithDetails } from '@/types/entryDetails';
 import { getEntryDetails } from '@/lib/callable-functions';
 import { incrementEntryViewCount } from '@/lib/firestore/queries/admin';
+import type { EntryWithDetails } from '@/types/entryDetails';
 import { notFound } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface EntryDetailPageViewProps {
   entryId: string;
@@ -27,6 +27,7 @@ export default function EntryDetailPageView({ entryId }: EntryDetailPageViewProp
           // Increment view count (fire and forget)
           incrementEntryViewCount(entryId).catch(console.error),
         ]);
+        console.log('Entry data:', entryData);
         setEntry(entryData);
         setError(null);
       } catch (err) {

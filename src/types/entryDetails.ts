@@ -20,7 +20,7 @@ export interface EntryAnalytics {
 
 export interface EntryEvaluationDetail {
   id: string;
-  rating: number;
+  agreementRating: number;
   comment?: string | null;
   categories: string[];
   submittedAt: Date;

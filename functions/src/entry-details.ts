@@ -1,6 +1,6 @@
-import * as functions from 'firebase-functions';
-import type { DPOEntry, EvaluationData, ParticipantFlag, EntryWithDetails } from './types';
 import { Timestamp } from 'firebase-admin/firestore';
+import * as functions from 'firebase-functions';
+import type { DPOEntry, EntryWithDetails, EvaluationData, ParticipantFlag } from './types';
 
 /**
  * Converts a Firestore Timestamp to a JavaScript Date object.
@@ -9,7 +9,7 @@ import { Timestamp } from 'firebase-admin/firestore';
  * @return {Date | unknown} The converted Date object or the original field.
  */
 function convertTimestamp(field: unknown): Date | unknown {
-  if (field instanceof Timestamp) {
+  if (field instanceof Timestamp && field.toDate instanceof Function) {
     return field.toDate();
   }
   return field;
@@ -71,17 +71,14 @@ export function processEntryDetails(
         ratingDistribution,
         categoryDistribution,
       },
-      evaluations: evaluations
-        .filter((e): e is typeof e & { id: string } => !!e.id)
-        .map((e) => ({
-          id: e.id,
-          agreementRating: e.agreementRating,
-          comment: e.comment,
-          categories: e.categories,
-          submittedAt: convertTimestamp(e.submittedAt),
-          chosenOptionKey: e.chosenOptionKey,
-          wasChosenActuallyAccepted: e.wasChosenActuallyAccepted,
-        })),
+      evaluations: evaluations.map((e) => ({
+        agreementRating: e.agreementRating,
+        comment: e.comment,
+        categories: e.categories,
+        submittedAt: convertTimestamp(e.submittedAt),
+        chosenOptionKey: e.chosenOptionKey,
+        wasChosenActuallyAccepted: e.wasChosenActuallyAccepted,
+      })),
     };
 
     return result as EntryWithDetails;

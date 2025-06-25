@@ -160,7 +160,7 @@ export interface EntryAnalytics {
 }
 
 export interface EntryEvaluationDetail {
-  id: string;
+  id?: string;
   agreementRating: number;
   comment?: string | null;
   categories: string[];
