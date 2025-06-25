@@ -8,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { DisplayEvaluation } from '@/types/evaluations';
@@ -27,9 +26,8 @@ export function EvaluationsTableActions({ evaluation }: EvaluationsTableActionsP
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem asChild>
-          <Link href={`/admin/entries/${evaluation.dpoEntryId}`}>
+          <Link href={`/admin/entries/${evaluation.dpoEntryId}`} className="common-link-hover">
             <View className="mr-2 h-4 w-4" />
             View DPO Entry
           </Link>

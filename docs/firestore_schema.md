@@ -27,12 +27,24 @@ Stores the main dataset entries for the Dark Patterns project.
   - **`update`**: `admin`. Researchers can submit revisions via the `reviseDpoEntry` Cloud Function, which has its own logic to allow limited field updates.
   - **`create`, `delete`**: `admin`
 
+### `dpo_revisions`
+
+Stores proposed revisions to DPO entries submitted by researchers.
+
+- **Document ID**: Auto-generated
+- **Data**: `DPORevision` type
+- **Security Rules**:
+  - **`read`**: `admin`, `researcher`
+  - **`create`**: `researcher`
+  - **`update`**: `admin` (for status changes)
+  - **`delete`**: `admin`
+
 ### `evaluations`
 
 Stores evaluations submitted by authenticated users.
 
 - **Document ID**: Auto-generated
-- **Data**: `EvaluationData` type
+- **Data**: `EvaluationData` type (with `agreementRating` instead of `rating`)
 - **Security Rules**:
   - **`read`**: `admin`, `researcher`
   - **`create`**: `authenticated user` (can only create for their own session)
@@ -90,10 +102,20 @@ Stores content for the landing page updates section.
 
 ### `cached_stats`
 
-Stores cached statistics for the landing page.
+Stores cached statistics for the landing page and admin dashboard.
 
-- **Document ID**: `overview_stats`
-- **Data**: `LandingStats` type
+- **Document ID**: `overview_stats`, `demographics_summary`, `response_aggregates`
+- **Data**: `OverviewStats`, `DemographicsSummary`, `ResponseAggregates` types
 - **Security Rules**:
-  - **`read`**: `public`
+  - **`read`**: `public` (for `overview_stats`), `admin` / `researcher` for others
   - **`write`**: `false` (only backend functions can update)
+
+### `activity_log`
+
+Stores a log of important events that occur in the system for auditing and display in the admin dashboard.
+
+- **Document ID**: Auto-generated
+- **Data**: `ActivityLogItem` type
+- **Security Rules**:
+  - **`read`**: `admin`, `researcher`
+  - **`write`**: `false` (only backend functions can write)
