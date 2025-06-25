@@ -1,5 +1,7 @@
 // src/lib/firestore/queries/admin.ts
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
+import type { AdminSubmissionsFilter, AdminSubmissionsSortConfig } from '@/hooks/useAdminSubmissions';
+import type { DisplaySubmission } from '@/types/submissions';
 import { db } from '@/lib/firebase';
 import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
 import { GlobalConfig } from '@/lib/firestore/schemas';
@@ -319,4 +321,96 @@ export async function getStatisticsData() {
       responseAggregates: null,
     };
   }
+}
+
+export function buildSubmissionsQuery(
+  filters: AdminSubmissionsFilter,
+  sort: AdminSubmissionsSortConfig,
+  pageSize: number,
+  pageDirection: 'next' | 'prev' | 'current',
+  cursors: {
+    first: QueryDocumentSnapshot | null;
+    last: QueryDocumentSnapshot | null;
+  },
+) {
+  if (!db) throw new Error('Firebase is not initialized');
+
+  const submissionsRef = collection(db, 'participant_flags');
+  let baseQuery: Query = query(submissionsRef);
+
+  const filterConstraints = [];
+
+  if (filters.status && filters.status.length > 0) {
+    filterConstraints.push(where('status', 'in', filters.status.slice(0, 10)));
+  }
+
+  if (filters.reason && filters.reason.length > 0) {
+    filterConstraints.push(where('reason', 'in', filters.reason.slice(0, 10)));
+  }
+
+  if (filters.searchTerm) {
+    console.warn('Search term filtering is not yet implemented for submissions.');
+  }
+
+  if (filterConstraints.length > 0) {
+    baseQuery = query(baseQuery, ...filterConstraints);
+  }
+
+  if (sort.key) {
+    baseQuery = query(baseQuery, orderBy(sort.key, sort.direction), orderBy(documentId(), sort.direction));
+  }
+
+  const countQuery = query(baseQuery);
+  let mainQuery = query(baseQuery, limit(pageSize));
+
+  if (pageDirection === 'next' && cursors.last) {
+    mainQuery = query(mainQuery, startAfter(cursors.last));
+  } else if (pageDirection === 'prev' && cursors.first) {
+    mainQuery = query(baseQuery, endBefore(cursors.first), limitToLast(pageSize));
+  }
+
+  return { mainQuery, countQuery };
+}
+
+export function transformSubmission(doc: QueryDocumentSnapshot): DisplaySubmission {
+  const data = doc.data() as ParticipantFlag;
+
+  return {
+    ...data,
+    id: doc.id,
+    flaggedAt: (data.flaggedAt as Timestamp).toDate().toISOString(),
+    remediatedAt: data.remediatedAt ? (data.remediatedAt as Timestamp).toDate().toISOString() : undefined,
+  };
+}
+
+export async function getSubmissionById(submissionId: string): Promise<DisplaySubmission | null> {
+  if (!db) {
+    console.error('Firestore not initialized');
+    return null;
+  }
+  const submissionDocRef = doc(db, 'participantFlags', submissionId);
+  const submissionDoc = await getDoc(submissionDocRef);
+
+  if (!submissionDoc.exists()) {
+    return null;
+  }
+
+  return transformSubmission(submissionDoc);
+}
+
+export async function fetchSubmissionsCount(countQuery: Query) {
+  const countSnapshot = await getCountFromServer(countQuery);
+  return countSnapshot.data().count;
+}
+
+export async function fetchSubmissionsData(mainQuery: Query) {
+  const querySnapshot = await getDocs(mainQuery);
+  const submissions = querySnapshot.docs.map(transformSubmission);
+  return {
+    submissions,
+    cursors: {
+      first: querySnapshot.docs[0] || null,
+      last: querySnapshot.docs[querySnapshot.docs.length - 1] || null,
+    },
+  };
 }

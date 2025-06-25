@@ -2,16 +2,16 @@
 
 import { useState } from 'react';
 
+import AdminTable from '@/components/common/AdminTable';
 import { Button } from '@/components/ui/button';
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
 import { Loader2, PlusCircle, UploadCloud } from 'lucide-react';
-import AdminTable from '../common/AdminTable';
 import Pagination from '../common/Pagination';
 import AdminHeader from './AdminHeader';
 import EntriesFilters from './EntriesFilters';
-import { getTableColumns } from './entries/EntriesTableColumns';
 
+import { getTableColumns } from '@/components/admin/entries/EntriesTableColumns';
 import { deleteDpoEntry } from '@/lib/firestore/mutations/dpo';
 import { toast } from 'sonner';
 import { ConfirmationModal } from '../common/ConfirmationModal';
@@ -131,7 +131,9 @@ const EntriesTableContent = ({
   onDelete,
   ...props
 }: EntriesPageViewProps & { onDelete: (entryId: string) => void }) => {
-  const columns = getTableColumns(onDelete);
+  const onDeleteEntry = (entryId: string) => {
+    onDelete(entryId);
+  };
 
   if (props.isLoadingEntries) {
     return <LoadingView />;
@@ -146,7 +148,7 @@ const EntriesTableContent = ({
     <>
       <div className="admin-card mt-6 overflow-x-auto p-0">
         <AdminTable
-          columns={columns}
+          columns={getTableColumns(onDeleteEntry)}
           data={props.entries}
           onSort={props.handleSortChange}
           currentSortKey={props.sortConfig.key}

@@ -114,8 +114,15 @@ export interface DPORevision {
 export interface ParticipantFlag {
   id?: string; // Firestore document ID, auto-generated
   participantSessionUid: string;
+  dpoEntryId: string;
   reason: string; // Could be one of predefined or "Other"
   comment?: string | null; // Detailed comment if reason is "Other" or additional notes
   flaggedAt: Timestamp | Date;
   categories?: string[];
+
+  // For remediation workflow
+  status: 'new' | 'under_review' | 'resolved' | 'rejected';
+  remediatedBy?: string; // UID of the user who remediated it
+  remediatedAt?: Timestamp | Date;
+  remediationNotes?: string;
 }
