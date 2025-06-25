@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-
-import AdminTable from '@/components/common/AdminTable';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { DisplayEntry, SortableEntryKeys } from '@/types/entries';
 import { Loader2, PlusCircle, UploadCloud } from 'lucide-react';
+import AdminTable from '../common/AdminTable';
 import Pagination from '../common/Pagination';
 import AdminHeader from './AdminHeader';
 import EntriesFilters from './EntriesFilters';
@@ -101,7 +100,7 @@ const EntriesPageToolbar = ({
   showArchived: boolean;
   setShowArchived: (value: boolean) => void;
 }) => (
-  <div className="mb-12 flex flex-wrap items-center justify-between gap-4">
+  <div className="mb-12 flex flex-wrap items-center justify-start gap-4">
     <EntriesFilters
       currentFilters={activeFilters}
       onFilterChange={handleFilterChange}
@@ -113,15 +112,15 @@ const EntriesPageToolbar = ({
       ]}
     />
     <div className="flex items-center">
-      <label htmlFor="show-archived" className="mr-2 text-sm font-medium text-gray-700">
+      <label htmlFor="show-archived" className="text-dark-text-secondary mr-2 text-sm font-medium">
         Show Archived
       </label>
-      <input
+      <Switch
         id="show-archived"
-        type="checkbox"
         checked={showArchived}
-        onChange={(e) => setShowArchived(e.target.checked)}
-        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+        onCheckedChange={setShowArchived}
+        className="cursor-pointer bg-gray-300 data-[state=checked]:[background-color:var(--sidebar-accent)]"
+        thumbClassName="bg-white"
       />
     </div>
   </div>

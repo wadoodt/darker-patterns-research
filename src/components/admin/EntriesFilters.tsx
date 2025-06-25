@@ -33,9 +33,9 @@ const EntriesFilters: React.FC<EntriesFiltersProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4">
-      <div className="flex items-center gap-2">
-        <label className="text-dark-text-secondary text-sm font-medium">Category:</label>
+    <div className="flex flex-wrap items-start gap-4">
+      <div className="flex items-start gap-2">
+        <label className="text-dark-text-secondary mt-2 text-sm font-medium">Category:</label>
         <MultiSelect
           options={categories.map((c) => ({ value: c, label: c }))}
           value={currentFilters.category || []}

@@ -1,6 +1,6 @@
 import type { DisplayEntry } from '@/types/entries';
 import type { Column } from '@/types/table';
-import { Archive, Tag } from 'lucide-react';
+import { Archive } from 'lucide-react';
 import Link from 'next/link';
 import { EntriesTableActions } from './EntriesTableActions';
 
@@ -41,8 +41,7 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
   {
     key: 'categories',
     header: 'Category',
-    sortable: false,
-    icon: Tag,
+    sortable: true,
     renderCell: (entry: DisplayEntry) => <span className="text-sm">{entry.categories.join(', ')}</span>,
   },
   {
