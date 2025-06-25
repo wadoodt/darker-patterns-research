@@ -41,7 +41,7 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
   {
     key: 'categories',
     header: 'Category',
-    sortable: true,
+    sortable: false,
     renderCell: (entry: DisplayEntry) => <span className="text-sm">{entry.categories.join(', ')}</span>,
   },
   {
