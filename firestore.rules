@@ -49,16 +49,16 @@ service cloud.firestore {
     // =================================================================
     match /dpo_entries/{entry} {
       allow read: if canReadData();
-      // Admins can write to any field.
-      // Researchers can only update specific fields when creating a new revision.
-      allow write: if isAdmin() || 
-                   (isResearcher() && request.resource.data.keys().hasOnly(['instruction', 'prompt', 'acceptedResponse', 'rejectedResponse', 'categories', 'reviewCount', 'lastReviewedAt', 'createdAt', 'isFlaggedCount', 'version', 'isArchived', 'originalEntryId', 'updatedAt']));
+      // Admins can perform any write operation.
+      // Researchers can only update specific metadata fields, not core content.
+      allow write: if isAdmin();
+      allow update: if isResearcher() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reviewCount', 'lastReviewedAt', 'isFlaggedCount']);
     }
 
     match /dpo_revisions/{revisionId} {
       // Admins can read all revisions. Researchers can read their own.
       allow read: if isAdmin() || (isResearcher() && resource.data.submittedBy == request.auth.uid);
-      // Researchers can create revisions for themselves.
+      // Researchers can create revisions, but only for themselves.
       allow create: if isResearcher() && request.resource.data.submittedBy == request.auth.uid;
       // Admins can update revisions (e.g., to approve/reject).
       allow update: if isAdmin();
@@ -68,13 +68,15 @@ service cloud.firestore {
 
     match /evaluations/{evaluationId} {
       allow read: if canReadData();
-      allow create: if isAuthenticated() && request.resource.data.participantSessionUid == request.auth.uid;
+      // Public survey participants can create evaluations without being authenticated.
+      allow create: if true;
       allow update, delete: if isAdmin();
     }
 
     match /participant_flags/{flagId} {
       allow read: if canReadData();
-      allow create: if isAuthenticated() && request.resource.data.participantSessionUid == request.auth.uid;
+      // Public survey participants can create flags without being authenticated.
+      allow create: if true;
       allow update, delete: if isAdmin();
     }
 
@@ -95,6 +97,7 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
 
+    // Default-deny all other collections
     // Default-deny all other collections
     match /{document=**} {
       allow read, write: if request.time < timestamp.date(2025, 7, 12);
