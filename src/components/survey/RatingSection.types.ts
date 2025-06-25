@@ -1,6 +1,5 @@
 export interface RatingSectionProps {
-  selectedOptionKey: 'A' | 'B' | null;
-  isCurrentEvaluationSubmitted: boolean;
-  userRating: number;
-  setUserRating: (rating: number) => void;
+  agreementRating: number;
+  setAgreementRating: (rating: number) => void;
+  isUIBlocked: boolean;
 }

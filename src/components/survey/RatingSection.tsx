@@ -2,17 +2,11 @@ import { Star } from 'lucide-react';
 import { Fragment } from 'react';
 import { RatingSectionProps } from './RatingSection.types';
 
-export default function RatingSection({
-  selectedOptionKey,
-  isCurrentEvaluationSubmitted,
-  userRating,
-  setUserRating,
-}: RatingSectionProps) {
-  if (!selectedOptionKey || isCurrentEvaluationSubmitted) return null;
+export default function RatingSection({ agreementRating, setAgreementRating, isUIBlocked }: RatingSectionProps) {
   return (
     <section aria-labelledby="rating-title" className="survey-section-card mb-5 p-4">
       <h3 id="rating-title" className="survey-section-title mb-2.5 text-center !text-base !font-semibold">
-        How confident are you in your choice? (1-5 Stars)
+        How strongly do you agree with the researcher’s option & categories? (1 = disagree, 5 = agree)
       </h3>
       <div className="star-rating-container">
         {[1, 2, 3, 4, 5].map((starValue) => (
@@ -22,13 +16,13 @@ export default function RatingSection({
               id={`star${starValue}`}
               name="rating"
               value={starValue}
-              checked={userRating === starValue}
-              onChange={() => setUserRating(starValue)}
+              checked={agreementRating === starValue}
+              onChange={() => setAgreementRating(starValue)}
               className="star-rating-input"
-              disabled={isCurrentEvaluationSubmitted}
+              disabled={isUIBlocked}
             />
             <label htmlFor={`star${starValue}`} className="star-rating-label" title={`${starValue} stars`}>
-              <Star fill={userRating >= starValue ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Star fill={agreementRating >= starValue ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </label>
           </Fragment>
         ))}

@@ -8,7 +8,7 @@ export const addDPOEntry = async (entry: Omit<DPOEntry, 'id'>) => {
   }
 
   try {
-    const docRef = await addDoc(collection(db, 'dpoEntries'), {
+    const docRef = await addDoc(collection(db, 'dpo_entries'), {
       ...entry,
       isArchived: false,
       createdAt: serverTimestamp(),
@@ -26,7 +26,7 @@ export const updateDPOEntry = async (entryId: string, entry: Partial<DPOEntry>) 
   }
 
   try {
-    const entryRef = doc(db, 'dpoEntries', entryId);
+    const entryRef = doc(db, 'dpo_entries', entryId);
     await updateDoc(entryRef, {
       ...entry,
       updatedAt: serverTimestamp(),
@@ -84,7 +84,7 @@ export const approveRevision = async (revisionId: string) => {
       }
 
       const revisionData = revisionDoc.data() as DPORevision;
-      const entryRef = doc(firestoreDb, 'dpoEntries', revisionData.originalEntryId);
+      const entryRef = doc(firestoreDb, 'dpo_entries', revisionData.originalEntryId);
 
       transaction.update(entryRef, {
         ...revisionData.proposedChanges,
@@ -134,7 +134,7 @@ export const flagDPOEntry = async (entryId: string, flagData: Omit<ParticipantFl
     throw new Error('Firestore is not initialized');
   }
 
-  const entryRef = doc(db, 'dpoEntries', entryId);
+  const entryRef = doc(db, 'dpo_entries', entryId);
   const flagsCollectionRef = collection(db, 'participantFlags');
 
   try {
@@ -172,7 +172,7 @@ export const deleteDpoEntry = async (entryId: string): Promise<{ success: boolea
     throw new Error('Firestore is not initialized');
   }
 
-  const entryRef = doc(db, 'dpoEntries', entryId);
+  const entryRef = doc(db, 'dpo_entries', entryId);
 
   try {
     await updateDoc(entryRef, {

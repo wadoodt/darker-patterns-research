@@ -45,7 +45,7 @@ export interface EvaluationData {
   categories: string[];
   chosenOptionKey: 'A' | 'B';
   wasChosenActuallyAccepted: boolean;
-  rating: number;
+  agreementRating: number;
   comment?: string | null;
   timeSpentMs: number;
   submittedAt: FirebaseAdminTimestamp | Date; // Use FirebaseAdminTimestamp for Functions
@@ -102,7 +102,11 @@ export interface LandingUpdate {
 
 // For `details` in ActivityLogItem (mirrors src/types/stats.ts suggestion):
 // Discriminated union for better type safety of details based on eventType
-type EvaluationSubmittedDetails = { rating: number; chosenOptionKey: 'A' | 'B'; wasResearcherAgreement: boolean };
+export type EvaluationSubmittedDetails = {
+  agreementRating: number;
+  chosenOptionKey: 'A' | 'B';
+  wasResearcherAgreement: boolean;
+};
 type ParticipantSessionStartedDetails = { participationType: 'email' | 'anonymous'; emailProvided: boolean };
 type ParticipantFlagSubmittedDetails = { reason: string; commentProvided: boolean };
 type DpoEntryDeletedDetails = { deletedBy: string };
@@ -157,7 +161,7 @@ export interface EntryAnalytics {
 
 export interface EntryEvaluationDetail {
   id: string;
-  rating: number;
+  agreementRating: number;
   comment?: string | null;
   categories: string[];
   submittedAt: Date;

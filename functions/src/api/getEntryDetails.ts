@@ -42,8 +42,10 @@ export const getEntryDetails = onCall(async (request) => {
     }
 
     const entry = { id: entryDoc.id, ...entryDoc.data() } as DPOEntry;
-    const evaluations = evaluationsSnapshot.docs.map((doc) => doc.data() as EvaluationData);
-    const flags = flagsSnapshot.docs.map((doc) => doc.data() as ParticipantFlag);
+    const evaluations = !evaluationsSnapshot.empty
+      ? evaluationsSnapshot.docs.map((doc) => doc.data() as EvaluationData)
+      : [];
+    const flags = !flagsSnapshot.empty ? flagsSnapshot.docs.map((doc) => doc.data() as ParticipantFlag) : [];
 
     const entryDetails = processEntryDetails(entry, evaluations, flags);
 

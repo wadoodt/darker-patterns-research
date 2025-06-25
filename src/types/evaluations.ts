@@ -5,11 +5,12 @@ export type DisplayEvaluation = Omit<EvaluationData, 'submittedAt'> & {
   dpoEntryInstruction: string; // To give context
   isIncorrect: boolean;
   submittedAt: string; // ISO string for serializing
+  agreementRating: number;
 };
 
 export type SortableEvaluationKeys =
   | 'dpoEntryId'
   | 'participantSessionUid'
-  | 'rating'
+  | 'agreementRating'
   | 'submittedAt'
   | 'chosenOptionKey';

@@ -2,14 +2,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { MessageSquare } from 'lucide-react';
 import { CommentsSectionProps } from './CommentsSection.types';
 
-export default function CommentsSection({
-  selectedOptionKey,
-  userRating,
-  isCurrentEvaluationSubmitted,
-  userComment,
-  setUserComment,
-}: CommentsSectionProps) {
-  if (!selectedOptionKey || userRating === 0 || isCurrentEvaluationSubmitted) return null;
+export default function CommentsSection({ userComment, setUserComment, isUIBlocked }: CommentsSectionProps) {
   return (
     <section aria-labelledby="comments-title" className="survey-section-card mb-5 p-4">
       <h3 id="comments-title" className="survey-section-title mb-2 flex items-center !text-base !font-semibold">
@@ -24,7 +17,7 @@ export default function CommentsSection({
         value={userComment}
         onChange={(e) => setUserComment(e.target.value)}
         rows={3}
-        disabled={isCurrentEvaluationSubmitted}
+        disabled={isUIBlocked}
       />
     </section>
   );

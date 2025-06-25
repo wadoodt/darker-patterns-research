@@ -95,6 +95,7 @@ export function EvaluationsPage() {
           id="show-incorrect"
           checked={filters.showOnlyIncorrect}
           onCheckedChange={(checked) => handleFilterChange({ showOnlyIncorrect: !!checked })}
+          disabled={isLoading}
         />
         <label
           htmlFor="show-incorrect"
@@ -102,6 +103,7 @@ export function EvaluationsPage() {
         >
           Show only incorrect evaluations
         </label>
+        {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
       </div>
 
       {tableContent()}

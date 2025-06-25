@@ -29,8 +29,8 @@ const EntryReviewStepContent: React.FC = () => {
     optionAisDPOAccepted,
     selectedOptionKey,
     setSelectedOptionKey,
-    userRating,
-    setUserRating,
+    agreementRating,
+    setAgreementRating,
     userComment,
     setUserComment,
     selectedCategories,
@@ -38,31 +38,44 @@ const EntryReviewStepContent: React.FC = () => {
     timeStarted,
     localError,
     setLocalError,
+    isRevealed,
+    setIsRevealed,
   } = useEntryReviewState();
 
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
 
   const handleOptionSelect = (optionKey: 'A' | 'B') => {
-    if (isCurrentEvaluationSubmitted) return;
+    if (isCurrentEvaluationSubmitted || isRevealed) return;
     setSelectedOptionKey(optionKey);
     setLocalError(null);
   };
 
-  const handleLocalSubmitAndReveal = () => {
+  const handleReveal = () => {
+    if (!selectedOptionKey || selectedCategories.length === 0) {
+      setLocalError('Please select an option and at least one category to continue.');
+      return;
+    }
+    setLocalError(null);
+    setIsRevealed(true);
+  };
+
+  const handleLocalSubmit = () => {
     setLocalError(null);
     const result = buildEvaluationDraft({
       currentDisplayEntry,
       selectedOptionKey,
-      userRating,
+      agreementRating,
       userComment,
       timeStarted,
       optionAisDPOAccepted,
       selectedCategories,
     });
+
     if (typeof result === 'string') {
       setLocalError(result);
       return;
     }
+
     const currentEntry = dpoEntriesToReview[currentDpoEntryIndex];
     if (!currentEntry) {
       setLocalError('No current entry to submit evaluation for.');
@@ -87,10 +100,12 @@ const EntryReviewStepContent: React.FC = () => {
     });
   };
 
-  const canSubmitLocal: boolean = Boolean(selectedOptionKey && userRating > 0);
-  const userChoseCorrectlyIfRevealed =
-    isCurrentEvaluationSubmitted &&
-    ((selectedOptionKey === 'A' && optionAisDPOAccepted) || (selectedOptionKey === 'B' && !optionAisDPOAccepted));
+  const canReveal: boolean = Boolean(selectedOptionKey && selectedCategories.length > 0 && !isRevealed);
+  const canSubmit: boolean = Boolean(selectedOptionKey && agreementRating > 0 && isRevealed);
+
+  const researcherOptionKey = optionAisDPOAccepted ? 'A' : 'B';
+  const userChoiceMatchesResearcher =
+    (isRevealed || isCurrentEvaluationSubmitted) && selectedOptionKey === researcherOptionKey;
 
   return (
     <EntryReviewStepContentView
@@ -101,23 +116,26 @@ const EntryReviewStepContent: React.FC = () => {
       totalSteps={totalSteps}
       isLoadingEntries={isLoadingEntries}
       isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
+      isRevealed={isRevealed}
       selectedOptionKey={selectedOptionKey}
-      userRating={userRating}
+      agreementRating={agreementRating}
       userComment={userComment}
       selectedCategories={selectedCategories}
       localError={localError}
       contextError={contextError}
       isFlagModalOpen={isFlagModalOpen}
-      canSubmitLocal={canSubmitLocal}
-      userChoseCorrectlyIfRevealed={userChoseCorrectlyIfRevealed}
+      canReveal={canReveal}
+      canSubmit={canSubmit}
+      userChoiceMatchesResearcher={userChoiceMatchesResearcher}
+      researcherOptionKey={researcherOptionKey}
       optionAContent={optionAContent}
       optionBContent={optionBContent}
-      optionAisDPOAccepted={optionAisDPOAccepted}
       handleOptionSelect={handleOptionSelect}
-      setUserRating={setUserRating}
+      setAgreementRating={setAgreementRating}
       setUserComment={setUserComment}
       setSelectedCategories={setSelectedCategories}
-      handleLocalSubmitAndReveal={handleLocalSubmitAndReveal}
+      handleReveal={handleReveal}
+      handleLocalSubmit={handleLocalSubmit}
       setIsFlagModalOpen={setIsFlagModalOpen}
       handleSubmitFlag={handleSubmitFlag}
     />

@@ -94,7 +94,10 @@ export const onNewEvaluationUpdateStats = onDocumentCreated('evaluations/{evalua
       );
 
       const newRatingDistribution = currentResponseAggregates.ratingDistribution || {};
-      newRatingDistribution[evaluationData.rating] = (newRatingDistribution[evaluationData.rating] || 0) + 1;
+      const rating = evaluationData.agreementRating ? Math.round(Number(evaluationData.agreementRating)) : 0;
+      if (!isNaN(rating)) {
+        newRatingDistribution[rating] = (newRatingDistribution[rating] || 0) + 1;
+      }
       let commentSubmissions = currentResponseAggregates.commentSubmissions || 0;
       if (evaluationData.comment && evaluationData.comment.trim() !== '') {
         commentSubmissions += 1;

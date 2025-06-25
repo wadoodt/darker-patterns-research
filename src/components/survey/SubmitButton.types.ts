@@ -1,8 +1,6 @@
 export interface SubmitButtonProps {
-  isCurrentEvaluationSubmitted: boolean;
-  selectedOptionKey: 'A' | 'B' | null;
-  userRating: number;
-  handleLocalSubmitAndReveal: () => void;
-  canSubmitLocal: boolean;
-  isLoadingEntries: boolean;
+  text: string;
+  onClick: () => void;
+  disabled: boolean;
+  isLoading: boolean;
 }

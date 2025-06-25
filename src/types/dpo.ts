@@ -41,6 +41,7 @@ export interface DPOEntry {
   acceptedResponse: string;
   rejectedResponse: string;
   categories: string[];
+  researcherCategories?: string[];
   discussion?: string; // Optional explanation/discussion visible after evaluation
   reviewCount: number;
   targetReviewCount?: number;
@@ -75,7 +76,7 @@ export interface EvaluationData {
   dpoEntryId: string;
   chosenOptionKey: 'A' | 'B';
   wasChosenActuallyAccepted: boolean;
-  rating: number;
+  agreementRating: number;
   categories: string[];
   comment?: string | null;
   timeSpentMs: number;

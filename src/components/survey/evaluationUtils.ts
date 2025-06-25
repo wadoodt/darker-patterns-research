@@ -3,7 +3,7 @@ import type { EvaluationDraft } from '../../types/dpo';
 export function buildEvaluationDraft({
   currentDisplayEntry,
   selectedOptionKey,
-  userRating,
+  agreementRating,
   userComment,
   timeStarted,
   optionAisDPOAccepted,
@@ -11,7 +11,7 @@ export function buildEvaluationDraft({
 }: {
   currentDisplayEntry: { id: string } | null;
   selectedOptionKey: 'A' | 'B' | null;
-  userRating: number;
+  agreementRating: number;
   userComment: string;
   timeStarted: number;
   optionAisDPOAccepted: boolean;
@@ -20,7 +20,7 @@ export function buildEvaluationDraft({
   if (!selectedOptionKey) {
     return 'Please select either Option A or Option B.';
   }
-  if (userRating === 0) {
+  if (agreementRating === 0) {
     return 'Please provide a rating (1-5 stars) for your choice.';
   }
   if (!currentDisplayEntry || !currentDisplayEntry.id) {
@@ -32,7 +32,7 @@ export function buildEvaluationDraft({
   return {
     dpoEntryId: currentDisplayEntry.id,
     chosenOptionKey: selectedOptionKey,
-    rating: userRating,
+    agreementRating: agreementRating,
     comment: userComment.trim(),
     timeSpentMs,
     wasChosenActuallyAccepted,

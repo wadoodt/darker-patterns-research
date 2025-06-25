@@ -32,7 +32,7 @@ export const logNewEvaluationActivity = onDocumentCreated('evaluations/{evaluati
       participantSessionUid: evalData.participantSessionUid,
       dpoEntryId: evalData.dpoEntryId,
       details: {
-        rating: evalData.rating,
+        agreementRating: evalData.agreementRating,
         chosenOptionKey: evalData.chosenOptionKey,
         wasResearcherAgreement: evalData.wasChosenActuallyAccepted,
       },

@@ -24,7 +24,7 @@ export function useAdminEvaluations() {
   const [evaluations, setEvaluations] = useState<DisplayEvaluation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
-  const [filters, setFilters] = useState<AdminEvaluationsFilter>({ showOnlyIncorrect: false });
+  const [filters, setFilters] = useState<AdminEvaluationsFilter>({ showOnlyIncorrect: true });
   const [sort, setSort] = useState<AdminEvaluationsSortConfig>({ key: 'submittedAt', direction: 'desc' });
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [cursors, setCursors] = useState<{ first: QueryDocumentSnapshot | null; last: QueryDocumentSnapshot | null }>({
@@ -53,7 +53,8 @@ export function useAdminEvaluations() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters.showOnlyIncorrect, sort.key, sort.direction]);
 
   const handleFilterChange = (newFilters: Partial<AdminEvaluationsFilter>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));

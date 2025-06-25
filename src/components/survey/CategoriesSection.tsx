@@ -3,20 +3,18 @@
 
 import { HARM_CATEGORIES, type HarmCategory } from '@/lib/harm-categories';
 import React from 'react';
-
-interface CategoriesSectionProps {
-  selectedCategories: string[];
-  setSelectedCategories: (categories: string[]) => void;
-  isCurrentEvaluationSubmitted: boolean;
-}
+import { CategoriesSectionProps } from './CategoriesSection.types';
+import { CheckCircle } from 'lucide-react';
 
 const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   selectedCategories,
   setSelectedCategories,
-  isCurrentEvaluationSubmitted,
+  isUIBlocked,
+  isRevealed,
+  researcherCategories = [],
 }) => {
   const handleCategoryChange = (categoryId: string) => {
-    if (isCurrentEvaluationSubmitted) return;
+    if (isUIBlocked) return;
     const newSelectedCategories = selectedCategories.includes(categoryId)
       ? selectedCategories.filter((id) => id !== categoryId)
       : [...selectedCategories, categoryId];
@@ -30,22 +28,33 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         Select one or more categories that you believe this entry is related to.
       </p>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {HARM_CATEGORIES.map((category: HarmCategory) => (
-          <div key={category.id} className="flex items-start">
-            <input
-              type="checkbox"
-              id={`category-${category.id}`}
-              checked={selectedCategories.includes(category.id)}
-              onChange={() => handleCategoryChange(category.id)}
-              disabled={isCurrentEvaluationSubmitted}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label htmlFor={`category-${category.id}`} className="ml-3 block text-sm text-gray-700">
-              <span className="font-medium">{category.name}</span>
-              <p className="text-xs text-gray-500">{category.description}</p>
-            </label>
-          </div>
-        ))}
+        {HARM_CATEGORIES.map((category: HarmCategory) => {
+          const isResearcherChoice = isRevealed && researcherCategories.includes(category.id);
+          return (
+            <div key={category.id} className="flex items-start">
+              <input
+                type="checkbox"
+                id={`category-${category.id}`}
+                checked={selectedCategories.includes(category.id)}
+                onChange={() => handleCategoryChange(category.id)}
+                disabled={isUIBlocked}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor={`category-${category.id}`} className="ml-3 block text-sm text-gray-700">
+                <span className="flex items-center font-medium">
+                  {category.name}
+                  {isResearcherChoice && (
+                    <span className="ml-2 flex items-center text-xs text-green-600">
+                      <CheckCircle size={14} className="mr-1" />
+                      Researcher
+                    </span>
+                  )}
+                </span>
+                <p className="text-xs text-gray-500">{category.description}</p>
+              </label>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

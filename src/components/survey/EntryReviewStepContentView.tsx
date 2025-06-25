@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import type { DPOEntry } from '@/types/dpo';
+import type { DPOEntry, DPOOption } from '@/types/dpo';
 import type React from 'react';
 import CategoriesSection from './CategoriesSection';
 import CommentsSection from './CommentsSection';
@@ -12,12 +12,6 @@ import RevealSection from './RevealSection';
 import ReviewHeader from './ReviewHeader';
 import SubmitButton from './SubmitButton';
 
-interface Option {
-  key: 'A' | 'B';
-  content: string;
-  isDatasetAccepted: boolean;
-}
-
 interface EntryReviewStepContentViewProps {
   // Data
   currentDisplayEntry: DPOEntry | null;
@@ -27,24 +21,28 @@ interface EntryReviewStepContentViewProps {
   totalSteps: number;
   isLoadingEntries: boolean;
   isCurrentEvaluationSubmitted: boolean;
+  isRevealed: boolean;
   selectedOptionKey: 'A' | 'B' | null;
-  userRating: number;
+  agreementRating: number;
   userComment: string;
   selectedCategories: string[];
   localError: string | null;
   contextError: string | null;
   isFlagModalOpen: boolean;
-  canSubmitLocal: boolean;
-  userChoseCorrectlyIfRevealed: boolean;
+  canReveal: boolean;
+  canSubmit: boolean;
+  userChoiceMatchesResearcher: boolean;
+  researcherOptionKey: 'A' | 'B';
   optionAContent: string;
   optionBContent: string;
-  optionAisDPOAccepted: boolean;
+
   // Handlers
   handleOptionSelect: (optionKey: 'A' | 'B') => void;
-  setUserRating: (rating: number) => void;
+  setAgreementRating: (rating: number) => void;
   setUserComment: (comment: string) => void;
   setSelectedCategories: (categories: string[]) => void;
-  handleLocalSubmitAndReveal: () => void;
+  handleReveal: () => void;
+  handleLocalSubmit: () => void;
   setIsFlagModalOpen: (open: boolean) => void;
   handleSubmitFlag: (reason: string, comment: string) => void;
 }
@@ -70,9 +68,19 @@ const EntryReviewStepContentView: React.FC<EntryReviewStepContentViewProps> = (p
     return <NoEntriesMessage />;
   }
 
-  const options: Option[] = [
-    { key: 'A', content: props.optionAContent, isDatasetAccepted: props.optionAisDPOAccepted },
-    { key: 'B', content: props.optionBContent, isDatasetAccepted: !props.optionAisDPOAccepted },
+  const isUIBlocked = props.isRevealed || props.isCurrentEvaluationSubmitted;
+
+  const options: DPOOption[] = [
+    {
+      key: 'A',
+      content: props.optionAContent,
+      isDatasetAccepted: props.researcherOptionKey === 'A',
+    },
+    {
+      key: 'B',
+      content: props.optionBContent,
+      isDatasetAccepted: props.researcherOptionKey === 'B',
+    },
   ];
 
   return (
@@ -91,49 +99,67 @@ const EntryReviewStepContentView: React.FC<EntryReviewStepContentViewProps> = (p
       <OptionsSection
         options={options}
         selectedOptionKey={props.selectedOptionKey}
-        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
         handleOptionSelect={props.handleOptionSelect}
-        userChoseCorrectlyIfRevealed={props.userChoseCorrectlyIfRevealed}
-      />
-      <RatingSection
-        selectedOptionKey={props.selectedOptionKey}
-        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
-        userRating={props.userRating}
-        setUserRating={props.setUserRating}
+        isUIBlocked={isUIBlocked}
+        isRevealed={props.isRevealed}
+        researcherOptionKey={props.researcherOptionKey}
       />
       <CategoriesSection
         selectedCategories={props.selectedCategories}
         setSelectedCategories={props.setSelectedCategories}
-        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+        isUIBlocked={isUIBlocked}
+        isRevealed={props.isRevealed}
+        researcherCategories={props.currentDisplayEntry.researcherCategories}
       />
-      <CommentsSection
-        selectedOptionKey={props.selectedOptionKey}
-        userRating={props.userRating}
-        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
-        userComment={props.userComment}
-        setUserComment={props.setUserComment}
-      />
+
       <ErrorMessages
         localError={props.localError}
         contextError={props.contextError}
         isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
       />
-      <SubmitButton
-        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
-        selectedOptionKey={props.selectedOptionKey}
-        userRating={props.userRating}
-        handleLocalSubmitAndReveal={props.handleLocalSubmitAndReveal}
-        canSubmitLocal={props.canSubmitLocal}
-        isLoadingEntries={props.isLoadingEntries}
-      />
-      <RevealSection
-        isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
-        currentDisplayEntry={props.currentDisplayEntry}
-        selectedOptionKey={props.selectedOptionKey}
-        userChoseCorrectlyIfRevealed={props.userChoseCorrectlyIfRevealed}
-        dpoEntriesToReview={props.dpoEntriesToReview}
-        currentDpoEntryIndex={props.currentDpoEntryIndex}
-      />
+
+      {!isUIBlocked && (
+        <SubmitButton
+          text="Compare with Researchers"
+          onClick={props.handleReveal}
+          disabled={!props.canReveal || props.isLoadingEntries}
+          isLoading={props.isLoadingEntries}
+        />
+      )}
+
+      {props.isRevealed && (
+        <RevealSection
+          isRevealed={props.isRevealed}
+          isCurrentEvaluationSubmitted={props.isCurrentEvaluationSubmitted}
+          currentDisplayEntry={props.currentDisplayEntry}
+          selectedOptionKey={props.selectedOptionKey}
+          userChoseCorrectlyIfRevealed={props.userChoiceMatchesResearcher}
+          dpoEntriesToReview={props.dpoEntriesToReview}
+          currentDpoEntryIndex={props.currentDpoEntryIndex}
+        />
+      )}
+
+      {props.isRevealed && !props.isCurrentEvaluationSubmitted && (
+        <>
+          <RatingSection
+            agreementRating={props.agreementRating}
+            setAgreementRating={props.setAgreementRating}
+            isUIBlocked={props.isCurrentEvaluationSubmitted}
+          />
+          <CommentsSection
+            userComment={props.userComment}
+            setUserComment={props.setUserComment}
+            isUIBlocked={props.isCurrentEvaluationSubmitted}
+          />
+          <SubmitButton
+            text="Submit Evaluation"
+            onClick={props.handleLocalSubmit}
+            disabled={!props.canSubmit || props.isLoadingEntries}
+            isLoading={props.isLoadingEntries}
+          />
+        </>
+      )}
+
       {props.currentDisplayEntry && (
         <FlagEntryModal
           isOpen={props.isFlagModalOpen}

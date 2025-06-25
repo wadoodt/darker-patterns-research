@@ -34,8 +34,13 @@ export const evaluationsTableColumns: Column<DisplayEvaluation>[] = [
   {
     key: 'chosenOptionKey',
     header: 'Participant Choice',
-    sortable: true,
     renderCell: (item) => item.chosenOptionKey,
+  },
+  {
+    key: 'agreementRating',
+    header: 'Agreement',
+    sortable: true,
+    renderCell: (item) => `${item.agreementRating}/5`,
   },
   {
     key: 'submittedAt',

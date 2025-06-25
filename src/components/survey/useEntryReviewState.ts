@@ -17,11 +17,12 @@ export function useEntryReviewState() {
   const [optionBContent, setOptionBContent] = useState<string>('');
   const [optionAisDPOAccepted, setOptionAisDPOAccepted] = useState<boolean>(false);
   const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(null);
-  const [userRating, setUserRating] = useState<number>(0);
+  const [agreementRating, setAgreementRating] = useState<number>(0);
   const [userComment, setUserComment] = useState<string>('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [timeStarted, setTimeStarted] = useState<number>(0);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [isRevealed, setIsRevealed] = useState<boolean>(false);
 
   useEffect(() => {
     setGlobalError(null);
@@ -33,12 +34,13 @@ export function useEntryReviewState() {
       setOptionBContent(isDatasetAcceptedRandomlyAssignedToA ? entry.rejectedResponse : entry.acceptedResponse);
       setOptionAisDPOAccepted(isDatasetAcceptedRandomlyAssignedToA);
       setSelectedOptionKey(null);
-      setUserRating(0);
+      setAgreementRating(0);
       setUserComment('');
       setSelectedCategories(entry.categories || []);
       setTimeStarted(Date.now());
       resetCurrentEvaluationSubmitted();
       setLocalError(null);
+      setIsRevealed(false);
     } else {
       setHasUnsavedChanges(false);
     }
@@ -47,12 +49,16 @@ export function useEntryReviewState() {
 
   // Effect to signal unsaved changes when form fields change before submission
   useEffect(() => {
-    if (currentDisplayEntry && !isCurrentEvaluationSubmitted && (selectedOptionKey || userRating > 0 || userComment)) {
+    if (
+      currentDisplayEntry &&
+      !isCurrentEvaluationSubmitted &&
+      (selectedOptionKey || agreementRating > 0 || userComment)
+    ) {
       setHasUnsavedChanges(true);
     }
   }, [
     selectedOptionKey,
-    userRating,
+    agreementRating,
     userComment,
     currentDisplayEntry,
     isCurrentEvaluationSubmitted,
@@ -66,8 +72,8 @@ export function useEntryReviewState() {
     optionAisDPOAccepted,
     selectedOptionKey,
     setSelectedOptionKey,
-    userRating,
-    setUserRating,
+    agreementRating,
+    setAgreementRating,
     userComment,
     setUserComment,
     selectedCategories,
@@ -76,5 +82,7 @@ export function useEntryReviewState() {
     setTimeStarted,
     localError,
     setLocalError,
+    isRevealed,
+    setIsRevealed,
   };
 }

@@ -64,7 +64,7 @@ export async function fetchEvaluationsData(mainQuery: Query) {
 
   for (const evaluationDoc of evaluationsSnapshot.docs) {
     const evaluationData = evaluationDoc.data() as EvaluationData;
-    const entryDocRef = doc(db, 'dpoEntries', evaluationData.dpoEntryId);
+    const entryDocRef = doc(db, 'dpo_entries', evaluationData.dpoEntryId);
     const entryDoc = await getDoc(entryDocRef);
     const dpoEntryInstruction = entryDoc.exists() ? (entryDoc.data() as DPOEntry).instruction : 'Unknown Entry';
 
@@ -74,6 +74,7 @@ export async function fetchEvaluationsData(mainQuery: Query) {
       submittedAt: (evaluationData.submittedAt as Timestamp).toDate().toISOString(),
       dpoEntryInstruction,
       isIncorrect: !evaluationData.wasChosenActuallyAccepted,
+      agreementRating: evaluationData.agreementRating,
     });
   }
 

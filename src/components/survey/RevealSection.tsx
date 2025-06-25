@@ -3,6 +3,7 @@ import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { RevealSectionProps } from './RevealSection.types';
 
 export default function RevealSection({
+  isRevealed,
   isCurrentEvaluationSubmitted,
   currentDisplayEntry,
   selectedOptionKey,
@@ -10,7 +11,7 @@ export default function RevealSection({
   dpoEntriesToReview,
   currentDpoEntryIndex,
 }: RevealSectionProps) {
-  if (!isCurrentEvaluationSubmitted || !currentDisplayEntry) return null;
+  if (!isRevealed || !currentDisplayEntry) return null;
   return (
     <section aria-labelledby="reveal-title" className="reveal-section survey-section-card visible mt-2 p-4 sm:p-5">
       <h3 id="reveal-title" className="survey-section-title mb-3 text-center !text-base !font-semibold">
@@ -60,11 +61,13 @@ export default function RevealSection({
             />
           </details>
         </div> */}
-        <p className="mt-4 text-center text-xs text-gray-500">
-          {currentDpoEntryIndex < dpoEntriesToReview.length - 1
-            ? "Click 'Next Entry' below to continue."
-            : "All entries evaluated! Click 'Finish Evaluation' below."}
-        </p>
+        {isCurrentEvaluationSubmitted && (
+          <p className="mt-4 text-center text-xs text-gray-500">
+            {currentDpoEntryIndex < dpoEntriesToReview.length - 1
+              ? "Click 'Next Entry' below to continue."
+              : "All entries evaluated! Click 'Finish Evaluation' below."}
+          </p>
+        )}
       </div>
     </section>
   );
