@@ -78,14 +78,14 @@ async function fetchAndSetSubmissions(
       last: lastDoc,
     });
 
-    const [totalCount, { submissions: fetchedSubmissions, cursors }] = await Promise.all([
+    const [totalCount, { submissions: fetchedSubmissions, first, last }] = await Promise.all([
       fetchSubmissionsCount(countQuery),
       fetchSubmissionsData(mainQuery),
     ]);
     setTotalSubmissionsCount(totalCount);
     setSubmissions(fetchedSubmissions);
-    setFirstDoc(cursors.first);
-    setLastDoc(cursors.last);
+    setFirstDoc(first);
+    setLastDoc(last);
     setCurrentPage(page);
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';

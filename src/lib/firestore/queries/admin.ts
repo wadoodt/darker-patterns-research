@@ -1,6 +1,7 @@
 // src/lib/firestore/queries/admin.ts
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { AdminSubmissionsFilter, AdminSubmissionsSortConfig } from '@/hooks/useAdminSubmissions';
+
 import type { DisplaySubmission } from '@/types/submissions';
 import { db } from '@/lib/firebase';
 import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
@@ -404,13 +405,12 @@ export async function fetchSubmissionsCount(countQuery: Query) {
 }
 
 export async function fetchSubmissionsData(mainQuery: Query) {
-  const querySnapshot = await getDocs(mainQuery);
-  const submissions = querySnapshot.docs.map(transformSubmission);
+  const submissionsSnapshot = await getDocs(mainQuery);
+  const submissions = submissionsSnapshot.docs.map(transformSubmission);
+
   return {
     submissions,
-    cursors: {
-      first: querySnapshot.docs[0] || null,
-      last: querySnapshot.docs[querySnapshot.docs.length - 1] || null,
-    },
+    first: submissionsSnapshot.docs[0] ?? null,
+    last: submissionsSnapshot.docs[submissionsSnapshot.docs.length - 1] ?? null,
   };
 }
