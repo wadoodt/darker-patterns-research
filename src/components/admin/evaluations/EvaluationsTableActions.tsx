@@ -27,7 +27,7 @@ export function EvaluationsTableActions({ evaluation }: EvaluationsTableActionsP
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/admin/entries/${evaluation.dpoEntryId}`} className="common-link-hover">
+          <Link href={`/admin/entries/${evaluation.dpoEntryId}`} className="link-dark">
             <View className="mr-2 h-4 w-4" />
             View DPO Entry
           </Link>

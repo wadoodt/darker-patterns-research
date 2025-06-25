@@ -6,11 +6,7 @@
   @apply rounded-xl border border-[color:var(--color-dark-bg-tertiary)] bg-[color:var(--color-dark-bg-secondary)] p-6 shadow-[var(--shadow-card-dark)];
 }
 
-.common-link-hover {
-  @apply rounded-lg transition-colors duration-200 hover:bg-[color:var(--color-dark-bg-tertiary)] hover:text-[color:var(--color-dark-text-primary)];
-}
-
-.common-link-hover {
+.link-dark {
   @apply rounded-lg transition-colors duration-200 hover:bg-[color:var(--color-dark-bg-tertiary)] hover:text-[color:var(--color-dark-text-primary)];
 }
 

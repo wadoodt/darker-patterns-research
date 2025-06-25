@@ -56,7 +56,7 @@ export function AdminTableView<T, S extends string>({
       <TableBody>
         {data.length > 0 ? (
           data.map((item, index) => (
-            <TableRow key={index} className="common-link-hover">
+            <TableRow key={index} className="link-dark">
               {columns.map((column) => (
                 <TableCell key={column.key}>{column.renderCell(item)}</TableCell>
               ))}
