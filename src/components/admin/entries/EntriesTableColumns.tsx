@@ -1,6 +1,7 @@
 import type { DisplayEntry } from '@/types/entries';
 import type { Column } from '@/types/table';
 import { Archive, Tag } from 'lucide-react';
+import Link from 'next/link';
 import { EntriesTableActions } from './EntriesTableActions';
 
 export const getTableColumns = (onDelete: (entryId: string) => void): Column<DisplayEntry>[] => [
@@ -15,7 +16,12 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
             <Archive className="mr-2 h-4 w-4 text-gray-500" />
           </span>
         )}
-        <span className="font-mono text-xs">{entry.id.substring(0, 12)}...</span>
+        <Link
+          href={`/admin/entries/${entry.id}`}
+          className="text-brand-white-500 hover:text-brand-white-700 cursor-pointer font-mono text-xs transition-colors hover:underline"
+        >
+          {entry.id.substring(0, 12)}...
+        </Link>
       </div>
     ),
   },
@@ -23,9 +29,13 @@ export const getTableColumns = (onDelete: (entryId: string) => void): Column<Dis
     key: 'instruction',
     header: 'Instruction',
     renderCell: (entry: DisplayEntry) => (
-      <span className="block max-w-xs truncate text-sm" title={entry.instruction}>
+      <Link
+        href={`/admin/entries/${entry.id}`}
+        className="text-brand-white-500 hover:text-brand-white-700 block max-w-xs cursor-pointer truncate text-sm transition-colors hover:underline"
+        title={entry.instruction}
+      >
         {entry.instruction}
-      </span>
+      </Link>
     ),
   },
   {
