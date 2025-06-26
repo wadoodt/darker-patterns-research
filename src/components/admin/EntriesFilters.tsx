@@ -60,7 +60,7 @@ const EntriesFilters: React.FC<EntriesFiltersProps> = ({
           value={currentFilters.category || []}
           onChange={handleCategoryChange}
           placeholder="Select categories..."
-          className="bg-dark-bg-secondary border-dark-border text-dark-text-primary w-fit max-w-[650px] min-w-[250px]"
+          className="bg-dark-bg-secondary border-dark-border text-dark-text-primary custom-scrollbar w-fit max-w-[650px] min-w-[250px] overflow-x-auto whitespace-nowrap"
         />
       </div>
     </div>
