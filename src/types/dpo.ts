@@ -17,6 +17,8 @@ export type RecentActivityItem = {
 export type ChartableDemographics = {
   age: { name: string; value: number }[];
   technicalBackground: { name: string; value: number }[];
+  aiFamiliarity: { name: string; value: number }[];
+  education: { name: string; value: number }[];
 };
 
 export type ProjectProgressDataPoint = {

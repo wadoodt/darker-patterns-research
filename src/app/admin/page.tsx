@@ -1,7 +1,7 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import { CheckCircle, Clock, PieChart, Users } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import AdminHeader from '@/components/admin/AdminHeader';
 import DemographicsCharts from '@/components/admin/charts/DemographicsCharts';
@@ -28,8 +28,8 @@ const AdminDashboardPage = async () => {
       </section>
 
       {/* Charts Section */}
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
+      <section>
+        <Card>
           <CardContent className="p-4">
             <h2 className="mb-4 text-xl font-semibold">Project Progress Overview</h2>
             <ProjectProgressChart data={dashboardData.projectProgress} />

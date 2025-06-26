@@ -48,31 +48,33 @@ async function getOverviewStats(firestore: Firestore) {
 
 // Helper function to get demographics
 async function getDemographicsData(firestore: Firestore): Promise<ChartableDemographics> {
-  const participantsCollection = collection(firestore, 'survey_participants');
-  const participantsSnapshot = await getDocs(participantsCollection);
-  const participants = participantsSnapshot.docs.map((doc) => doc.data() as ParticipantSession);
+  const summaryDocRef = doc(firestore, 'cached_statistics', 'demographics_summary');
+  const summaryDocSnap = await getDoc(summaryDocRef);
 
-  const ageDistribution = participants.reduce(
-    (acc, p) => {
-      const ageGroup = p.demographics?.ageGroup || 'Unknown';
-      acc[ageGroup] = (acc[ageGroup] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  if (!summaryDocSnap.exists()) {
+    console.warn('Could not find cached demographics summary. Returning empty data.');
+    return {
+      age: [],
+      technicalBackground: [],
+      aiFamiliarity: [],
+      education: [],
+    };
+  }
 
-  const techBackgroundDistribution = participants.reduce(
-    (acc, p) => {
-      const background = p.demographics?.fieldOfExpertise || 'Unknown';
-      acc[background] = (acc[background] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  const summaryData = summaryDocSnap.data();
+  const ageDistribution = summaryData.ageGroupDistribution || {};
+  const techBackgroundDistribution = summaryData.expertiseDistribution || {};
+  const aiFamiliarityDistribution = summaryData.aiFamiliarityDistribution || {};
+  const educationDistribution = summaryData.educationDistribution || {};
 
   return {
-    age: Object.entries(ageDistribution).map(([name, value]) => ({ name, value })),
-    technicalBackground: Object.entries(techBackgroundDistribution).map(([name, value]) => ({ name, value })),
+    age: Object.entries(ageDistribution).map(([name, value]) => ({ name, value: value as number })),
+    technicalBackground: Object.entries(techBackgroundDistribution).map(([name, value]) => ({
+      name,
+      value: value as number,
+    })),
+    aiFamiliarity: Object.entries(aiFamiliarityDistribution).map(([name, value]) => ({ name, value: value as number })),
+    education: Object.entries(educationDistribution).map(([name, value]) => ({ name, value: value as number })),
   };
 }
 
@@ -147,7 +149,7 @@ export async function getDashboardData(): Promise<DashboardData> {
       entriesCompleted: 0,
       avgTimePerEntry: 'N/A',
       activeParticipants: 0,
-      demographics: { age: [], technicalBackground: [] },
+      demographics: { age: [], technicalBackground: [], aiFamiliarity: [], education: [] },
       recentActivity: [],
       projectProgress: [],
     };
@@ -175,7 +177,7 @@ export async function getDashboardData(): Promise<DashboardData> {
       entriesCompleted: 0,
       avgTimePerEntry: 'N/A',
       activeParticipants: 0,
-      demographics: { age: [], technicalBackground: [] },
+      demographics: { age: [], technicalBackground: [], aiFamiliarity: [], education: [] },
       recentActivity: [],
       projectProgress: [],
     };
