@@ -12,8 +12,8 @@ export interface OverviewStats {
   agreementRate?: number; // Percentage, e.g., 75 for 75%
   totalAnnotatedEntries?: number;
   totalEntriesWithUnresolvedFlags?: number;
-  lastEvaluationAt?: Timestamp;
-  lastUpdatedAt?: Timestamp;
+  lastEvaluationAt?: Timestamp | Date;
+  lastUpdatedAt?: Timestamp | Date;
 }
 
 export interface DemographicsDistribution {
@@ -27,7 +27,7 @@ export interface DemographicsSummary {
   expertiseDistribution?: DemographicsDistribution;
   aiFamiliarityDistribution?: DemographicsDistribution;
   totalParticipantsWithDemographics?: number;
-  lastUpdatedAt?: Timestamp;
+  lastUpdatedAt?: Timestamp | Date;
 }
 
 export interface ResponseAggregates {
@@ -44,7 +44,7 @@ export interface ResponseAggregates {
   overallAnnotationPercent?: number;
   min10ReviewsPercent?: number;
   unresolvedFlagsPercent?: number;
-  lastUpdatedAt?: Timestamp;
+  lastUpdatedAt?: Timestamp | Date;
 }
 
 export interface ProjectProgressTimeseries {
@@ -87,4 +87,5 @@ export interface LandingStats {
   totalAgreementCount?: number;
   totalEvaluationsSubmitted?: number;
   usersWithEmailAddressCount?: number;
+  totalDPOEntries?: number;
 }

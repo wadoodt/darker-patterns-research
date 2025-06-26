@@ -2,13 +2,13 @@
 import type { AdminEntriesFilter, AdminEntriesSortConfig } from '@/hooks/useAdminEntries';
 import type { AdminSubmissionsFilter, AdminSubmissionsSortConfig } from '@/hooks/useAdminSubmissions';
 
-import type { DisplaySubmission } from '@/types/submissions';
 import { db } from '@/lib/firebase';
 import { getMockDashboardData, getMockStatisticsData } from '@/lib/firestore/mocks/admin';
 import { GlobalConfig } from '@/lib/firestore/schemas';
 import type { DPOEntry, DPORevision, EvaluationData, ParticipantFlag } from '@/types/dpo';
 import type { DisplayEntry } from '@/types/entries';
 import type { DemographicsSummary, OverviewStats, ResponseAggregates } from '@/types/stats';
+import type { DisplaySubmission } from '@/types/submissions';
 import {
   collection,
   collectionGroup,
@@ -295,9 +295,9 @@ export async function getStatisticsData() {
   }
 
   try {
-    const overviewRef = doc(db, 'stats_overview', 'global_stats');
-    const responsesRef = doc(db, 'stats_responses', 'global_stats');
-    const demographicsRef = doc(db, 'stats_demographics', 'global_stats');
+    const overviewRef = doc(db, 'cached_statistics', 'overview_stats');
+    const responsesRef = doc(db, 'cached_statistics', 'response_aggregates');
+    const demographicsRef = doc(db, 'cached_statistics', 'demographics_summary');
 
     const [overviewSnap, responsesSnap, demographicsSnap] = await Promise.all([
       getDoc(overviewRef),
@@ -310,9 +310,31 @@ export async function getStatisticsData() {
     const demographicsSummary = demographicsSnap.exists() ? (demographicsSnap.data() as DemographicsSummary) : null;
 
     return {
-      overviewStats,
-      responseAggregates,
-      demographicsSummary,
+      overviewStats: {
+        ...overviewStats,
+        lastEvaluationAt:
+          overviewStats?.lastEvaluationAt instanceof Timestamp
+            ? overviewStats.lastEvaluationAt.toDate()
+            : overviewStats?.lastEvaluationAt,
+        lastUpdatedAt:
+          overviewStats?.lastUpdatedAt instanceof Timestamp
+            ? overviewStats.lastUpdatedAt.toDate()
+            : overviewStats?.lastUpdatedAt,
+      },
+      responseAggregates: {
+        ...responseAggregates,
+        lastUpdatedAt:
+          responseAggregates?.lastUpdatedAt instanceof Timestamp
+            ? responseAggregates.lastUpdatedAt.toDate()
+            : responseAggregates?.lastUpdatedAt,
+      },
+      demographicsSummary: {
+        ...demographicsSummary,
+        lastUpdatedAt:
+          demographicsSummary?.lastUpdatedAt instanceof Timestamp
+            ? demographicsSummary.lastUpdatedAt.toDate()
+            : demographicsSummary?.lastUpdatedAt,
+      },
     };
   } catch (error) {
     console.error('Error fetching statistics data:', error);

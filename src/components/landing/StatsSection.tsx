@@ -41,7 +41,7 @@ const StatsSection = async () => {
     },
     {
       title: 'Fully Reviewed Entries',
-      value: `${statsData?.fullyReviewedEntriesCount ?? 0}/700`,
+      value: `${statsData?.fullyReviewedEntriesCount ?? 0}/${statsData?.totalDPOEntries ?? 0}`,
       icon: <Zap size={24} />,
       changeText: `Updated: ${lastUpdatedDate.toLocaleDateString()}`,
     },

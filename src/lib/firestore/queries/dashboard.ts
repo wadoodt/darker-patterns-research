@@ -4,7 +4,6 @@ import type {
   DashboardData,
   EvaluationData,
   ParticipantFlag,
-  ParticipantSession,
   ProjectProgressDataPoint,
   RecentActivityItem,
 } from '@/types/dpo';
@@ -73,7 +72,10 @@ async function getDemographicsData(firestore: Firestore): Promise<ChartableDemog
       name,
       value: value as number,
     })),
-    aiFamiliarity: Object.entries(aiFamiliarityDistribution).map(([name, value]) => ({ name, value: value as number })),
+    aiFamiliarity: Object.entries(aiFamiliarityDistribution).map(([name, value]) => ({
+      name: name.split(' (')[0],
+      value: value as number,
+    })),
     education: Object.entries(educationDistribution).map(([name, value]) => ({ name, value: value as number })),
   };
 }
@@ -104,15 +106,16 @@ async function getRecentActivity(firestore: Firestore): Promise<RecentActivityIt
     return {
       id: doc.id,
       type: 'flag',
-      description: `A participant was flagged. Reason: ${data.reason}`,
+      description: `Entry ${data.dpoEntryId} was flagged. Reason: ${data.reason}`,
       timestamp: (data.flaggedAt as Timestamp).toDate(),
+      href: `/admin/entries/${data.dpoEntryId}`,
     };
   });
 
   const combined = [...evaluationActivities, ...flagActivities].sort(
     (a, b) => b.timestamp.getTime() - a.timestamp.getTime(),
   );
-  return combined.slice(0, 5);
+  return combined.slice(0, 7);
 }
 
 // Helper function to get project progress

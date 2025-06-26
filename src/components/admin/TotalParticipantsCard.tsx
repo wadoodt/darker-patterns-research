@@ -2,10 +2,11 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Timestamp } from 'firebase/firestore';
 
 interface TotalParticipantsCardProps {
   total: number;
-  lastUpdatedAt?: { seconds: number };
+  lastUpdatedAt?: Timestamp | Date;
 }
 
 export function TotalParticipantsCard({ total, lastUpdatedAt }: TotalParticipantsCardProps) {
@@ -20,7 +21,10 @@ export function TotalParticipantsCard({ total, lastUpdatedAt }: TotalParticipant
         <p className="text-dark-text-primary text-3xl font-bold">{total?.toLocaleString() || 'N/A'}</p>
         {lastUpdatedAt && (
           <p className="text-dark-text-tertiary mt-1 text-xs">
-            Last updated: {new Date(lastUpdatedAt.seconds * 1000).toLocaleDateString()}
+            Last updated:{' '}
+            {lastUpdatedAt instanceof Timestamp
+              ? lastUpdatedAt.toDate().toLocaleDateString()
+              : new Date(lastUpdatedAt).toLocaleDateString()}
           </p>
         )}
       </CardContent>
