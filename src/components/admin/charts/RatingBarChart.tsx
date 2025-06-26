@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import type { ChartConfig } from '@/types/charts';
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import type { BarChartData } from '@/types/charts';
 
@@ -56,7 +56,7 @@ export function RatingBarChart({ data, chartConfig }: RatingBarChartProps) {
                 cursor={{ fill: 'hsl(var(--muted) / 0.3)' }}
                 content={<ChartTooltipContent labelClassName="text-sm" indicator="dot" />}
               />
-              <Bar dataKey="count" name="Submissions" radius={[4, 4, 0, 0]}>
+              <Bar dataKey="count" name="Submissions" radius={[4, 4, 0, 0]} fill="#82ca9d">
                 {data.map((entry) => (
                   <Cell
                     key={`cell-${entry.name}`}

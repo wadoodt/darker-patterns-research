@@ -9,7 +9,7 @@ interface DemographicsChartsProps {
 
 const DemographicsCharts = ({ data }: DemographicsChartsProps) => {
   return (
-    <div className="space-y-8">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
       <div>
         <h3 className="mb-4 text-lg font-semibold">Age Distribution</h3>
         <ResponsiveContainer width="100%" height={200}>

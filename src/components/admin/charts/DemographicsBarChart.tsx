@@ -71,6 +71,7 @@ export function DemographicsBarChart({
             dataKey={barDataKey}
             radius={layout === 'vertical' ? [0, 4, 4, 0] : [4, 4, 0, 0]}
             barSize={layout === 'vertical' ? undefined : 20}
+            fill="#82ca9d"
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill as string} name={String(entry[dataKey])} />

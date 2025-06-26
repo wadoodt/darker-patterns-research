@@ -7,11 +7,12 @@ interface ContentCardProps {
   children: React.ReactNode;
   className?: string;
   colSpan?: number;
+  id?: string;
 }
 
-export function ContentCard({ title, description, children, className, colSpan = 1 }: ContentCardProps) {
+export function ContentCard({ title, description, children, className, colSpan = 1, id }: ContentCardProps) {
   return (
-    <Card className={cn('shadow-lg', className, colSpan && colSpan > 1 ? `lg:col-span-${colSpan}` : '')}>
+    <Card id={id} className={cn('shadow-lg', className, colSpan && colSpan > 1 ? `lg:col-span-${colSpan}` : '')}>
       <CardHeader>
         <CardTitle className="font-headline">{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}

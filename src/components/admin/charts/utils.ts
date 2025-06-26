@@ -1,9 +1,8 @@
 // src/components/admin/charts/utils.ts
 'use client';
 
-import { ChartDataItem } from '@/types/charts';
+import { chartColors, ChartDataItem, type ChartConfig } from '@/types/charts';
 import { DemographicsDistribution } from '@/types/stats';
-import { chartColors, type ChartConfig } from '@/types/charts';
 
 export function transformDistributionData(
   distribution: DemographicsDistribution | undefined,
@@ -22,7 +21,7 @@ export function transformDistributionData(
 
 export function createChartConfig(data: ChartDataItem[], nameField: string) {
   const config: { [key: string]: { label: string; color?: string } } = {
-    count: { label: 'Participants' },
+    count: { label: 'Participants', color: '#82ca9d' },
   };
   data.forEach((item) => {
     const key = item[nameField];

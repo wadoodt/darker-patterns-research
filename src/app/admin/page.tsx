@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import AdminHeader from '@/components/admin/AdminHeader';
 import DemographicsCharts from '@/components/admin/charts/DemographicsCharts';
-import ProjectProgressChart from '@/components/admin/charts/ProjectProgressChart';
+
 import StatCardAdmin from '@/components/admin/StatCardAdmin';
 import { Card, CardContent } from '@/components/ui/card';
 import { getDashboardData } from '@/lib/firestore/queries/dashboard';
@@ -31,13 +31,15 @@ const AdminDashboardPage = async () => {
       <section>
         <Card>
           <CardContent className="p-4">
-            <h2 className="mb-4 text-xl font-semibold">Project Progress Overview</h2>
-            <ProjectProgressChart data={dashboardData.projectProgress} />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <h2 className="mb-4 text-xl font-semibold">Participant Demographics</h2>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Participant Demographics</h2>
+              <Link
+                href="/admin/statistics#demographics"
+                className="text-brand-purple-400 text-sm font-medium hover:underline"
+              >
+                View All
+              </Link>
+            </div>
             <DemographicsCharts data={dashboardData.demographics} />
           </CardContent>
         </Card>

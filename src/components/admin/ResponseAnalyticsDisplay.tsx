@@ -26,33 +26,11 @@ export default function ResponseAnalyticsDisplay({ overviewStats, responseAggreg
   const agreementRate = overviewStats?.agreementRate;
   const commentRate = responseAggregates?.commentSubmissionRatePercent;
 
-  const agreementChartData = createPieChartData(
-    agreementRate,
-    'Agreed',
-    'Disagreed',
-    'hsl(var(--chart-1))',
-    'hsl(var(--chart-3))',
-  );
-  const agreementChartConfig = createPieChartConfig(
-    'Agreed',
-    'Disagreed',
-    'hsl(var(--chart-1))',
-    'hsl(var(--chart-3))',
-  );
+  const agreementChartData = createPieChartData(agreementRate, 'Agreed', 'Disagreed', '#82ca9d', '#ff8042');
+  const agreementChartConfig = createPieChartConfig('Agreed', 'Disagreed', '#82ca9d', '#ff8042');
 
-  const commentChartData = createPieChartData(
-    commentRate,
-    'With Comment',
-    'No Comment',
-    'hsl(var(--chart-2))',
-    'hsl(var(--chart-4))',
-  );
-  const commentChartConfig = createPieChartConfig(
-    'With Comment',
-    'No Comment',
-    'hsl(var(--chart-2))',
-    'hsl(var(--chart-4))',
-  );
+  const commentChartData = createPieChartData(commentRate, 'With Comment', 'No Comment', '#82ca9d', '#ff8042');
+  const commentChartConfig = createPieChartConfig('With Comment', 'No Comment', '#82ca9d', '#ff8042');
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
