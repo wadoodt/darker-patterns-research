@@ -28,16 +28,16 @@ export function EntriesTableActions({ entry, onDelete }: EntriesTableActionsProp
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild className="cursor-pointer hover:bg-gray-100 hover:text-black">
-          <Link href={`/admin/entries/${entry.id}`} className="flex items-center">
+      <DropdownMenuContent align="end" className="w-45 bg-[color:var(--color-dark-bg-secondary)]">
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href={`/admin/entries/${entry.id}`} className="admin-sidebar-navlink flex items-center">
             <Eye className="mr-2 h-4 w-4" />
             View Details
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => onDelete(entry.id)}
-          className="cursor-pointer text-red-600 hover:bg-gray-100 focus:text-red-600"
+          className="admin-sidebar-navlink cursor-pointer hover:!bg-red-900 hover:!text-red-300"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete Entry

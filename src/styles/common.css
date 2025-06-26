@@ -40,3 +40,20 @@
 .light-footer-text {
   @apply mt-2 text-xs leading-5 text-gray-500;
 }
+.custom-scrollbar::-webkit-scrollbar {
+  height: 5px;
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
