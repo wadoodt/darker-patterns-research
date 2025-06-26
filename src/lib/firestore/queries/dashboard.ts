@@ -1,36 +1,48 @@
-import { collection, getDocs, query, orderBy, limit, Timestamp, where, Firestore } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type {
+  ChartableDemographics,
   DashboardData,
   EvaluationData,
   ParticipantFlag,
-  RecentActivityItem,
-  ChartableDemographics,
   ParticipantSession,
   ProjectProgressDataPoint,
+  RecentActivityItem,
 } from '@/types/dpo';
+import { collection, doc, Firestore, getDoc, getDocs, limit, orderBy, query, Timestamp } from 'firebase/firestore';
+
+// Helper function to format milliseconds into a readable string 'Xm Ys'
+function formatMilliseconds(ms: number): string {
+  if (ms < 0) {
+    return '0m 0s';
+  }
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}m ${seconds}s`;
+}
 
 // Helper function to get overview stats
 async function getOverviewStats(firestore: Firestore) {
-  const entriesCollection = collection(firestore, 'dpo_entries');
-  const participantsCollection = collection(firestore, 'survey_participants');
+  const statsDocRef = doc(firestore, 'cached_statistics', 'overview_stats');
+  const statsDocSnap = await getDoc(statsDocRef);
 
-  const entriesQuery = query(entriesCollection, where('isArchived', '!=', true));
-  const completedEntriesQuery = query(entriesCollection, where('reviewCount', '>=', 5));
-  const participantsQuery = query(participantsCollection, where('surveyCompletedAt', '!=', null));
+  if (!statsDocSnap.exists()) {
+    console.warn('Could not find cached overview stats. Returning default values.');
+    return {
+      totalEntries: 0,
+      entriesCompleted: 0,
+      activeParticipants: 0,
+      avgTimePerEntry: '0m 0s',
+    };
+  }
 
-  const [entriesSnapshot, completedEntriesSnapshot, participantsSnapshot] = await Promise.all([
-    getDocs(entriesQuery),
-    getDocs(completedEntriesQuery),
-    getDocs(participantsQuery),
-  ]);
+  const statsData = statsDocSnap.data();
 
-  // Simplified avgTimePerEntry for now
   return {
-    totalEntries: entriesSnapshot.size,
-    entriesCompleted: completedEntriesSnapshot.size,
-    activeParticipants: participantsSnapshot.size,
-    avgTimePerEntry: '5m 30s',
+    totalEntries: statsData.totalDPOEntries || 0,
+    entriesCompleted: statsData.fullyReviewedEntriesCount || 0,
+    activeParticipants: statsData.totalEvaluationsSubmitted || 0,
+    avgTimePerEntry: formatMilliseconds(statsData.averageTimePerEvaluationMs || 0),
   };
 }
 

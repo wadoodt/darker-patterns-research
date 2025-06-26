@@ -51,6 +51,8 @@ export const deleteDpoEntry = onCall(async (request) => {
       transaction.delete(entryRef);
 
       // 3. Update Statistics
+      const overviewStatsRef = db.doc('cached_statistics/overview_stats');
+      transaction.set(overviewStatsRef, { totalDPOEntries: admin.firestore.FieldValue.increment(-1) }, { merge: true });
 
       // 4. Logging
       const logRef = db.collection('activity_logs').doc();

@@ -7,12 +7,18 @@ export const addDPOEntry = async (entry: Omit<DPOEntry, 'id'>) => {
     throw new Error('Firestore is not initialized');
   }
 
+  const overviewStatsRef = doc(db, 'cached_statistics', 'overview_stats');
+
   try {
     const docRef = await addDoc(collection(db, 'dpo_entries'), {
       ...entry,
       isArchived: false,
       createdAt: serverTimestamp(),
     });
+
+    // Increment the total DPO entries count
+    await updateDoc(overviewStatsRef, { totalDPOEntries: increment(1) });
+
     return docRef.id;
   } catch (error) {
     console.error('Error adding DPO entry: ', error);
@@ -173,12 +179,25 @@ export const deleteDpoEntry = async (entryId: string): Promise<{ success: boolea
   }
 
   const entryRef = doc(db, 'dpo_entries', entryId);
+  const overviewStatsRef = doc(db, 'cached_statistics', 'overview_stats');
 
   try {
-    await updateDoc(entryRef, {
-      isArchived: true,
-      archivedAt: serverTimestamp(),
+    await runTransaction(db, async (transaction) => {
+      const entryDoc = await transaction.get(entryRef);
+      if (!entryDoc.exists() || entryDoc.data().isArchived) {
+        // To prevent decrementing twice if the function is called on an already archived entry.
+        return;
+      }
+
+      transaction.update(entryRef, {
+        isArchived: true,
+        archivedAt: serverTimestamp(),
+      });
+
+      // Decrement the total DPO entries count
+      transaction.update(overviewStatsRef, { totalDPOEntries: increment(-1) });
     });
+
     return { success: true, message: 'Entry archived successfully.' };
   } catch (error) {
     console.error('Error archiving DPO entry:', error);

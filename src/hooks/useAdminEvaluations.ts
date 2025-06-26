@@ -40,19 +40,6 @@ export function useAdminEvaluations() {
         const [data, count] = await Promise.all([fetchEvaluationsData(mainQuery), fetchEvaluationsCount(countQuery)]);
 
         setEvaluations(data.evaluations);
-        console.log(
-          'Evaluations:',
-          data.evaluations
-            .filter((e): e is typeof e & { id: string } => !!e.id)
-            .map((e) => ({
-              id: e.id,
-              agreementRating: e.agreementRating,
-              comment: e.comment,
-              categories: e.categories,
-              chosenOptionKey: e.chosenOptionKey,
-              wasChosenActuallyAccepted: e.wasChosenActuallyAccepted,
-            })),
-        );
         setCursors({ first: data.first, last: data.last });
         setTotalCount(count);
       } catch (error) {

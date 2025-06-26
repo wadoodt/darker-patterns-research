@@ -45,6 +45,7 @@ export const ingestDpoDataset = onCall(async (request) => {
   const batch = db.batch();
   const dpoEntriesRef = db.collection('dpo_entries');
   const adminSettingsRef = db.doc('admin_settings/global_config');
+  const overviewStatsRef = db.doc('cached_statistics/overview_stats');
 
   try {
     const adminSettingsDoc = await adminSettingsRef.get();
@@ -66,7 +67,13 @@ export const ingestDpoDataset = onCall(async (request) => {
 
     await batch.commit();
 
-    // 4. Feedback
+    // 4. Update Statistics
+    await overviewStatsRef.set(
+      { totalDPOEntries: admin.firestore.FieldValue.increment(entries.length) },
+      { merge: true },
+    );
+
+    // 5. Feedback
     return { success: true, message: `Successfully ingested ${entries.length} DPO entries.` };
   } catch (error) {
     functions.logger.error('Error ingesting DPO dataset:', error);
