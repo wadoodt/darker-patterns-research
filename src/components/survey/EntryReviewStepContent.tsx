@@ -43,19 +43,23 @@ const EntryReviewStepContent: React.FC = () => {
     setIsRevealed,
   } = useEntryReviewState();
 
+  // add a flag so tour only ever runs once
+  const [tourHasRun, setTourHasRun] = useState(false);
+
   const { startTour } = useSurveyTour();
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
 
-  // Start tour when first entry loads
+  // Start tour when first entry loads (only once)
   useEffect(() => {
-    if (currentDisplayEntry && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted) {
+    if (currentDisplayEntry && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted && !tourHasRun) {
       // Small delay to ensure DOM is ready
       const timer = setTimeout(() => {
         startTour();
+        setTourHasRun(true);
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, startTour]);
+  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, startTour, tourHasRun]);
 
   const handleOptionSelect = (optionKey: 'A' | 'B') => {
     if (isCurrentEvaluationSubmitted || isRevealed) return;
