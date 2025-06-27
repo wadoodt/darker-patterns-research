@@ -22,9 +22,9 @@ const DemographicsForm = ({
   contextError,
 }: DemographicsFormProps) => {
   return (
-    <div className="survey-page-container max-w-xl">
+    <div className="survey-page-container max-w-6xl">
       <DemographicsHeader currentStepNumber={currentStepNumber} totalSteps={totalSteps} />
-      <p className="font-body-academic text-light-text-secondary mb-8 text-sm leading-relaxed sm:mb-10 sm:text-base">
+      <p className="font-body-academic text-light-text-secondary mb-8 max-w-4xl text-sm leading-relaxed sm:mb-10 sm:text-base">
         This information is used for research analysis only and will be kept confidential. All fields are required
         unless marked optional.
       </p>

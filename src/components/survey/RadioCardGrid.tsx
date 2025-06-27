@@ -18,6 +18,7 @@ interface RadioCardGridProps {
   hasOtherOption?: boolean;
   otherValue?: string;
   otherPlaceholder?: string;
+  compact?: boolean;
 }
 
 const RadioCardGrid = ({
@@ -32,6 +33,7 @@ const RadioCardGrid = ({
   hasOtherOption = false,
   otherValue = '',
   otherPlaceholder = 'Please specify',
+  compact = false,
 }: RadioCardGridProps) => {
   const handleOtherInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const otherFieldName =
@@ -58,6 +60,21 @@ const RadioCardGrid = ({
     ((name === 'gender' && value === 'Prefer to self-describe') ||
       ((name === 'educationLevel' || name === 'fieldOfExpertise') && value === 'Other'));
 
+  // Dynamic grid classes based on number of options and compact mode
+  const getGridClasses = () => {
+    if (compact) {
+      // For compact mode (age group, gender), use fewer columns
+      return 'grid grid-cols-1 sm:grid-cols-2 gap-3';
+    } else {
+      // For full-width sections with many options, use more columns
+      if (options.length <= 6) {
+        return 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3';
+      } else {
+        return 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3';
+      }
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -68,15 +85,15 @@ const RadioCardGrid = ({
         </label>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={getGridClasses()}>
         {options.map((option) => (
           <label
             key={option.value}
-            className={`relative flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
+            className={`relative flex cursor-pointer items-center rounded-lg border p-3 transition-all ${
               value === option.value
                 ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500'
                 : 'border-gray-300 bg-white hover:border-gray-400'
-            } ${disabled ? 'cursor-not-allowed opacity-50' : ''} `}
+            } ${disabled ? 'cursor-not-allowed opacity-50' : ''} ${compact ? 'min-h-[3rem]' : 'min-h-[3.5rem]'} `}
           >
             <input
               type="radio"
@@ -94,7 +111,9 @@ const RadioCardGrid = ({
             >
               {value === option.value && <div className="m-0.5 h-2 w-2 rounded-full bg-white" />}
             </div>
-            <span className={`text-sm ${value === option.value ? 'font-medium text-blue-900' : 'text-gray-700'}`}>
+            <span
+              className={`text-sm leading-tight ${value === option.value ? 'font-medium text-blue-900' : 'text-gray-700'}`}
+            >
               {option.label}
             </span>
           </label>
