@@ -1,8 +1,9 @@
 /* eslint-disable max-lines-per-function */
 // components/survey/EntryReviewStepContent.tsx
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
+import { useSurveyTour } from '../../hooks/useSurveyTour';
 import EntryReviewStepContentView from './EntryReviewStepContentView';
 import { buildEvaluationDraft } from './evaluationUtils';
 import { submitFlagForEntry } from './flagUtils';
@@ -42,7 +43,19 @@ const EntryReviewStepContent: React.FC = () => {
     setIsRevealed,
   } = useEntryReviewState();
 
+  const { startTour } = useSurveyTour();
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
+
+  // Start tour when first entry loads
+  useEffect(() => {
+    if (currentDisplayEntry && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(() => {
+        startTour();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, startTour]);
 
   const handleOptionSelect = (optionKey: 'A' | 'B') => {
     if (isCurrentEvaluationSubmitted || isRevealed) return;

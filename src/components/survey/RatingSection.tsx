@@ -33,9 +33,9 @@ export default function RatingSection({ agreementRating, setAgreementRating, isU
   };
 
   return (
-    <section aria-labelledby="rating-title" className="survey-section-card mb-5 p-4" data-tour="rating-section">
+    <section aria-labelledby="rating-title" className="survey-section-card mb-5 p-4" data-tour="rating">
       <h3 id="rating-title" className="survey-section-title mb-2.5 text-center !text-base !font-semibold">
-        How strongly do you agree with the researcher's option & categories? (1 = disagree, 5 = agree)
+        How strongly do you agree with the researcher&apos;s option &amp; categories? (1 = disagree, 5 = agree)
       </h3>
       <div className="star-rating-container">
         {[1, 2, 3, 4, 5].map((starValue) => (

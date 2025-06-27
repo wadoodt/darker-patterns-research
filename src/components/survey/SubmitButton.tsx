@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { SubmitButtonProps } from './SubmitButton.types';
 
-export default function SubmitButton({ text, onClick, disabled, isLoading }: SubmitButtonProps) {
+export default function SubmitButton({ text, onClick, disabled, isLoading, dataTour }: SubmitButtonProps) {
   return (
-    <div className="mt-1 mb-5 text-center">
+    <div className="mt-1 mb-5 text-center" data-tour={dataTour}>
       <Button
         onClick={onClick}
         disabled={disabled || isLoading}

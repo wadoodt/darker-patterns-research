@@ -21,6 +21,7 @@ export default function InstructionCard({
           title="Flag this entry for review"
           className="h-auto px-2 py-1 text-xs text-gray-500 hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
           disabled={isCurrentEvaluationSubmitted}
+          data-tour="flag-button"
         >
           <Flag size={12} className="mr-1" /> Flag Entry
         </Button>

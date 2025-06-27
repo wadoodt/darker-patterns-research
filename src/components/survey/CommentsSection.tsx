@@ -4,7 +4,7 @@ import { CommentsSectionProps } from './CommentsSection.types';
 
 export default function CommentsSection({ userComment, setUserComment, isUIBlocked }: CommentsSectionProps) {
   return (
-    <section aria-labelledby="comments-title" className="survey-section-card mb-5 p-4">
+    <section aria-labelledby="comments-title" className="survey-section-card mb-5 p-4" data-tour="comments">
       <h3 id="comments-title" className="survey-section-title mb-2 flex items-center !text-base !font-semibold">
         <MessageSquare size={18} className="text-brand-purple-600 mr-1.5" />
         Optional Comments
