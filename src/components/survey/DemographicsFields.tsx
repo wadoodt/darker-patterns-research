@@ -8,8 +8,7 @@ import {
   genderOptions,
 } from '../../lib/survey/demographicsOptions';
 import type { DemographicData } from '../../types/dpo';
-import RadioWithOther from './RadioWithOther';
-import SimpleRadioGroup from './SimpleRadioGroup';
+import RadioCardGrid from './RadioCardGrid';
 
 interface DemographicsFieldsProps {
   formData: DemographicData;
@@ -19,60 +18,69 @@ interface DemographicsFieldsProps {
 
 const DemographicsFields = ({ formData, onChange, isLoadingEntries }: DemographicsFieldsProps) => {
   return (
-    <form id="demographicsFormInternal" className="space-y-7 sm:space-y-8">
-      <SimpleRadioGroup
-        options={ageGroupOptions}
+    <form id="demographicsFormInternal" className="space-y-8">
+      <RadioCardGrid
+        options={ageGroupOptions.map((option) => ({ value: option, label: `${option} years old` }))}
         name="ageGroup"
         value={formData.ageGroup || ''}
         onChange={onChange}
         icon={TrendingUp}
-        label="Age Group:"
+        label="Age Group"
         disabled={isLoadingEntries}
+        required
       />
 
-      <RadioWithOther
-        options={genderOptions}
+      <RadioCardGrid
+        options={genderOptions.map((option) => ({ value: option, label: option }))}
         name="gender"
         value={formData.gender || ''}
-        otherValue={formData.genderOther || ''}
         onChange={onChange}
         icon={GenderIcon}
-        label="Gender:"
+        label="Gender"
         disabled={isLoadingEntries}
-        otherInputPlaceholder="Please specify your gender"
+        required
+        hasOtherOption
+        otherValue={formData.genderOther || ''}
+        otherPlaceholder="Please specify your gender"
       />
 
-      <RadioWithOther
-        options={educationOptions}
+      <RadioCardGrid
+        options={educationOptions.map((option) => ({ value: option, label: option }))}
         name="educationLevel"
         value={formData.educationLevel || ''}
-        otherValue={formData.educationOther || ''}
         onChange={onChange}
         icon={BookOpen}
-        label="Highest Education Level Attained:"
+        label="Highest Education Level Attained"
         disabled={isLoadingEntries}
+        required
+        hasOtherOption
+        otherValue={formData.educationOther || ''}
+        otherPlaceholder="Please specify your education level"
       />
 
-      <RadioWithOther
-        options={expertiseOptions}
+      <RadioCardGrid
+        options={expertiseOptions.map((option) => ({ value: option, label: option }))}
         name="fieldOfExpertise"
         value={formData.fieldOfExpertise || ''}
-        otherValue={formData.expertiseOther || ''}
         onChange={onChange}
         icon={Cpu}
-        label="Primary Field of Expertise / Occupation:"
+        label="Primary Field of Expertise / Occupation"
         disabled={isLoadingEntries}
-        otherInputPlaceholder="Please specify field or role"
+        required
+        hasOtherOption
+        otherValue={formData.expertiseOther || ''}
+        otherPlaceholder="Please specify field or role"
       />
 
-      <SimpleRadioGroup
-        options={aiFamiliarityOptions}
+      <RadioCardGrid
+        options={aiFamiliarityOptions.map((option) => ({ value: option, label: option }))}
         name="aiFamiliarity"
         value={formData.aiFamiliarity || ''}
         onChange={onChange}
         icon={Brain}
-        label="Level of Familiarity with AI/LLMs (e.g., ChatGPT, Gemini, Copilot):"
+        label="Level of Familiarity with AI/LLMs (e.g., ChatGPT, Gemini, Copilot)"
         disabled={isLoadingEntries}
+        required
       />
     </form>
   );
