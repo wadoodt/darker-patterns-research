@@ -152,6 +152,9 @@
   @apply text-brand-purple-700 border-brand-purple-300 hover:bg-brand-purple-50 border bg-white;
 }
 
-/* .driver-popover-next-btn {
-  @apply text-brand-purple-700;
-} */
+.driver-popover-next-btn {
+  @apply !bg-brand-purple-500 hover:!bg-brand-purple-600 !border-brand-purple-500 !rounded-md !px-4 !py-2 !text-sm !font-medium !text-white;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
