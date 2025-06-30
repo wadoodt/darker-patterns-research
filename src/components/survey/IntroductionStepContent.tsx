@@ -26,10 +26,16 @@ const IntroductionStepContent = () => {
     selectedOption === 'anonymous' ? contextTermsAgreed : false,
   );
 
+  // Card-specific error states
+  const [emailCardError, setEmailCardError] = useState<string | null>(null);
+  const [anonymousCardError, setAnonymousCardError] = useState<string | null>(null);
+
   // Validation function to check if we can proceed - enhanced for better method switching
   const validateCurrentState = useCallback(() => {
-    // Always clear error first to start fresh
+    // Always clear errors first to start fresh
     setGlobalError(null);
+    setEmailCardError(null);
+    setAnonymousCardError(null);
 
     if (!selectedOption) {
       setGlobalError('Please select a participation method.');
@@ -41,18 +47,18 @@ const IntroductionStepContent = () => {
     // For email participation, check email validity first
     if (selectedOption === 'email') {
       if (!localEmail.trim()) {
-        setGlobalError('Please enter your email address.');
+        setEmailCardError('Please enter your email address to continue.');
         return false;
       }
 
       const emailError = validateEmail(localEmail);
       if (emailError) {
-        setGlobalError(emailError);
+        setEmailCardError(emailError);
         return false;
       }
 
       if (!currentTermsAgreed) {
-        setGlobalError('Please agree to the terms and privacy policy.');
+        setEmailCardError('Must agree to the terms and privacy policy to proceed.');
         return false;
       }
     }
@@ -60,7 +66,7 @@ const IntroductionStepContent = () => {
     // For anonymous participation, only check terms agreement
     if (selectedOption === 'anonymous') {
       if (!currentTermsAgreed) {
-        setGlobalError('Please agree to the terms and privacy policy.');
+        setAnonymousCardError('Must agree to the terms and privacy policy to proceed.');
         return false;
       }
     }
@@ -84,7 +90,15 @@ const IntroductionStepContent = () => {
     }
 
     return true;
-  }, [selectedOption, localEmail, agreedToTermsEmail, agreedToTermsAnonymous, setGlobalError]);
+  }, [
+    selectedOption,
+    localEmail,
+    agreedToTermsEmail,
+    agreedToTermsAnonymous,
+    setGlobalError,
+    setEmailCardError,
+    setAnonymousCardError,
+  ]);
 
   return useIntroductionStepLogic({
     selectedOption,
@@ -102,6 +116,10 @@ const IntroductionStepContent = () => {
     setHasUnsavedChanges,
     setParticipationDetails,
     validateCurrentState,
+    emailCardError,
+    setEmailCardError,
+    anonymousCardError,
+    setAnonymousCardError,
   });
 };
 
@@ -122,6 +140,10 @@ function useIntroductionStepLogic({
   setHasUnsavedChanges,
   setParticipationDetails,
   validateCurrentState,
+  emailCardError,
+  setEmailCardError,
+  anonymousCardError,
+  setAnonymousCardError,
 }: {
   selectedOption: 'email' | 'anonymous' | null;
   setSelectedOption: (option: 'email' | 'anonymous') => void;
@@ -138,6 +160,10 @@ function useIntroductionStepLogic({
   setHasUnsavedChanges: (hasChanges: boolean) => void;
   setParticipationDetails: (details: { type: 'email' | 'anonymous'; email?: string; termsAgreed: boolean }) => void;
   validateCurrentState: () => boolean;
+  emailCardError: string | null;
+  setEmailCardError: (error: string | null) => void;
+  anonymousCardError: string | null;
+  setAnonymousCardError: (error: string | null) => void;
 }) {
   // Effect to mark unsaved changes and validate
   useEffect(() => {
@@ -179,6 +205,8 @@ function useIntroductionStepLogic({
     setAgreedToTermsAnonymous,
     setGlobalError,
     setParticipationDetails,
+    setEmailCardError,
+    setAnonymousCardError,
   });
 
   return (
@@ -190,6 +218,8 @@ function useIntroductionStepLogic({
       agreedToTermsEmail={agreedToTermsEmail}
       agreedToTermsAnonymous={agreedToTermsAnonymous}
       contextError={contextError}
+      emailCardError={emailCardError}
+      anonymousCardError={anonymousCardError}
       onOptionSelect={handlers.handleOptionSelect}
       onTermsChange={handlers.handleTermsChange}
       onEmailChange={handlers.handleEmailChange}
@@ -207,6 +237,8 @@ function useIntroductionHandlers({
   setAgreedToTermsAnonymous,
   setGlobalError,
   setParticipationDetails,
+  setEmailCardError,
+  setAnonymousCardError,
 }: {
   selectedOption: 'email' | 'anonymous' | null;
   setSelectedOption: (option: 'email' | 'anonymous') => void;
@@ -216,14 +248,19 @@ function useIntroductionHandlers({
   setAgreedToTermsAnonymous: (agreed: boolean) => void;
   setGlobalError: (error: string | null) => void;
   setParticipationDetails: (details: { type: 'email' | 'anonymous'; email?: string; termsAgreed: boolean }) => void;
+  setEmailCardError: (error: string | null) => void;
+  setAnonymousCardError: (error: string | null) => void;
 }) {
   const handleOptionSelect = useHandleOptionSelect({
+    selectedOption,
     setSelectedOption,
     setAgreedToTermsAnonymous,
     setAgreedToTermsEmail,
     setLocalEmail,
     setGlobalError,
     setParticipationDetails,
+    setEmailCardError,
+    setAnonymousCardError,
   });
 
   const handleEmailChange = useHandleEmailChange({
@@ -250,22 +287,34 @@ function useIntroductionHandlers({
 
 // Custom hooks to handle specific interactions
 function useHandleOptionSelect({
+  selectedOption,
   setSelectedOption,
   setAgreedToTermsAnonymous,
   setAgreedToTermsEmail,
   setLocalEmail,
   setGlobalError,
   setParticipationDetails,
+  setEmailCardError,
+  setAnonymousCardError,
 }: {
+  selectedOption: 'email' | 'anonymous' | null;
   setSelectedOption: (option: 'email' | 'anonymous') => void;
   setAgreedToTermsAnonymous: (agreed: boolean) => void;
   setAgreedToTermsEmail: (agreed: boolean) => void;
   setLocalEmail: (email: string) => void;
   setGlobalError: (error: string | null) => void;
   setParticipationDetails: (details: { type: 'email' | 'anonymous'; email?: string; termsAgreed: boolean }) => void;
+  setEmailCardError: (error: string | null) => void;
+  setAnonymousCardError: (error: string | null) => void;
 }) {
   return useCallback(
     (option: 'email' | 'anonymous') => {
+      // If clicking on the same option that's already selected, do nothing
+      // This prevents clearing errors when user clicks inside an already selected card
+      if (selectedOption === option) {
+        return;
+      }
+
       setSelectedOption(option);
 
       // Reset terms agreement when switching methods
@@ -279,6 +328,8 @@ function useHandleOptionSelect({
 
       // Clear any existing errors when switching methods
       setGlobalError(null);
+      setEmailCardError(null);
+      setAnonymousCardError(null);
 
       // Reset participation details in context to ensure validation state is cleared
       // This prevents the button from staying enabled when switching methods
@@ -289,12 +340,15 @@ function useHandleOptionSelect({
       });
     },
     [
+      selectedOption,
       setSelectedOption,
       setAgreedToTermsAnonymous,
       setAgreedToTermsEmail,
       setLocalEmail,
       setGlobalError,
       setParticipationDetails,
+      setEmailCardError,
+      setAnonymousCardError,
     ],
   );
 }

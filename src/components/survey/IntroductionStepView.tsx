@@ -11,6 +11,8 @@ interface IntroductionStepViewProps {
   agreedToTermsEmail: boolean;
   agreedToTermsAnonymous: boolean;
   contextError: string | null;
+  emailCardError: string | null;
+  anonymousCardError: string | null;
   onOptionSelect: (option: 'email' | 'anonymous') => void;
   onTermsChange: (type: 'email' | 'anonymous', checked: boolean | 'indeterminate') => void;
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -24,6 +26,8 @@ const IntroductionStepView: React.FC<IntroductionStepViewProps> = ({
   agreedToTermsEmail,
   agreedToTermsAnonymous,
   contextError,
+  emailCardError,
+  anonymousCardError,
   onOptionSelect,
   onTermsChange,
   onEmailChange,
@@ -36,6 +40,8 @@ const IntroductionStepView: React.FC<IntroductionStepViewProps> = ({
         localEmail={localEmail}
         agreedToTermsEmail={agreedToTermsEmail}
         agreedToTermsAnonymous={agreedToTermsAnonymous}
+        emailCardError={emailCardError}
+        anonymousCardError={anonymousCardError}
         onOptionSelect={onOptionSelect}
         onTermsChange={onTermsChange}
         onEmailChange={onEmailChange}

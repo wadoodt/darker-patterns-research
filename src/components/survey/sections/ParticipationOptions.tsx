@@ -40,6 +40,7 @@ interface EmailOptionCardProps {
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   termsAgreed: boolean;
   onTermsChange: (checked: boolean | 'indeterminate') => void;
+  cardError: string | null;
 }
 
 const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
@@ -50,6 +51,7 @@ const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
   onEmailChange,
   termsAgreed,
   onTermsChange,
+  cardError,
 }) => (
   <div
     onClick={onSelect}
@@ -74,16 +76,25 @@ const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
       </ul>
     </div>
     {isSelected && (
-      <div className="mt-auto space-y-2 pt-3">
-        <Input
-          type="email"
-          placeholder="your.email@example.com"
-          value={email}
-          onChange={onEmailChange}
-          className="form-input-light h-9 text-xs"
-          required
-        />
-        <TermsCheckbox type="email" checked={termsAgreed} onCheckedChange={onTermsChange} />
+      <div className="mt-auto flex h-[8.5rem] flex-col pt-3">
+        <div className="flex flex-col space-y-2">
+          <Input
+            type="email"
+            placeholder="your.email@example.com"
+            value={email}
+            onChange={onEmailChange}
+            className="form-input-light h-9 text-xs"
+            required
+          />
+          <TermsCheckbox type="email" checked={termsAgreed} onCheckedChange={onTermsChange} />
+        </div>
+        <div className="mt-1 flex min-h-[2.5rem] items-start">
+          {cardError && (
+            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5">
+              <span className="block text-xs leading-tight font-normal text-red-700">{cardError}</span>
+            </div>
+          )}
+        </div>
       </div>
     )}
   </div>
@@ -94,6 +105,7 @@ interface AnonymousOptionCardProps {
   onSelect: () => void;
   termsAgreed: boolean;
   onTermsChange: (checked: boolean | 'indeterminate') => void;
+  cardError: string | null;
 }
 
 const AnonymousOptionCard: React.FC<AnonymousOptionCardProps> = ({
@@ -101,6 +113,7 @@ const AnonymousOptionCard: React.FC<AnonymousOptionCardProps> = ({
   onSelect,
   termsAgreed,
   onTermsChange,
+  cardError,
 }) => (
   <div
     onClick={onSelect}
@@ -119,8 +132,17 @@ const AnonymousOptionCard: React.FC<AnonymousOptionCardProps> = ({
       </ul>
     </div>
     {isSelected && (
-      <div className="terms-checkbox-label mt-auto pt-3">
-        <TermsCheckbox type="anonymous" checked={termsAgreed} onCheckedChange={onTermsChange} />
+      <div className="mt-auto flex h-[8.5rem] flex-col pt-3">
+        <div className="flex flex-col space-y-2">
+          <TermsCheckbox type="anonymous" checked={termsAgreed} onCheckedChange={onTermsChange} />
+        </div>
+        <div className="mt-1 flex min-h-[2.5rem] items-start">
+          {cardError && (
+            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5">
+              <span className="block text-xs leading-tight font-normal text-red-700">{cardError}</span>
+            </div>
+          )}
+        </div>
       </div>
     )}
   </div>
@@ -131,6 +153,8 @@ interface ParticipationOptionsProps {
   localEmail: string;
   agreedToTermsEmail: boolean;
   agreedToTermsAnonymous: boolean;
+  emailCardError: string | null;
+  anonymousCardError: string | null;
   onOptionSelect: (option: 'email' | 'anonymous') => void;
   onTermsChange: (type: 'email' | 'anonymous', checked: boolean | 'indeterminate') => void;
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -141,6 +165,8 @@ const ParticipationOptions: React.FC<ParticipationOptionsProps> = ({
   localEmail,
   agreedToTermsEmail,
   agreedToTermsAnonymous,
+  emailCardError,
+  anonymousCardError,
   onOptionSelect,
   onTermsChange,
   onEmailChange,
@@ -157,12 +183,14 @@ const ParticipationOptions: React.FC<ParticipationOptionsProps> = ({
           onEmailChange={onEmailChange}
           termsAgreed={agreedToTermsEmail}
           onTermsChange={(checked) => onTermsChange('email', checked)}
+          cardError={emailCardError}
         />
         <AnonymousOptionCard
           isSelected={selectedOption === 'anonymous'}
           onSelect={() => onOptionSelect('anonymous')}
           termsAgreed={agreedToTermsAnonymous}
           onTermsChange={(checked) => onTermsChange('anonymous', checked)}
+          cardError={anonymousCardError}
         />
       </div>
     </section>
