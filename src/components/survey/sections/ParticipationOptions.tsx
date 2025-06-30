@@ -16,7 +16,7 @@ const TermsCheckbox: React.FC<TermsCheckboxProps> = ({ type, checked, onCheckedC
       id={`terms${type === 'email' ? 'Email' : 'Anonymous'}`}
       checked={checked}
       onCheckedChange={onCheckedChange}
-      className="form-checkbox-custom-light"
+      className={checked ? 'form-checkbox-custom-light' : 'form-checkbox-custom-light border-red-500'}
     />
     <label htmlFor={`terms${type === 'email' ? 'Email' : 'Anonymous'}`} className="ml-2 text-xs">
       I agree to the{' '}
