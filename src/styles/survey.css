@@ -151,3 +151,7 @@
 .btn-light-theme.btn-secondary-light {
   @apply text-brand-purple-700 border-brand-purple-300 hover:bg-brand-purple-50 border bg-white;
 }
+
+/* .driver-popover-next-btn {
+  @apply text-brand-purple-700;
+} */

@@ -2,6 +2,39 @@ import { driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { useEffect, useState } from 'react';
 
+// Simple device-based tour completion tracking
+// No user ID needed - just track if tour has been completed on this device/browser
+const TOUR_COMPLETED_KEY = 'survey_tour_completed';
+
+// Check if tour has been completed on this device
+const hasTourBeenCompleted = (): boolean => {
+  try {
+    return localStorage.getItem(TOUR_COMPLETED_KEY) === 'true';
+  } catch {
+    // If localStorage is not available, assume tour hasn't been completed
+    console.warn('localStorage not available, assuming tour not completed');
+    return false;
+  }
+};
+
+// Mark tour as completed on this device
+const markTourCompleted = (): void => {
+  try {
+    localStorage.setItem(TOUR_COMPLETED_KEY, 'true');
+  } catch {
+    console.warn('Could not save tour completion status to localStorage');
+  }
+};
+
+// Reset tour completion status (useful for testing)
+const resetTourCompletion = (): void => {
+  try {
+    localStorage.removeItem(TOUR_COMPLETED_KEY);
+  } catch {
+    console.warn('Could not reset tour completion status in localStorage');
+  }
+};
+
 const createTourSteps = (): DriveStep[] => [
   {
     element: '.survey-page-container',
@@ -86,6 +119,9 @@ export const useSurveyTour = () => {
   const [tourInstance, setTourInstance] = useState<ReturnType<typeof driver> | null>(null);
 
   useEffect(() => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') return;
+
     const driverInstance = driver({
       showProgress: true,
       nextBtnText: 'Next',
@@ -93,6 +129,10 @@ export const useSurveyTour = () => {
       doneBtnText: 'Got it!',
       progressText: 'Step {{current}} of {{total}}',
       steps: createTourSteps(),
+      onDestroyed: () => {
+        // Mark tour as completed when user finishes or skips it
+        markTourCompleted();
+      },
     });
 
     setTourInstance(driverInstance);
@@ -102,17 +142,44 @@ export const useSurveyTour = () => {
     };
   }, []);
 
+  const shouldShowTour = (): boolean => {
+    if (typeof window === 'undefined') return false;
+    const shouldShow = !hasTourBeenCompleted();
+
+    // Debug logging (can be removed in production)
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`Survey Tour - Should show tour: ${shouldShow}`);
+    }
+
+    return shouldShow;
+  };
+
   const startTour = () => {
-    if (tourInstance) {
+    if (tourInstance && shouldShowTour()) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Starting survey tour');
+      }
       tourInstance.drive();
+    } else if (process.env.NODE_ENV === 'development') {
+      console.warn('Tour not started - already completed on this device');
     }
   };
 
   const skipTour = () => {
     if (tourInstance) {
       tourInstance.destroy();
+      markTourCompleted();
     }
   };
 
-  return { startTour, skipTour };
+  const resetTourForCurrentDevice = () => {
+    resetTourCompletion();
+  };
+
+  return {
+    startTour,
+    skipTour,
+    shouldShowTour: shouldShowTour(),
+    resetTourForCurrentDevice, // For testing purposes
+  };
 };
