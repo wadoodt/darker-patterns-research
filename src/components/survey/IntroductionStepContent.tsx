@@ -26,8 +26,11 @@ const IntroductionStepContent = () => {
     selectedOption === 'anonymous' ? contextTermsAgreed : false,
   );
 
-  // Validation function to check if we can proceed
+  // Validation function to check if we can proceed - enhanced for better method switching
   const validateCurrentState = useCallback(() => {
+    // Always clear error first to start fresh
+    setGlobalError(null);
+
     if (!selectedOption) {
       setGlobalError('Please select a participation method.');
       return false;
@@ -35,7 +38,34 @@ const IntroductionStepContent = () => {
 
     const currentTermsAgreed = selectedOption === 'email' ? agreedToTermsEmail : agreedToTermsAnonymous;
 
-    // Use the improved validation function
+    // For email participation, check email validity first
+    if (selectedOption === 'email') {
+      if (!localEmail.trim()) {
+        setGlobalError('Please enter your email address.');
+        return false;
+      }
+
+      const emailError = validateEmail(localEmail);
+      if (emailError) {
+        setGlobalError(emailError);
+        return false;
+      }
+
+      if (!currentTermsAgreed) {
+        setGlobalError('Please agree to the terms and privacy policy.');
+        return false;
+      }
+    }
+
+    // For anonymous participation, only check terms agreement
+    if (selectedOption === 'anonymous') {
+      if (!currentTermsAgreed) {
+        setGlobalError('Please agree to the terms and privacy policy.');
+        return false;
+      }
+    }
+
+    // Use the improved validation function as final check
     const canProceed = canProceedFromIntroStep({
       type: selectedOption,
       email: selectedOption === 'email' ? localEmail : undefined,
@@ -43,17 +73,16 @@ const IntroductionStepContent = () => {
     });
 
     if (!canProceed) {
-      // Get detailed error message
+      // Fallback to detailed error message
       const validationError = validateParticipationDetails({
         type: selectedOption,
         email: selectedOption === 'email' ? localEmail : undefined,
         termsAgreed: currentTermsAgreed,
       });
-      setGlobalError(validationError || 'Please complete all required fields and agree to terms.');
+      setGlobalError(validationError || 'Please complete all required fields.');
       return false;
     }
 
-    setGlobalError(null);
     return true;
   }, [selectedOption, localEmail, agreedToTermsEmail, agreedToTermsAnonymous, setGlobalError]);
 
@@ -117,8 +146,20 @@ function useIntroductionStepLogic({
       setHasUnsavedChanges(true);
     }
 
-    // Validate current state whenever dependencies change
+    // Always validate current state whenever dependencies change
+    // This ensures validation is re-triggered when switching methods
     validateCurrentState();
+
+    // Force re-validation by updating participation details in context
+    // This ensures the navigation footer gets the correct validation state
+    if (selectedOption) {
+      const currentTermsAgreed = selectedOption === 'email' ? agreedToTermsEmail : agreedToTermsAnonymous;
+      setParticipationDetails({
+        type: selectedOption,
+        email: selectedOption === 'email' ? localEmail : undefined,
+        termsAgreed: currentTermsAgreed,
+      });
+    }
   }, [
     selectedOption,
     localEmail,
@@ -126,6 +167,7 @@ function useIntroductionStepLogic({
     agreedToTermsAnonymous,
     setHasUnsavedChanges,
     validateCurrentState,
+    setParticipationDetails,
   ]);
 
   const handlers = useIntroductionHandlers({
@@ -181,6 +223,7 @@ function useIntroductionHandlers({
     setAgreedToTermsEmail,
     setLocalEmail,
     setGlobalError,
+    setParticipationDetails,
   });
 
   const handleEmailChange = useHandleEmailChange({
@@ -212,18 +255,20 @@ function useHandleOptionSelect({
   setAgreedToTermsEmail,
   setLocalEmail,
   setGlobalError,
+  setParticipationDetails,
 }: {
   setSelectedOption: (option: 'email' | 'anonymous') => void;
   setAgreedToTermsAnonymous: (agreed: boolean) => void;
   setAgreedToTermsEmail: (agreed: boolean) => void;
   setLocalEmail: (email: string) => void;
   setGlobalError: (error: string | null) => void;
+  setParticipationDetails: (details: { type: 'email' | 'anonymous'; email?: string; termsAgreed: boolean }) => void;
 }) {
   return useCallback(
     (option: 'email' | 'anonymous') => {
       setSelectedOption(option);
 
-      // Reset terms agreement when switching
+      // Reset terms agreement when switching methods
       if (option === 'email') {
         setAgreedToTermsAnonymous(false);
       } else {
@@ -234,8 +279,23 @@ function useHandleOptionSelect({
 
       // Clear any existing errors when switching methods
       setGlobalError(null);
+
+      // Reset participation details in context to ensure validation state is cleared
+      // This prevents the button from staying enabled when switching methods
+      setParticipationDetails({
+        type: option,
+        email: option === 'email' ? '' : undefined,
+        termsAgreed: false,
+      });
     },
-    [setSelectedOption, setAgreedToTermsAnonymous, setAgreedToTermsEmail, setLocalEmail, setGlobalError],
+    [
+      setSelectedOption,
+      setAgreedToTermsAnonymous,
+      setAgreedToTermsEmail,
+      setLocalEmail,
+      setGlobalError,
+      setParticipationDetails,
+    ],
   );
 }
 
@@ -254,16 +314,21 @@ function useHandleEmailChange({
       const newEmail = e.target.value;
       setLocalEmail(newEmail);
 
-      // Validate email in real-time if there's content
-      if (newEmail.trim() && selectedOption === 'email') {
-        const emailError = validateEmail(newEmail);
-        if (emailError) {
-          setGlobalError(emailError);
+      // Clear errors immediately when user starts typing
+      setGlobalError(null);
+
+      // Only validate if the user has typed something and selected email method
+      if (selectedOption === 'email') {
+        if (newEmail.trim()) {
+          // Validate email format in real-time
+          const emailError = validateEmail(newEmail);
+          if (emailError) {
+            setGlobalError(emailError);
+          }
         } else {
-          setGlobalError(null);
+          // Show error if email is empty for email participation
+          setGlobalError('Email is required for email participation');
         }
-      } else if (!newEmail.trim() && selectedOption === 'email') {
-        setGlobalError('Email is required for email participation');
       }
     },
     [selectedOption, setLocalEmail, setGlobalError],
@@ -299,6 +364,8 @@ function useHandleTermsChange({
             setGlobalError(emailError);
             return;
           }
+          // Clear errors if email is valid and terms are being checked
+          setGlobalError(null);
         }
         setAgreedToTermsEmail(isChecked);
         setParticipationDetails({
@@ -307,6 +374,10 @@ function useHandleTermsChange({
           termsAgreed: isChecked,
         });
       } else if (type === 'anonymous' && selectedOption === 'anonymous') {
+        // Clear errors when checking terms for anonymous participation
+        if (isChecked) {
+          setGlobalError(null);
+        }
         setAgreedToTermsAnonymous(isChecked);
         setParticipationDetails({
           type: selectedOption,
