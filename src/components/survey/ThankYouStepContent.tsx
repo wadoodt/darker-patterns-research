@@ -112,7 +112,7 @@ const ThankYouStepContent = () => {
           Step {currentStepNumber} of {totalSteps}: Completion
         </p>
         <h2 className="survey-main-title flex items-center justify-center gap-2 !text-3xl">
-          <PartyPopper size={30} className="text-brand-purple-500" /> Thank You!
+          <PartyPopper size={30} className="thank-you-pop text-brand-purple-500" /> Thank You!
         </h2>
       </div>
 

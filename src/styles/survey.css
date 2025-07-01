@@ -11,6 +11,12 @@
   @apply font-heading-academic text-light-text-primary text-2xl font-bold sm:text-3xl;
 }
 
+.animate-thank-you-pop {
+  animation:
+    var(--animate-thank-you-pop, thankYouPop 1s ease-out forwards),
+    subtle-shimmer 4s linear infinite;
+}
+
 .survey-section-card {
   @apply bg-light-bg-secondary rounded-card-survey shadow-card-light border border-gray-200 p-6 sm:p-8;
 }
