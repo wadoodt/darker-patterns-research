@@ -117,6 +117,14 @@ const createTourSteps = (): DriveStep[] => [
 
 export const useSurveyTour = () => {
   const [tourInstance, setTourInstance] = useState<ReturnType<typeof driver> | null>(null);
+  const [tourCompleted, setTourCompleted] = useState<boolean>(true); // Default to true to avoid flash
+
+  // Initialize tour completion status
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setTourCompleted(hasTourBeenCompleted());
+    }
+  }, []);
 
   useEffect(() => {
     // Check if we're in a browser environment
@@ -132,6 +140,7 @@ export const useSurveyTour = () => {
       onDestroyed: () => {
         // Mark tour as completed when user finishes or skips it
         markTourCompleted();
+        setTourCompleted(true);
       },
     });
 
@@ -142,20 +151,10 @@ export const useSurveyTour = () => {
     };
   }, []);
 
-  const shouldShowTour = (): boolean => {
-    if (typeof window === 'undefined') return false;
-    const shouldShow = !hasTourBeenCompleted();
-
-    // Debug logging (can be removed in production)
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(`Survey Tour - Should show tour: ${shouldShow}`);
-    }
-
-    return shouldShow;
-  };
+  const shouldShowTour = !tourCompleted;
 
   const startTour = () => {
-    if (tourInstance && shouldShowTour()) {
+    if (tourInstance && shouldShowTour) {
       if (process.env.NODE_ENV === 'development') {
         console.warn('Starting survey tour');
       }
@@ -169,17 +168,13 @@ export const useSurveyTour = () => {
     if (tourInstance) {
       tourInstance.destroy();
       markTourCompleted();
+      setTourCompleted(true);
     }
-  };
-
-  const resetTourForCurrentDevice = () => {
-    resetTourCompletion();
   };
 
   return {
     startTour,
     skipTour,
-    shouldShowTour: shouldShowTour(),
-    resetTourForCurrentDevice, // For testing purposes
+    shouldShowTour,
   };
 };

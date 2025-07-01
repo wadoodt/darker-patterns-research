@@ -12,7 +12,7 @@
   margin: 0 !important;
   padding: 0 !important;
 }
-tainer-narrow {
+.survey-page-container-narrow {
   /* For Demographics form */
   @apply mx-auto max-w-xl space-y-6 px-4 sm:space-y-8 sm:px-6 lg:px-8;
 }
@@ -107,6 +107,9 @@ tainer-narrow {
 }
 .star-rating-label {
   @apply cursor-pointer text-gray-300 transition-colors hover:text-yellow-400;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
 }
 .star-rating-input:checked ~ .star-rating-label,
 .star-rating-label:hover ~ .star-rating-label,

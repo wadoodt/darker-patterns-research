@@ -1,5 +1,5 @@
 import { BookOpen, Brain, Cpu, Users as GenderIcon, TrendingUp } from 'lucide-react';
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   ageGroupOptions,
   aiFamiliarityOptions,
@@ -16,7 +16,6 @@ interface DemographicsFieldsProps {
   isLoadingEntries: boolean;
 }
 
-// Split into smaller components to keep functions under line limit
 const AgeAndGenderSection = ({ formData, onChange, isLoadingEntries }: DemographicsFieldsProps) => (
   <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
     <RadioCardGrid
@@ -92,27 +91,13 @@ const AiFamiliaritySection = ({ formData, onChange, isLoadingEntries }: Demograp
   />
 );
 
-/**
- * DemographicsFields Component - Displays demographic information form fields
- * Split into multiple functional components to improve readability and meet linting requirements
- */
 const DemographicsFields = ({ formData, onChange, isLoadingEntries }: DemographicsFieldsProps) => {
-  // Create an optimized onChange handler that uses requestAnimationFrame for smoother transitions
-  const handleOptimizedChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      requestAnimationFrame(() => {
-        onChange(e);
-      });
-    },
-    [onChange],
-  );
-
   return (
     <form id="demographicsFormInternal" className="space-y-8">
-      <AgeAndGenderSection formData={formData} onChange={handleOptimizedChange} isLoadingEntries={isLoadingEntries} />
-      <EducationSection formData={formData} onChange={handleOptimizedChange} isLoadingEntries={isLoadingEntries} />
-      <ExpertiseSection formData={formData} onChange={handleOptimizedChange} isLoadingEntries={isLoadingEntries} />
-      <AiFamiliaritySection formData={formData} onChange={handleOptimizedChange} isLoadingEntries={isLoadingEntries} />
+      <AgeAndGenderSection formData={formData} onChange={onChange} isLoadingEntries={isLoadingEntries} />
+      <EducationSection formData={formData} onChange={onChange} isLoadingEntries={isLoadingEntries} />
+      <ExpertiseSection formData={formData} onChange={onChange} isLoadingEntries={isLoadingEntries} />
+      <AiFamiliaritySection formData={formData} onChange={onChange} isLoadingEntries={isLoadingEntries} />
     </form>
   );
 };

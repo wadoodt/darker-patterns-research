@@ -10,7 +10,7 @@ interface TourControlsProps {
 }
 
 export const TourControls: React.FC<TourControlsProps> = ({ className = '' }) => {
-  const { startTour, shouldShowTour, resetTourForCurrentDevice } = useSurveyTour();
+  const { startTour, shouldShowTour } = useSurveyTour();
 
   // Only show in development
   if (process.env.NODE_ENV !== 'development') {
@@ -28,12 +28,6 @@ export const TourControls: React.FC<TourControlsProps> = ({ className = '' }) =>
           className="block w-full rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
         >
           Start Tour
-        </button>
-        <button
-          onClick={resetTourForCurrentDevice}
-          className="block w-full rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-600"
-        >
-          Reset Tour
         </button>
       </div>
     </div>

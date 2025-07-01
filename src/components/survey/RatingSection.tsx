@@ -58,7 +58,6 @@ export default function RatingSection({ agreementRating, setAgreementRating, isU
               onMouseLeave={handleMouseLeave}
               style={{
                 opacity: getStarOpacity(starValue),
-                transition: 'opacity 0.2s ease, color 0.2s ease',
                 cursor: isUIBlocked ? 'not-allowed' : 'pointer',
               }}
             >

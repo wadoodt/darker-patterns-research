@@ -78,14 +78,12 @@ export function useSurveyNavigationFooterLogic(): NavigationProps {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStepNumber]);
 
-  // Validation for Introduction Step (Step 1) - using improved validation
   const canProceedFromIntro: boolean = canProceedFromIntroStep({
     type: participationType,
     email: participantEmail,
     termsAgreed: termsAgreed,
   });
 
-  // Validation for Demographics Step (Step 2)
   const isDemographicsFormValid = () => {
     if (!demographicsData) return false;
     const {

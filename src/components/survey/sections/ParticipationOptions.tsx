@@ -76,7 +76,7 @@ const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
       </ul>
     </div>
     {isSelected && (
-      <div className="mt-auto flex h-[8.5rem] flex-col pt-3">
+      <div className="mt-auto flex min-h-[8.5rem] flex-col pt-3">
         <div className="flex flex-col space-y-2">
           <Input
             type="email"
@@ -132,7 +132,7 @@ const AnonymousOptionCard: React.FC<AnonymousOptionCardProps> = ({
       </ul>
     </div>
     {isSelected && (
-      <div className="mt-auto flex h-[8.5rem] flex-col pt-3">
+      <div className="mt-auto flex min-h-[8.5rem] flex-col pt-3">
         <div className="flex flex-col space-y-2">
           <TermsCheckbox type="anonymous" checked={termsAgreed} onCheckedChange={onTermsChange} />
         </div>
