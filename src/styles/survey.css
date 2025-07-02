@@ -2,7 +2,7 @@
   /* Used in IntroductionStep, DemographicsStep etc. */
   @apply mx-auto max-w-3xl space-y-6 px-4 sm:space-y-8 sm:px-6 lg:px-8;
 } /* Card Error Messages */
-.card-error-message {
+/* .card-error-message {
   @apply mt-2 w-full rounded border border-red-200 bg-red-50 px-3 py-2;
 }
 .card-error-text {
@@ -11,7 +11,7 @@
   list-style-type: none !important;
   margin: 0 !important;
   padding: 0 !important;
-}
+} */
 .survey-page-container-narrow {
   /* For Demographics form */
   @apply mx-auto max-w-xl space-y-6 px-4 sm:space-y-8 sm:px-6 lg:px-8;
