@@ -12,7 +12,9 @@ const hasTourBeenCompleted = (): boolean => {
     return localStorage.getItem(TOUR_COMPLETED_KEY) === 'true';
   } catch {
     // If localStorage is not available, assume tour hasn't been completed
-    console.warn('localStorage not available, assuming tour not completed');
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('localStorage not available, assuming tour not completed');
+    }
     return false;
   }
 };
@@ -22,7 +24,9 @@ const markTourCompleted = (): void => {
   try {
     localStorage.setItem(TOUR_COMPLETED_KEY, 'true');
   } catch {
-    console.warn('Could not save tour completion status to localStorage');
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Could not save tour completion status to localStorage');
+    }
   }
 };
 
@@ -31,7 +35,9 @@ const resetTourCompletion = (): void => {
   try {
     localStorage.removeItem(TOUR_COMPLETED_KEY);
   } catch {
-    console.warn('Could not reset tour completion status in localStorage');
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Could not reset tour completion status in localStorage');
+    }
   }
 };
 
@@ -154,13 +160,19 @@ export const useSurveyTour = () => {
   const shouldShowTour = !tourCompleted;
 
   const startTour = () => {
-    if (tourInstance && shouldShowTour) {
+    if (!tourInstance) return;
+
+    if (shouldShowTour) {
       if (process.env.NODE_ENV === 'development') {
         console.warn('Starting survey tour');
       }
       tourInstance.drive();
-    } else if (process.env.NODE_ENV === 'development') {
-      console.warn('Tour not started - already completed on this device');
+    } else {
+      // Show confirmation if tour was already completed
+      const confirmed = window.confirm('You have already completed the tour. Would you like to see it again?');
+      if (confirmed) {
+        tourInstance.drive();
+      }
     }
   };
 
@@ -172,9 +184,18 @@ export const useSurveyTour = () => {
     }
   };
 
+  const resetTourForCurrentDevice = () => {
+    resetTourCompletion();
+    setTourCompleted(false);
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Tour has been reset for this device');
+    }
+  };
+
   return {
     startTour,
     skipTour,
     shouldShowTour,
+    resetTourForCurrentDevice,
   };
 };

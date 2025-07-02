@@ -8,8 +8,6 @@ import EntryReviewStepContentView from './EntryReviewStepContentView';
 import { buildEvaluationDraft } from './evaluationUtils';
 import { submitFlagForEntry } from './flagUtils';
 import { useEntryReviewState } from './useEntryReviewState';
-// Uncomment the line below for testing tour functionality in development
-// import TourControls from './TourControls';
 
 const EntryReviewStepContent: React.FC = () => {
   const {
@@ -119,41 +117,41 @@ const EntryReviewStepContent: React.FC = () => {
     (isRevealed || isCurrentEvaluationSubmitted) && selectedOptionKey === researcherOptionKey;
 
   return (
-    <>
-      <EntryReviewStepContentView
-        currentDisplayEntry={currentDisplayEntry}
-        currentDpoEntryIndex={currentDpoEntryIndex}
-        dpoEntriesToReview={dpoEntriesToReview}
-        currentStepNumber={currentStepNumber}
-        totalSteps={totalSteps}
-        isLoadingEntries={isLoadingEntries}
-        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-        isRevealed={isRevealed}
-        selectedOptionKey={selectedOptionKey}
-        agreementRating={agreementRating}
-        userComment={userComment}
-        selectedCategories={selectedCategories}
-        localError={localError}
-        contextError={contextError}
-        isFlagModalOpen={isFlagModalOpen}
-        canReveal={canReveal}
-        canSubmit={canSubmit}
-        userChoiceMatchesResearcher={userChoiceMatchesResearcher}
-        researcherOptionKey={researcherOptionKey}
-        optionAContent={optionAContent}
-        optionBContent={optionBContent}
-        handleOptionSelect={handleOptionSelect}
-        setAgreementRating={setAgreementRating}
-        setUserComment={setUserComment}
-        setSelectedCategories={setSelectedCategories}
-        handleReveal={handleReveal}
-        handleLocalSubmit={handleLocalSubmit}
-        setIsFlagModalOpen={setIsFlagModalOpen}
-        handleSubmitFlag={handleSubmitFlag}
-      />
-      {/* Uncomment the line below for testing tour functionality in development */}
-      {/* <TourControls /> */}
-    </>
+    <div className="survey-page-container flex min-h-screen flex-col">
+      <div className="flex-1">
+        <EntryReviewStepContentView
+          currentDisplayEntry={currentDisplayEntry}
+          currentDpoEntryIndex={currentDpoEntryIndex}
+          dpoEntriesToReview={dpoEntriesToReview}
+          currentStepNumber={currentStepNumber}
+          totalSteps={totalSteps}
+          isLoadingEntries={isLoadingEntries}
+          isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
+          isRevealed={isRevealed}
+          selectedOptionKey={selectedOptionKey}
+          agreementRating={agreementRating}
+          userComment={userComment}
+          selectedCategories={selectedCategories}
+          localError={localError}
+          contextError={contextError}
+          isFlagModalOpen={isFlagModalOpen}
+          canReveal={canReveal}
+          canSubmit={canSubmit}
+          userChoiceMatchesResearcher={userChoiceMatchesResearcher}
+          researcherOptionKey={researcherOptionKey}
+          optionAContent={optionAContent}
+          optionBContent={optionBContent}
+          handleOptionSelect={handleOptionSelect}
+          setAgreementRating={setAgreementRating}
+          setUserComment={setUserComment}
+          setSelectedCategories={setSelectedCategories}
+          handleReveal={handleReveal}
+          handleLocalSubmit={handleLocalSubmit}
+          setIsFlagModalOpen={setIsFlagModalOpen}
+          handleSubmitFlag={handleSubmitFlag}
+        />
+      </div>
+    </div>
   );
 };
 

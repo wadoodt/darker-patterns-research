@@ -14,7 +14,6 @@ const IntroductionStepContent = () => {
     participationType: contextParticipationType,
     participantEmail: contextEmail,
     termsAgreed: contextTermsAgreed,
-    error: contextError,
     setGlobalError,
     setHasUnsavedChanges,
   } = useSurveyProgress();
@@ -111,7 +110,6 @@ const IntroductionStepContent = () => {
     setAgreedToTermsAnonymous,
     currentStepNumber,
     totalSteps,
-    contextError,
     setGlobalError,
     setHasUnsavedChanges,
     setParticipationDetails,
@@ -123,7 +121,6 @@ const IntroductionStepContent = () => {
   });
 };
 
-// Extract the main logic to a separate hook to reduce line count
 function useIntroductionStepLogic({
   selectedOption,
   setSelectedOption,
@@ -135,7 +132,6 @@ function useIntroductionStepLogic({
   setAgreedToTermsAnonymous,
   currentStepNumber,
   totalSteps,
-  contextError,
   setGlobalError,
   setHasUnsavedChanges,
   setParticipationDetails,
@@ -155,7 +151,6 @@ function useIntroductionStepLogic({
   setAgreedToTermsAnonymous: (agreed: boolean) => void;
   currentStepNumber: number;
   totalSteps: number;
-  contextError: string | null;
   setGlobalError: (error: string | null) => void;
   setHasUnsavedChanges: (hasChanges: boolean) => void;
   setParticipationDetails: (details: { type: 'email' | 'anonymous'; email?: string; termsAgreed: boolean }) => void;
@@ -217,7 +212,6 @@ function useIntroductionStepLogic({
       localEmail={localEmail}
       agreedToTermsEmail={agreedToTermsEmail}
       agreedToTermsAnonymous={agreedToTermsAnonymous}
-      contextError={contextError}
       emailCardError={emailCardError}
       anonymousCardError={anonymousCardError}
       onOptionSelect={handlers.handleOptionSelect}
@@ -251,6 +245,7 @@ function useIntroductionHandlers({
   setEmailCardError: (error: string | null) => void;
   setAnonymousCardError: (error: string | null) => void;
 }) {
+  // Ensure all error state setters are properly passed to child hooks
   const handleOptionSelect = useHandleOptionSelect({
     selectedOption,
     setSelectedOption,
@@ -266,7 +261,7 @@ function useIntroductionHandlers({
   const handleEmailChange = useHandleEmailChange({
     selectedOption,
     setLocalEmail,
-    setGlobalError,
+    setEmailCardError,
   });
 
   const handleTermsChange = useHandleTermsChange({
@@ -275,7 +270,8 @@ function useIntroductionHandlers({
     setAgreedToTermsEmail,
     setAgreedToTermsAnonymous,
     setParticipationDetails,
-    setGlobalError,
+    setEmailCardError,
+    setAnonymousCardError,
   });
 
   return {
@@ -356,11 +352,11 @@ function useHandleOptionSelect({
 function useHandleEmailChange({
   selectedOption,
   setLocalEmail,
-  setGlobalError,
+  setEmailCardError,
 }: {
   selectedOption: 'email' | 'anonymous' | null;
   setLocalEmail: (email: string) => void;
-  setGlobalError: (error: string | null) => void;
+  setEmailCardError?: (error: string | null) => void; // Make this optional
 }) {
   return useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -368,8 +364,8 @@ function useHandleEmailChange({
       const newEmail = e.target.value;
       setLocalEmail(newEmail);
 
-      // Clear errors immediately when user starts typing
-      setGlobalError(null);
+      // Safely clear errors if setter is provided
+      setEmailCardError?.(null);
 
       // Only validate if the user has typed something and selected email method
       if (selectedOption === 'email') {
@@ -377,15 +373,15 @@ function useHandleEmailChange({
           // Validate email format in real-time
           const emailError = validateEmail(newEmail);
           if (emailError) {
-            setGlobalError(emailError);
+            setEmailCardError?.(emailError);
           }
         } else {
           // Show error if email is empty for email participation
-          setGlobalError('Email is required for email participation');
+          setEmailCardError?.('Email is required for email participation');
         }
       }
     },
-    [selectedOption, setLocalEmail, setGlobalError],
+    [selectedOption, setLocalEmail, setEmailCardError],
   );
 }
 
@@ -395,14 +391,16 @@ function useHandleTermsChange({
   setAgreedToTermsEmail,
   setAgreedToTermsAnonymous,
   setParticipationDetails,
-  setGlobalError,
+  setEmailCardError,
+  setAnonymousCardError,
 }: {
   selectedOption: 'email' | 'anonymous' | null;
   localEmail: string;
   setAgreedToTermsEmail: (agreed: boolean) => void;
   setAgreedToTermsAnonymous: (agreed: boolean) => void;
   setParticipationDetails: (details: { type: 'email' | 'anonymous'; email?: string; termsAgreed: boolean }) => void;
-  setGlobalError: (error: string | null) => void;
+  setEmailCardError?: (error: string | null) => void; // Make optional
+  setAnonymousCardError?: (error: string | null) => void; // Make optional
 }) {
   return useCallback(
     (type: 'email' | 'anonymous', checked: boolean | 'indeterminate') => {
@@ -415,11 +413,11 @@ function useHandleTermsChange({
         if (isChecked) {
           const emailError = validateEmail(localEmail);
           if (emailError) {
-            setGlobalError(emailError);
+            setEmailCardError?.(emailError);
             return;
           }
           // Clear errors if email is valid and terms are being checked
-          setGlobalError(null);
+          setEmailCardError?.(null);
         }
         setAgreedToTermsEmail(isChecked);
         setParticipationDetails({
@@ -430,7 +428,7 @@ function useHandleTermsChange({
       } else if (type === 'anonymous' && selectedOption === 'anonymous') {
         // Clear errors when checking terms for anonymous participation
         if (isChecked) {
-          setGlobalError(null);
+          setAnonymousCardError?.(null);
         }
         setAgreedToTermsAnonymous(isChecked);
         setParticipationDetails({
@@ -446,7 +444,8 @@ function useHandleTermsChange({
       setAgreedToTermsEmail,
       setAgreedToTermsAnonymous,
       setParticipationDetails,
-      setGlobalError,
+      setEmailCardError,
+      setAnonymousCardError,
     ],
   );
 }

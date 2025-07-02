@@ -1,6 +1,6 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { Award, Mail, User } from 'lucide-react';
+import { AlertTriangle, Award, Mail, User } from 'lucide-react';
 import Link from 'next/link';
 import type React from 'react';
 
@@ -66,17 +66,21 @@ const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
         Recommended
       </span>
     )}
-    <Mail size={24} className="text-brand-purple-500 mx-auto mb-2" />
-    <h4 className="auth-option-title text-center">Participate with Email</h4>
-    <div className="auth-option-description">
-      <ul>
-        <li>Receive research updates.</li>
-        <li>Get a copy of the published paper.</li>
-        <li>Contribute to a richer dataset.</li>
-      </ul>
+    <div className="flex flex-grow flex-col justify-center">
+      <Mail size={24} className="text-brand-purple-500 mx-auto mb-2" />
+      <h4 className="auth-option-title text-center">Participate with Email</h4>
+      <div className="auth-option-description">
+        <ul>
+          <li>Receive research updates.</li>
+          <li>Get a copy of the published paper.</li>
+          <li>Contribute to a richer dataset.</li>
+        </ul>
+      </div>
     </div>
-    {isSelected && (
-      <div className="mt-auto flex min-h-[8.5rem] flex-col pt-3">
+    <div
+      className={`overflow-hidden transition-all duration-500 ease-in-out ${isSelected ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
+    >
+      <div className="flex flex-col pt-3">
         <div className="flex flex-col space-y-2">
           <Input
             type="email"
@@ -90,13 +94,14 @@ const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
         </div>
         <div className="mt-1 flex min-h-[2.5rem] items-start">
           {cardError && (
-            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5">
-              <span className="block text-xs leading-tight font-normal text-red-700">{cardError}</span>
+            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5 text-red-700">
+              <AlertTriangle size={16} className="mr-1" />
+              <span className="block text-xs leading-tight font-normal">{cardError}</span>
             </div>
           )}
         </div>
       </div>
-    )}
+    </div>
   </div>
 );
 
@@ -117,7 +122,7 @@ const AnonymousOptionCard: React.FC<AnonymousOptionCardProps> = ({
 }) => (
   <div
     onClick={onSelect}
-    className={`auth-option-card-survey ${isSelected ? 'selected' : ''}`}
+    className={`auth-option-card-survey flex flex-grow flex-col justify-center ${isSelected ? 'selected' : ''}`}
     role="button"
     tabIndex={0}
     onKeyDown={(e) => e.key === 'Enter' && onSelect()}
@@ -131,20 +136,23 @@ const AnonymousOptionCard: React.FC<AnonymousOptionCardProps> = ({
         <li>Still a valuable contribution!</li>
       </ul>
     </div>
-    {isSelected && (
-      <div className="mt-auto flex min-h-[8.5rem] flex-col pt-3">
+    <div
+      className={`overflow-hidden transition-all duration-500 ease-in-out ${isSelected ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
+    >
+      <div className="flex flex-col pt-3">
         <div className="flex flex-col space-y-2">
           <TermsCheckbox type="anonymous" checked={termsAgreed} onCheckedChange={onTermsChange} />
         </div>
         <div className="mt-1 flex min-h-[2.5rem] items-start">
           {cardError && (
-            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5">
-              <span className="block text-xs leading-tight font-normal text-red-700">{cardError}</span>
+            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5 text-red-700">
+              <AlertTriangle size={16} className="mr-1" />{' '}
+              <span className="block text-xs leading-tight font-normal">{cardError}</span>
             </div>
           )}
         </div>
       </div>
-    )}
+    </div>
   </div>
 );
 
@@ -177,7 +185,7 @@ const ParticipationOptions: React.FC<ParticipationOptionsProps> = ({
       <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
         <EmailOptionCard
           isSelected={selectedOption === 'email'}
-          isRecommended={selectedOption !== 'anonymous'}
+          isRecommended
           onSelect={() => onOptionSelect('email')}
           email={localEmail}
           onEmailChange={onEmailChange}

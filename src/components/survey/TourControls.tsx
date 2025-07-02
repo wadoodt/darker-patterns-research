@@ -4,13 +4,20 @@
 'use client';
 
 import { useSurveyTour } from '@/hooks/useSurveyTour';
+import { useEffect, useState } from 'react';
 
 interface TourControlsProps {
   className?: string;
 }
 
 export const TourControls: React.FC<TourControlsProps> = ({ className = '' }) => {
-  const { startTour, shouldShowTour } = useSurveyTour();
+  const { startTour, shouldShowTour, resetTourForCurrentDevice } = useSurveyTour();
+  const [showReset, setShowReset] = useState(false);
+
+  // Only show reset button if the tour is not active
+  useEffect(() => {
+    setShowReset(!shouldShowTour);
+  }, [shouldShowTour]);
 
   // Only show in development
   if (process.env.NODE_ENV !== 'development') {
@@ -26,9 +33,21 @@ export const TourControls: React.FC<TourControlsProps> = ({ className = '' }) =>
         <button
           onClick={startTour}
           className="block w-full rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
+          disabled={shouldShowTour}
         >
-          Start Tour
+          {shouldShowTour ? 'Tour in Progress' : 'Start Tour'}
         </button>
+        {showReset && (
+          <button
+            onClick={() => {
+              resetTourForCurrentDevice();
+              setShowReset(false);
+            }}
+            className="mt-1 block w-full rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-600"
+          >
+            Reset Tour (Testing)
+          </button>
+        )}
       </div>
     </div>
   );

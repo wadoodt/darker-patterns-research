@@ -10,7 +10,6 @@ interface IntroductionStepViewProps {
   localEmail: string;
   agreedToTermsEmail: boolean;
   agreedToTermsAnonymous: boolean;
-  contextError: string | null;
   emailCardError: string | null;
   anonymousCardError: string | null;
   onOptionSelect: (option: 'email' | 'anonymous') => void;
@@ -25,7 +24,6 @@ const IntroductionStepView: React.FC<IntroductionStepViewProps> = ({
   localEmail,
   agreedToTermsEmail,
   agreedToTermsAnonymous,
-  contextError,
   emailCardError,
   anonymousCardError,
   onOptionSelect,
@@ -34,7 +32,7 @@ const IntroductionStepView: React.FC<IntroductionStepViewProps> = ({
 }) => {
   return (
     <div className="survey-page-container max-w-2xl">
-      <IntroductionHeader currentStepNumber={currentStepNumber} totalSteps={totalSteps} contextError={contextError} />
+      <IntroductionHeader currentStepNumber={currentStepNumber} totalSteps={totalSteps} />
       <ParticipationOptions
         selectedOption={selectedOption}
         localEmail={localEmail}
