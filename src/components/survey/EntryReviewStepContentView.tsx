@@ -124,6 +124,7 @@ const EntryReviewStepContentView: React.FC<EntryReviewStepContentViewProps> = (p
           onClick={props.handleReveal}
           disabled={!props.canReveal || props.isLoadingEntries}
           isLoading={props.isLoadingEntries}
+          dataTour="reveal-button"
         />
       )}
 
@@ -156,6 +157,7 @@ const EntryReviewStepContentView: React.FC<EntryReviewStepContentViewProps> = (p
             onClick={props.handleLocalSubmit}
             disabled={!props.canSubmit || props.isLoadingEntries}
             isLoading={props.isLoadingEntries}
+            dataTour="submit-button"
           />
         </>
       )}

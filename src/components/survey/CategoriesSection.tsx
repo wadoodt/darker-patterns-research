@@ -2,9 +2,9 @@
 'use client';
 
 import { HARM_CATEGORIES, type HarmCategory } from '@/lib/harm-categories';
+import { CheckCircle } from 'lucide-react';
 import React from 'react';
 import { CategoriesSectionProps } from './CategoriesSection.types';
-import { CheckCircle } from 'lucide-react';
 
 const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   selectedCategories,
@@ -22,7 +22,7 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   };
 
   return (
-    <div className="mb-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="mb-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm" data-tour="categories">
       <h3 className="mb-3 text-lg font-semibold text-gray-800">Select Harm Categories</h3>
       <p className="mb-4 text-sm text-gray-600">
         Select one or more categories that you believe this entry is related to.

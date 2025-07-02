@@ -1,13 +1,11 @@
-import { AlertTriangle } from 'lucide-react';
 import type React from 'react';
 
 interface IntroductionHeaderProps {
   currentStepNumber: number;
   totalSteps: number;
-  contextError: string | null;
 }
 
-const IntroductionHeader: React.FC<IntroductionHeaderProps> = ({ currentStepNumber, totalSteps, contextError }) => {
+const IntroductionHeader: React.FC<IntroductionHeaderProps> = ({ currentStepNumber, totalSteps }) => {
   return (
     <>
       <div className="survey-step-title-container">
@@ -21,12 +19,6 @@ const IntroductionHeader: React.FC<IntroductionHeaderProps> = ({ currentStepNumb
         Thank you for your interest! This study aims to create a human-validated dataset for detecting &quot;dark
         patterns&quot; in Large Language Models (LLMs). Your participation is crucial.
       </p>
-
-      {contextError && (
-        <div className="mb-6 flex items-center gap-2 rounded-md border border-red-300 bg-red-100 p-3 text-xs text-red-700">
-          <AlertTriangle size={16} /> {contextError}
-        </div>
-      )}
     </>
   );
 };
