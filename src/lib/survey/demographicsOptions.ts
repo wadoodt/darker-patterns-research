@@ -1,4 +1,4 @@
-export const ageGroupOptions = ['18–24', '25–34', '35–44', '45–54', '55–64', '65+'];
+export const ageGroupOptions = ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'];
 
 export const genderOptions = ['Male', 'Female', 'Non-binary', 'Prefer to self-describe', 'Prefer not to say'];
 

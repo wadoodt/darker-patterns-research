@@ -97,6 +97,9 @@
 }
 .star-rating-label {
   @apply cursor-pointer text-gray-300 transition-colors hover:text-yellow-400;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
 }
 .star-rating-input:checked ~ .star-rating-label,
 .star-rating-label:hover ~ .star-rating-label,
@@ -150,4 +153,23 @@
 }
 .btn-light-theme.btn-secondary-light {
   @apply text-brand-purple-700 border-brand-purple-300 hover:bg-brand-purple-50 border bg-white;
+}
+
+/* Card Error Messages */
+.card-error-message {
+  @apply mt-2 w-full rounded border border-red-200 bg-red-50 px-3 py-2;
+}
+.card-error-text {
+  @apply block text-xs leading-tight font-normal text-red-700;
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.driver-popover-next-btn {
+  @apply !bg-brand-purple-500 hover:!bg-brand-purple-600 !border-brand-purple-500 !rounded-md !px-4 !py-2 !text-sm !font-medium !text-white;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
 }

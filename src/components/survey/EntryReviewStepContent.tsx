@@ -1,12 +1,15 @@
 /* eslint-disable max-lines-per-function */
 // components/survey/EntryReviewStepContent.tsx
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
+import { useSurveyTour } from '../../hooks/useSurveyTour';
 import EntryReviewStepContentView from './EntryReviewStepContentView';
 import { buildEvaluationDraft } from './evaluationUtils';
 import { submitFlagForEntry } from './flagUtils';
 import { useEntryReviewState } from './useEntryReviewState';
+// Uncomment the line below for testing tour functionality in development
+// import TourControls from './TourControls';
 
 const EntryReviewStepContent: React.FC = () => {
   const {
@@ -42,7 +45,15 @@ const EntryReviewStepContent: React.FC = () => {
     setIsRevealed,
   } = useEntryReviewState();
 
+  const { startTour, shouldShowTour } = useSurveyTour();
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
+
+  // Start tour when first entry loads (only if user hasn't seen it before)
+  useEffect(() => {
+    if (currentDisplayEntry && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted && shouldShowTour) {
+      startTour();
+    }
+  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, startTour, shouldShowTour]);
 
   const handleOptionSelect = (optionKey: 'A' | 'B') => {
     if (isCurrentEvaluationSubmitted || isRevealed) return;
@@ -108,37 +119,41 @@ const EntryReviewStepContent: React.FC = () => {
     (isRevealed || isCurrentEvaluationSubmitted) && selectedOptionKey === researcherOptionKey;
 
   return (
-    <EntryReviewStepContentView
-      currentDisplayEntry={currentDisplayEntry}
-      currentDpoEntryIndex={currentDpoEntryIndex}
-      dpoEntriesToReview={dpoEntriesToReview}
-      currentStepNumber={currentStepNumber}
-      totalSteps={totalSteps}
-      isLoadingEntries={isLoadingEntries}
-      isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
-      isRevealed={isRevealed}
-      selectedOptionKey={selectedOptionKey}
-      agreementRating={agreementRating}
-      userComment={userComment}
-      selectedCategories={selectedCategories}
-      localError={localError}
-      contextError={contextError}
-      isFlagModalOpen={isFlagModalOpen}
-      canReveal={canReveal}
-      canSubmit={canSubmit}
-      userChoiceMatchesResearcher={userChoiceMatchesResearcher}
-      researcherOptionKey={researcherOptionKey}
-      optionAContent={optionAContent}
-      optionBContent={optionBContent}
-      handleOptionSelect={handleOptionSelect}
-      setAgreementRating={setAgreementRating}
-      setUserComment={setUserComment}
-      setSelectedCategories={setSelectedCategories}
-      handleReveal={handleReveal}
-      handleLocalSubmit={handleLocalSubmit}
-      setIsFlagModalOpen={setIsFlagModalOpen}
-      handleSubmitFlag={handleSubmitFlag}
-    />
+    <>
+      <EntryReviewStepContentView
+        currentDisplayEntry={currentDisplayEntry}
+        currentDpoEntryIndex={currentDpoEntryIndex}
+        dpoEntriesToReview={dpoEntriesToReview}
+        currentStepNumber={currentStepNumber}
+        totalSteps={totalSteps}
+        isLoadingEntries={isLoadingEntries}
+        isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
+        isRevealed={isRevealed}
+        selectedOptionKey={selectedOptionKey}
+        agreementRating={agreementRating}
+        userComment={userComment}
+        selectedCategories={selectedCategories}
+        localError={localError}
+        contextError={contextError}
+        isFlagModalOpen={isFlagModalOpen}
+        canReveal={canReveal}
+        canSubmit={canSubmit}
+        userChoiceMatchesResearcher={userChoiceMatchesResearcher}
+        researcherOptionKey={researcherOptionKey}
+        optionAContent={optionAContent}
+        optionBContent={optionBContent}
+        handleOptionSelect={handleOptionSelect}
+        setAgreementRating={setAgreementRating}
+        setUserComment={setUserComment}
+        setSelectedCategories={setSelectedCategories}
+        handleReveal={handleReveal}
+        handleLocalSubmit={handleLocalSubmit}
+        setIsFlagModalOpen={setIsFlagModalOpen}
+        handleSubmitFlag={handleSubmitFlag}
+      />
+      {/* Uncomment the line below for testing tour functionality in development */}
+      {/* <TourControls /> */}
+    </>
   );
 };
 

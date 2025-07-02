@@ -30,7 +30,7 @@ const SurveyNavigationFooter = () => {
   const logic = useSurveyNavigationFooterLogic();
   return (
     <footer className="survey-nav-footer">
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-center gap-4">
         {renderLeftButton(logic)}
         {renderRightButton(logic)}
       </div>
