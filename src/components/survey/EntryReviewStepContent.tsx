@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 // components/survey/EntryReviewStepContent.tsx
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 import { useSurveyTour } from '../../hooks/useSurveyTour';
 import EntryReviewStepContentView from './EntryReviewStepContentView';
@@ -21,6 +21,8 @@ const EntryReviewStepContent: React.FC = () => {
     markCurrentEvaluationSubmitted,
     isCurrentEvaluationSubmitted,
     error: contextError,
+    goToNextStep,
+    completeSurveyAndPersistData,
   } = useSurveyProgress();
 
   const {
@@ -53,22 +55,32 @@ const EntryReviewStepContent: React.FC = () => {
     }
   }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, startTour, shouldShowTour]);
 
-  const handleOptionSelect = (optionKey: 'A' | 'B') => {
-    if (isCurrentEvaluationSubmitted || isRevealed) return;
-    setSelectedOptionKey(optionKey);
-    setLocalError(null);
-  };
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }, [currentStepNumber, currentDpoEntryIndex]);
 
-  const handleReveal = () => {
+  const handleOptionSelect = useCallback(
+    (optionKey: 'A' | 'B') => {
+      if (isCurrentEvaluationSubmitted || isRevealed) return;
+      setSelectedOptionKey(optionKey);
+      setLocalError(null);
+    },
+    [isCurrentEvaluationSubmitted, isRevealed, setSelectedOptionKey, setLocalError],
+  );
+
+  const handleReveal = useCallback(() => {
     if (!selectedOptionKey || selectedCategories.length === 0) {
       setLocalError('Please select an option and at least one category to continue.');
       return;
     }
     setLocalError(null);
     setIsRevealed(true);
-  };
+  }, [selectedOptionKey, selectedCategories.length, setLocalError, setIsRevealed]);
 
-  const handleLocalSubmit = () => {
+  const handleLocalSubmit = useCallback(() => {
     setLocalError(null);
     const result = buildEvaluationDraft({
       currentDisplayEntry,
@@ -92,22 +104,48 @@ const EntryReviewStepContent: React.FC = () => {
     }
     submitEvaluationToContext(result, currentEntry);
     markCurrentEvaluationSubmitted();
-  };
 
-  const handleSubmitFlag = async (reason: string, comment: string) => {
-    if (!participantSessionUid) {
-      alert('Cannot submit flag: missing session information.');
-      setIsFlagModalOpen(false);
-      return;
+    const isLastEntry = currentDpoEntryIndex === dpoEntriesToReview.length - 1;
+
+    if (isLastEntry) {
+      completeSurveyAndPersistData();
+    } else {
+      goToNextStep();
     }
-    await submitFlagForEntry({
-      currentDisplayEntry,
-      participantSessionUid,
-      reason,
-      comment,
-      onFinally: () => setIsFlagModalOpen(false),
-    });
-  };
+  }, [
+    currentDisplayEntry,
+    selectedOptionKey,
+    agreementRating,
+    userComment,
+    timeStarted,
+    optionAisDPOAccepted,
+    selectedCategories,
+    dpoEntriesToReview,
+    currentDpoEntryIndex,
+    submitEvaluationToContext,
+    markCurrentEvaluationSubmitted,
+    setLocalError,
+    goToNextStep,
+    completeSurveyAndPersistData,
+  ]);
+
+  const handleSubmitFlag = useCallback(
+    async (reason: string, comment: string) => {
+      if (!participantSessionUid) {
+        alert('Cannot submit flag: missing session information.');
+        setIsFlagModalOpen(false);
+        return;
+      }
+      await submitFlagForEntry({
+        currentDisplayEntry,
+        participantSessionUid,
+        reason,
+        comment,
+        onFinally: () => setIsFlagModalOpen(false),
+      });
+    },
+    [participantSessionUid, currentDisplayEntry, setIsFlagModalOpen],
+  );
 
   const canReveal: boolean = Boolean(selectedOptionKey && selectedCategories.length > 0 && !isRevealed);
   const canSubmit: boolean = Boolean(selectedOptionKey && agreementRating > 0 && isRevealed);
