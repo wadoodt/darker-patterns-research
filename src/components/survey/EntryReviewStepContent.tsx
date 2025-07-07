@@ -53,7 +53,14 @@ const EntryReviewStepContent: React.FC = () => {
     if (currentDisplayEntry && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted && shouldShowTour) {
       startTour();
     }
-  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, startTour, shouldShowTour]);
+  }, [
+    currentDisplayEntry,
+    currentDpoEntryIndex,
+    isCurrentEvaluationSubmitted,
+    startTour,
+    shouldShowTour,
+    currentStepNumber,
+  ]);
 
   useEffect(() => {
     window.scrollTo({

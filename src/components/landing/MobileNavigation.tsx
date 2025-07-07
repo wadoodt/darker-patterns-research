@@ -1,4 +1,5 @@
 import { type NavLink } from '@/lib/navigation';
+import clsx from 'clsx';
 import { X } from 'lucide-react';
 import Link from 'next/link';
 import CTAButton from './CTAButton';
@@ -21,7 +22,10 @@ const MobileNavigation = ({ mainNavLinks, onMobileMenuToggle, variant = 'dark' }
 
       {/* Panel */}
       <div
-        className={`${bgClass} fixed inset-y-0 right-0 z-[101] h-screen w-full overflow-y-auto sm:max-w-sm sm:ring-1`}
+        className={clsx(
+          bgClass,
+          'fixed inset-y-0 right-0 z-[101] h-screen w-full overflow-y-auto sm:max-w-sm sm:ring-1',
+        )}
       >
         <div className="flex items-center justify-between">
           <Link href="/" className="-m-1.5 flex items-center gap-2 p-1.5" onClick={onMobileMenuToggle}>
