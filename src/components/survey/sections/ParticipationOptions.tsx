@@ -78,7 +78,7 @@ const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
       </div>
     </div>
     <div
-      className={`overflow-hidden transition-all duration-500 ease-in-out ${isSelected ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
+      className={`overflow-hidden transition-all duration-1000 ease-in-out ${isSelected ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
     >
       <div className="flex flex-col pt-3">
         <div className="flex flex-col space-y-2">
@@ -92,14 +92,12 @@ const EmailOptionCard: React.FC<EmailOptionCardProps> = ({
           />
           <TermsCheckbox type="email" checked={termsAgreed} onCheckedChange={onTermsChange} />
         </div>
-        <div className="mt-1 flex min-h-[2.5rem] items-start">
-          {cardError && (
-            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5 text-red-700">
-              <AlertTriangle size={16} className="mr-1" />
-              <span className="block text-xs leading-tight font-normal">{cardError}</span>
-            </div>
-          )}
-        </div>
+        {cardError && (
+          <div className="mt-1 flex min-h-[2.5rem] w-full items-start rounded border border-red-200 bg-red-50 px-3 py-1.5 text-red-700">
+            <AlertTriangle size={16} className="mr-1" />
+            <span className="block text-xs leading-tight font-normal">{cardError}</span>
+          </div>
+        )}
       </div>
     </div>
   </div>
@@ -137,20 +135,18 @@ const AnonymousOptionCard: React.FC<AnonymousOptionCardProps> = ({
       </ul>
     </div>
     <div
-      className={`overflow-hidden transition-all duration-500 ease-in-out ${isSelected ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
+      className={`overflow-hidden transition-all duration-1000 ease-in-out ${isSelected ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
     >
       <div className="flex flex-col pt-3">
         <div className="flex flex-col space-y-2">
           <TermsCheckbox type="anonymous" checked={termsAgreed} onCheckedChange={onTermsChange} />
         </div>
-        <div className="mt-1 flex min-h-[2.5rem] items-start">
-          {cardError && (
-            <div className="w-full rounded border border-red-200 bg-red-50 px-3 py-1.5 text-red-700">
-              <AlertTriangle size={16} className="mr-1" />{' '}
-              <span className="block text-xs leading-tight font-normal">{cardError}</span>
-            </div>
-          )}
-        </div>
+        {cardError && (
+          <div className="mt-1 flex min-h-[2.5rem] w-full items-start rounded border border-red-200 bg-red-50 px-3 py-1.5 text-red-700">
+            <AlertTriangle size={16} className="mr-1" />{' '}
+            <span className="block text-xs leading-tight font-normal">{cardError}</span>
+          </div>
+        )}
       </div>
     </div>
   </div>
