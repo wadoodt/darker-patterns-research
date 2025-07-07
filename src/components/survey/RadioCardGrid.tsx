@@ -139,7 +139,7 @@ const OtherInput = ({
         onChange={handleChange}
         placeholder={otherPlaceholder}
         disabled={disabled || !isOtherSelected}
-        className="w-full rounded-lg border border-gray-300 p-3 transition-all duration-200 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+        className="w-full rounded-lg border border-gray-300 bg-white p-3 transition-all duration-200 outline-none focus:rounded-lg focus:border-blue-500 focus:ring-0 focus:ring-blue-500"
       />
     )}
   </div>
