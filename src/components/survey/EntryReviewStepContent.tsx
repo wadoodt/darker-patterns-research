@@ -57,7 +57,14 @@ const EntryReviewStepContent: React.FC = () => {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, shouldShowTour]);
+  }, [
+    currentDisplayEntry,
+    currentDpoEntryIndex,
+    isCurrentEvaluationSubmitted,
+    startTour,
+    shouldShowTour,
+    currentStepNumber,
+  ]);
 
   useEffect(() => {
     window.scrollTo({
