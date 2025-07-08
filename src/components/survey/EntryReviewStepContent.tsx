@@ -48,10 +48,14 @@ const EntryReviewStepContent: React.FC = () => {
 
   // Start tour when first entry loads (only if user hasn't seen it before)
   useEffect(() => {
-    if (currentDisplayEntry && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted && shouldShowTour) {
-      startTour();
+    if (currentDisplayEntry?.id && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted && shouldShowTour) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(() => {
+        startTour();
+      }, 500);
+      return () => clearTimeout(timer);
     }
-  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, startTour, shouldShowTour]);
+  }, [currentDisplayEntry, currentDpoEntryIndex, isCurrentEvaluationSubmitted, shouldShowTour]);
 
   const handleOptionSelect = (optionKey: 'A' | 'B') => {
     if (isCurrentEvaluationSubmitted || isRevealed) return;
