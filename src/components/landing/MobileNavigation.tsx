@@ -51,7 +51,7 @@ const MobileNavigation = ({ mainNavLinks, onMobileMenuToggle, variant = 'dark' }
                   key={link.label}
                   href={link.href}
                   onClick={onMobileMenuToggle}
-                  className={`-mx-3 block rounded-lg px-3 py-2 text-base leading-7 font-semibold ${textPrimary} ${hoverBg}`}
+                  className={`block rounded-lg px-3 py-2 text-base leading-7 font-semibold ${textPrimary} ${hoverBg}`}
                 >
                   {link.label}
                 </Link>
