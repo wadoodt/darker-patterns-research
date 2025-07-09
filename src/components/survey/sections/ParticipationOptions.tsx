@@ -11,7 +11,7 @@ interface TermsCheckboxProps {
 }
 
 const TermsCheckbox: React.FC<TermsCheckboxProps> = ({ type, checked, onCheckedChange }) => (
-  <div className="terms-checkbox-label pl-1">
+  <div className="terms-checkbox-label">
     <Checkbox
       id={`terms${type === 'email' ? 'Email' : 'Anonymous'}`}
       checked={checked}
