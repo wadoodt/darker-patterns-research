@@ -1,69 +1,55 @@
+'use client';
 import { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
-import type { DPOEntry } from '../../types/dpo';
 
 export function useEntryReviewState() {
-  const {
-    getCurrentDpoEntry,
-    currentDpoEntryIndex,
-    resetCurrentEvaluationSubmitted,
-    setGlobalError,
-    setHasUnsavedChanges,
-    isCurrentEvaluationSubmitted,
-  } = useSurveyProgress();
+  const { currentDisplayEntry, dpoEntriesToReview, currentDpoEntryIndex, evaluations, isCurrentEvaluationSubmitted } =
+    useSurveyProgress();
 
-  const [currentDisplayEntry, setCurrentDisplayEntry] = useState<DPOEntry | null>(null);
-  const [optionAContent, setOptionAContent] = useState<string>('');
-  const [optionBContent, setOptionBContent] = useState<string>('');
-  const [optionAisDPOAccepted, setOptionAisDPOAccepted] = useState<boolean>(false);
-  const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(null);
-  const [agreementRating, setAgreementRating] = useState<number>(0);
-  const [userComment, setUserComment] = useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [timeStarted, setTimeStarted] = useState<number>(0);
+  const currentEntry = dpoEntriesToReview[currentDpoEntryIndex];
+  const existingEvaluation = evaluations.find((evaluation) => evaluation.dpoEntryId === currentEntry?.id);
+
+  const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(
+    existingEvaluation ? existingEvaluation.chosenOptionKey : null,
+  );
+  const [agreementRating, setAgreementRating] = useState<number>(
+    existingEvaluation ? existingEvaluation.agreementRating : 0,
+  );
+  const [userComment, setUserComment] = useState<string>(existingEvaluation ? existingEvaluation.comment || '' : '');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    existingEvaluation ? existingEvaluation.categories : [],
+  );
   const [localError, setLocalError] = useState<string | null>(null);
-  const [isRevealed, setIsRevealed] = useState<boolean>(false);
+  const [isRevealed, setIsRevealed] = useState<boolean>(existingEvaluation ? true : false);
+
+  const optionAContent = currentDisplayEntry?.acceptedResponse || '';
+  const optionBContent = currentDisplayEntry?.rejectedResponse || '';
+  const optionAisDPOAccepted = currentDisplayEntry?.acceptedResponse ? true : false;
 
   useEffect(() => {
-    setGlobalError(null);
-    const entry = getCurrentDpoEntry();
-    setCurrentDisplayEntry(entry);
-    if (entry) {
-      const isDatasetAcceptedRandomlyAssignedToA = Math.random() < 0.5;
-      setOptionAContent(isDatasetAcceptedRandomlyAssignedToA ? entry.acceptedResponse : entry.rejectedResponse);
-      setOptionBContent(isDatasetAcceptedRandomlyAssignedToA ? entry.rejectedResponse : entry.acceptedResponse);
-      setOptionAisDPOAccepted(isDatasetAcceptedRandomlyAssignedToA);
-      setSelectedOptionKey(null);
-      setAgreementRating(0);
-      setUserComment('');
-      setSelectedCategories(entry.categories || []);
-      setTimeStarted(Date.now());
-      resetCurrentEvaluationSubmitted();
+    if (currentEntry) {
+      const evalForEntry = evaluations.find((evaluation) => evaluation.dpoEntryId === currentEntry.id);
+      if (evalForEntry) {
+        setSelectedOptionKey(evalForEntry.chosenOptionKey);
+        setAgreementRating(evalForEntry.agreementRating);
+        setUserComment(evalForEntry.comment || '');
+        setSelectedCategories(evalForEntry.categories);
+        setIsRevealed(true);
+
+        if (!isCurrentEvaluationSubmitted) {
+        }
+      } else {
+        setSelectedOptionKey(null);
+        setAgreementRating(0);
+        setUserComment('');
+        setSelectedCategories([]);
+        setIsRevealed(false);
+      }
       setLocalError(null);
-      setIsRevealed(false);
-    } else {
-      setHasUnsavedChanges(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDpoEntryIndex, getCurrentDpoEntry]);
+  }, [currentDpoEntryIndex, currentEntry, evaluations, isCurrentEvaluationSubmitted]);
 
-  // Effect to signal unsaved changes when form fields change before submission
-  useEffect(() => {
-    if (
-      currentDisplayEntry &&
-      !isCurrentEvaluationSubmitted &&
-      (selectedOptionKey || agreementRating > 0 || userComment)
-    ) {
-      setHasUnsavedChanges(true);
-    }
-  }, [
-    selectedOptionKey,
-    agreementRating,
-    userComment,
-    currentDisplayEntry,
-    isCurrentEvaluationSubmitted,
-    setHasUnsavedChanges,
-  ]);
+  const timeStarted = Date.now();
 
   return {
     currentDisplayEntry,
@@ -79,7 +65,6 @@ export function useEntryReviewState() {
     selectedCategories,
     setSelectedCategories,
     timeStarted,
-    setTimeStarted,
     localError,
     setLocalError,
     isRevealed,

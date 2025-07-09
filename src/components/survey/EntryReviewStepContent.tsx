@@ -23,10 +23,10 @@ const EntryReviewStepContent: React.FC = () => {
     error: contextError,
     goToNextStep,
     completeSurveyAndPersistData,
+    currentDisplayEntry,
   } = useSurveyProgress();
 
   const {
-    currentDisplayEntry,
     optionAContent,
     optionBContent,
     optionAisDPOAccepted,

@@ -20,6 +20,7 @@ export const initialState: SurveyState = {
   isSubmittingSurvey: false,
   isCurrentEvaluationSubmitted: false,
   hasUnsavedChanges: false,
+  currentDisplayEntry: null, // Inicializar como null
 };
 
 export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyState {
@@ -70,6 +71,7 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
         isLoadingEntries: false,
         currentStepNumber: 3,
         isCurrentEvaluationSubmitted: false,
+        currentDisplayEntry: action.payload[0] || null, // Establecer la primera entrada
       };
 
     case SurveyActionType.SET_EVALUATION:
@@ -98,9 +100,18 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
             currentStepNumber: 4,
             isCurrentEvaluationSubmitted: false,
             hasUnsavedChanges: false,
+            currentDisplayEntry: null,
           };
         }
-        return { ...state, currentDpoEntryIndex: nextIndex };
+        const nextEntry = state.dpoEntriesToReview[nextIndex];
+        const hasEvaluation = state.evaluations.some((evaluation) => evaluation.dpoEntryId === nextEntry.id);
+        return {
+          ...state,
+          currentDpoEntryIndex: nextIndex,
+          isCurrentEvaluationSubmitted: hasEvaluation,
+          hasUnsavedChanges: false,
+          currentDisplayEntry: nextEntry,
+        };
       }
 
       return {
@@ -114,7 +125,16 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
     case SurveyActionType.GO_TO_PREVIOUS_STEP: {
       if (state.currentStepNumber === 3) {
         if (state.currentDpoEntryIndex > 0) {
-          return { ...state, currentDpoEntryIndex: state.currentDpoEntryIndex - 1 };
+          const prevIndex = state.currentDpoEntryIndex - 1;
+          const prevEntry = state.dpoEntriesToReview[prevIndex];
+          const hasEvaluation = state.evaluations.some((evaluation) => evaluation.dpoEntryId === prevEntry.id);
+          return {
+            ...state,
+            currentDpoEntryIndex: prevIndex,
+            isCurrentEvaluationSubmitted: hasEvaluation,
+            hasUnsavedChanges: false,
+            currentDisplayEntry: prevEntry,
+          };
         }
         return {
           ...state,
@@ -123,6 +143,7 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
           dpoEntriesToReview: [],
           isLoadingEntries: false,
           hasUnsavedChanges: false,
+          currentDisplayEntry: null,
         };
       }
 
@@ -151,10 +172,11 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
         error: null,
         hasUnsavedChanges: false,
         currentStepNumber: 4,
+        currentDisplayEntry: null,
       };
 
     case SurveyActionType.RESET_SURVEY:
-      return initialState;
+      return { ...initialState };
 
     case SurveyActionType.SET_UNSAVED_CHANGES:
       return { ...state, hasUnsavedChanges: action.payload };

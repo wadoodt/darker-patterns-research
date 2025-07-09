@@ -17,6 +17,7 @@ export interface SurveyState {
   isSubmittingSurvey: boolean;
   isCurrentEvaluationSubmitted: boolean;
   hasUnsavedChanges: boolean;
+  currentDisplayEntry: DPOEntry | null;
 }
 
 export interface SurveyAction {
