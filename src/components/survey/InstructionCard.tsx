@@ -1,14 +1,16 @@
 import { Button } from '@/components/ui/button';
-import { Flag, Info, Map } from 'lucide-react';
-import { InstructionCardProps } from './InstructionCard.types';
 import { useSurveyTour } from '@/hooks/useSurveyTour';
+import { Flag, Info, Map } from 'lucide-react';
+import React from 'react';
+import { InstructionCardProps } from './InstructionCard.types';
 
-export default function InstructionCard({
+function InstructionCardComponent({
   instruction,
   isCurrentEvaluationSubmitted,
   setIsFlagModalOpen,
 }: InstructionCardProps) {
   const { startTour } = useSurveyTour();
+
   return (
     <section aria-labelledby="instruction-title" className="entry-instruction-card mb-5">
       <div className="mb-1.5 flex items-center justify-between">
@@ -46,3 +48,5 @@ export default function InstructionCard({
     </section>
   );
 }
+const InstructionCard = React.memo(InstructionCardComponent);
+export default InstructionCard;

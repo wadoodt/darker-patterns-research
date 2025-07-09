@@ -17,7 +17,7 @@ const DesktopNavigation = ({ mainNavLinks }: DesktopNavigationProps) => {
         ))}
       </div>
 
-      <div className="flex flex-1 items-center justify-end">
+      <div className="hidden items-center justify-end md:flex md:flex-1">
         <CTAButton href="/step-introduction" className="hidden px-4 py-2 text-sm sm:inline-flex">
           Start Survey
         </CTAButton>

@@ -6,7 +6,7 @@ interface MobileMenuButtonProps {
 
 const MobileMenuButton = ({ onMobileMenuToggle }: MobileMenuButtonProps) => {
   return (
-    <div className="ml-3 lg:hidden">
+    <div className="ml-3 flex items-center justify-center lg:hidden">
       <button
         type="button"
         className="text-dark-text-secondary hover:text-dark-text-primary -m-2.5 inline-flex items-center justify-center rounded-md p-2.5"

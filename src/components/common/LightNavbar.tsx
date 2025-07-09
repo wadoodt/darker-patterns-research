@@ -3,8 +3,10 @@
 
 import { getLinkGroup, navLinks } from '@/lib/navigation';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import CTAButton from '../landing/CTAButton';
+import MobileMenuButton from '../landing/MobileMenuButton';
+import MobileNavigation from '../landing/MobileNavigation';
 import ProtectedLink from './ProtectedLink';
 
 interface LightNavbarProps {
@@ -18,8 +20,13 @@ const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) =>
 
   const mainNavLinks = navLinks.filter((link) => link.group === 'landing');
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
   return (
-    <header className="light-navbar sticky top-[0.375rem] z-50">
+    <header className="light-navbar sticky z-50">
       <nav className="light-navbar-content">
         <div className="flex lg:flex-1">
           <ProtectedLink
@@ -57,8 +64,12 @@ const LightNavbar: React.FC<LightNavbarProps> = ({ showUnsavedChangesModal }) =>
               Access for Researchers
             </ProtectedLink>
           )}
+          <MobileMenuButton onMobileMenuToggle={handleMobileMenuToggle} />
         </div>
       </nav>
+      {mobileMenuOpen && (
+        <MobileNavigation mainNavLinks={mainNavLinks} onMobileMenuToggle={handleMobileMenuToggle} variant="light" />
+      )}
     </header>
   );
 };

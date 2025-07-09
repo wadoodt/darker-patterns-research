@@ -70,7 +70,7 @@
   @apply list-inside list-disc space-y-1 pl-1 text-xs;
 }
 .terms-checkbox-label {
-  @apply text-light-text-secondary hover:text-light-text-primary mt-auto flex cursor-pointer items-center gap-2 pt-3 text-xs;
+  @apply text-light-text-secondary hover:text-light-text-primary mt-auto flex cursor-pointer items-center gap-2 p-1 pr-0 text-xs;
 }
 
 /* Entry Review Specific Styles */
@@ -148,7 +148,7 @@
   @apply text-xs;
 }
 .survey-nav-footer {
-  @apply bg-light-bg-primary border-light-border-primary fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between border-t px-4 py-3 sm:px-6;
+  @apply fixed right-0 bottom-0 left-0 z-50 mx-auto flex max-w-7xl justify-between rounded-2xl border-t border-gray-100 bg-white px-4 py-3 sm:px-6 sm:shadow;
 }
 .survey-nav-footer-button {
   @apply px-4 py-2 text-xs sm:text-sm;
