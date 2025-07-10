@@ -17,6 +17,7 @@ export enum SurveyActionType {
   COMPLETE_SURVEY = 'COMPLETE_SURVEY',
   RESET_SURVEY = 'RESET_SURVEY',
   SET_UNSAVED_CHANGES = 'SET_UNSAVED_CHANGES',
+  UPDATE_DPO_ENTRY_USER_STATE = 'UPDATE_DPO_ENTRY_USER_STATE',
 }
 
 export type SurveyAction =
@@ -38,4 +39,11 @@ export type SurveyAction =
   | { type: SurveyActionType.SET_SUBMITTING; payload: boolean }
   | { type: SurveyActionType.COMPLETE_SURVEY }
   | { type: SurveyActionType.RESET_SURVEY }
-  | { type: SurveyActionType.SET_UNSAVED_CHANGES; payload: boolean };
+  | { type: SurveyActionType.SET_UNSAVED_CHANGES; payload: boolean }
+  | {
+      type: SurveyActionType.UPDATE_DPO_ENTRY_USER_STATE;
+      payload: {
+        entryId: string;
+        updates: Partial<DPOEntry>;
+      };
+    };

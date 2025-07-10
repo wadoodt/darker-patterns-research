@@ -40,4 +40,5 @@ export interface SurveyContextValue extends SurveyState {
   setGlobalError: (message: string | null) => void;
   resetSurvey: () => void;
   setHasUnsavedChanges: (hasChanges: boolean) => void;
+  updateDpoEntryUserState: (entryId: string, updates: Partial<DPOEntry>) => void;
 }

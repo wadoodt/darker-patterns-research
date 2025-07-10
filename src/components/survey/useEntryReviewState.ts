@@ -3,53 +3,44 @@ import { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 
 export function useEntryReviewState() {
-  const { currentDisplayEntry, dpoEntriesToReview, currentDpoEntryIndex, evaluations, isCurrentEvaluationSubmitted } =
-    useSurveyProgress();
-
-  const currentEntry = dpoEntriesToReview[currentDpoEntryIndex];
-  const existingEvaluation = evaluations.find((evaluation) => evaluation.dpoEntryId === currentEntry?.id);
+  const { currentDisplayEntry } = useSurveyProgress();
 
   const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(
-    existingEvaluation ? existingEvaluation.chosenOptionKey : null,
+    currentDisplayEntry?.userSelectedOptionKey || null,
   );
-  const [agreementRating, setAgreementRating] = useState<number>(
-    existingEvaluation ? existingEvaluation.agreementRating : 0,
-  );
-  const [userComment, setUserComment] = useState<string>(existingEvaluation ? existingEvaluation.comment || '' : '');
+  const [agreementRating, setAgreementRating] = useState<number>(currentDisplayEntry?.userAgreementRating || 0);
+  const [userComment, setUserComment] = useState<string>(currentDisplayEntry?.userComment || '');
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    existingEvaluation ? existingEvaluation.categories : [],
+    currentDisplayEntry?.userSelectedCategories || [],
   );
   const [localError, setLocalError] = useState<string | null>(null);
-  const [isRevealed, setIsRevealed] = useState<boolean>(existingEvaluation ? true : false);
+  const [isRevealed, setIsRevealed] = useState<boolean>(currentDisplayEntry?.isUserRevealed || false);
+
+  const [timeStarted, setTimeStarted] = useState<number>(Date.now());
 
   const optionAContent = currentDisplayEntry?.acceptedResponse || '';
   const optionBContent = currentDisplayEntry?.rejectedResponse || '';
   const optionAisDPOAccepted = currentDisplayEntry?.acceptedResponse ? true : false;
 
   useEffect(() => {
-    if (currentEntry) {
-      const evalForEntry = evaluations.find((evaluation) => evaluation.dpoEntryId === currentEntry.id);
-      if (evalForEntry) {
-        setSelectedOptionKey(evalForEntry.chosenOptionKey);
-        setAgreementRating(evalForEntry.agreementRating);
-        setUserComment(evalForEntry.comment || '');
-        setSelectedCategories(evalForEntry.categories);
-        setIsRevealed(true);
+    if (currentDisplayEntry) {
+      setSelectedOptionKey(currentDisplayEntry.userSelectedOptionKey || null);
+      setAgreementRating(currentDisplayEntry.userAgreementRating || 0);
+      setUserComment(currentDisplayEntry.userComment || '');
+      setSelectedCategories(currentDisplayEntry.userSelectedCategories || []);
+      setIsRevealed(currentDisplayEntry.isUserRevealed || false);
 
-        if (!isCurrentEvaluationSubmitted) {
-        }
-      } else {
-        setSelectedOptionKey(null);
-        setAgreementRating(0);
-        setUserComment('');
-        setSelectedCategories([]);
-        setIsRevealed(false);
-      }
-      setLocalError(null);
+      setTimeStarted(Date.now());
+    } else {
+      setSelectedOptionKey(null);
+      setAgreementRating(0);
+      setUserComment('');
+      setSelectedCategories([]);
+      setIsRevealed(false);
+      setTimeStarted(Date.now());
     }
-  }, [currentDpoEntryIndex, currentEntry, evaluations, isCurrentEvaluationSubmitted]);
-
-  const timeStarted = Date.now();
+    setLocalError(null);
+  }, [currentDisplayEntry]);
 
   return {
     currentDisplayEntry,

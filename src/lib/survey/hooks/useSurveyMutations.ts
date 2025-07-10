@@ -15,6 +15,7 @@ export interface UseSurveyMutations {
   updateDemographicsInContext: (data: DemographicData) => void;
   submitEvaluation: (evaluationDraft: EvaluationDraft, currentEntry: DPOEntry) => void;
   completeSurveyAndPersistData: () => Promise<void>;
+  updateDpoEntryUserState: (entryId: string, updates: Partial<DPOEntry>) => void;
 }
 
 export function useSurveyMutations(state: SurveyState, dispatch: Dispatch<SurveyAction>): UseSurveyMutations {
@@ -107,11 +108,25 @@ export function useSurveyMutations(state: SurveyState, dispatch: Dispatch<Survey
     }
   }, [state, dispatch]);
 
+  const updateDpoEntryUserState = useCallback(
+    (entryId: string, updates: Partial<DPOEntry>) => {
+      dispatch({
+        type: SurveyActionType.UPDATE_DPO_ENTRY_USER_STATE,
+        payload: {
+          entryId,
+          updates,
+        },
+      });
+    },
+    [dispatch],
+  );
+
   return {
     setParticipationDetails,
     setParticipantEmail,
     updateDemographicsInContext,
     submitEvaluation,
     completeSurveyAndPersistData,
+    updateDpoEntryUserState,
   };
 }
