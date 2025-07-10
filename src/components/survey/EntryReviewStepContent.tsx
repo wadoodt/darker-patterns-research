@@ -17,15 +17,13 @@ const EntryReviewStepContent: React.FC = () => {
     currentDpoEntryIndex,
     isLoadingEntries,
     participantSessionUid,
-    // markCurrentEvaluationSubmitted, // <--- Consider removing, handled by SET_EVALUATION now
     isCurrentEvaluationSubmitted,
     error: contextError,
     goToNextStep,
     completeSurveyAndPersistData,
     currentDisplayEntry,
-    // --- ADD updateDpoEntryUserState HERE ---
     updateDpoEntryUserState,
-  } = useSurveyProgress(); // This is where updateDpoEntryUserState comes from
+  } = useSurveyProgress();
 
   const {
     optionAContent,
@@ -34,11 +32,11 @@ const EntryReviewStepContent: React.FC = () => {
     selectedOptionKey,
     setSelectedOptionKey,
     agreementRating,
-    setAgreementRating, // Still needed for local state update by handleSetAgreementRating
+    setAgreementRating,
     userComment,
-    setUserComment, // Still needed for local state update by handleSetUserComment
+    setUserComment,
     selectedCategories,
-    setSelectedCategories, // Still needed for local state update by handleSetSelectedCategories
+    setSelectedCategories,
     timeStarted,
     localError,
     setLocalError,
@@ -49,10 +47,8 @@ const EntryReviewStepContent: React.FC = () => {
   const { startTour, shouldShowTour } = useSurveyTour();
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
 
-  // Start tour when first entry loads (only if user hasn't seen it before)
   useEffect(() => {
     if (currentDisplayEntry?.id && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted && shouldShowTour) {
-      // Small delay to ensure DOM is ready
       const timer = setTimeout(() => {
         startTour();
       }, 500);
@@ -70,16 +66,14 @@ const EntryReviewStepContent: React.FC = () => {
 
   const handleOptionSelect = useCallback(
     (optionKey: 'A' | 'B') => {
-      // It's crucial to check isUserEvaluationSubmitted from currentDisplayEntry
-      // because isCurrentEvaluationSubmitted might be for the previous entry.
-      if (currentDisplayEntry?.isUserEvaluationSubmitted || isRevealed) return; // Use currentDisplayEntry's state for this
+      if (currentDisplayEntry?.isUserEvaluationSubmitted || isRevealed) return;
       setSelectedOptionKey(optionKey);
       setLocalError(null);
       if (currentDisplayEntry?.id) {
         updateDpoEntryUserState(currentDisplayEntry.id, { userSelectedOptionKey: optionKey });
       }
     },
-    [currentDisplayEntry, isRevealed, setSelectedOptionKey, setLocalError, updateDpoEntryUserState], // Add currentDisplayEntry and updateDpoEntryUserState to dependencies
+    [currentDisplayEntry, isRevealed, setSelectedOptionKey, setLocalError, updateDpoEntryUserState],
   );
 
   const handleSetAgreementRating = useCallback(
@@ -152,26 +146,12 @@ const EntryReviewStepContent: React.FC = () => {
       return;
     }
 
-    // Always use currentDisplayEntry directly, as it's kept up-to-date by the reducer
-    // and correctly reflects the current entry being displayed.
     if (!currentDisplayEntry || !currentDisplayEntry.id) {
-      // Use currentDisplayEntry.id for validation
       setLocalError('No current entry to submit evaluation for.');
       return;
     }
 
-    submitEvaluationToContext(result, currentDisplayEntry); // Pass currentDisplayEntry directly
-
-    // markCurrentEvaluationSubmitted(); // <--- This line is likely no longer needed.
-    // The SET_EVALUATION action in reducer now handles
-    // marking isUserEvaluationSubmitted: true on the DPOEntry
-    // and useEntryReviewState will pick it up.
-
-    // Redundant but safe: Ensure the DPOEntry in state reflects the submitted state.
-    // The SET_EVALUATION action in the reducer already handles this robustly,
-    // but an explicit dispatch here can act as a fallback/reinforcement.
-    // If you're confident in the SET_EVALUATION reducer logic, you could omit this block.
-    // However, it doesn't hurt.
+    submitEvaluationToContext(result, currentDisplayEntry);
     updateDpoEntryUserState(currentDisplayEntry.id, {
       isUserEvaluationSubmitted: true,
       userSelectedOptionKey: selectedOptionKey,
@@ -188,21 +168,21 @@ const EntryReviewStepContent: React.FC = () => {
     } else {
       goToNextStep();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    currentDisplayEntry, // Crucial dependency for all these changes
+    currentDisplayEntry,
     selectedOptionKey,
     agreementRating,
     userComment,
-    timeStarted,
     optionAisDPOAccepted,
     selectedCategories,
-    dpoEntriesToReview, // Needed for `isLastEntry` check
-    currentDpoEntryIndex, // Needed for `isLastEntry` check
+    dpoEntriesToReview,
+    currentDpoEntryIndex,
     submitEvaluationToContext,
     setLocalError,
     goToNextStep,
     completeSurveyAndPersistData,
-    updateDpoEntryUserState, // New dependency
+    updateDpoEntryUserState,
   ]);
 
   const handleSubmitFlag = useCallback(
@@ -223,8 +203,6 @@ const EntryReviewStepContent: React.FC = () => {
     [participantSessionUid, currentDisplayEntry, setIsFlagModalOpen],
   );
 
-  // canReveal and canSubmit can also check currentDisplayEntry.isUserEvaluationSubmitted
-  // if you want to prevent actions on already submitted entries.
   const canReveal: boolean = Boolean(
     selectedOptionKey &&
       selectedCategories.length > 0 &&
@@ -236,7 +214,6 @@ const EntryReviewStepContent: React.FC = () => {
   );
 
   const researcherOptionKey = optionAisDPOAccepted ? 'A' : 'B';
-  // userChoiceMatchesResearcher should also look at currentDisplayEntry.isUserEvaluationSubmitted
   const userChoiceMatchesResearcher =
     (isRevealed || (currentDisplayEntry?.isUserEvaluationSubmitted ?? false)) &&
     selectedOptionKey === researcherOptionKey;
@@ -251,9 +228,7 @@ const EntryReviewStepContent: React.FC = () => {
           currentStepNumber={currentStepNumber}
           totalSteps={totalSteps}
           isLoadingEntries={isLoadingEntries}
-          // The prop passed here should reflect the current entry's submission status
-          // which is now primarily driven by currentDisplayEntry.isUserEvaluationSubmitted
-          isCurrentEvaluationSubmitted={currentDisplayEntry?.isUserEvaluationSubmitted || false} // <--- IMPORTANT CHANGE
+          isCurrentEvaluationSubmitted={currentDisplayEntry?.isUserEvaluationSubmitted || false}
           isRevealed={isRevealed}
           selectedOptionKey={selectedOptionKey}
           agreementRating={agreementRating}
@@ -269,11 +244,9 @@ const EntryReviewStepContent: React.FC = () => {
           optionAContent={optionAContent}
           optionBContent={optionBContent}
           handleOptionSelect={handleOptionSelect}
-          // --- PASS NEW HANDLERS TO CONTENT VIEW ---
-          setAgreementRating={handleSetAgreementRating} // Use new handler
-          setUserComment={handleSetUserComment} // Use new handler
-          setSelectedCategories={handleSetSelectedCategories} // Use new handler
-          // --- END NEW HANDLERS ---
+          setAgreementRating={handleSetAgreementRating}
+          setUserComment={handleSetUserComment}
+          setSelectedCategories={handleSetSelectedCategories}
           handleReveal={handleReveal}
           handleLocalSubmit={handleLocalSubmit}
           setIsFlagModalOpen={setIsFlagModalOpen}

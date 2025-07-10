@@ -13,7 +13,6 @@ import ReviewHeader from './ReviewHeader';
 import SubmitButton from './SubmitButton';
 
 interface EntryReviewStepContentViewProps {
-  // Data
   currentDisplayEntry: DPOEntry | null;
   currentDpoEntryIndex: number;
   dpoEntriesToReview: DPOEntry[];
@@ -35,8 +34,6 @@ interface EntryReviewStepContentViewProps {
   researcherOptionKey: 'A' | 'B';
   optionAContent: string;
   optionBContent: string;
-
-  // Handlers
   handleOptionSelect: (optionKey: 'A' | 'B') => void;
   setAgreementRating: (rating: number) => void;
   setUserComment: (comment: string) => void;

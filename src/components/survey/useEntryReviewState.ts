@@ -29,7 +29,6 @@ export function useEntryReviewState() {
       setUserComment(currentDisplayEntry.userComment || '');
       setSelectedCategories(currentDisplayEntry.userSelectedCategories || []);
       setIsRevealed(currentDisplayEntry.isUserRevealed || false);
-
       setTimeStarted(Date.now());
     } else {
       setSelectedOptionKey(null);
