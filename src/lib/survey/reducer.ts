@@ -147,11 +147,10 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
         if (state.currentDpoEntryIndex > 0) {
           const prevIndex = state.currentDpoEntryIndex - 1;
           const prevEntry = state.dpoEntriesToReview[prevIndex];
-          const hasEvaluation = state.evaluations.some((evaluation) => evaluation.dpoEntryId === prevEntry.id);
           return {
             ...state,
             currentDpoEntryIndex: prevIndex,
-            isCurrentEvaluationSubmitted: hasEvaluation,
+            isCurrentEvaluationSubmitted: prevEntry.isUserEvaluationSubmitted || false,
             hasUnsavedChanges: false,
             currentDisplayEntry: prevEntry,
           };

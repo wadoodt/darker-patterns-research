@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
 
 export function useEntryReviewState() {
-  const { currentDisplayEntry } = useSurveyProgress();
+  const { currentDisplayEntry, updateDpoEntryUserState } = useSurveyProgress();
 
   const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(
     currentDisplayEntry?.userSelectedOptionKey || null,
@@ -18,9 +18,9 @@ export function useEntryReviewState() {
 
   const [timeStarted, setTimeStarted] = useState<number>(Date.now());
 
-  const optionAContent = currentDisplayEntry?.acceptedResponse || '';
-  const optionBContent = currentDisplayEntry?.rejectedResponse || '';
-  const optionAisDPOAccepted = currentDisplayEntry?.acceptedResponse ? true : false;
+  const [optionAContent, setOptionAContent] = useState<string>('');
+  const [optionBContent, setOptionBContent] = useState<string>('');
+  const [optionAisDPOAccepted, setOptionAisDPOAccepted] = useState<boolean>(false);
 
   useEffect(() => {
     if (currentDisplayEntry) {
@@ -30,6 +30,21 @@ export function useEntryReviewState() {
       setSelectedCategories(currentDisplayEntry.userSelectedCategories || []);
       setIsRevealed(currentDisplayEntry.isUserRevealed || false);
       setTimeStarted(Date.now());
+
+      let currentOptionOrder = currentDisplayEntry.userOptionOrder;
+      if (!currentOptionOrder) {
+        currentOptionOrder = Math.random() < 0.5 ? 'AB' : 'BA';
+        updateDpoEntryUserState(currentDisplayEntry.id, { userOptionOrder: currentOptionOrder });
+      }
+      if (currentOptionOrder === 'AB') {
+        setOptionAContent(currentDisplayEntry.acceptedResponse || '');
+        setOptionBContent(currentDisplayEntry.rejectedResponse || '');
+        setOptionAisDPOAccepted(true);
+      } else {
+        setOptionAContent(currentDisplayEntry.rejectedResponse || '');
+        setOptionBContent(currentDisplayEntry.acceptedResponse || '');
+        setOptionAisDPOAccepted(false);
+      }
     } else {
       setSelectedOptionKey(null);
       setAgreementRating(0);
@@ -39,7 +54,7 @@ export function useEntryReviewState() {
       setTimeStarted(Date.now());
     }
     setLocalError(null);
-  }, [currentDisplayEntry]);
+  }, [currentDisplayEntry, updateDpoEntryUserState]);
 
   return {
     currentDisplayEntry,

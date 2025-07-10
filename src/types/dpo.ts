@@ -44,7 +44,7 @@ export interface DPOEntry {
   rejectedResponse: string;
   categories: string[];
   researcherCategories?: string[];
-  discussion?: string; // Optional explanation/discussion visible after evaluation
+  discussion?: string;
   reviewCount: number;
   targetReviewCount?: number;
   lastReviewedAt?: Timestamp | Date;
@@ -52,21 +52,19 @@ export interface DPOEntry {
   date: Timestamp | Date;
   isFlaggedCount?: number;
   lastFlaggedAt?: Timestamp | Date;
-
+  userOptionOrder?: 'AB' | 'BA'; // 'AB' means A=accepted, B=rejected; 'BA' significa B=accepted, A=rejected
   // Fields for "Archive & Create New Version" strategy
   isArchived?: boolean; // True if this entry is an old version and superseded
   archivedAt?: Timestamp | Date; // The date when the entry was archived
   originalEntryId?: string; // If this entry is a new version, this links to the ID of the entry it corrects/revises
   supersededByEntryId?: string; // If this entry is archived, this links to the ID of the new entry that replaces it
   viewCount?: number;
-  // --- START: NEW FIELDS FOR USER'S INTERACTION STATE ---
   userSelectedOptionKey?: 'A' | 'B' | null; // Stores 'A' or 'B' (the chosen option)
   userAgreementRating?: number; // Stores the user's rating (0-5)
   userComment?: string | null; // Stores the user's comment
   userSelectedCategories?: string[]; // Stores the array of categories selected by the user
   isUserRevealed?: boolean; // True if the user has clicked "Reveal" for this entry
   isUserEvaluationSubmitted?: boolean; // True if the user has submitted evaluation for this entry
-  // --- END: NEW FIELDS FOR USER'S INTERACTION STATE ---
 }
 
 export interface DemographicData {

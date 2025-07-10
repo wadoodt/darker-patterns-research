@@ -168,7 +168,6 @@ const EntryReviewStepContent: React.FC = () => {
     } else {
       goToNextStep();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     currentDisplayEntry,
     selectedOptionKey,
@@ -178,6 +177,7 @@ const EntryReviewStepContent: React.FC = () => {
     selectedCategories,
     dpoEntriesToReview,
     currentDpoEntryIndex,
+    timeStarted,
     submitEvaluationToContext,
     setLocalError,
     goToNextStep,
