@@ -1,69 +1,60 @@
+'use client';
 import { useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
-import type { DPOEntry } from '../../types/dpo';
 
 export function useEntryReviewState() {
-  const {
-    getCurrentDpoEntry,
-    currentDpoEntryIndex,
-    resetCurrentEvaluationSubmitted,
-    setGlobalError,
-    setHasUnsavedChanges,
-    isCurrentEvaluationSubmitted,
-  } = useSurveyProgress();
+  const { currentDisplayEntry, updateDpoEntryUserState } = useSurveyProgress();
 
-  const [currentDisplayEntry, setCurrentDisplayEntry] = useState<DPOEntry | null>(null);
+  const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(
+    currentDisplayEntry?.userSelectedOptionKey || null,
+  );
+  const [agreementRating, setAgreementRating] = useState<number>(currentDisplayEntry?.userAgreementRating || 0);
+  const [userComment, setUserComment] = useState<string>(currentDisplayEntry?.userComment || '');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    currentDisplayEntry?.userSelectedCategories || [],
+  );
+  const [localError, setLocalError] = useState<string | null>(null);
+  const [isRevealed, setIsRevealed] = useState<boolean>(currentDisplayEntry?.isUserRevealed || false);
+
+  const [timeStarted, setTimeStarted] = useState<number>(Date.now());
+
   const [optionAContent, setOptionAContent] = useState<string>('');
   const [optionBContent, setOptionBContent] = useState<string>('');
   const [optionAisDPOAccepted, setOptionAisDPOAccepted] = useState<boolean>(false);
-  const [selectedOptionKey, setSelectedOptionKey] = useState<'A' | 'B' | null>(null);
-  const [agreementRating, setAgreementRating] = useState<number>(0);
-  const [userComment, setUserComment] = useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [timeStarted, setTimeStarted] = useState<number>(0);
-  const [localError, setLocalError] = useState<string | null>(null);
-  const [isRevealed, setIsRevealed] = useState<boolean>(false);
 
   useEffect(() => {
-    setGlobalError(null);
-    const entry = getCurrentDpoEntry();
-    setCurrentDisplayEntry(entry);
-    if (entry) {
-      const isDatasetAcceptedRandomlyAssignedToA = Math.random() < 0.5;
-      setOptionAContent(isDatasetAcceptedRandomlyAssignedToA ? entry.acceptedResponse : entry.rejectedResponse);
-      setOptionBContent(isDatasetAcceptedRandomlyAssignedToA ? entry.rejectedResponse : entry.acceptedResponse);
-      setOptionAisDPOAccepted(isDatasetAcceptedRandomlyAssignedToA);
+    if (currentDisplayEntry) {
+      setSelectedOptionKey(currentDisplayEntry.userSelectedOptionKey || null);
+      setAgreementRating(currentDisplayEntry.userAgreementRating || 0);
+      setUserComment(currentDisplayEntry.userComment || '');
+      setSelectedCategories(currentDisplayEntry.userSelectedCategories || []);
+      setIsRevealed(currentDisplayEntry.isUserRevealed || false);
+      setTimeStarted(Date.now());
+
+      let currentOptionOrder = currentDisplayEntry.userOptionOrder;
+      if (!currentOptionOrder) {
+        currentOptionOrder = Math.random() < 0.5 ? 'AB' : 'BA';
+        updateDpoEntryUserState(currentDisplayEntry.id, { userOptionOrder: currentOptionOrder });
+      }
+      if (currentOptionOrder === 'AB') {
+        setOptionAContent(currentDisplayEntry.acceptedResponse || '');
+        setOptionBContent(currentDisplayEntry.rejectedResponse || '');
+        setOptionAisDPOAccepted(true);
+      } else {
+        setOptionAContent(currentDisplayEntry.rejectedResponse || '');
+        setOptionBContent(currentDisplayEntry.acceptedResponse || '');
+        setOptionAisDPOAccepted(false);
+      }
+    } else {
       setSelectedOptionKey(null);
       setAgreementRating(0);
       setUserComment('');
-      setSelectedCategories(entry.categories || []);
-      setTimeStarted(Date.now());
-      resetCurrentEvaluationSubmitted();
-      setLocalError(null);
+      setSelectedCategories([]);
       setIsRevealed(false);
-    } else {
-      setHasUnsavedChanges(false);
+      setTimeStarted(Date.now());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDpoEntryIndex, getCurrentDpoEntry]);
-
-  // Effect to signal unsaved changes when form fields change before submission
-  useEffect(() => {
-    if (
-      currentDisplayEntry &&
-      !isCurrentEvaluationSubmitted &&
-      (selectedOptionKey || agreementRating > 0 || userComment)
-    ) {
-      setHasUnsavedChanges(true);
-    }
-  }, [
-    selectedOptionKey,
-    agreementRating,
-    userComment,
-    currentDisplayEntry,
-    isCurrentEvaluationSubmitted,
-    setHasUnsavedChanges,
-  ]);
+    setLocalError(null);
+  }, [currentDisplayEntry, updateDpoEntryUserState]);
 
   return {
     currentDisplayEntry,
@@ -79,7 +70,6 @@ export function useEntryReviewState() {
     selectedCategories,
     setSelectedCategories,
     timeStarted,
-    setTimeStarted,
     localError,
     setLocalError,
     isRevealed,

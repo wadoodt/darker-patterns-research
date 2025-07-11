@@ -1,5 +1,4 @@
 /* eslint-disable max-lines-per-function */
-// components/survey/EntryReviewStepContent.tsx
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { useSurveyProgress } from '../../contexts/SurveyProgressContext';
@@ -18,15 +17,15 @@ const EntryReviewStepContent: React.FC = () => {
     currentDpoEntryIndex,
     isLoadingEntries,
     participantSessionUid,
-    markCurrentEvaluationSubmitted,
     isCurrentEvaluationSubmitted,
     error: contextError,
     goToNextStep,
     completeSurveyAndPersistData,
+    currentDisplayEntry,
+    updateDpoEntryUserState,
   } = useSurveyProgress();
 
   const {
-    currentDisplayEntry,
     optionAContent,
     optionBContent,
     optionAisDPOAccepted,
@@ -48,10 +47,8 @@ const EntryReviewStepContent: React.FC = () => {
   const { startTour, shouldShowTour } = useSurveyTour();
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
 
-  // Start tour when first entry loads (only if user hasn't seen it before)
   useEffect(() => {
     if (currentDisplayEntry?.id && currentDpoEntryIndex === 0 && !isCurrentEvaluationSubmitted && shouldShowTour) {
-      // Small delay to ensure DOM is ready
       const timer = setTimeout(() => {
         startTour();
       }, 500);
@@ -69,11 +66,44 @@ const EntryReviewStepContent: React.FC = () => {
 
   const handleOptionSelect = useCallback(
     (optionKey: 'A' | 'B') => {
-      if (isCurrentEvaluationSubmitted || isRevealed) return;
+      if (currentDisplayEntry?.isUserEvaluationSubmitted || isRevealed) return;
       setSelectedOptionKey(optionKey);
       setLocalError(null);
+      if (currentDisplayEntry?.id) {
+        updateDpoEntryUserState(currentDisplayEntry.id, { userSelectedOptionKey: optionKey });
+      }
     },
-    [isCurrentEvaluationSubmitted, isRevealed, setSelectedOptionKey, setLocalError],
+    [currentDisplayEntry, isRevealed, setSelectedOptionKey, setLocalError, updateDpoEntryUserState],
+  );
+
+  const handleSetAgreementRating = useCallback(
+    (rating: number) => {
+      setAgreementRating(rating);
+      if (currentDisplayEntry?.id) {
+        updateDpoEntryUserState(currentDisplayEntry.id, { userAgreementRating: rating });
+      }
+    },
+    [setAgreementRating, currentDisplayEntry, updateDpoEntryUserState],
+  );
+
+  const handleSetUserComment = useCallback(
+    (comment: string) => {
+      setUserComment(comment);
+      if (currentDisplayEntry?.id) {
+        updateDpoEntryUserState(currentDisplayEntry.id, { userComment: comment });
+      }
+    },
+    [setUserComment, currentDisplayEntry, updateDpoEntryUserState],
+  );
+
+  const handleSetSelectedCategories = useCallback(
+    (categories: string[]) => {
+      setSelectedCategories(categories);
+      if (currentDisplayEntry?.id) {
+        updateDpoEntryUserState(currentDisplayEntry.id, { userSelectedCategories: categories });
+      }
+    },
+    [setSelectedCategories, currentDisplayEntry, updateDpoEntryUserState],
   );
 
   const handleReveal = useCallback(() => {
@@ -83,7 +113,21 @@ const EntryReviewStepContent: React.FC = () => {
     }
     setLocalError(null);
     setIsRevealed(true);
-  }, [selectedOptionKey, selectedCategories.length, setLocalError, setIsRevealed]);
+    if (currentDisplayEntry?.id) {
+      updateDpoEntryUserState(currentDisplayEntry.id, {
+        isUserRevealed: true,
+        userSelectedOptionKey: selectedOptionKey,
+        userSelectedCategories: selectedCategories,
+      });
+    }
+  }, [
+    selectedOptionKey,
+    selectedCategories,
+    setLocalError,
+    setIsRevealed,
+    currentDisplayEntry,
+    updateDpoEntryUserState,
+  ]);
 
   const handleLocalSubmit = useCallback(() => {
     setLocalError(null);
@@ -102,18 +146,29 @@ const EntryReviewStepContent: React.FC = () => {
       return;
     }
 
-    const currentEntry = dpoEntriesToReview[currentDpoEntryIndex];
-    if (!currentEntry) {
+    if (!currentDisplayEntry || !currentDisplayEntry.id) {
       setLocalError('No current entry to submit evaluation for.');
       return;
     }
-    submitEvaluationToContext(result, currentEntry);
-    markCurrentEvaluationSubmitted();
+
+    submitEvaluationToContext(result, currentDisplayEntry);
+    updateDpoEntryUserState(currentDisplayEntry.id, {
+      isUserEvaluationSubmitted: true,
+      userSelectedOptionKey: selectedOptionKey,
+      userAgreementRating: agreementRating,
+      userComment: userComment,
+      userSelectedCategories: selectedCategories,
+      isUserRevealed: true,
+    });
 
     const isLastEntry = currentDpoEntryIndex === dpoEntriesToReview.length - 1;
 
     if (isLastEntry) {
-      completeSurveyAndPersistData();
+      if (window.confirm('Are you sure you want to complete the survey?')) {
+        completeSurveyAndPersistData();
+      } else {
+        window.alert('Now you can go back to previous step');
+      }
     } else {
       goToNextStep();
     }
@@ -122,16 +177,16 @@ const EntryReviewStepContent: React.FC = () => {
     selectedOptionKey,
     agreementRating,
     userComment,
-    timeStarted,
     optionAisDPOAccepted,
     selectedCategories,
     dpoEntriesToReview,
     currentDpoEntryIndex,
+    timeStarted,
     submitEvaluationToContext,
-    markCurrentEvaluationSubmitted,
     setLocalError,
     goToNextStep,
     completeSurveyAndPersistData,
+    updateDpoEntryUserState,
   ]);
 
   const handleSubmitFlag = useCallback(
@@ -152,12 +207,20 @@ const EntryReviewStepContent: React.FC = () => {
     [participantSessionUid, currentDisplayEntry, setIsFlagModalOpen],
   );
 
-  const canReveal: boolean = Boolean(selectedOptionKey && selectedCategories.length > 0 && !isRevealed);
-  const canSubmit: boolean = Boolean(selectedOptionKey && agreementRating > 0 && isRevealed);
+  const canReveal: boolean = Boolean(
+    selectedOptionKey &&
+      selectedCategories.length > 0 &&
+      !isRevealed &&
+      !currentDisplayEntry?.isUserEvaluationSubmitted,
+  );
+  const canSubmit: boolean = Boolean(
+    selectedOptionKey && agreementRating > 0 && isRevealed && !currentDisplayEntry?.isUserEvaluationSubmitted,
+  );
 
   const researcherOptionKey = optionAisDPOAccepted ? 'A' : 'B';
   const userChoiceMatchesResearcher =
-    (isRevealed || isCurrentEvaluationSubmitted) && selectedOptionKey === researcherOptionKey;
+    (isRevealed || (currentDisplayEntry?.isUserEvaluationSubmitted ?? false)) &&
+    selectedOptionKey === researcherOptionKey;
 
   return (
     <div className="survey-page-container flex min-h-screen flex-col">
@@ -169,7 +232,7 @@ const EntryReviewStepContent: React.FC = () => {
           currentStepNumber={currentStepNumber}
           totalSteps={totalSteps}
           isLoadingEntries={isLoadingEntries}
-          isCurrentEvaluationSubmitted={isCurrentEvaluationSubmitted}
+          isCurrentEvaluationSubmitted={currentDisplayEntry?.isUserEvaluationSubmitted || false}
           isRevealed={isRevealed}
           selectedOptionKey={selectedOptionKey}
           agreementRating={agreementRating}
@@ -185,9 +248,9 @@ const EntryReviewStepContent: React.FC = () => {
           optionAContent={optionAContent}
           optionBContent={optionBContent}
           handleOptionSelect={handleOptionSelect}
-          setAgreementRating={setAgreementRating}
-          setUserComment={setUserComment}
-          setSelectedCategories={setSelectedCategories}
+          setAgreementRating={handleSetAgreementRating}
+          setUserComment={handleSetUserComment}
+          setSelectedCategories={handleSetSelectedCategories}
           handleReveal={handleReveal}
           handleLocalSubmit={handleLocalSubmit}
           setIsFlagModalOpen={setIsFlagModalOpen}

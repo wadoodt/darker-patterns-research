@@ -13,7 +13,6 @@ import ReviewHeader from './ReviewHeader';
 import SubmitButton from './SubmitButton';
 
 interface EntryReviewStepContentViewProps {
-  // Data
   currentDisplayEntry: DPOEntry | null;
   currentDpoEntryIndex: number;
   dpoEntriesToReview: DPOEntry[];
@@ -35,8 +34,6 @@ interface EntryReviewStepContentViewProps {
   researcherOptionKey: 'A' | 'B';
   optionAContent: string;
   optionBContent: string;
-
-  // Handlers
   handleOptionSelect: (optionKey: 'A' | 'B') => void;
   setAgreementRating: (rating: number) => void;
   setUserComment: (comment: string) => void;
@@ -56,7 +53,7 @@ const LoadingEntries = () => (
 const NoEntriesMessage = () => (
   <div className="survey-page-container p-10 text-center">
     <p className="mb-4 text-gray-600">No entries available for review.</p>
-    <p className="text-sm text-gray-500">Please check back later or contact support if you believe this is an error.</p>
+    <p className="text-sm text-gray-500">Please wait a little.</p>
   </div>
 );
 
