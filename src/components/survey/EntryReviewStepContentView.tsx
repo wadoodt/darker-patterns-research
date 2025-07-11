@@ -53,7 +53,7 @@ const LoadingEntries = () => (
 const NoEntriesMessage = () => (
   <div className="survey-page-container p-10 text-center">
     <p className="mb-4 text-gray-600">No entries available for review.</p>
-    <p className="text-sm text-gray-500">Please check back later or contact support if you believe this is an error.</p>
+    <p className="text-sm text-gray-500">Please wait a little.</p>
   </div>
 );
 

@@ -164,7 +164,11 @@ const EntryReviewStepContent: React.FC = () => {
     const isLastEntry = currentDpoEntryIndex === dpoEntriesToReview.length - 1;
 
     if (isLastEntry) {
-      completeSurveyAndPersistData();
+      if (window.confirm('Are you sure you want to complete the survey?')) {
+        completeSurveyAndPersistData();
+      } else {
+        window.alert('Now you can go back to previous step');
+      }
     } else {
       goToNextStep();
     }
