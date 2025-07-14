@@ -39,9 +39,28 @@ export type ApiResponse<T> =
 export type User = {
   id: number;
   username: string;
+  email: string;
   role: 'admin' | 'user';
   // The mock token is stored on the user object for simplicity.
   token?: string;
   // The password should never be sent to the client, but is here for mock DB purposes.
   password?: string;
+};
+
+/**
+ * Represents the structure of a Company object.
+ */
+export type Company = {
+  id: string;
+  name: string;
+  plan: 'Enterprise' | 'Pro' | 'Free';
+};
+
+/**
+ * Represents the structure of a user Profile object.
+ */
+export type Profile = {
+  id: string;
+  name: string;
+  email: string;
 };

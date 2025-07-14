@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import apiClient from '../../api/client';
-import type { User, AuthContextType } from '../types';
-import type { ApiResponse } from '../../types/api';
+import apiClient from '@api/client';
+import type { User, ApiResponse } from 'types';
+import type { AuthContextType } from './types';
 import { AuthContext } from './context';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -1,12 +1,18 @@
 import * as authHandlers from './handlers/auth';
+import * as companyHandlers from './handlers/companies-handler.ts';
+import * as userHandlers from './handlers/user-handler.ts';
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Record<string, (request: Request) => Promise<Response>> = {
+  // Auth
   'POST /auth/login': authHandlers.login,
   'GET /auth/me': authHandlers.me,
   'POST /auth/logout': authHandlers.logout,
-  // Add other routes here, e.g.:
-  // 'GET /api/users': userHandlers.getUsers,
+
+  // App Data
+  'GET /api/companies': companyHandlers.getCompanies,
+  'GET /api/profile': userHandlers.getProfile,
+  'PATCH /api/profile': userHandlers.updateProfile,
 };
 
 /**

@@ -1,10 +1,4 @@
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  role: string;
-  // Add other user properties as needed
-}
+import type { User } from 'types';
 
 export interface AuthContextType {
   user: User | null;

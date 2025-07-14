@@ -3,7 +3,7 @@
  * This file should be used for runtime logic, not for type definitions.
  */
 
-import type { ApiResponse } from '../types/api';
+import type { ApiResponse } from 'types';
 import { RESPONSE_CODES, ERROR_CODES } from './codes';
 
 // ------------------------------------------------------------------

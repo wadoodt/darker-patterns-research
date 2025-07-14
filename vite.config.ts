@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from '@vitejs/plugin-react';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import path from "path";
 import { glob } from "glob";
 
@@ -14,7 +15,7 @@ const input = glob
 export default defineConfig({
   root: ".",
   publicDir: "public",
-  plugins: [react()],
+  plugins: [react(), tsconfigPaths()],
   build: {
     outDir: "dist",
     emptyOutDir: true,
@@ -34,6 +35,15 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@layouts": path.resolve(__dirname, "./src/layouts"),
+      "@pages": path.resolve(__dirname, "./src/pages"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@contexts": path.resolve(__dirname, "./src/contexts"),
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@styles": path.resolve(__dirname, "./src/styles"),
+      "@locales": path.resolve(__dirname, "./src/locales"),
+      "@api": path.resolve(__dirname, "./src/api"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
     },
   },
   server: {
