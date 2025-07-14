@@ -1,0 +1,8 @@
+{
+  "public_header": "Encabezado Público",
+  "public_footer": "Pie de Página Público",
+  "dashboard_header": "Marcador de Posición del Encabezado del Panel",
+  "sidebar_placeholder": "Marcador de Posición de la Barra Lateral",
+  "public_landing_page": "Página de Aterrizaje Pública",
+  "protected_dashboard_home": "Inicio del Panel Protegido"
+} 

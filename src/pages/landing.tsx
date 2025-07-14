@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import LandingPage from './LandingPage.tsx';
-import PublicLayout from '../layouts/PublicLayout';
-import '../styles/landing.css';
+import LandingPage from './landing/LandingPage.tsx';
+import PublicLayout from '@layouts/PublicLayout';
+import '@styles/landing.css';
 import { Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
-import '../utils/i18n'; // Import i18n configuration
+import '@locales/i18n.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

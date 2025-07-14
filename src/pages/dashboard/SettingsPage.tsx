@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@hooks/useAuth';
 
 const SettingsPage: React.FC = () => {
   const { hasRole } = useAuth();

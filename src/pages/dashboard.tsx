@@ -1,15 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from '../App';
-import '../styles/dashboard.css';
-import { Theme } from '@radix-ui/themes';
-import '@radix-ui/themes/styles.css';
-import '../utils/i18n'; // Import i18n configuration
-import { AuthProvider } from '../contexts/AuthContext';
-import ErrorBoundary from '../components/ErrorBoundary';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./dashboard/App";
+import "@styles/dashboard.css";
+import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
+import "@locales/i18n";
+import { AuthProvider } from "@contexts/AuthContext";
+import ErrorBoundary from "@components/ErrorBoundary";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>

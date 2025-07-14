@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoginTemplate from './LoginTemplate';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@hooks/useAuth';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');

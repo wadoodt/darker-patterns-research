@@ -1,8 +1,8 @@
 
-import { useAuth } from '../hooks/useAuth';
-import { CacheAdminPanel } from '../components/CacheAdminPanel';
-import { CompaniesList } from '../components/CompaniesList';
-import { Profile } from '../components/Profile';
+import { useAuth } from '@hooks/useAuth';
+import { CacheAdminPanel } from '@components/CacheAdminPanel';
+import { CompaniesList } from '@components/CompaniesList';
+import { Profile } from '@components/Profile';
 
 export default function DashboardPage() {
   const { logout, user } = useAuth();
