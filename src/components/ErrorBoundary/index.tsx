@@ -1,4 +1,4 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
@@ -21,7 +21,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // You can log the error to an error reporting service here
-    console.error('Uncaught error:', error, errorInfo);
+    console.error("Uncaught error:", error, errorInfo);
   }
 
   public render() {
@@ -29,8 +29,11 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <div>
           <h2>Something went wrong.</h2>
-          <p>Here is the info that you can pass to Client Service to report the error, remember you can send your reports to [support@email.com]</p>
-          <details style={{ whiteSpace: 'pre-wrap' }}>
+          <p>
+            Here is the info that you can pass to Client Service to report the
+            error, remember you can send your reports to [support@email.com]
+          </p>
+          <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state.error && this.state.error.toString()}
             <br />
           </details>

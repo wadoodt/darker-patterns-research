@@ -1,3 +1,11 @@
-// Re-export from AuthContext to maintain backward compatibility
-export { useAuth } from '@contexts/AuthContext/hooks';
-export type { AuthContextType } from '@contexts/AuthContext/types';
+import { useContext } from 'react';
+import { AuthContext } from '@contexts/AuthContext/context';
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
