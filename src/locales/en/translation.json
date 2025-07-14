@@ -1,0 +1,24 @@
+{
+  "response": {
+    "auth": {
+      "login_success": "Login successful! Redirecting..."
+    },
+    "general": {
+      "operation_success": "Operation completed successfully."
+    }
+  },
+  "error": {
+    "general": {
+      "internal_server_error": "An internal server error occurred. Please try again later.",
+      "not_found": "The requested resource was not found."
+    },
+    "auth": {
+      "invalid_credentials": "Invalid username or password. Please try again.",
+      "unauthorized": "You are not authorized to perform this action.",
+      "forbidden": "You do not have permission to access this resource."
+    },
+    "validation": {
+      "validation_error": "There were errors with your submission. Please check the fields and try again."
+    }
+  }
+}
