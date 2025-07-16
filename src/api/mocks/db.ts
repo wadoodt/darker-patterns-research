@@ -6,20 +6,22 @@ import { mockProfile } from './_data/user-data.ts';
 // Seed data for the users table. In a real app, passwords would be hashed.
 const mockUsers: User[] = [
   {
-    id: 1,
-    username: "admin",
-    email: "admin@example.com",
-    password: "password",
-    role: "admin",
-    token: "mock-token-for-id-1",
+    id: '1',
+    username: 'admin',
+    email: 'admin@example.com',
+    password: 'password',
+    plan: 'premium',
+    status: 'active',
+    stripeCustomerId: 'cus_mock_admin',
   },
   {
-    id: 2,
-    username: "user",
-    email: "user@example.com",
-    password: "password",
-    role: "user",
-    token: "mock-token-for-id-2",
+    id: '2',
+    username: 'user',
+    email: 'user@example.com',
+    password: 'password',
+    plan: 'basic',
+    status: 'active',
+    stripeCustomerId: 'cus_mock_user',
   },
 ];
 

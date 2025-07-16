@@ -92,7 +92,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const hasRole = useCallback((roles: string[]): boolean => {
-    return !!user && roles.includes(user.role);
+    if (!user) return false;
+    // Adapt role-checking to plan-checking
+    return roles.includes(user.plan);
   }, [user]);
 
   const isAuthenticated = useCallback((): boolean => {

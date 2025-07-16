@@ -11,8 +11,7 @@ import { createErrorResponse } from '../../response';
  * @returns A tuple containing either the authorized user object or an error Response object.
  */
 export const authorize = async (
-  request: Request,
-  allowedRoles: Array<User['role']> = []
+  request: Request
 ): Promise<[User | null, Response | null]> => {
   const authHeader = request.headers.get('Authorization');
 
@@ -22,16 +21,12 @@ export const authorize = async (
   }
 
   const token = authHeader.split(' ')[1];
-  const user = db.users.findFirst({ where: { token } });
+  const userId = token.replace('mock-token-for-id-', '');
+  const user = db.users.findFirst({ where: { id: userId } });
 
   if (!user) {
     const errorResponse = createErrorResponse('UNAUTHORIZED');
     return [null, new Response(JSON.stringify(errorResponse), { status: 401 })];
-  }
-
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-    const errorResponse = createErrorResponse('FORBIDDEN');
-    return [null, new Response(JSON.stringify(errorResponse), { status: 403 })];
   }
 
   return [user, null];

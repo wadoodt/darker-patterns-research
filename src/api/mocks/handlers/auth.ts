@@ -22,7 +22,7 @@ export const login = async (request: Request): Promise<Response> => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _password, ...userResponse } = user;
-    const token = user.token ?? `mock-token-for-id-${user.id}`;
+    const token = `mock-token-for-id-${user.id}`;
 
     const successResponse = createSuccessResponse(
       {
@@ -57,7 +57,7 @@ export const me = async (request: Request): Promise<Response> => {
       });
     }
 
-    const userId = parseInt(token.replace('mock-token-for-id-', ''), 10);
+    const userId = token.replace('mock-token-for-id-', '');
     const user = db.users.findFirst({ where: { id: userId } });
 
     if (!user) {

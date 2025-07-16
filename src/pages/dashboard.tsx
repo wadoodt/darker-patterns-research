@@ -8,16 +8,19 @@ import "@radix-ui/themes/styles.css";
 import "@locales/i18n";
 import { AuthProvider } from "@contexts/AuthContext";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { CacheProvider } from "@contexts/CacheContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Theme appearance="light" accentColor="blue" radius="large">
-          <ErrorBoundary>
-            <App />
-          </ErrorBoundary>
-        </Theme>
+        <CacheProvider>
+          <Theme appearance="light" accentColor="blue" radius="large">
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
+          </Theme>
+        </CacheProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

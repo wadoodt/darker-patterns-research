@@ -26,7 +26,7 @@ interface QueryOptions<T> {
 export function createTable<T extends Entity>(initialData: T[]) {
   // Use a deep copy to ensure the original seed data is never mutated.
   let tableData = JSON.parse(JSON.stringify(initialData));
-  let nextId = initialData.length + 1;
+  
 
   const matches = (item: T, where: WhereClause<T>): boolean => {
     return Object.entries(where).every(([key, value]) => item[key as keyof T] === value);
@@ -92,8 +92,8 @@ export function createTable<T extends Entity>(initialData: T[]) {
      * @param {Omit<T, 'id'>} params.data - The data for the new record, excluding the 'id'.
      * @returns {T} The newly created record, including its new ID.
      */
-    create({ data }: { data: Omit<T, 'id'> }): T {
-      const newItem = { ...data, id: nextId++ } as T;
+    create(data: Omit<T, 'id'> & { id?: string | number }): T {
+      const newItem = { ...data, id: data.id || crypto.randomUUID() } as T;
       tableData.push(newItem);
       return newItem;
     },
@@ -130,9 +130,8 @@ export function createTable<T extends Entity>(initialData: T[]) {
     /**
      * Resets the table to its initial state. Useful for testing.
      */
-    _reset() {
+        _reset() {
       tableData = JSON.parse(JSON.stringify(initialData));
-      nextId = initialData.length + 1;
     },
   };
 }

@@ -37,14 +37,18 @@ export type ApiResponse<T> =
  * Represents the structure of a User object.
  */
 export type User = {
-  id: number;
-  username: string;
+  id: string;
   email: string;
-  role: 'admin' | 'user';
-  // The mock token is stored on the user object for simplicity.
-  token?: string;
+  username: string;
+  plan: 'basic' | 'pro' | 'premium';
+  status: 'created' | 'active' | 'inactive';
+  stripeCustomerId?: string;
   // The password should never be sent to the client, but is here for mock DB purposes.
   password?: string;
+};
+
+export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'> & {
+  password: string;
 };
 
 /**

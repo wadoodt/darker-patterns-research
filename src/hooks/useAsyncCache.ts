@@ -71,6 +71,7 @@ export function useAsyncCache<T>(
     if (enabled && (data === null || refetchOnMount)) {
       loadData();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadData, enabled, refetchOnMount]);
 
   // Public refresh function

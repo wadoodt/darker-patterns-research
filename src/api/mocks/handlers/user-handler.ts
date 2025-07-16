@@ -1,5 +1,6 @@
 // src/api/mocks/user-handler.ts
 import { db } from '../db';
+import type { CreateUserPayload } from 'types';
 
 /**
  * Handles the GET /api/profile request.
@@ -27,6 +28,36 @@ export async function getProfile() {
  * @param {Request} request - The incoming request object.
  * @returns A Response object with the updated user profile.
  */
+export async function createUser(request: Request) {
+  const { username, email, password, plan } = (await request.json()) as CreateUserPayload;
+
+  if (!username || !email || !password || !plan) {
+    return new Response(JSON.stringify({ message: 'Missing required fields' }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 400,
+    });
+  }
+
+  const newUser = db.users.create({
+    username,
+    email,
+    password,
+    plan,
+    status: 'created',
+    stripeCustomerId: `cus_mock_${crypto.randomUUID()}`,
+  });
+
+  const responsePayload = {
+    user: newUser,
+    stripeUrl: '/success.html',
+  };
+
+  return new Response(JSON.stringify(responsePayload), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 201,
+  });
+}
+
 export async function updateProfile(request: Request) {
   const { name } = await request.json();
   const updatedProfile = db.profile.update({
