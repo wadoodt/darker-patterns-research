@@ -1,6 +1,7 @@
 // src/components/CompaniesList.tsx
 'use client';
 
+import apiClient from '@api/client';
 import { useAsyncCache } from '@hooks/useAsyncCache';
 import { CacheLevel } from '@lib/cache/types';
 import * as api from 'types/api';
@@ -8,11 +9,11 @@ import * as api from 'types/api';
 // This is the new data fetching function that uses the standard fetch API.
 // Our mock resolver will intercept this call.
 async function fetchCompanies() {
-  const response = await fetch('/api/companies');
-  if (!response.ok) {
+  const response = await apiClient.get('/companies');
+  if (response.status !== 200) {
     throw new Error('Failed to fetch companies');
   }
-  return response.json();
+  return response.data;
 }
 
 export function CompaniesList() {
@@ -24,7 +25,7 @@ export function CompaniesList() {
   } = useAsyncCache<api.Company[]>(
     ['companies'], // Cache key
     fetchCompanies, // Use the new fetcher function
-    CacheLevel.STABLE // Cache for 4 hours
+    CacheLevel.PERSISTENT
   );
 
   if (loading && !companies) return <div>Loading companies...</div>;

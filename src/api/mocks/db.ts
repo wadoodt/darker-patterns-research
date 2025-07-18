@@ -1,35 +1,14 @@
 import { createTable } from './lib/createTable';
-import type { User, Company, Profile } from 'types';
+import type { Company, AdminSettings } from 'types';
 import { mockCompanies } from './_data/companies-data.ts';
-import { mockProfile } from './_data/user-data.ts';
-
-// Seed data for the users table. In a real app, passwords would be hashed.
-const mockUsers: User[] = [
-  {
-    id: '1',
-    username: 'admin',
-    email: 'admin@example.com',
-    password: 'password',
-    plan: 'premium',
-    status: 'active',
-    stripeCustomerId: 'cus_mock_admin',
-  },
-  {
-    id: '2',
-    username: 'user',
-    email: 'user@example.com',
-    password: 'password',
-    plan: 'basic',
-    status: 'active',
-    stripeCustomerId: 'cus_mock_user',
-  },
-];
+import { mockUsers } from './_data/user-data.ts';
+import { mockAdminSettings } from './_data/admin-settings-data';
 
 // The global mock database instance.
 export const db = {
   users: createTable(mockUsers),
   companies: createTable<Company>(mockCompanies),
-  profile: createTable<Profile>([mockProfile]),
+  adminSettings: createTable<AdminSettings>([mockAdminSettings]),
 };
 
 

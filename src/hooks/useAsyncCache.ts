@@ -1,5 +1,5 @@
 // src/hooks/useAsyncCache.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useCache } from '@contexts/CacheContext';
 import { createCacheKey } from '@lib/cache/utils';
 import { CacheLevel } from '@lib/cache/types';
@@ -21,7 +21,13 @@ export function useAsyncCache<T>(
   options: UseAsyncCacheOptions = {},
 ) {
   const { refetchOnMount = false, enabled = true, customTtl } = options;
-  const { get, set, isReady } = useCache();
+  const { get, set, isReady, error: cacheError } = useCache();
+
+  useEffect(() => {
+    if (cacheError) {
+      console.warn(`[useAsyncCache] Cache error for key '${keyParts.join(':')}':`, cacheError.message);
+    }
+  }, [cacheError, keyParts]);
 
   // Generate a stable cache key
   const cacheKey = createCacheKey('async-data', ...keyParts);
@@ -29,32 +35,49 @@ export function useAsyncCache<T>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   const loadData = useCallback(
     async (forceRefresh = false) => {
-      if (!isReady || !enabled) {
-        if (!enabled) setLoading(false);
+      if (!enabled) {
+        setLoading(false);
         return;
       }
 
       setLoading(true);
       setError(null);
 
+      const canUseCache = isReady && !cacheError;
+
       try {
-        // Try fetching from cache first unless a refresh is forced
-        if (!forceRefresh) {
+        // Try fetching from cache first if possible and not forced
+        if (canUseCache && !forceRefresh) {
           const cachedData = await get<T>(cacheKey);
           if (cachedData !== null) {
-            setData(cachedData);
-            setLoading(false);
-            return;
+            if (mounted.current) {
+              setData(cachedData);
+            }
+            return; // Exit early
           }
         }
 
-        // If not in cache or refresh is forced, call the fetcher
+        // If not in cache, refresh is forced, or cache is unavailable, call the fetcher
         const freshData = await fetcher();
-        await set(cacheKey, freshData, level, customTtl);
-        setData(freshData);
+
+        if (mounted.current) {
+          // Only try to set cache if it's available
+          if (canUseCache) {
+            await set(cacheKey, freshData, level, customTtl);
+          }
+          setData(freshData);
+        }
       } catch (err) {
         const error = err instanceof Error ? err : new Error('Failed to fetch data');
         setError(error);
@@ -63,7 +86,7 @@ export function useAsyncCache<T>(
         setLoading(false);
       }
     },
-    [cacheKey, get, set, fetcher, level, customTtl, isReady, enabled],
+    [cacheKey, get, set, fetcher, level, customTtl, isReady, enabled, cacheError],
   );
 
   // Effect to trigger the initial data load

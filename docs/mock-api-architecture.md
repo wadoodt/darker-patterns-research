@@ -183,7 +183,16 @@ it('should reject a user with the wrong password', () => {
 });
 ```
 
-## 5. Related Documentation
+## 5. Interaction with Client-Side Caching
 
+The mock API and the client-side caching system are designed to work together seamlessly. The caching layer is completely independent of the data source, meaning it will cache responses from the mock API just as it would from a real backend.
+
+- **No Special Configuration Needed**: When mocks are enabled (`VITE_USE_MOCKS=true`), the `useAsyncCache` hook will automatically fetch data from the mock API via the `axios` interceptor. The response is then cached as usual.
+- **Realistic Development**: This allows developers to build and test features with realistic loading states and data persistence, all without needing a live backend.
+- **Debugging**: The **Cache Management Panel** on the profile page can be used to inspect data provided by the mock API, making it easy to verify that your mock handlers are returning the correct data structures.
+
+## 6. Related Documentation
+
+- **[Client-Side Caching: A Developer's Guide](./CACHED_REQUEST.md)**: For a deep dive into the caching system.
 - **[Endpoint Integration Guide](./ENDPOINT_INTEGRATION.md)**: For a step-by-step guide on how to use this mock architecture to add new API endpoints.
 - **[API Response & Error Handling](./ERROR_HANDLING.md)**: To understand how mock handlers should structure their success and error responses.

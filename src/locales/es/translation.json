@@ -4,5 +4,50 @@
   "dashboard_header": "Marcador de Posición del Encabezado del Panel",
   "sidebar_placeholder": "Marcador de Posición de la Barra Lateral",
   "public_landing_page": "Página de Aterrizaje Pública",
-  "protected_dashboard_home": "Inicio del Panel Protegido"
-} 
+  "protected_dashboard_home": "Inicio del Panel Protegido",
+  "error": {
+    "auth": {
+      "invalid_credentials": "Credenciales inválidas. Por favor, inténtalo de nuevo.",
+      "unauthorized": "No tienes autorización para realizar esta acción."
+    },
+    "validation": {
+      "password_too_short": "La contraseña es demasiado corta.",
+      "email_invalid": "La dirección de correo electrónico no es válida."
+    },
+    "general": {
+      "not_found": "El recurso solicitado no fue encontrado.",
+      "internal_server_error": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
+    }
+  },
+  "response": {
+    "auth": {
+      "login_success": "¡Inicio de sesión exitoso!"
+    },
+    "general": {
+      "operation_success": "Operación completada con éxito."
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": {
+      "title": "Preferencias de Idioma",
+      "description": "Elige el idioma para la aplicación."
+    },
+    "theme": {
+      "title": "Preferencias de Tema",
+      "description": "Elige el tema para la aplicación.",
+      "options": {
+        "light": "Claro",
+        "dark": "Oscuro",
+        "highContrastLight": "Claro de Alto Contraste",
+        "highContrastDark": "Oscuro de Alto Contraste",
+        "lightSimple": "Claro (Simple)"
+      }
+    },
+    "system": {
+      "title": "Acciones a Nivel de Sistema",
+      "warning": "Estas acciones afectan a todos los usuarios y deben usarse con precaución.",
+      "emergencyShutdown": "Parada de Emergencia"
+    }
+  }
+}

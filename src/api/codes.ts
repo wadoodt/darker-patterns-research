@@ -13,6 +13,10 @@ export const RESPONSE_CODES = {
     status: 200,
     message: 'response.auth.login_success', // i18n key
   },
+  SIGNUP_SUCCESS: {
+    status: 201, // Use 201 for resource creation
+    message: 'response.auth.signup_success',
+  },
   // --- General --- 
   OPERATION_SUCCESS: {
     status: 200,

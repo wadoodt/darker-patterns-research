@@ -18,7 +18,9 @@ apiClient.interceptors.request.use(
     if (import.meta.env.VITE_USE_MOCKS === 'true') {
       // The resolver needs a standard Request object. We build one from the axios config.
       // A dummy base is required for the URL constructor.
-      const url = new URL(config.url || '', 'http://mock.api');
+      const fullUrl = `${config.baseURL || ''}${config.url || ''}`;
+      console.log(fullUrl);
+      const url = new URL(fullUrl, 'http://mock.api');
       const request = new Request(url, {
         method: config.method?.toUpperCase(),
         headers: config.headers as HeadersInit,

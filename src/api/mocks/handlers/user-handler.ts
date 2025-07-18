@@ -1,79 +1,102 @@
-// src/api/mocks/user-handler.ts
+// src/api/mocks/handlers/user-handler.ts
 import { db } from '../db';
-import type { CreateUserPayload } from 'types';
+import { createErrorResponse, createSuccessResponse } from '../../response';
+import { ERROR_CODES, RESPONSE_CODES } from '../../codes';
 
 /**
- * Handles the GET /api/profile request.
- * @returns A Response object with the user profile.
+ * Handles the GET /api/users/me request.
  */
-export async function getProfile() {
-  // There's only one profile, so findFirst is appropriate.
-  const profile = db.profile.findFirst({});
+export const getUserMe = async (request: Request): Promise<Response> => {
+  try {
+    const token = request.headers.get('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      return new Response(JSON.stringify(createErrorResponse('UNAUTHORIZED')), {
+        status: ERROR_CODES.UNAUTHORIZED.status,
+      });
+    }
 
-  if (!profile) {
-    return new Response(JSON.stringify({ message: 'Profile not found' }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 404,
+    const userId = token.replace('mock-token-for-id-', '');
+    const user = db.users.findFirst({ where: { id: userId } });
+
+    if (!user) {
+      return new Response(JSON.stringify(createErrorResponse('UNAUTHORIZED')), {
+        status: ERROR_CODES.UNAUTHORIZED.status,
+      });
+    }
+
+    const company = db.companies.findFirst({ where: { id: user.companyId } });
+
+    // The user object in the auth context needs the plan
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userResponse } = {
+      ...user,
+      plan: company?.plan,
+    };
+
+    return new Response(JSON.stringify(createSuccessResponse({ user: userResponse }, 'OPERATION_SUCCESS')), {
+      status: RESPONSE_CODES.OPERATION_SUCCESS.status,
+    });
+  } catch {
+    return new Response(JSON.stringify(createErrorResponse('INTERNAL_SERVER_ERROR')), {
+      status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
     });
   }
-
-  return new Response(JSON.stringify(profile), {
-    headers: { 'Content-Type': 'application/json' },
-    status: 200,
-  });
-}
+};
 
 /**
- * Handles the PATCH /api/profile request.
- * @param {Request} request - The incoming request object.
- * @returns A Response object with the updated user profile.
+ * Handles the PATCH /api/users/me request.
  */
-export async function createUser(request: Request) {
-  const { username, email, password, plan } = (await request.json()) as CreateUserPayload;
+export const updateUserMe = async (request: Request): Promise<Response> => {
+  try {
+    const token = request.headers.get('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      return new Response(JSON.stringify(createErrorResponse('UNAUTHORIZED')), {
+        status: ERROR_CODES.UNAUTHORIZED.status,
+      });
+    }
 
-  if (!username || !email || !password || !plan) {
-    return new Response(JSON.stringify({ message: 'Missing required fields' }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 400,
+    const userId = token.replace('mock-token-for-id-', '');
+    const user = db.users.findFirst({ where: { id: userId } });
+
+    if (!user) {
+      return new Response(JSON.stringify(createErrorResponse('NOT_FOUND')), {
+        status: ERROR_CODES.NOT_FOUND.status,
+      });
+    }
+
+    const { name } = await request.json();
+
+    if (!name) {
+        return new Response(JSON.stringify(createErrorResponse('VALIDATION_ERROR', {name: 'Name is required'})), {
+            status: ERROR_CODES.VALIDATION_ERROR.status,
+        });
+    }
+
+    const updatedUser = db.users.update({
+      where: { id: userId },
+      data: { name },
+    });
+
+    if (!updatedUser) {
+      return new Response(JSON.stringify(createErrorResponse('NOT_FOUND')), {
+        status: ERROR_CODES.NOT_FOUND.status,
+      });
+    }
+    
+    const company = db.companies.findFirst({ where: { id: updatedUser.companyId } });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userResponse } = {
+        ...updatedUser,
+        plan: company?.plan,
+    };
+
+    return new Response(JSON.stringify(createSuccessResponse({ user: userResponse }, 'OPERATION_SUCCESS')), {
+      status: RESPONSE_CODES.OPERATION_SUCCESS.status,
+    });
+  } catch {
+    return new Response(JSON.stringify(createErrorResponse('INTERNAL_SERVER_ERROR')), {
+      status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
     });
   }
-
-  const newUser = db.users.create({
-    username,
-    email,
-    password,
-    plan,
-    status: 'created',
-    stripeCustomerId: `cus_mock_${crypto.randomUUID()}`,
-  });
-
-  const responsePayload = {
-    user: newUser,
-    stripeUrl: '/success.html',
-  };
-
-  return new Response(JSON.stringify(responsePayload), {
-    headers: { 'Content-Type': 'application/json' },
-    status: 201,
-  });
-}
-
-export async function updateProfile(request: Request) {
-  const { name } = await request.json();
-  const updatedProfile = db.profile.update({
-    where: { id: 'user-123' }, // In a real scenario, the ID might come from the URL or auth context.
-    data: { name },
-  });
-
-  if (!updatedProfile) {
-    return new Response(JSON.stringify({ message: 'Profile not found' }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 404,
-    });
-  }
-
-  return new Response(JSON.stringify(updatedProfile), {
-    headers: { 'Content-Type': 'application/json' },
-    status: 200,
-  });
-}
+};

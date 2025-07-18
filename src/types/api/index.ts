@@ -38,16 +38,18 @@ export type ApiResponse<T> =
  */
 export type User = {
   id: string;
+  name: string;
   email: string;
   username: string;
-  plan: 'basic' | 'pro' | 'premium';
+  role: 'user' | 'admin' | 'super-admin' | 'qa';
+  companyId: string;
   status: 'created' | 'active' | 'inactive';
-  stripeCustomerId?: string;
   // The password should never be sent to the client, but is here for mock DB purposes.
   password?: string;
+
 };
 
-export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'> & {
+export type CreateUserPayload = Omit<User, 'id' | 'status'> & {
   password: string;
 };
 
@@ -58,13 +60,20 @@ export type Company = {
   id: string;
   name: string;
   plan: 'Enterprise' | 'Pro' | 'Free';
+  stripeCustomerId: string;
+  status: 'active' | 'inactive' | 'past_due';
 };
 
 /**
- * Represents the structure of a user Profile object.
+ * Represents the structure of the admin settings object.
  */
-export type Profile = {
+export type AdminSettings = {
   id: string;
-  name: string;
-  email: string;
+  featureFlags: {
+    enableNewDashboard: boolean;
+    enableBetaFeatures: boolean;
+  };
+  blockedFeatures: string[];
 };
+
+

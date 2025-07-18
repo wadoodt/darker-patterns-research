@@ -18,7 +18,32 @@
       "forbidden": "You do not have permission to access this resource."
     },
     "validation": {
-      "validation_error": "There were errors with your submission. Please check the fields and try again."
+      "validation_error": "There were errors with your submission. Please check the fields and try again.",
+      "password_too_short": "Password is too short.",
+      "email_invalid": "The email address is not valid."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "Language Preferences",
+      "description": "Choose the language for the application."
+    },
+    "theme": {
+      "title": "Theme Preferences",
+      "description": "Choose the theme for the application.",
+      "options": {
+        "light": "Light",
+        "dark": "Dark",
+        "highContrastLight": "High Contrast Light",
+        "highContrastDark": "High Contrast Dark",
+        "lightSimple": "Light (Simple)"
+      }
+    },
+    "system": {
+      "title": "System-Wide Actions",
+      "warning": "These actions affect all users and should be used with caution.",
+      "emergencyShutdown": "Emergency Shutdown"
     }
   }
 }

@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./dashboard/App";
+import App from '@features/dashboard/pages/App.tsx';
 import "@styles/dashboard.css";
-import { Theme } from "@radix-ui/themes";
+
 import "@radix-ui/themes/styles.css";
 import "@locales/i18n";
 import { AuthProvider } from "@contexts/AuthContext";
@@ -15,11 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <AuthProvider>
         <CacheProvider>
-          <Theme appearance="light" accentColor="blue" radius="large">
-            <ErrorBoundary>
-              <App />
-            </ErrorBoundary>
-          </Theme>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </CacheProvider>
       </AuthProvider>
     </BrowserRouter>

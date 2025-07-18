@@ -1,11 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import apiClient from '@api/client';
-import type { User, ApiResponse } from 'types';
+import type { ApiResponse } from 'types';
+import type { AuthenticatedUser } from 'types/auth';
 import type { AuthContextType } from './types';
 import { AuthContext } from './context';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
   const [tokenExpiresAt, setTokenExpiresAt] = useState<number | null>(
     JSON.parse(localStorage.getItem('tokenExpiresAt') || 'null')
@@ -20,7 +21,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (storedToken && expiresAt && Date.now() < expiresAt) {
         try {
-          const { data: response } = await apiClient.get('/auth/me');
+          const { data: response } = await apiClient.get('/users/me');
           if (response.data) {
             setUser(response.data.user);
             setToken(storedToken);
@@ -93,24 +94,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const hasRole = useCallback((roles: string[]): boolean => {
     if (!user) return false;
-    // Adapt role-checking to plan-checking
-    return roles.includes(user.plan);
+    return roles.includes(user.role);
+  }, [user]);
+
+  const hasPlan = useCallback((plans: string[]): boolean => {
+    if (!user || !user.plan) return false;
+    return plans.includes(user.plan);
   }, [user]);
 
   const isAuthenticated = useCallback((): boolean => {
     return !!token && !!tokenExpiresAt && Date.now() < tokenExpiresAt;
   }, [token, tokenExpiresAt]);
 
-  const value: AuthContextType = {
-    user,
-    token,
-    tokenExpiresAt,
-    isLoading,
-    login,
-    logout,
-    hasRole,
-    isAuthenticated,
-  };
+  const value: AuthContextType = useMemo(
+    () => ({
+      user,
+      token,
+      tokenExpiresAt,
+      isLoading,
+      login,
+      logout,
+      hasRole,
+      hasPlan,
+      isAuthenticated,
+    }),
+    [user, token, tokenExpiresAt, isLoading, login, logout, hasRole, hasPlan, isAuthenticated]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

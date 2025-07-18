@@ -8,6 +8,7 @@ export interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   hasRole: (roles: string[]) => boolean;
+  hasPlan: (plans: string[]) => boolean;
   isAuthenticated: () => boolean;
 }
 

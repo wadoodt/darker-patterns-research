@@ -34,7 +34,9 @@
       "@api/*": ["api/*"],
       "@utils/*": ["utils/*"],
       "@lib/*": ["lib/*"],
-      "@types/*": ["types/*"]
+      "@types/*": ["types/*"],
+      "@routes/*": ["routes/*"],
+      "@features/*": ["features/*"]
     }
   },
   "include": ["src"]

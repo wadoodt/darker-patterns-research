@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { mockApiPlugin } from './src/api/mocks/vite-plugin';
 import path from "path";
 import { glob } from "glob";
 
@@ -15,7 +16,7 @@ const input = glob
 export default defineConfig({
   root: ".",
   publicDir: "public",
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react(), tsconfigPaths(), mockApiPlugin()],
   build: {
     outDir: "dist",
     emptyOutDir: true,
@@ -44,6 +45,7 @@ export default defineConfig({
       "@locales": path.resolve(__dirname, "./src/locales"),
       "@api": path.resolve(__dirname, "./src/api"),
       "@utils": path.resolve(__dirname, "./src/utils"),
+      "@features": path.resolve(__dirname, "./src/features"),
     },
   },
   server: {

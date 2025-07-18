@@ -4,9 +4,10 @@
 /**
  * Defines the persistence level of a cache entry, determining its TTL.
  */
-export type CacheLevel = 'STANDARD' | 'PERSISTENT' | 'SESSION' | 'CRITICAL' | 'STABLE' | 'CONFIG';
+export type CacheLevel = 'STANDARD' | 'PERSISTENT' | 'SESSION' | 'CRITICAL' | 'STABLE' | 'CONFIG' | 'DEBUG';
 
 export const CacheLevel = {
+  DEBUG: 'DEBUG' as CacheLevel,
   STANDARD: 'STANDARD' as CacheLevel,
   PERSISTENT: 'PERSISTENT' as CacheLevel,
   SESSION: 'SESSION' as CacheLevel,
@@ -30,6 +31,7 @@ export interface CacheEntry<T = unknown> {
  * Maps each cache level to its duration in milliseconds.
  */
 export const CACHE_TTL_MAP: Record<CacheLevel, number> = {
+  DEBUG: 1000 * 5,
   CRITICAL: 1000 * 60 * 5, // 5 minutes
   STANDARD: 1000 * 60 * 30, // 30 minutes
   STABLE: 1000 * 60 * 60 * 4, // 4 hours
