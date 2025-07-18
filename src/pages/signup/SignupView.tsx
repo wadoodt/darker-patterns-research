@@ -53,10 +53,21 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
       setIsLoading(false);
       return;
     }
-    // TODO: Integrate with Stripe in the future
-    // For now, mock API call and redirect to /success
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800)); // mock delay
+      // TODO: Integrate with real backend user creation and Stripe session creation
+      // For now, simulate payment session creation with the mock API
+      const paymentRes = await fetch('/api/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyId: 'comp-001', // TODO: Replace with actual companyId from signup
+          userId: 'user-001',    // TODO: Replace with actual userId from signup
+          amount: selectedPlan === 'business' ? 9900 : selectedPlan === 'premium' ? 24900 : 0, // Example pricing
+          currency: 'usd'
+        }),
+      });
+      await paymentRes.json();
+      // TODO: When backend is ready, redirect to paymentData.stripeUrl for real Stripe onboarding
       window.location.href = '/success';
     } catch {
       setError(t('signup.alerts.error.generic'));

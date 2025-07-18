@@ -26,16 +26,23 @@ This document details the implementation plan for a user signup and Stripe onboa
 - On submit:
   - Calls backend API to create a user with status `created` and the selected plan.
   - Backend returns a Stripe onboarding/checkout URL.
-  - The frontend redirects the user to Stripe using `window.location.href = stripeUrl`.
+  - **Current (Mock) Flow:**
+    - Calls a mock `/api/payments` endpoint and immediately redirects to `/success`.
+    - **TODO:** When Stripe is ready, replace this with a redirect to the real Stripe URL (`window.location.href = stripeUrl`).
 
 ### 1.4. Stripe Onboarding
 - User completes payment/account creation in Stripe’s UI.
 - Stripe is configured to redirect the user to `/success.html` (or `/signup/success`) after completion.
+- **TODO:** When Stripe is ready, ensure the success page can handle Stripe's redirect/callback and display appropriate messages.
 
 ### 1.5. Success Page (`/success.html` or `/signup/success`)
 - Static page.
-- Informs the user that signup was successful and they should now log in.
-- Provides a link to `/login.html` or `/login`.
+- Informs the user that signup was successful and they should now log in or go to the dashboard.
+- **New Behavior:**
+  - Shows a 10-second countdown and auto-redirects to the dashboard (`/dashboard`).
+  - Provides a button for immediate navigation to the dashboard.
+  - The countdown timer is cleared if the user clicks the button.
+- **TIP:** If Stripe's flow changes (e.g., Stripe redirects directly to the dashboard or another page), update the countdown/redirect logic accordingly.
 
 ### 1.6. Login & Dashboard
 - User logs in via `/login.html` or `/login`.
@@ -105,12 +112,13 @@ export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'>
 - On form submit:
   - Validate all fields.
   - POST to `/api/users` with the form data.
-  - On success, redirect to the returned Stripe URL.
+  - On success, POST to `/api/payments` (mock) and redirect to `/success`.
+  - **TODO:** When Stripe is ready, redirect to the returned Stripe URL instead of `/success`.
 
 ### 4.3. Success Page
 - Simple static page.
-- Message: “Signup successful! Please log in.”
-- Link to `/login`.
+- **New:** Shows a 10-second countdown and auto-redirects to the dashboard, with a button for immediate navigation.
+- **TODO:** If Stripe is integrated, ensure the success page can handle Stripe's redirect/callback and display appropriate messages.
 
 ### 4.4. Dashboard Page
 - On mount, fetch the current user.
@@ -124,17 +132,19 @@ export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'>
 - Attach a Stripe customer and generate a Stripe onboarding/checkout URL.
 - On Stripe webhook event, update the user’s status to `active`.
 - Ensure the Stripe redirect URL is set to `/success.html` (or `/signup/success`).
+- **TODO:** When Stripe is ready, update the frontend to use the real Stripe URL and handle Stripe's redirect/callback on the success page.
 
 ---
 
 ## 6. Summary of Required Changes
 
-- **New static page:** `/success.html` (or `/signup/success`)
+- **New static page:** `/success.html` (or `/signup/success`) with countdown and dashboard redirect.
 - **Update:** `/pricing.html` to add plan selection links with query params.
-- **Update:** `/signup.html` to handle plan pre-selection and Stripe redirect.
+- **Update:** `/signup.html` to handle plan pre-selection and Stripe/mock payment redirect.
 - **Types:** Add `CreateUserPayload` type using `Omit`.
-- **API:** Ensure `/api/users` supports the described flow.
+- **API:** Ensure `/api/users` and `/api/payments` support the described flow.
 - **Dashboard:** Add user status check on load.
+- **TODO:** When Stripe is ready, update the signup and success flow as described above.
 
 ---
 
@@ -143,11 +153,10 @@ export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'>
 1. User visits `/landing.html` → clicks “See Pricing” → `/pricing.html`
 2. User clicks “Sign Up” on Pro plan → `/signup.html?plan=pro`
 3. User fills out form, plan is pre-selected → submits
-4. Backend creates user, returns Stripe URL → frontend redirects to Stripe
-5. User completes Stripe onboarding → Stripe redirects to `/success.html`
-6. User sees success message → clicks to `/login.html`
-7. User logs in → dashboard checks status
-8. If status is `active`, user can use the app; otherwise, show warning
+4. Backend creates user, returns Stripe URL (mocked for now) → frontend POSTs to `/api/payments` and redirects to `/success`
+5. **Success page:** Shows a 10-second countdown and button to dashboard, then auto-redirects
+6. User lands on dashboard
+7. If status is `active`, user can use the app; otherwise, show warning
 
 ---
 

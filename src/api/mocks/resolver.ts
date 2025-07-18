@@ -2,9 +2,10 @@ import * as authHandlers from './handlers/auth';
 import * as companyHandlers from './handlers/companies-handler.ts';
 import * as userHandlers from './handlers/user-handler';
 import * as adminHandlers from './handlers/admin-handler';
+import * as paymentsHandlers from './handlers/payments-handler';
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
-const routes: Record<string, (request: Request) => Promise<Response>> = {
+const routes: Record<string, (request: Request, ...args: unknown[]) => Promise<Response>> = {
   // Auth
   'POST /api/auth/login': authHandlers.login,
   'POST /api/auth/logout': authHandlers.logout,
@@ -21,7 +22,9 @@ const routes: Record<string, (request: Request) => Promise<Response>> = {
   'GET /api/admin/users': adminHandlers.getUsers,
   'PATCH /api/admin/users/:userId': adminHandlers.updateUser,
 
-
+  // Payments
+  'POST /api/payments': paymentsHandlers.createPayment,
+  // 'GET /api/payments/:id' handled dynamically below
 };
 
 /**
@@ -33,7 +36,14 @@ export const resolve = (request: Request): Promise<Response> => {
   const url = new URL(request.url);
   const routeKey = `${request.method.toUpperCase()} ${url.pathname}`;
 
-  console.log(routeKey);
+  // Dynamic route for GET /api/payments/:id
+  if (request.method.toUpperCase() === 'GET' && url.pathname.startsWith('/api/payments/')) {
+    const id = url.pathname.split('/').pop();
+    if (id) {
+      return paymentsHandlers.getPayment(request, id);
+    }
+  }
+
   const handler = routes[routeKey];
 
   if (handler) {

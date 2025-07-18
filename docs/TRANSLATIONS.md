@@ -29,6 +29,22 @@ This document explains the contract for how the backend and frontend work togeth
 
 ---
 
+## 0.1. Translation File Structure & Best Practices
+
+- **All translation files (e.g., `en/translation.json`, `es/translation.json`) must have the same key structure.**
+- When adding new features, UI, or API messages, always add the same keys to all supported languages.
+- If a translation is not yet available, use the English text as a placeholder. This prevents missing key errors and ensures the UI works in all languages.
+- Review and update translations whenever onboarding, pricing, or other user-facing flows change.
+- **Tip:** Use scripts or tools to compare translation files and detect missing keys (e.g., `i18next-scanner`, custom scripts, or online JSON diff tools).
+
+**Example workflow:**
+1. Add new keys to `en/translation.json` for a new feature.
+2. Copy the same keys to `es/translation.json` (or other languages), using English as a placeholder if needed.
+3. Translate the values as soon as possible.
+4. Periodically check for missing or outdated keys in all languages.
+
+---
+
 ## 1. The Backend-Frontend Translation Contract
 
 The core principle is a clear separation of concerns:
@@ -91,6 +107,10 @@ Next, add the key and its corresponding user-friendly text to the translation fi
   }
 }
 ```
+
+**Remember:**
+- Add the same key to all language files, even if using English as a placeholder.
+- Translate as soon as possible.
 
 ### Step 3: Use the Code in the Mock API
 

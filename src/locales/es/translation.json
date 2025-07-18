@@ -49,5 +49,147 @@
       "warning": "Estas acciones afectan a todos los usuarios y deben usarse con precaución.",
       "emergencyShutdown": "Parada de Emergencia"
     }
+  },
+  "pricing": {
+    "hero": {
+      "title": "Elige tu plan",
+      "description": "Precios simples y transparentes para empresas de todos los tamaños. Comienza a calentar tus dominios y enviar campañas hoy."
+    },
+    "plans": {
+      "business": {
+        "title": "Negocios",
+        "description": "Ideal para empresas en crecimiento que inician con campañas de correo.",
+        "price": "$99",
+        "interval": "/mes",
+        "features": [
+          "Hasta 5 dominios conectados",
+          "Calentamiento de dominios ilimitado",
+          "10,000 correos enviados/mes",
+          "Automatización básica de campañas",
+          "Analíticas estándar",
+          "Soporte por correo y chat"
+        ],
+        "ctaText": "Elegir Negocios"
+      },
+      "premium": {
+        "title": "Premium",
+        "description": "Para empresas establecidas que escalan su alcance.",
+        "price": "$249",
+        "interval": "/mes",
+        "features": [
+          "Hasta 20 dominios conectados",
+          "Calentamiento de dominios ilimitado",
+          "50,000 correos enviados/mes",
+          "Automatización avanzada de campañas (IF/ELSE)",
+          "Analíticas avanzadas e IA",
+          "Pruebas A/B",
+          "Soporte prioritario"
+        ],
+        "ctaText": "Elegir Premium"
+      },
+      "custom": {
+        "title": "Personalizado",
+        "description": "Soluciones a medida para grandes empresas o necesidades específicas.",
+        "price": "Contáctanos",
+        "features": [
+          "Límites de dominio personalizados",
+          "Volumen de envío de correos personalizado",
+          "Desarrollo de funciones a medida",
+          "Gerente de cuenta dedicado",
+          "Acuerdos de nivel de servicio (SLA)",
+          "Onboarding y capacitación"
+        ],
+        "ctaText": "Contactar Ventas"
+      }
+    },
+    "faq": {
+      "title": "Preguntas sobre precios",
+      "items": [
+        {
+          "question": "¿Hay un plan gratuito o prueba?",
+          "answer": "No, actualmente no ofrecemos un plan gratuito ni una prueba tradicional. Sin embargo, puedes explorar la plataforma usando nuestra cuenta de prueba para ver cómo funciona. Usa las credenciales: Correo: `test@email.com` Contraseña: `Test#1234` ID de empresa: `Test1234567890` Código de referencia: `Test1234567890`. Ten en cuenta que las acciones en esta cuenta están simuladas y no se envían correos reales ni se calientan dominios. Cuando estés listo para usar el servicio activamente, selecciona uno de nuestros planes pagos."
+        },
+        {
+          "question": "¿Qué métodos de pago aceptan?",
+          "answer": "Usamos Stripe como procesador de pagos. Esto nos permite aceptar una amplia variedad de métodos, incluyendo tarjetas de crédito principales (Visa, Mastercard, American Express), tarjetas de débito y otras opciones regionales como SEPA Direct Debit, iDEAL, etc., dependiendo de tu ubicación."
+        },
+        {
+          "question": "No me convence alguna parte del plan o tengo sugerencias.",
+          "answer": "¡Agradecemos tus comentarios! Si alguna función de los planes Negocios o Premium no se ajusta a tus necesidades, o tienes sugerencias de mejora, contáctanos a través de la página de Contacto. Para requerimientos muy específicos o modificaciones importantes, el plan 'Personalizado' está diseñado para ofrecer soluciones a medida. Habla con nuestro equipo de ventas para crear el plan ideal para ti."
+        },
+        {
+          "question": "¿Puedo obtener un descuento?",
+          "answer": "Ocasionalmente ofrecemos promociones o descuentos, especialmente para compromisos anuales o entidades sin fines de lucro. Por favor, contacta a nuestro equipo de ventas o soporte para consultar ofertas actuales o discutir descuentos según tu situación (volumen, duración, etc.). El plan 'Personalizado' también permite negociar según el alcance del servicio."
+        }
+      ]
+    }
+  },
+  "signup": {
+    "header": {
+      "title": "Crea tu cuenta en Penguin Mails",
+      "description": "Únete a un equipo existente o crea el tuyo propio."
+    },
+    "form": {
+      "typeLabel": "¿Te unes a una empresa existente o creas una nueva cuenta?",
+      "options": {
+        "new": "Crear nueva",
+        "existing": "Unirse a existente"
+      },
+      "labels": {
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar contraseña",
+        "businessId": "ID de empresa",
+        "referralCode": "Código de referencia",
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "businessName": "Nombre de la empresa"
+      },
+      "placeholders": {
+        "email": "tu@email.com",
+        "businessId": "Ingresa el ID proporcionado por tu equipo",
+        "referralCode": "Ingresa el código proporcionado por tu equipo",
+        "firstName": "Juan",
+        "lastName": "Pérez",
+        "businessName": "Nombre de tu empresa"
+      }
+    },
+    "alerts": {
+      "joining": {
+        "title": "Uniéndote a un equipo",
+        "description": "Asegúrate de tener el ID de empresa y el código de referencia correctos de tu administrador."
+      },
+      "newAccount": {
+        "title": "Creando nueva cuenta",
+        "description": "Te estás registrando en el plan {{plan}}. Podrás gestionar tu suscripción más adelante."
+      },
+      "planRequired": {
+        "title": "Plan requerido",
+        "description": "Por favor selecciona un plan antes de crear una nueva cuenta."
+      },
+      "error": {
+        "title": "Error",
+        "passwordMismatch": "Las contraseñas no coinciden.",
+        "noPlan": "No puedes crear una cuenta nueva sin seleccionar un plan. Por favor visita la página de Precios.",
+        "missingBusinessInfo": "El ID de empresa y el código de referencia son obligatorios para unirse a una empresa existente.",
+        "generic": "El registro falló. Por favor, inténtalo de nuevo.",
+        "selectPlan": "Por favor selecciona un plan en la página de Precios antes de crear una cuenta nueva."
+      }
+    },
+    "buttons": {
+      "createAccount": "Crear cuenta",
+      "joinBusiness": "Unirse a empresa",
+      "signingUp": "Registrando..."
+    },
+    "footer": {
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "login": "Iniciar sesión"
+    }
+  },
+  "success": {
+    "title": "¡Registro exitoso!",
+    "description": "Tu cuenta está lista. Ahora puedes acceder a tu panel.",
+    "goToDashboard": "Ir al panel",
+    "autoRedirect": "Serás redirigido al panel en {{seconds}} segundos."
   }
 }

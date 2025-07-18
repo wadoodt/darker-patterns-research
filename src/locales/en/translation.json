@@ -181,5 +181,11 @@
       "haveAccount": "Already have an account?",
       "login": "Login"
     }
+  },
+  "success": {
+    "title": "Signup Successful!",
+    "description": "Your account is ready. You can now access your dashboard.",
+    "goToDashboard": "Go to Dashboard",
+    "autoRedirect": "You will be redirected to the dashboard in {{seconds}} seconds."
   }
 }
