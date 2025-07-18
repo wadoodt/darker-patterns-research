@@ -2,6 +2,7 @@
 import { db } from '../db';
 import { createErrorResponse, createSuccessResponse } from '../../response';
 import { ERROR_CODES, RESPONSE_CODES } from '../../codes';
+import type { User } from 'types/api';
 
 /**
  * Handles the GET /api/users/me request.
@@ -64,7 +65,7 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
       });
     }
 
-    const { name } = await request.json();
+    const { name } = (await request.json()) as Pick<User, 'name'>;
 
     if (!name) {
         return new Response(JSON.stringify(createErrorResponse('VALIDATION_ERROR', {name: 'Name is required'})), {

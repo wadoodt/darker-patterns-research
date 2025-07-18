@@ -1,4 +1,100 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
+
+type SignupFormProps = {
+  handleSubmit: (event: React.FormEvent) => void;
+  signupAction: 'create' | 'join';
+  setSignupAction: Dispatch<SetStateAction<'create' | 'join'>>;
+  plan: string;
+  setPlan: Dispatch<SetStateAction<string>>;
+  companyName: string;
+  setCompanyName: Dispatch<SetStateAction<string>>;
+  companyId: string;
+  setCompanyId: Dispatch<SetStateAction<string>>;
+  username: string;
+  setUsername: Dispatch<SetStateAction<string>>;
+  email: string;
+  setEmail: Dispatch<SetStateAction<string>>;
+  password: string;
+  setPassword: Dispatch<SetStateAction<string>>;
+};
+
+const SignupForm = ({
+  handleSubmit,
+  signupAction,
+  setSignupAction,
+  plan,
+  setPlan,
+  companyName,
+  setCompanyName,
+  companyId,
+  setCompanyId,
+  username,
+  setUsername,
+  email,
+  setEmail,
+  password,
+  setPassword,
+}: SignupFormProps) => (
+  <form onSubmit={handleSubmit}>
+    <h1>Sign Up</h1>
+    <div style={{ marginBottom: '1rem' }}>
+      <label style={{ marginRight: '1rem' }}>
+        <input
+          type="radio"
+          value="create"
+          checked={signupAction === 'create'}
+          onChange={() => setSignupAction('create')}
+        />
+        Create a new company
+      </label>
+      <label>
+        <input
+          type="radio"
+          value="join"
+          checked={signupAction === 'join'}
+          onChange={() => setSignupAction('join')}
+        />
+        Join an existing company
+      </label>
+    </div>
+
+    {signupAction === 'create' ? (
+      <>
+        <div>
+          <label htmlFor="plan">Plan</label>
+          <select id="plan" value={plan} onChange={(e) => setPlan(e.target.value)}>
+            <option value="Free">Free</option>
+            <option value="Pro">Pro</option>
+            <option value="Enterprise">Enterprise</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="companyName">Company Name</label>
+          <input id="companyName" type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} required />
+        </div>
+      </>
+    ) : (
+      <div>
+        <label htmlFor="companyId">Company ID</label>
+        <input id="companyId" type="text" value={companyId} onChange={(e) => setCompanyId(e.target.value)} required />
+      </div>
+    )}
+
+    <div>
+      <label htmlFor="username">Your Name</label>
+      <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+    </div>
+    <div>
+      <label htmlFor="email">Email</label>
+      <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+    </div>
+    <div>
+      <label htmlFor="password">Password</label>
+      <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+    </div>
+    <button type="submit">Sign Up</button>
+  </form>
+);
 
 const SignupPage = () => {
   const [signupAction, setSignupAction] = useState<'create' | 'join'>('create');
@@ -53,65 +149,23 @@ const SignupPage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Sign Up</h1>
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ marginRight: '1rem' }}>
-          <input
-            type="radio"
-            value="create"
-            checked={signupAction === 'create'}
-            onChange={() => setSignupAction('create')}
-          />
-          Create a new company
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="join"
-            checked={signupAction === 'join'}
-            onChange={() => setSignupAction('join')}
-          />
-          Join an existing company
-        </label>
-      </div>
-
-      {signupAction === 'create' ? (
-        <>
-          <div>
-            <label htmlFor="plan">Plan</label>
-            <select id="plan" value={plan} onChange={(e) => setPlan(e.target.value)}>
-              <option value="Free">Free</option>
-              <option value="Pro">Pro</option>
-              <option value="Enterprise">Enterprise</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="companyName">Company Name</label>
-            <input id="companyName" type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} required />
-          </div>
-        </>
-      ) : (
-        <div>
-          <label htmlFor="companyId">Company ID</label>
-          <input id="companyId" type="text" value={companyId} onChange={(e) => setCompanyId(e.target.value)} required />
-        </div>
-      )}
-
-      <div>
-        <label htmlFor="username">Your Name</label>
-        <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-      </div>
-      <button type="submit">Sign Up</button>
-    </form>
+    <SignupForm
+      handleSubmit={handleSubmit}
+      signupAction={signupAction}
+      setSignupAction={setSignupAction}
+      plan={plan}
+      setPlan={setPlan}
+      companyName={companyName}
+      setCompanyName={setCompanyName}
+      companyId={companyId}
+      setCompanyId={setCompanyId}
+      username={username}
+      setUsername={setUsername}
+      email={email}
+      setEmail={setEmail}
+      password={password}
+      setPassword={setPassword}
+    />
   );
 };
 

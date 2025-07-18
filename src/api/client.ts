@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import axios from 'axios';
 
 const apiClient = axios.create({
@@ -39,7 +41,13 @@ apiClient.interceptors.request.use(
           data,
           status: mockResponse.status,
           statusText: mockResponse.statusText,
-          headers: Object.fromEntries(mockResponse.headers.entries()),
+          headers: (() => {
+            const h: Record<string, string> = {};
+            mockResponse.headers.forEach((value, key) => {
+              h[key] = value;
+            });
+            return h;
+          })(),
           config: config,
           request: {},
         });

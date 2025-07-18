@@ -4,13 +4,19 @@ import {
   createSuccessResponse,
 } from '../../response';
 import { ERROR_CODES, RESPONSE_CODES } from '../../codes';
+import type { User, Company } from 'types/api';
+
+type SignupPayload = Partial<User> & Partial<Pick<Company, 'name' | 'plan'>> & {
+  action: 'create' | 'join';
+  companyName?: string;
+};
 
 /**
  * Handles the login request using the standardized API response format.
  */
 export const login = async (request: Request): Promise<Response> => {
   try {
-    const { username, password } = await request.json();
+    const { username, password } = (await request.json()) as Pick<User, 'username' | 'password'>;
     const user = db.users.findFirst({ where: { username } });
 
     if (!user || user.password !== password) {
@@ -66,11 +72,12 @@ export const login = async (request: Request): Promise<Response> => {
  */
 export const signup = async (request: Request): Promise<Response> => {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as SignupPayload;
     const { action, username, email, password } = body;
 
     if (action === 'create') {
       const { plan, companyName } = body;
+
       if (!username || !email || !password || !plan || !companyName) {
         return new Response(JSON.stringify(createErrorResponse('VALIDATION_ERROR', { error: 'All fields for creating a company are required' })), {
           status: ERROR_CODES.VALIDATION_ERROR.status,

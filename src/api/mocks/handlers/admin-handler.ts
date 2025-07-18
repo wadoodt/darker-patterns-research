@@ -4,6 +4,7 @@ import {
   createSuccessResponse,
 } from '../../response';
 import { ERROR_CODES } from '../../codes';
+import type { User } from 'types/api';
 
 /**
  * Handles the request to get all users within the admin's company.
@@ -43,7 +44,9 @@ export const updateUser = async (request: Request): Promise<Response> => {
 
   const url = new URL(request.url);
   const userId = url.pathname.split('/').pop();
-  const { role, status } = await request.json();
+  const { role, status } = (await request.json()) as Partial<
+    Pick<User, 'role' | 'status'>
+  >;
 
   if (!userId) {
     const errorResponse = createErrorResponse('VALIDATION_ERROR', { error: 'User ID is missing from the URL.' });

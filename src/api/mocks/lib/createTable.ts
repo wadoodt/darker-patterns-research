@@ -6,7 +6,7 @@ type Entity = { id: string | number; [key: string]: unknown };
 type WhereClause<T> = Partial<T>;
 
 // Defines the structure for our Drizzle-like query options.
-interface QueryOptions<T> {
+export interface QueryOptions<T> {
   where?: WhereClause<T>;
   page?: number;
   limit?: number;
