@@ -3,4 +3,4 @@
  * This allows for cleaner imports, e.g.: `import { User } from '@types';`
  */
 
-export * from './api';
+export * from "./api";

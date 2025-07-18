@@ -1,5 +1,5 @@
 // src/pages/admin-panel/SettingsPage.tsx
-import React from 'react';
+import React from "react";
 
 const SettingsPage: React.FC = () => {
   return (

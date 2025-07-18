@@ -8,19 +8,19 @@
  * Using 'as const' makes it readonly and allows using keys as literal types.
  */
 export const RESPONSE_CODES = {
-  // --- Auth --- 
+  // --- Auth ---
   LOGIN_SUCCESS: {
     status: 200,
-    message: 'response.auth.login_success', // i18n key
+    message: "response.auth.login_success", // i18n key
   },
   SIGNUP_SUCCESS: {
     status: 201, // Use 201 for resource creation
-    message: 'response.auth.signup_success',
+    message: "response.auth.signup_success",
   },
-  // --- General --- 
+  // --- General ---
   OPERATION_SUCCESS: {
     status: 200,
-    message: 'response.general.operation_success',
+    message: "response.general.operation_success",
   },
 } as const;
 
@@ -28,31 +28,31 @@ export const RESPONSE_CODES = {
  * A dictionary of error codes.
  */
 export const ERROR_CODES = {
-  // --- General --- 
+  // --- General ---
   INTERNAL_SERVER_ERROR: {
     status: 500,
-    message: 'error.general.internal_server_error',
+    message: "error.general.internal_server_error",
   },
   NOT_FOUND: {
     status: 404,
-    message: 'error.general.not_found',
+    message: "error.general.not_found",
   },
-  // --- Auth --- 
+  // --- Auth ---
   INVALID_CREDENTIALS: {
     status: 401,
-    message: 'error.auth.invalid_credentials',
+    message: "error.auth.invalid_credentials",
   },
   UNAUTHORIZED: {
     status: 401,
-    message: 'error.auth.unauthorized',
+    message: "error.auth.unauthorized",
   },
   FORBIDDEN: {
     status: 403,
-    message: 'error.auth.forbidden',
+    message: "error.auth.forbidden",
   },
-  // --- Validation --- 
+  // --- Validation ---
   VALIDATION_ERROR: {
     status: 422, // Unprocessable Entity
-    message: 'error.validation.validation_error',
+    message: "error.validation.validation_error",
   },
 } as const;

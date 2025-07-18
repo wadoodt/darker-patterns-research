@@ -1,8 +1,8 @@
 // src/hooks/useAsyncCache.ts
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useCache } from '@contexts/CacheContext';
-import { createCacheKey } from '@lib/cache/utils';
-import { CacheLevel } from '@lib/cache/types';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useCache } from "@contexts/CacheContext";
+import { createCacheKey } from "@lib/cache/utils";
+import { CacheLevel } from "@lib/cache/types";
 
 interface UseAsyncCacheOptions {
   refetchOnMount?: boolean;
@@ -25,12 +25,15 @@ export function useAsyncCache<T>(
 
   useEffect(() => {
     if (cacheError) {
-      console.warn(`[useAsyncCache] Cache error for key '${keyParts.join(':')}':`, cacheError.message);
+      console.warn(
+        `[useAsyncCache] Cache error for key '${keyParts.join(":")}':`,
+        cacheError.message,
+      );
     }
   }, [cacheError, keyParts]);
 
   // Generate a stable cache key
-  const cacheKey = createCacheKey('async-data', ...keyParts);
+  const cacheKey = createCacheKey("async-data", ...keyParts);
 
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(enabled);
@@ -79,14 +82,25 @@ export function useAsyncCache<T>(
           setData(freshData);
         }
       } catch (err) {
-        const error = err instanceof Error ? err : new Error('Failed to fetch data');
+        const error =
+          err instanceof Error ? err : new Error("Failed to fetch data");
         setError(error);
         console.error(`[useAsyncCache Error: ${cacheKey}]`, error);
       } finally {
         setLoading(false);
       }
     },
-    [cacheKey, get, set, fetcher, level, customTtl, isReady, enabled, cacheError],
+    [
+      cacheKey,
+      get,
+      set,
+      fetcher,
+      level,
+      customTtl,
+      isReady,
+      enabled,
+      cacheError,
+    ],
   );
 
   // Effect to trigger the initial data load
@@ -94,7 +108,7 @@ export function useAsyncCache<T>(
     if (enabled && (data === null || refetchOnMount)) {
       loadData();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadData, enabled, refetchOnMount]);
 
   // Public refresh function

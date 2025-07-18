@@ -1,8 +1,8 @@
-import React from 'react';
-import { Building } from 'lucide-react';
+import React from "react";
+import { Building } from "lucide-react";
 
 type BusinessFieldsProps = {
-  signupType: 'new' | 'existing';
+  signupType: "new" | "existing";
   businessName: string;
   setBusinessName: (v: string) => void;
   businessId: string;
@@ -12,50 +12,90 @@ type BusinessFieldsProps = {
   t: (key: string, options?: Record<string, unknown>) => string;
 };
 
-const BusinessFields: React.FC<BusinessFieldsProps> = ({ signupType, businessName, setBusinessName, businessId, setBusinessId, referralCode, setReferralCode, t }) => (
+const BusinessFields: React.FC<BusinessFieldsProps> = ({
+  signupType,
+  businessName,
+  setBusinessName,
+  businessId,
+  setBusinessId,
+  referralCode,
+  setReferralCode,
+  t,
+}) => (
   <>
-    {signupType === 'new' && (
+    {signupType === "new" && (
       <div style={{ marginBottom: 16 }}>
-        <label htmlFor="businessName">{t('signup.form.labels.businessName')}</label>
+        <label htmlFor="businessName">
+          {t("signup.form.labels.businessName")}
+        </label>
         <input
           id="businessName"
           type="text"
           required
           value={businessName}
           onChange={(e) => setBusinessName(e.target.value)}
-          style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
+          style={{
+            width: "100%",
+            padding: 8,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+          }}
         />
       </div>
     )}
-    {signupType === 'existing' && (
+    {signupType === "existing" && (
       <>
         <div style={{ marginBottom: 16 }}>
-          <label htmlFor="businessId">{t('signup.form.labels.businessId')}</label>
+          <label htmlFor="businessId">
+            {t("signup.form.labels.businessId")}
+          </label>
           <input
             id="businessId"
             type="text"
             required
             value={businessId}
             onChange={(e) => setBusinessId(e.target.value)}
-            style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
+            style={{
+              width: "100%",
+              padding: 8,
+              borderRadius: 6,
+              border: "1px solid #ccc",
+            }}
           />
         </div>
         <div style={{ marginBottom: 16 }}>
-          <label htmlFor="referralCode">{t('signup.form.labels.referralCode')}</label>
+          <label htmlFor="referralCode">
+            {t("signup.form.labels.referralCode")}
+          </label>
           <input
             id="referralCode"
             type="text"
             required
             value={referralCode}
             onChange={(e) => setReferralCode(e.target.value)}
-            style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
+            style={{
+              width: "100%",
+              padding: 8,
+              borderRadius: 6,
+              border: "1px solid #ccc",
+            }}
           />
         </div>
-        <div style={{ background: '#f6f6f6', borderRadius: 6, padding: 12, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div
+          style={{
+            background: "#f6f6f6",
+            borderRadius: 6,
+            padding: 12,
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           <Building size={18} />
           <div>
-            <strong>{t('signup.alerts.joining.title')}</strong>
-            <div>{t('signup.alerts.joining.description')}</div>
+            <strong>{t("signup.alerts.joining.title")}</strong>
+            <div>{t("signup.alerts.joining.description")}</div>
           </div>
         </div>
       </>
@@ -63,4 +103,4 @@ const BusinessFields: React.FC<BusinessFieldsProps> = ({ signupType, businessNam
   </>
 );
 
-export default BusinessFields; 
+export default BusinessFields;

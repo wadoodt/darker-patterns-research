@@ -3,8 +3,8 @@
  * This file should be used for runtime logic, not for type definitions.
  */
 
-import type { ApiResponse } from 'types';
-import { RESPONSE_CODES, ERROR_CODES } from './codes';
+import type { ApiResponse } from "types";
+import { RESPONSE_CODES, ERROR_CODES } from "./codes";
 
 // ------------------------------------------------------------------
 // Utility Functions
@@ -21,7 +21,7 @@ import { RESPONSE_CODES, ERROR_CODES } from './codes';
  */
 export function createSuccessResponse<T>(
   data: T,
-  messageCode: keyof typeof RESPONSE_CODES
+  messageCode: keyof typeof RESPONSE_CODES,
 ): ApiResponse<T> {
   return {
     data: {
@@ -43,7 +43,7 @@ export function createSuccessResponse<T>(
  */
 export function createErrorResponse<T = never>(
   messageCode: keyof typeof ERROR_CODES,
-  validations?: Record<string, string>
+  validations?: Record<string, string>,
 ): ApiResponse<T> {
   return {
     data: null,

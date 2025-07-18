@@ -1,6 +1,11 @@
 export interface AppSettings {
   language: string;
-  theme: 'light' | 'dark' | 'high-contrast-light' | 'high-contrast-dark' | 'light-simple';
+  theme:
+    | "light"
+    | "dark"
+    | "high-contrast-light"
+    | "high-contrast-dark"
+    | "light-simple";
   notifications: {
     email: boolean;
     push: boolean;
@@ -17,8 +22,8 @@ export interface AppContextType {
 }
 
 export const defaultSettings: AppSettings = {
-  language: 'en',
-  theme: 'light',
+  language: "en",
+  theme: "light",
   notifications: {
     email: true,
     push: true,

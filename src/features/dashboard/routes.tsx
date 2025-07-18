@@ -1,28 +1,28 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import ProtectedRoute from '@components/ProtectedRoute';
-import ErrorBoundary from '@components/ErrorBoundary';
-import DashboardLayout from '@layouts/DashboardLayout';
+import { Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "@components/ProtectedRoute";
+import ErrorBoundary from "@components/ErrorBoundary";
+import DashboardLayout from "@layouts/DashboardLayout";
 
 // Dashboard Pages
-import DashboardPage from '@features/dashboard/pages/DashboardPage';
-import SettingsPage from '@features/dashboard/pages/SettingsPage';
-import ProfilePage from '@features/profile/pages/ProfilePage';
-import TeamPage from './pages/TeamPage';
-import BillingPage from './pages/BillingPage';
-import InfraPage from './pages/InfraPage';
-import DomainsPage from './pages/DomainsPage';
-import NotFoundPage from './pages/NotFoundPage';
+import DashboardPage from "@features/dashboard/pages/DashboardPage";
+import SettingsPage from "@features/dashboard/pages/SettingsPage";
+import ProfilePage from "@features/profile/pages/ProfilePage";
+import TeamPage from "./pages/TeamPage";
+import BillingPage from "./pages/BillingPage";
+import InfraPage from "./pages/InfraPage";
+import DomainsPage from "./pages/DomainsPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 // Admin Pages
-import { AdminRoutes } from '@features/admin-panel/routes';
+import { AdminRoutes } from "@features/admin-panel/routes";
 
 // Public Pages
-import SignupPage from '@features/auth/pages/SignupPage';
+import SignupIndex from "@pages/signup/index";
 
 export const AppRoutes = () => (
   <Routes>
     {/* Public routes */}
-    <Route path="/signup" element={<SignupPage />} />
+    <Route path="/signup" element={<SignupIndex />} />
 
     {/* Authenticated routes with DashboardLayout */}
     <Route
@@ -50,7 +50,7 @@ export const AppRoutes = () => (
       <Route
         path="/admin-panel/*"
         element={
-          <ProtectedRoute roles={['admin']}>
+          <ProtectedRoute roles={["admin"]}>
             <AdminRoutes />
           </ProtectedRoute>
         }

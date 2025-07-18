@@ -1,5 +1,5 @@
 // src/pages/dashboard/AdminPanelPage.tsx
-import React from 'react';
+import React from "react";
 
 const AdminPanelPage: React.FC = () => {
   return (

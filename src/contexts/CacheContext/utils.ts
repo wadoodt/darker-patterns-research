@@ -1,6 +1,7 @@
 // Utility to normalize keys to string[]
-export const normalizeKeys = (keys: (string | number | IDBValidKey)[]): string[] =>
-  keys.map((k) => typeof k === 'string' ? k : String(k));
+export const normalizeKeys = (
+  keys: (string | number | IDBValidKey)[],
+): string[] => keys.map((k) => (typeof k === "string" ? k : String(k)));
 
 // Utility to clean up expired entries
 type CacheEntryLike = { level?: string; expiresAt?: number };
@@ -13,7 +14,13 @@ type CleanupExpiredOptions<T extends CacheEntryLike = CacheEntryLike> = {
   now?: number;
   level?: string;
 };
-export const cleanupExpiredEntries = async <T extends CacheEntryLike = CacheEntryLike>({ kv, now = Date.now(), level }: CleanupExpiredOptions<T>) => {
+export const cleanupExpiredEntries = async <
+  T extends CacheEntryLike = CacheEntryLike,
+>({
+  kv,
+  now = Date.now(),
+  level,
+}: CleanupExpiredOptions<T>) => {
   const keys = normalizeKeys(await kv.keys());
   for (const key of keys) {
     const entry = await kv.get(key);
@@ -27,7 +34,7 @@ export const cleanupExpiredEntries = async <T extends CacheEntryLike = CacheEntr
 
 // Utility to match keys by pattern (supports * wildcard)
 export const matchPattern = (pattern: string) => {
-  const regex = new RegExp(`^${pattern.replace(/\*/g, '.*')}$`);
+  const regex = new RegExp(`^${pattern.replace(/\*/g, ".*")}$`);
   return (key: string) => regex.test(key);
 };
 
@@ -45,8 +52,10 @@ export const deleteDatabase = (dbName: string): Promise<void> => {
       reject(deleteRequest.error);
     };
     deleteRequest.onblocked = () => {
-      console.warn(`Database ${dbName} deletion blocked. Please close other tabs with this app open.`);
-      reject(new Error('Database deletion blocked.'));
+      console.warn(
+        `Database ${dbName} deletion blocked. Please close other tabs with this app open.`,
+      );
+      reject(new Error("Database deletion blocked."));
     };
   });
 };

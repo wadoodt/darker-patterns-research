@@ -10,7 +10,7 @@ export interface QueryOptions<T> {
   where?: WhereClause<T>;
   page?: number;
   limit?: number;
-  orderBy?: { [K in keyof T]?: 'asc' | 'desc' };
+  orderBy?: { [K in keyof T]?: "asc" | "desc" };
   query?: string; // For full-text search
 }
 
@@ -26,10 +26,11 @@ export interface QueryOptions<T> {
 export function createTable<T extends Entity>(initialData: T[]) {
   // Use a deep copy to ensure the original seed data is never mutated.
   let tableData = JSON.parse(JSON.stringify(initialData));
-  
 
   const matches = (item: T, where: WhereClause<T>): boolean => {
-    return Object.entries(where).every(([key, value]) => item[key as keyof T] === value);
+    return Object.entries(where).every(
+      ([key, value]) => item[key as keyof T] === value,
+    );
   };
 
   return {
@@ -53,7 +54,13 @@ export function createTable<T extends Entity>(initialData: T[]) {
      * @param {string} [options.query] - A string for full-text search across all string properties of the records.
      * @returns {T[]} An array of matching records.
      */
-    findMany({ where = {}, page = 1, limit = 10, orderBy = {}, query = '' }: QueryOptions<T>): T[] {
+    findMany({
+      where = {},
+      page = 1,
+      limit = 10,
+      orderBy = {},
+      query = "",
+    }: QueryOptions<T>): T[] {
       let results = tableData.filter((item: T) => matches(item, where));
 
       // Full-text search across all string properties
@@ -62,21 +69,22 @@ export function createTable<T extends Entity>(initialData: T[]) {
         results = results.filter((item: T) =>
           Object.values(item).some(
             (value) =>
-              typeof value === 'string' && value.toLowerCase().includes(lowerCaseQuery)
-          )
+              typeof value === "string" &&
+              value.toLowerCase().includes(lowerCaseQuery),
+          ),
         );
       }
 
       // Sorting
       const [field, direction] = Object.entries(orderBy)[0] || [];
       if (field) {
-                results.sort((a: T, b: T) => {
+        results.sort((a: T, b: T) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const valA = a[field] as any;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const valB = b[field] as any;
-          if (valA < valB) return direction === 'asc' ? -1 : 1;
-          if (valA > valB) return direction === 'asc' ? 1 : -1;
+          if (valA < valB) return direction === "asc" ? -1 : 1;
+          if (valA > valB) return direction === "asc" ? 1 : -1;
           return 0;
         });
       }
@@ -92,7 +100,7 @@ export function createTable<T extends Entity>(initialData: T[]) {
      * @param {Omit<T, 'id'>} params.data - The data for the new record, excluding the 'id'.
      * @returns {T} The newly created record, including its new ID.
      */
-    create(data: Omit<T, 'id'> & { id?: string | number }): T {
+    create(data: Omit<T, "id"> & { id?: string | number }): T {
       const newItem = { ...data, id: data.id || crypto.randomUUID() } as T;
       tableData.push(newItem);
       return newItem;
@@ -105,7 +113,13 @@ export function createTable<T extends Entity>(initialData: T[]) {
      * @param {Partial<T>} params.data - An object containing the fields to update.
      * @returns {T | undefined} The updated record, or `undefined` if no record was found.
      */
-    update({ where = {}, data }: { where?: WhereClause<T>; data: Partial<T> }): T | undefined {
+    update({
+      where = {},
+      data,
+    }: {
+      where?: WhereClause<T>;
+      data: Partial<T>;
+    }): T | undefined {
       const itemIndex = tableData.findIndex((item: T) => matches(item, where));
       if (itemIndex === -1) return undefined;
 
@@ -130,7 +144,7 @@ export function createTable<T extends Entity>(initialData: T[]) {
     /**
      * Resets the table to its initial state. Useful for testing.
      */
-        _reset() {
+    _reset() {
       tableData = JSON.parse(JSON.stringify(initialData));
     },
   };

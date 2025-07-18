@@ -20,7 +20,7 @@ export const FloatingMailsContainer: React.FC = () => {
       leftPercent: Math.random() * 90,
       delay: 0,
     }),
-    []
+    [],
   );
 
   const handleFinish = useCallback(
@@ -30,7 +30,7 @@ export const FloatingMailsContainer: React.FC = () => {
         return [...filtered, createRandomMail()];
       });
     },
-    [createRandomMail]
+    [createRandomMail],
   );
 
   useEffect(() => {
@@ -38,9 +38,12 @@ export const FloatingMailsContainer: React.FC = () => {
     const timers: NodeJS.Timeout[] = [];
 
     for (let i = 0; i < initialCount; i++) {
-      const t = setTimeout(() => {
-        setMails((prev) => [...prev, createRandomMail()]);
-      }, i * 500 + Math.random() * 500);
+      const t = setTimeout(
+        () => {
+          setMails((prev) => [...prev, createRandomMail()]);
+        },
+        i * 500 + Math.random() * 500,
+      );
       timers.push(t);
     }
 
@@ -61,4 +64,4 @@ export const FloatingMailsContainer: React.FC = () => {
       ))}
     </>
   );
-}; 
+};

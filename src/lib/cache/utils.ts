@@ -1,6 +1,6 @@
 // src/lib/cache/utils.ts
 
-import { CacheLevel } from './types';
+import { CacheLevel } from "./types";
 
 /**
  * Creates a standardized cache key from a prefix and parts.
@@ -9,8 +9,11 @@ import { CacheLevel } from './types';
  * @param parts The remaining parts of the key.
  * @returns A formatted string key.
  */
-export function createCacheKey(prefix: string, ...parts: (string | number)[]): string {
-  return `${prefix}:${parts.join(':')}`;
+export function createCacheKey(
+  prefix: string,
+  ...parts: (string | number)[]
+): string {
+  return `${prefix}:${parts.join(":")}`;
 }
 
 /**
@@ -20,7 +23,12 @@ export function createCacheKey(prefix: string, ...parts: (string | number)[]): s
  * @param items An array of items to cache.
  */
 export async function batchCacheSet<T>(
-  cacheSet: (key: string, data: T, level?: CacheLevel, customTtl?: number) => Promise<void>,
+  cacheSet: (
+    key: string,
+    data: T,
+    level?: CacheLevel,
+    customTtl?: number,
+  ) => Promise<void>,
   items: Array<{
     keyParts: (string | number)[];
     data: T;
@@ -31,7 +39,7 @@ export async function batchCacheSet<T>(
   await Promise.all(
     items.map((item) => {
       // Re-use the key creation logic for consistency
-      const key = createCacheKey('async-data', ...item.keyParts);
+      const key = createCacheKey("async-data", ...item.keyParts);
       return cacheSet(key, item.data, item.level, item.customTtl);
     }),
   );

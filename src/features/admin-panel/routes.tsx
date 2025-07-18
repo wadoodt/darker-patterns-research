@@ -1,11 +1,11 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
-import AdminPanelPage from './pages/AdminPanelPage';
-import AdminPanelSettingsPage from './pages/SettingsPage';
-import AdminPanelUsersPage from './pages/UsersPage';
-import AdminPanelCompaniesPage from './pages/CompaniesPage';
-import AdminPanelInfraPage from './pages/InfraPage';
-import NotFoundPage from './pages/NotFoundPage';
+import AdminPanelPage from "./pages/AdminPanelPage";
+import AdminPanelSettingsPage from "./pages/SettingsPage";
+import AdminPanelUsersPage from "./pages/UsersPage";
+import AdminPanelCompaniesPage from "./pages/CompaniesPage";
+import AdminPanelInfraPage from "./pages/InfraPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export const AdminRoutes = () => (
   <Routes>

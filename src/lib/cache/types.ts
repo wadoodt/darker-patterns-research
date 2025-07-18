@@ -1,19 +1,25 @@
 // src/lib/cache/types.ts
 
-
 /**
  * Defines the persistence level of a cache entry, determining its TTL.
  */
-export type CacheLevel = 'STANDARD' | 'PERSISTENT' | 'SESSION' | 'CRITICAL' | 'STABLE' | 'CONFIG' | 'DEBUG';
+export type CacheLevel =
+  | "STANDARD"
+  | "PERSISTENT"
+  | "SESSION"
+  | "CRITICAL"
+  | "STABLE"
+  | "CONFIG"
+  | "DEBUG";
 
 export const CacheLevel = {
-  DEBUG: 'DEBUG' as CacheLevel,
-  STANDARD: 'STANDARD' as CacheLevel,
-  PERSISTENT: 'PERSISTENT' as CacheLevel,
-  SESSION: 'SESSION' as CacheLevel,
-  CRITICAL: 'CRITICAL' as CacheLevel,
-  STABLE: 'STABLE' as CacheLevel,
-  CONFIG: 'CONFIG' as CacheLevel,
+  DEBUG: "DEBUG" as CacheLevel,
+  STANDARD: "STANDARD" as CacheLevel,
+  PERSISTENT: "PERSISTENT" as CacheLevel,
+  SESSION: "SESSION" as CacheLevel,
+  CRITICAL: "CRITICAL" as CacheLevel,
+  STABLE: "STABLE" as CacheLevel,
+  CONFIG: "CONFIG" as CacheLevel,
 };
 
 /**

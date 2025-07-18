@@ -6,7 +6,10 @@ import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 const FAQSection: React.FC = () => {
   const { t } = useTranslation();
   // Example: get FAQ items from i18n
-  const faqs = t("pricing.faq.items", { returnObjects: true }) as Array<{ question: string; answer: string }>;
+  const faqs = t("pricing.faq.items", { returnObjects: true }) as Array<{
+    question: string;
+    answer: string;
+  }>;
   return (
     <section className="faq-section" id="faq">
       <h2>{t("pricing.faq.title")}</h2>
@@ -15,11 +18,16 @@ const FAQSection: React.FC = () => {
           <Accordion.Item value={`item-${idx}`} key={idx} className="faq-item">
             <Accordion.Header>
               <Accordion.Trigger className="faq-trigger">
-                <QuestionMarkCircledIcon aria-hidden="true" style={{ marginRight: 8 }} />
+                <QuestionMarkCircledIcon
+                  aria-hidden="true"
+                  style={{ marginRight: 8 }}
+                />
                 {faq.question}
               </Accordion.Trigger>
             </Accordion.Header>
-            <Accordion.Content className="faq-content">{faq.answer}</Accordion.Content>
+            <Accordion.Content className="faq-content">
+              {faq.answer}
+            </Accordion.Content>
           </Accordion.Item>
         ))}
       </Accordion.Root>
@@ -27,4 +35,4 @@ const FAQSection: React.FC = () => {
   );
 };
 
-export default FAQSection; 
+export default FAQSection;

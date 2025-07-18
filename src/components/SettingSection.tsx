@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, Heading } from '@radix-ui/themes';
+import React from "react";
+import { Card, Heading } from "@radix-ui/themes";
 
 interface SettingSectionProps {
   title: string;

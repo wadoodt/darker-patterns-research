@@ -8,7 +8,7 @@ For a detailed explanation of the mock API's internal workings, see the **[Mock 
 
 **The frontend's types and mock data MUST always be an exact mirror of the backend API contract.**
 
-When the backend changes a data model, the frontend must reflect that change in its own types and mocks *before* the new backend code is deployed. This prevents integration bugs and ensures a smooth development workflow.
+When the backend changes a data model, the frontend must reflect that change in its own types and mocks _before_ the new backend code is deployed. This prevents integration bugs and ensures a smooth development workflow.
 
 ---
 
@@ -35,7 +35,7 @@ The backend is adding a `stripeClientId` to the `User` object.
 The backend developer's task is to communicate this change clearly. In their Pull Request, they should provide the updated data structure or type definition.
 
 > **Backend PR Description Example:**
-> 
+>
 > "Updated the `/auth/me` and `/auth/login` endpoints. The `User` object in the response now includes a `stripeClientId: string` field. Frontend must update its types and mocks."
 
 ### Step 2: Frontend Developer Updates Local Types
@@ -57,9 +57,9 @@ export type User = {
 
 This is the most powerful step. As soon as the type is updated, TypeScript will generate errors in every part of the application that is now out of sync. This includes:
 
--   **Mock Data**: The mock user objects in `src/api/mocks/db.ts` will now be missing the `stripeClientId` property.
--   **UI Components**: Any component that receives a `User` object might need adjustments.
--   **Helper Functions**: Any function that processes a `User` object might break.
+- **Mock Data**: The mock user objects in `src/api/mocks/db.ts` will now be missing the `stripeClientId` property.
+- **UI Components**: Any component that receives a `User` object might need adjustments.
+- **Helper Functions**: Any function that processes a `User` object might break.
 
 These errors are not a problem; they are your **to-do list**. Systematically fix each one.
 
@@ -73,9 +73,9 @@ This is a **critical, non-negotiable** step. The mock environment must reflect t
     // src/api/mocks/db.ts
     db.users.create({
       id: 1,
-      username: 'testuser',
+      username: "testuser",
       // ...
-      stripeClientId: 'cus_mock_123',
+      stripeClientId: "cus_mock_123",
     });
     ```
 

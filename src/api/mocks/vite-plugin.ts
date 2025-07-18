@@ -1,6 +1,6 @@
-import type { Plugin } from 'vite';
-import type { IncomingMessage } from 'http';
-import { resolve as mockResolver } from './resolver';
+import type { Plugin } from "vite";
+import type { IncomingMessage } from "http";
+import { resolve as mockResolver } from "./resolver";
 
 // Helper to read the body from Node's IncomingMessage
 async function getRequestBody(req: IncomingMessage): Promise<Buffer> {
@@ -13,12 +13,15 @@ async function getRequestBody(req: IncomingMessage): Promise<Buffer> {
 
 export function mockApiPlugin(): Plugin {
   return {
-    name: 'mock-api-plugin',
+    name: "mock-api-plugin",
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
-        if (req.url?.startsWith('/api')) {
+        if (req.url?.startsWith("/api")) {
           try {
-            const fullUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+            const fullUrl = new URL(
+              req.url,
+              `http://${req.headers.host || "localhost"}`,
+            );
             const body = await getRequestBody(req);
 
             // Create a standard Request object
@@ -29,17 +32,16 @@ export function mockApiPlugin(): Plugin {
             });
 
             const mockResponse = await mockResolver(request);
-            
+
             res.statusCode = mockResponse.status;
             mockResponse.headers.forEach((value, key) => {
               res.setHeader(key, value);
             });
             res.end(await mockResponse.text());
-
           } catch (e) {
-            console.error('Mock API Error:', e);
+            console.error("Mock API Error:", e);
             res.statusCode = 500;
-            res.end(JSON.stringify({ error: 'Mock API failed' }));
+            res.end(JSON.stringify({ error: "Mock API failed" }));
           }
         } else {
           next();

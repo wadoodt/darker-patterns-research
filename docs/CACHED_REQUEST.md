@@ -7,13 +7,11 @@ This guide explains how to use the robust client-side caching system in the Peng
 First, ensure your application is wrapped with the `CacheProvider` in a root component (e.g., `main.tsx` or `App.tsx`). This initializes the cache and makes it available to all child components.
 
 ```tsx
-import { CacheProvider } from './contexts/CacheContext';
+import { CacheProvider } from "./contexts/CacheContext";
 
 function App() {
   return (
-    <CacheProvider>
-      {/* ...your routes and components... */}
-    </CacheProvider>
+    <CacheProvider>{/* ...your routes and components... */}</CacheProvider>
   );
 }
 ```
@@ -28,19 +26,24 @@ Import the hook and provide a unique `cacheKey` and an async `fetcher` function.
 
 ```tsx
 // src/components/CompaniesList.tsx
-import { useAsyncCache } from '@hooks/useAsyncCache';
-import { api } from '@api/client';
+import { useAsyncCache } from "@hooks/useAsyncCache";
+import { api } from "@api/client";
 
 const fetchCompanies = async () => {
-  const response = await api.get('/companies');
+  const response = await api.get("/companies");
   return response.data;
 };
 
 export function CompaniesList() {
-  const { data: companies, loading, error, reload } = useAsyncCache(
-    'companies-list',
+  const {
+    data: companies,
+    loading,
+    error,
+    reload,
+  } = useAsyncCache(
+    "companies-list",
     fetchCompanies,
-    { level: 'PERSISTENT' } // Cache level
+    { level: "PERSISTENT" }, // Cache level
   );
 
   if (loading) return <p>Loading companies...</p>;
@@ -50,7 +53,9 @@ export function CompaniesList() {
     <div>
       <button onClick={() => reload(true)}>Force Refresh</button>
       <ul>
-        {companies?.map(company => <li key={company.id}>{company.name}</li>)}
+        {companies?.map((company) => (
+          <li key={company.id}>{company.name}</li>
+        ))}
       </ul>
     </div>
   );
@@ -71,9 +76,11 @@ export function CompaniesList() {
 We have made significant improvements to make the cache system more robust.
 
 ### Automatic Fallback
+
 If the cache is not ready (e.g., IndexedDB is initializing) or a cache read fails, `useAsyncCache` will **automatically bypass the cache** and execute the `fetcher` function directly. This ensures that the user can still see data even if the caching system encounters an issue.
 
 ### Automatic Database Recovery
+
 If the `CacheProvider` detects an IndexedDB versioning error during initialization, it will **automatically delete and recreate the database**. This self-healing mechanism prevents the app from getting stuck in a broken state due to schema mismatches.
 
 ## 4. Cache Management & Debugging
@@ -84,6 +91,7 @@ To help with development and debugging, we've created a central cache management
 - **Component**: This UI is powered by the `<CacheAdminPanel />` component.
 
 **Features:**
+
 - View all keys and values currently in the cache.
 - Manually delete a specific cache entry.
 - Clear the entire cache with a single click.
@@ -91,14 +99,14 @@ To help with development and debugging, we've created a central cache management
 This tool is invaluable for observing cache behavior and ensuring your data is being stored and refreshed correctly.
 
 ```tsx
-import { useEffect, useState } from 'react';
-import { useCache } from '../contexts/CacheContext';
-import { CacheLevel } from '../lib/cache/types';
+import { useEffect, useState } from "react";
+import { useCache } from "../contexts/CacheContext";
+import { CacheLevel } from "../lib/cache/types";
 
 function MyComponent() {
   const { get, set, isReady } = useCache();
   const [data, setData] = useState(null);
-  const cacheKey = 'my-api-request';
+  const cacheKey = "my-api-request";
 
   useEffect(() => {
     if (!isReady) return;
@@ -110,7 +118,7 @@ function MyComponent() {
         return;
       }
       // Otherwise fetch and cache
-      const response = await fetch('/api/some-endpoint');
+      const response = await fetch("/api/some-endpoint");
       const result = await response.json();
       setData(result);
       await set(cacheKey, result, CacheLevel.STANDARD); // or another level
@@ -128,7 +136,7 @@ To force a refresh (e.g., after a mutation), use `invalidateByPattern`:
 
 ```tsx
 const { invalidateByPattern } = useCache();
-await invalidateByPattern('my-api-request');
+await invalidateByPattern("my-api-request");
 ```
 
 ## 5. Advanced: Pattern-based Invalidation
@@ -136,12 +144,13 @@ await invalidateByPattern('my-api-request');
 If you use hierarchical keys (e.g., `user:123:profile`), you can invalidate all related cache entries:
 
 ```tsx
-await invalidateByPattern('user:123*');
+await invalidateByPattern("user:123*");
 ```
 
 ## 6. TTL and Cache Levels
 
 Choose a `CacheLevel` for each request:
+
 - `STANDARD`: 1 hour
 - `PERSISTENT`: 30 days
 - `SESSION`: 30 minutes
@@ -153,9 +162,9 @@ You can also pass a custom TTL in milliseconds to `set`.
 You can abstract the pattern above into a custom hook:
 
 ```tsx
-import { useEffect, useState } from 'react';
-import { useCache } from '../contexts/CacheContext';
-import { CacheLevel } from '../lib/cache/types';
+import { useEffect, useState } from "react";
+import { useCache } from "../contexts/CacheContext";
+import { CacheLevel } from "../lib/cache/types";
 
 export function useCachedApi(key, fetcher, level = CacheLevel.STANDARD) {
   const { get, set, isReady } = useCache();

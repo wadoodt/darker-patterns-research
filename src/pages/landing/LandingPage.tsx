@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import HeroSection from "./HeroSection";
 import HowItWorksSection from "./HowItWorksSection";
 import FAQSection from "./FAQSection";
@@ -16,4 +16,3 @@ const LandingPage: React.FC = () => {
 };
 
 export default LandingPage;
-

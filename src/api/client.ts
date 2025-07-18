@@ -1,28 +1,28 @@
 /// <reference types="vite/client" />
 
-import axios from 'axios';
+import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: "/api",
 });
 
-import { resolve } from './mocks/resolver';
+import { resolve } from "./mocks/resolver";
 
 apiClient.interceptors.request.use(
   async (config) => {
     // 1. Add the authentication token to the headers.
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
     // 2. If mocks are enabled, intercept the request and use the mock resolver.
-    if (import.meta.env.VITE_USE_MOCKS === 'true') {
+    if (import.meta.env.VITE_USE_MOCKS === "true") {
       // The resolver needs a standard Request object. We build one from the axios config.
       // A dummy base is required for the URL constructor.
-      const fullUrl = `${config.baseURL || ''}${config.url || ''}`;
+      const fullUrl = `${config.baseURL || ""}${config.url || ""}`;
       console.log(fullUrl);
-      const url = new URL(fullUrl, 'http://mock.api');
+      const url = new URL(fullUrl, "http://mock.api");
       const request = new Request(url, {
         method: config.method?.toUpperCase(),
         headers: config.headers as HeadersInit,
@@ -59,7 +59,7 @@ apiClient.interceptors.request.use(
   (error) => {
     // This error handler is for the request setup, not the response.
     return Promise.reject(error);
-  }
+  },
 );
 
 apiClient.interceptors.response.use(
@@ -67,11 +67,10 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Handle unauthorized errors, e.g., redirect to login
-      console.log('Unauthorized access, redirecting to login...');
+      console.log("Unauthorized access, redirecting to login...");
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;
-

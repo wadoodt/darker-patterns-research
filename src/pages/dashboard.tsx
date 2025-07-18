@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from '@features/dashboard/pages/App.tsx';
+import App from "@features/dashboard/pages/App.tsx";
 import "@styles/dashboard.css";
 
 import "@radix-ui/themes/styles.css";
@@ -21,5 +21,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </CacheProvider>
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

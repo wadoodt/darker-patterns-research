@@ -1,5 +1,5 @@
 // src/pages/admin-panel/CompaniesPage.tsx
-import React from 'react';
+import React from "react";
 
 const CompaniesPage: React.FC = () => {
   return (

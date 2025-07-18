@@ -1,6 +1,5 @@
-
-import React from 'react';
-import LoginView from './LoginView';
+import React from "react";
+import LoginView from "./LoginView";
 
 interface LoginTemplateProps {
   onSubmit: (event: React.FormEvent) => void;
@@ -9,7 +8,12 @@ interface LoginTemplateProps {
   error: string | null;
 }
 
-const LoginTemplate: React.FC<LoginTemplateProps> = ({ onSubmit, onUsernameChange, onPasswordChange, error }) => {
+const LoginTemplate: React.FC<LoginTemplateProps> = ({
+  onSubmit,
+  onUsernameChange,
+  onPasswordChange,
+  error,
+}) => {
   return (
     <LoginView
       onSubmit={onSubmit}
@@ -21,4 +25,3 @@ const LoginTemplate: React.FC<LoginTemplateProps> = ({ onSubmit, onUsernameChang
 };
 
 export default LoginTemplate;
-

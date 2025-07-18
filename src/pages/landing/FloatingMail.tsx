@@ -33,14 +33,16 @@ export const FloatingMail: React.FC<FloatingMailProps> = ({
     <div
       ref={ref}
       className="floatingMail"
-      style={{
-        top: `${topPercent}%`,
-        left: `${leftPercent}%`,
-        animationDuration: `${duration}s`,
-        animationDelay: `${delay}s`,
-        "--driftX": driftX,
-        "--driftY": driftY,
-      } as React.CSSProperties}
+      style={
+        {
+          top: `${topPercent}%`,
+          left: `${leftPercent}%`,
+          animationDuration: `${duration}s`,
+          animationDelay: `${delay}s`,
+          "--driftX": driftX,
+          "--driftY": driftY,
+        } as React.CSSProperties
+      }
     >
       <img
         src="/images/email_placeholder.png"
@@ -51,4 +53,4 @@ export const FloatingMail: React.FC<FloatingMailProps> = ({
       />
     </div>
   );
-}; 
+};

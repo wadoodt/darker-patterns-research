@@ -1,5 +1,5 @@
 // src/pages/admin-panel/InfraPage.tsx
-import React from 'react';
+import React from "react";
 
 const InfraPage: React.FC = () => {
   return (

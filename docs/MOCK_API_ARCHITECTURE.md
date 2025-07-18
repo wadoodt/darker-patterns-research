@@ -51,9 +51,10 @@ This file serves as the central database instance.
 
 - **Purpose**: To use the `createTable` factory to instantiate all the necessary data models for the application (e.g., users, products, etc.).
 - **Example**:
+
   ```typescript
-  import { createTable } from './lib/createTable';
-  import { mockUsers } from './_data/users'; // Initial seed data
+  import { createTable } from "./lib/createTable";
+  import { mockUsers } from "./_data/users"; // Initial seed data
 
   export const db = {
     users: createTable(mockUsers),
@@ -86,7 +87,7 @@ Handlers contain the business logic for each API endpoint.
 **Example: `handlers/auth.ts`**
 
 ```typescript
-import { db } from '../db';
+import { db } from "../db";
 
 // Corresponds to POST /api/auth/login
 export const login = async (request) => {
@@ -94,7 +95,7 @@ export const login = async (request) => {
   const user = db.users.findFirst({ where: { username } });
 
   if (!user || user.password !== password) {
-    return new Response('Invalid credentials', { status: 401 });
+    return new Response("Invalid credentials", { status: 401 });
   }
 
   // Exclude password from the response
@@ -115,10 +116,10 @@ The resolver is the mock API gateway. It maps incoming requests to the correct h
 A simple object mapping a route key (`METHOD /path`) to a handler function.
 
 ```typescript
-import * as authHandlers from './handlers/auth';
+import * as authHandlers from "./handlers/auth";
 
 const routes = {
-  'POST /api/auth/login': authHandlers.login,
+  "POST /api/auth/login": authHandlers.login,
   // 'GET /api/users': userHandlers.getUsers,
 };
 ```
@@ -138,19 +139,20 @@ The final step is to hook the resolver into our `axios` client.
 
 ```typescript
 apiClient.interceptors.request.use(async (config) => {
-  if (import.meta.env.VITE_USE_MOCKS === 'true') {
+  if (import.meta.env.VITE_USE_MOCKS === "true") {
     // The resolver will handle the request and return a Response object.
     const response = await resolve(config);
 
     // We adapt the Response to an axios-compatible format.
-    config.adapter = async () => Promise.resolve({
-      data: await response.json(),
-      status: response.status,
-      statusText: response.statusText,
-      headers: Object.fromEntries(response.headers.entries()),
-      config: config,
-      request: {},
-    });
+    config.adapter = async () =>
+      Promise.resolve({
+        data: await response.json(),
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+        config: config,
+        request: {},
+      });
   }
   return config;
 });
@@ -166,19 +168,19 @@ This architecture is highly conducive to testing.
 **Example: `AuthContext.test.tsx`**
 
 ```typescript
-import { db } from 'src/api/mocks/db';
+import { db } from "src/api/mocks/db";
 
 afterEach(() => {
   // Reset the database state after each test
   db.users._reset();
 });
 
-it('should allow a valid user to log in', () => {
+it("should allow a valid user to log in", () => {
   // No special setup needed if the default mock user is sufficient
   // ... test login logic
 });
 
-it('should reject a user with the wrong password', () => {
+it("should reject a user with the wrong password", () => {
   // ... test login logic with bad credentials
 });
 ```

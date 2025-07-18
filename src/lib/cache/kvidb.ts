@@ -8,7 +8,7 @@
 export default async function kvidb(
   db_name = "db",
   store_name = "store",
-  version = 1
+  version = 1,
 ) {
   const indexedDB = window.indexedDB;
   const idb = indexedDB.open(db_name, version);

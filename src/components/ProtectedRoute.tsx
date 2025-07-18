@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '@hooks/useAuth';
+import React, { useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "@hooks/useAuth";
 
 interface ProtectedRouteProps {
   roles?: string[];
-  children?: React.ReactNode; 
+  children?: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
   useEffect(() => {
     if (!isLoading && !isAuthenticated()) {
       // If not authenticated, force a full page reload to the login page.
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
   }, [isLoading, isAuthenticated]);
 
@@ -32,4 +32,3 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
 };
 
 export default ProtectedRoute;
-

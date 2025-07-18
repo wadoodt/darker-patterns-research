@@ -34,9 +34,9 @@ const GoToTopButton: React.FC = () => {
         boxShadow: "0 2px 8px var(--gray-a5)",
         cursor: "pointer",
         fontSize: 18,
-        transition: "background 0.2s"
+        transition: "background 0.2s",
       }}
-      onKeyDown={e => {
+      onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") handleClick();
       }}
     >
@@ -45,4 +45,4 @@ const GoToTopButton: React.FC = () => {
   ) : null;
 };
 
-export default GoToTopButton; 
+export default GoToTopButton;

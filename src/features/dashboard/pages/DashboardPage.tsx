@@ -1,16 +1,16 @@
-
-import { CompaniesList } from '@components/CompaniesList';
+import { CompaniesList } from "@components/CompaniesList";
 
 export default function DashboardPage() {
   return (
     <div>
-      <p>This is your protected dashboard. Below is the component demonstrating client-side caching.</p>
-      
-      <div style={{ marginTop: '2rem' }}>
+      <p>
+        This is your protected dashboard. Below is the component demonstrating
+        client-side caching.
+      </p>
+
+      <div style={{ marginTop: "2rem" }}>
         <CompaniesList />
       </div>
     </div>
   );
 }
-
-

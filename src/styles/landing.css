@@ -301,7 +301,9 @@ button:focus-visible {
   border: 1.5px solid var(--accent-8) !important;
   color: var(--accent-11) !important;
   background: transparent !important;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 .hero-outline-link {
   display: flex;

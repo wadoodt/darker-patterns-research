@@ -9,16 +9,19 @@ This document details the implementation plan for a user signup and Stripe onboa
 ## 1. Page Flow & Navigation
 
 ### 1.1. Landing Page (`/landing.html` or `/landing`)
+
 - Entry point for users.
 - Contains a button/link to the Pricing page (`/pricing.html` or `/pricing`).
 
 ### 1.2. Pricing Page (`/pricing.html` or `/pricing`)
+
 - Lists available plans (e.g., Basic, Pro, Premium).
 - Each plan has a “Sign Up” button.
 - Clicking a plan navigates to `/signup.html?plan=pro` (or `basic`, `premium`).
 - **Note:** Navigation is via `<a href="...">` (full page reload), not SPA routing, as these are static pages.
 
 ### 1.3. Signup Page (`/signup.html` or `/signup`)
+
 - Reads the `plan` query parameter from the URL.
 - If present, pre-selects the plan in a `<select>` dropdown.
 - If not present, user must select a plan before submitting.
@@ -31,11 +34,13 @@ This document details the implementation plan for a user signup and Stripe onboa
     - **TODO:** When Stripe is ready, replace this with a redirect to the real Stripe URL (`window.location.href = stripeUrl`).
 
 ### 1.4. Stripe Onboarding
+
 - User completes payment/account creation in Stripe’s UI.
 - Stripe is configured to redirect the user to `/success.html` (or `/signup/success`) after completion.
 - **TODO:** When Stripe is ready, ensure the success page can handle Stripe's redirect/callback and display appropriate messages.
 
 ### 1.5. Success Page (`/success.html` or `/signup/success`)
+
 - Static page.
 - Informs the user that signup was successful and they should now log in or go to the dashboard.
 - **New Behavior:**
@@ -45,6 +50,7 @@ This document details the implementation plan for a user signup and Stripe onboa
 - **TIP:** If Stripe's flow changes (e.g., Stripe redirects directly to the dashboard or another page), update the countdown/redirect logic accordingly.
 
 ### 1.6. Login & Dashboard
+
 - User logs in via `/login.html` or `/login`.
 - On dashboard load, the frontend checks the user’s status via API.
 - If the user’s status is not `active`, display a message or restrict access.
@@ -54,6 +60,7 @@ This document details the implementation plan for a user signup and Stripe onboa
 ## 2. TypeScript Types
 
 ### 2.1. User Creation Type
+
 - Used for the signup form and API request to create a user.
 - Should **not** include fields like `id`, `status`, or Stripe-related fields.
 - Use TypeScript’s `Omit` utility to derive this from the main `User` type, or define a separate type.
@@ -65,18 +72,22 @@ export type User = {
   id: string;
   email: string;
   username: string;
-  plan: 'basic' | 'pro' | 'premium';
-  status: 'created' | 'active' | 'inactive';
+  plan: "basic" | "pro" | "premium";
+  status: "created" | "active" | "inactive";
   stripeCustomerId?: string;
   // ...other fields
 };
 
-export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'> & {
+export type CreateUserPayload = Omit<
+  User,
+  "id" | "status" | "stripeCustomerId"
+> & {
   password: string;
 };
 ```
 
 ### 2.2. Created User Type
+
 - The existing `User` type (as above) is used for users returned from the API after creation.
 
 ---
@@ -84,16 +95,19 @@ export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'>
 ## 3. API Endpoints
 
 ### 3.1. Create User
+
 - **Endpoint:** `POST /api/users`
 - **Payload:** `CreateUserPayload`
 - **Response:** `{ user: User, stripeUrl: string }`
 - The backend creates the user with status `created`, attaches a Stripe customer, and returns a Stripe onboarding URL.
 
 ### 3.2. Stripe Webhook
+
 - Listens for Stripe events (e.g., `customer.created`, `checkout.session.completed`).
 - On relevant event, updates the user’s status to `active`.
 
 ### 3.3. User Status Check
+
 - **Endpoint:** `GET /api/users/me`
 - Returns the current user, including their status.
 
@@ -102,10 +116,12 @@ export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'>
 ## 4. Frontend Implementation Details
 
 ### 4.1. Static Pages & Navigation
+
 - All navigation between `/landing`, `/pricing`, `/signup`, `/success`, and `/login` is via `<a href="...">` or `window.location.href = ...`.
 - No SPA routing between these pages.
 
 ### 4.2. Signup Page Logic
+
 - On load, parse the `plan` query parameter.
 - If present, pre-select the plan in the form.
 - If not, require the user to select a plan.
@@ -116,11 +132,13 @@ export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'>
   - **TODO:** When Stripe is ready, redirect to the returned Stripe URL instead of `/success`.
 
 ### 4.3. Success Page
+
 - Simple static page.
 - **New:** Shows a 10-second countdown and auto-redirects to the dashboard, with a button for immediate navigation.
 - **TODO:** If Stripe is integrated, ensure the success page can handle Stripe's redirect/callback and display appropriate messages.
 
 ### 4.4. Dashboard Page
+
 - On mount, fetch the current user.
 - If `user.status !== 'active'`, show a warning or restrict access.
 
@@ -171,4 +189,4 @@ export type CreateUserPayload = Omit<User, 'id' | 'status' | 'stripeCustomerId'>
 
 ---
 
-**This document serves as the blueprint for implementing the described signup and Stripe onboarding flow in your codebase.** 
+**This document serves as the blueprint for implementing the described signup and Stripe onboarding flow in your codebase.**

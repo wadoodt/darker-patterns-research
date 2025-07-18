@@ -12,6 +12,7 @@ This single, consistent shape simplifies frontend logic by eliminating guesswork
 - **Error Response**: Contains an `error` object with a translatable `message` key and optional `validations` for form errors.
 
 ### Core Files
+
 - **`src/types/api/index.ts`**: Defines the core `ApiResponse`, `ApiSuccess`, and `ApiError` types.
 - **`src/api/codes.ts`**: Contains the centralized `RESPONSE_CODES` and `ERROR_CODES` dictionaries. All user-facing messages are defined here as i18n keys. For a detailed explanation of this process, see the **[Translatable API Messages Guide](./TRANSLATIONS.md)**.
 - **`src/api/response.ts`**: Provides the `createSuccessResponse()` and `createErrorResponse()` helper functions to ensure responses are built correctly.
@@ -40,7 +41,7 @@ Open `src/api/codes.ts` and add any new success or error codes your endpoint req
 // src/api/codes.ts
 export const ERROR_CODES = {
   // ... existing codes
-  USER_NOT_FOUND: { status: 404, message: 'error.user.not_found' },
+  USER_NOT_FOUND: { status: 404, message: "error.user.not_found" },
 } as const;
 ```
 
@@ -63,16 +64,16 @@ In `src/api/mocks/handlers/`, create or modify a handler for your endpoint. Use 
 
 ```typescript
 // src/api/mocks/handlers/users.ts
-import { createSuccessResponse, createErrorResponse } from '../../response';
+import { createSuccessResponse, createErrorResponse } from "../../response";
 
-http.get('/api/users/:id', ({ params }) => {
+http.get("/api/users/:id", ({ params }) => {
   const user = db.users.findFirst({ where: { id: Number(params.id) } });
 
   if (!user) {
-    return HttpResponse.json(createErrorResponse('USER_NOT_FOUND'));
+    return HttpResponse.json(createErrorResponse("USER_NOT_FOUND"));
   }
 
-  return HttpResponse.json(createSuccessResponse(user, 'OPERATION_SUCCESS'));
+  return HttpResponse.json(createSuccessResponse(user, "OPERATION_SUCCESS"));
 });
 ```
 
@@ -82,8 +83,8 @@ When calling the API from the frontend, type the response with `ApiResponse<Your
 
 ```typescript
 // src/features/users/api.ts
-import apiClient from '../../api/client';
-import type { ApiResponse, User } from '../../types';
+import apiClient from "../../api/client";
+import type { ApiResponse, User } from "../../types";
 
 export const fetchUser = async (id: number): Promise<User> => {
   const response = await apiClient.get<ApiResponse<User>>(`/users/${id}`);

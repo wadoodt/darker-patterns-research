@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import SignupTemplate from './SignupTemplate';
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import SignupTemplate from "./SignupTemplate";
 
-type SignupType = 'new' | 'existing';
+type SignupType = "new" | "existing";
 
 type SignupViewProps = {
   selectedPlanParams: string | null;
@@ -10,22 +10,24 @@ type SignupViewProps = {
 
 const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
   const { t } = useTranslation();
-  const [signupType, setSignupType] = useState<SignupType>('new');
-  const [selectedPlan, setSelectedPlan] = useState<string>(selectedPlanParams || 'business');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [businessId, setBusinessId] = useState('');
-  const [referralCode, setReferralCode] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [businessName, setBusinessName] = useState('');
+  const [signupType, setSignupType] = useState<SignupType>("new");
+  const [selectedPlan, setSelectedPlan] = useState<string>(
+    selectedPlanParams || "business",
+  );
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [businessId, setBusinessId] = useState("");
+  const [referralCode, setReferralCode] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [businessName, setBusinessName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (signupType === 'new' && !selectedPlan) {
-      setError(t('signup.alerts.error.selectPlan'));
+    if (signupType === "new" && !selectedPlan) {
+      setError(t("signup.alerts.error.selectPlan"));
     } else {
       setError(null);
     }
@@ -33,12 +35,12 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
 
   const getPlanLabel = (planKey: string) => {
     switch (planKey) {
-      case 'business':
-        return t('pricing.plans.business.title');
-      case 'premium':
-        return t('pricing.plans.premium.title');
-      case 'custom':
-        return t('pricing.plans.custom.title');
+      case "business":
+        return t("pricing.plans.business.title");
+      case "premium":
+        return t("pricing.plans.premium.title");
+      case "custom":
+        return t("pricing.plans.custom.title");
       default:
         return planKey;
     }
@@ -49,28 +51,33 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
     setIsLoading(true);
     setError(null);
     if (password !== confirmPassword) {
-      setError(t('signup.alerts.error.passwordMismatch'));
+      setError(t("signup.alerts.error.passwordMismatch"));
       setIsLoading(false);
       return;
     }
     try {
       // TODO: Integrate with real backend user creation and Stripe session creation
       // For now, simulate payment session creation with the mock API
-      const paymentRes = await fetch('/api/payments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const paymentRes = await fetch("/api/payments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          companyId: 'comp-001', // TODO: Replace with actual companyId from signup
-          userId: 'user-001',    // TODO: Replace with actual userId from signup
-          amount: selectedPlan === 'business' ? 9900 : selectedPlan === 'premium' ? 24900 : 0, // Example pricing
-          currency: 'usd'
+          companyId: "comp-001", // TODO: Replace with actual companyId from signup
+          userId: "user-001", // TODO: Replace with actual userId from signup
+          amount:
+            selectedPlan === "business"
+              ? 9900
+              : selectedPlan === "premium"
+                ? 24900
+                : 0, // Example pricing
+          currency: "usd",
         }),
       });
       await paymentRes.json();
       // TODO: When backend is ready, redirect to paymentData.stripeUrl for real Stripe onboarding
-      window.location.href = '/success';
+      window.location.href = "/success";
     } catch {
-      setError(t('signup.alerts.error.generic'));
+      setError(t("signup.alerts.error.generic"));
     } finally {
       setIsLoading(false);
     }
@@ -107,4 +114,4 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
   );
 };
 
-export default SignupView; 
+export default SignupView;

@@ -1,5 +1,5 @@
 // src/api/mocks/handlers/payments-handler.ts
-import { db } from '../db';
+import { db } from "../db";
 
 // POST /api/payments - Simulate creating a Stripe session
 export const createPayment = async (request: Request) => {
@@ -9,7 +9,7 @@ export const createPayment = async (request: Request) => {
     id: `pay-${Date.now()}`,
     companyId,
     userId,
-    status: 'pending',
+    status: "pending",
     amount,
     currency,
     stripeSessionId: `cs_test_${Math.random().toString(36).slice(2)}`,
@@ -20,9 +20,9 @@ export const createPayment = async (request: Request) => {
   return new Response(
     JSON.stringify({
       payment: newPayment,
-      stripeUrl: `https://mock.stripe.com/session/${newPayment.stripeSessionId}`
+      stripeUrl: `https://mock.stripe.com/session/${newPayment.stripeSessionId}`,
     }),
-    { status: 201, headers: { 'Content-Type': 'application/json' } }
+    { status: 201, headers: { "Content-Type": "application/json" } },
   );
 };
 
@@ -30,7 +30,10 @@ export const createPayment = async (request: Request) => {
 export const getPayment = async (_request: Request, id: string) => {
   const payment = db.payments.findFirst({ where: { id } });
   if (!payment) {
-    return new Response('Payment not found', { status: 404 });
+    return new Response("Payment not found", { status: 404 });
   }
-  return new Response(JSON.stringify(payment), { status: 200, headers: { 'Content-Type': 'application/json' } });
-}; 
+  return new Response(JSON.stringify(payment), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+};

@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
-import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import { mockApiPlugin } from './src/api/mocks/vite-plugin';
+import react from "@vitejs/plugin-react";
+import tsconfigPaths from "vite-tsconfig-paths";
+import { mockApiPlugin } from "./src/api/mocks/vite-plugin";
 import path from "path";
 import { glob } from "glob";
 
@@ -24,9 +24,9 @@ export default defineConfig({
       input,
       output: {
         assetFileNames: (assetInfo) => {
-          let extType = assetInfo.name?.split('.').at(1);
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType || '')) {
-            extType = 'images';
+          let extType = assetInfo.name?.split(".").at(1);
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType || "")) {
+            extType = "images";
           }
           return `assets/${extType}/[name]-[hash][extname]`;
         },

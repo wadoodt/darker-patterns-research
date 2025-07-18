@@ -1,6 +1,6 @@
-import React from 'react';
-import { Select } from '@radix-ui/themes';
-import { useApp } from '@hooks/useApp';
+import React from "react";
+import { Select } from "@radix-ui/themes";
+import { useApp } from "@hooks/useApp";
 
 const LanguageSelector: React.FC = () => {
   const { settings, updateSettings, availableLanguages } = useApp();
@@ -10,10 +10,7 @@ const LanguageSelector: React.FC = () => {
   };
 
   return (
-    <Select.Root
-      value={settings.language}
-      onValueChange={handleLanguageChange}
-    >
+    <Select.Root value={settings.language} onValueChange={handleLanguageChange}>
       <Select.Trigger aria-label="Select language" />
       <Select.Content>
         {availableLanguages.map((lang) => (

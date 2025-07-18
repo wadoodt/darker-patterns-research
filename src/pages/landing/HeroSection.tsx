@@ -12,16 +12,27 @@ const HeroSection: React.FC = () => {
       <div className="hero-content-outer">
         <div className="hero-content-inner">
           <h1 className="hero-title">
-            {t("pricing.hero.title")} <span className="hero-title-accent">Penguin Mails</span>
+            {t("pricing.hero.title")}{" "}
+            <span className="hero-title-accent">Penguin Mails</span>
           </h1>
           <p className="hero-description">{t("pricing.hero.description")}</p>
           <div className="hero-buttons-row">
             <Button asChild size="3">
-              <a href="/signup" aria-label={t("signup.header.title")}>{t("pricing.plans.business.ctaText")}</a>
+              <a href="/signup" aria-label={t("signup.header.title")}>
+                {t("pricing.plans.business.ctaText")}
+              </a>
             </Button>
-            <Button asChild variant="outline" size="3" className="hero-outline-btn">
-              <a href="#how-it-works" aria-label={t("pricing.faq.title")}
-                className="hero-outline-link">
+            <Button
+              asChild
+              variant="outline"
+              size="3"
+              className="hero-outline-btn"
+            >
+              <a
+                href="#how-it-works"
+                aria-label={t("pricing.faq.title")}
+                className="hero-outline-link"
+              >
                 <ArrowRightCircle size={20} style={{ marginRight: 8 }} />
                 {t("pricing.faq.title")}
               </a>
@@ -51,4 +62,4 @@ const HeroSection: React.FC = () => {
   );
 };
 
-export default HeroSection; 
+export default HeroSection;

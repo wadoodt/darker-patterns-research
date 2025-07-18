@@ -1,5 +1,5 @@
 // src/pages/dashboard/BillingPage.tsx
-import React from 'react';
+import React from "react";
 
 const BillingPage: React.FC = () => {
   return (

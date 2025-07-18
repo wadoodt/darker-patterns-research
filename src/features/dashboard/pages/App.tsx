@@ -1,7 +1,7 @@
 import { Theme } from "@radix-ui/themes";
 import { AppProvider } from "@contexts/AppContext";
 import { useApp } from "@hooks/useApp";
-import { AppRoutes } from '@features/dashboard/routes';
+import { AppRoutes } from "@features/dashboard/routes";
 
 import type { ThemeProps } from "@radix-ui/themes";
 import type { AppSettings } from "@contexts/AppContext/types";

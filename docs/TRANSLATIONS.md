@@ -38,6 +38,7 @@ This document explains the contract for how the backend and frontend work togeth
 - **Tip:** Use scripts or tools to compare translation files and detect missing keys (e.g., `i18next-scanner`, custom scripts, or online JSON diff tools).
 
 **Example workflow:**
+
 1. Add new keys to `en/translation.json` for a new feature.
 2. Copy the same keys to `es/translation.json` (or other languages), using English as a placeholder if needed.
 3. Translate the values as soon as possible.
@@ -49,8 +50,8 @@ This document explains the contract for how the backend and frontend work togeth
 
 The core principle is a clear separation of concerns:
 
--   **The Backend** is responsible for identifying the result of an operation (e.g., `INVALID_CREDENTIALS`, `USER_CREATED_SUCCESSFULLY`). It communicates this result by sending a predefined **i18n key** (a string code) in the API response.
--   **The Frontend** is responsible for the presentation. It takes this i18n key from the API response and uses the `i18next` library to look up the corresponding human-readable, translated string to display to the user.
+- **The Backend** is responsible for identifying the result of an operation (e.g., `INVALID_CREDENTIALS`, `USER_CREATED_SUCCESSFULLY`). It communicates this result by sending a predefined **i18n key** (a string code) in the API response.
+- **The Frontend** is responsible for the presentation. It takes this i18n key from the API response and uses the `i18next` library to look up the corresponding human-readable, translated string to display to the user.
 
 This approach decouples backend logic from frontend display text, allowing UI messages to be changed and translated without requiring any backend code changes.
 
@@ -58,10 +59,10 @@ This approach decouples backend logic from frontend display text, allowing UI me
 
 The backend will provide a code for various scenarios:
 
--   **Authentication Errors**: `error.auth.invalid_credentials`, `error.auth.unauthorized`
--   **Validation Errors**: `error.validation.password_too_short`, `error.validation.email_invalid`
--   **Server/Business Logic Errors**: `error.general.not_found`, `error.general.internal_server_error`
--   **Success Messages**: `response.auth.login_success`, `response.general.operation_success`
+- **Authentication Errors**: `error.auth.invalid_credentials`, `error.auth.unauthorized`
+- **Validation Errors**: `error.validation.password_too_short`, `error.validation.email_invalid`
+- **Server/Business Logic Errors**: `error.general.not_found`, `error.general.internal_server_error`
+- **Success Messages**: `response.auth.login_success`, `response.general.operation_success`
 
 All of these codes are defined centrally in `src/api/codes.ts` as part of the standardized response structure. For more context, see the **[API Response & Error Handling Guide](./ERROR_HANDLING.md)**.
 
@@ -79,7 +80,10 @@ First, define the new code in `src/api/codes.ts`. The `message` property must be
 // src/api/codes.ts
 export const ERROR_CODES = {
   // ... existing codes
-  PASSWORD_TOO_WEAK: { status: 400, message: 'error.validation.password_too_weak' },
+  PASSWORD_TOO_WEAK: {
+    status: 400,
+    message: "error.validation.password_too_weak",
+  },
 } as const;
 ```
 
@@ -109,6 +113,7 @@ Next, add the key and its corresponding user-friendly text to the translation fi
 ```
 
 **Remember:**
+
 - Add the same key to all language files, even if using English as a placeholder.
 - Translate as soon as possible.
 
@@ -119,7 +124,7 @@ Ensure your mock API handler in `src/api/mocks/handlers/` uses the new code when
 ```typescript
 // In a mock handler for user registration
 if (password.length < 8) {
-  return HttpResponse.json(createErrorResponse('PASSWORD_TOO_WEAK'));
+  return HttpResponse.json(createErrorResponse("PASSWORD_TOO_WEAK"));
 }
 ```
 

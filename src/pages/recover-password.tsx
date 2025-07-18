@@ -11,8 +11,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
       <PublicLayout>
-          <RecoverPasswordPage />
-        </PublicLayout>
+        <RecoverPasswordPage />
+      </PublicLayout>
     </AuthProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

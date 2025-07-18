@@ -1,11 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Select, Switch, Flex, Text, Badge, Box, Card, Heading } from '@radix-ui/themes';
-import type { User } from 'types';
-import apiClient from '../../../api/client';
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  Select,
+  Switch,
+  Flex,
+  Text,
+  Badge,
+  Box,
+  Card,
+  Heading,
+} from "@radix-ui/themes";
+import type { User } from "types";
+import apiClient from "../../../api/client";
 
 interface UserTableRowProps {
   user: User;
-  onUpdate: (userId: string, updates: Partial<Pick<User, 'role' | 'status'>>) => void;
+  onUpdate: (
+    userId: string,
+    updates: Partial<Pick<User, "role" | "status">>,
+  ) => void;
 }
 
 const UserTableRow: React.FC<UserTableRowProps> = ({ user, onUpdate }) => (
@@ -13,13 +26,17 @@ const UserTableRow: React.FC<UserTableRowProps> = ({ user, onUpdate }) => (
     <Table.RowHeaderCell>
       <Flex direction="column">
         <Text weight="bold">{user.name}</Text>
-        <Text size="2" color="gray">{user.email}</Text>
+        <Text size="2" color="gray">
+          {user.email}
+        </Text>
       </Flex>
     </Table.RowHeaderCell>
     <Table.Cell>
       <Select.Root
         defaultValue={user.role}
-        onValueChange={(newRole) => onUpdate(user.id, { role: newRole as 'admin' | 'user' })}
+        onValueChange={(newRole) =>
+          onUpdate(user.id, { role: newRole as "admin" | "user" })
+        }
       >
         <Select.Trigger />
         <Select.Content>
@@ -29,15 +46,17 @@ const UserTableRow: React.FC<UserTableRowProps> = ({ user, onUpdate }) => (
       </Select.Root>
     </Table.Cell>
     <Table.Cell>
-      <Badge color={user.status === 'active' ? 'green' : 'red'}>
+      <Badge color={user.status === "active" ? "green" : "red"}>
         {user.status}
       </Badge>
     </Table.Cell>
     <Table.Cell>
       <Flex align="center" gap="2">
         <Switch
-          checked={user.status === 'active'}
-          onCheckedChange={(checked) => onUpdate(user.id, { status: checked ? 'active' : 'inactive' })}
+          checked={user.status === "active"}
+          onCheckedChange={(checked) =>
+            onUpdate(user.id, { status: checked ? "active" : "inactive" })
+          }
         />
       </Flex>
     </Table.Cell>
@@ -54,13 +73,17 @@ const UsersPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const { data: response, status} = await apiClient.get('/admin/users');
+        const { data: response, status } = await apiClient.get("/admin/users");
         if (status !== 200) {
-          throw new Error(response.data.error?.detail || 'Failed to fetch users');
+          throw new Error(
+            response.data.error?.detail || "Failed to fetch users",
+          );
         }
         setUsers(response.data.users);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred",
+        );
       } finally {
         setLoading(false);
       }
@@ -69,21 +92,26 @@ const UsersPage: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const handleUpdateUser = async (userId: string, updates: Partial<Pick<User, 'role' | 'status'>>) => {
+  const handleUpdateUser = async (
+    userId: string,
+    updates: Partial<Pick<User, "role" | "status">>,
+  ) => {
     try {
       const response = await apiClient.patch(`/admin/users/${userId}`, updates);
 
       const data = response.data;
-      if (data.code !== 'OPERATION_SUCCESS') {
-        throw new Error(data.error?.detail || 'Failed to update user');
+      if (data.code !== "OPERATION_SUCCESS") {
+        throw new Error(data.error?.detail || "Failed to update user");
       }
 
-      setUsers(prevUsers =>
-        prevUsers.map(user => (user.id === userId ? { ...user, ...data.data } : user))
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === userId ? { ...user, ...data.data } : user,
+        ),
       );
     } catch (err) {
       console.error(err);
-      alert(err instanceof Error ? err.message : 'Failed to update user');
+      alert(err instanceof Error ? err.message : "Failed to update user");
     }
   };
 
@@ -94,7 +122,9 @@ const UsersPage: React.FC = () => {
     <Card size="4">
       <Box mb="4">
         <Heading>User Management</Heading>
-        <Text as="p" color="gray">View and manage all users in your company.</Text>
+        <Text as="p" color="gray">
+          View and manage all users in your company.
+        </Text>
       </Box>
       <Table.Root variant="surface">
         <Table.Header>
@@ -106,8 +136,12 @@ const UsersPage: React.FC = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {users.map(user => (
-            <UserTableRow key={user.id} user={user} onUpdate={handleUpdateUser} />
+          {users.map((user) => (
+            <UserTableRow
+              key={user.id}
+              user={user}
+              onUpdate={handleUpdateUser}
+            />
           ))}
         </Table.Body>
       </Table.Root>

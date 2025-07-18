@@ -1,5 +1,5 @@
 // src/pages/dashboard/TeamPage.tsx
-import React from 'react';
+import React from "react";
 
 const TeamPage: React.FC = () => {
   return (

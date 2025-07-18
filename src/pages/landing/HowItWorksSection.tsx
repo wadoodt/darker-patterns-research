@@ -1,6 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { EnvelopeClosedIcon, LayoutIcon, BarChartIcon } from "@radix-ui/react-icons";
+import {
+  EnvelopeClosedIcon,
+  LayoutIcon,
+  BarChartIcon,
+} from "@radix-ui/react-icons";
 
 const stepsIcons = [EnvelopeClosedIcon, LayoutIcon, BarChartIcon];
 
@@ -8,9 +12,18 @@ const HowItWorksSection: React.FC = () => {
   const { t } = useTranslation();
   // Example steps, replace with i18n content as needed
   const steps = [
-    { title: t("pricing.plans.business.title"), description: t("pricing.plans.business.description") },
-    { title: t("pricing.plans.premium.title"), description: t("pricing.plans.premium.description") },
-    { title: t("pricing.plans.custom.title"), description: t("pricing.plans.custom.description") },
+    {
+      title: t("pricing.plans.business.title"),
+      description: t("pricing.plans.business.description"),
+    },
+    {
+      title: t("pricing.plans.premium.title"),
+      description: t("pricing.plans.premium.description"),
+    },
+    {
+      title: t("pricing.plans.custom.title"),
+      description: t("pricing.plans.custom.description"),
+    },
   ];
   return (
     <section className="how-it-works-section" id="how-it-works">
@@ -31,4 +44,4 @@ const HowItWorksSection: React.FC = () => {
   );
 };
 
-export default HowItWorksSection; 
+export default HowItWorksSection;

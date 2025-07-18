@@ -1,8 +1,13 @@
-import type { ReactNode } from 'react';
-import { CacheLevel, type CacheEntry } from '../../lib/cache/types';
+import type { ReactNode } from "react";
+import { CacheLevel, type CacheEntry } from "../../lib/cache/types";
 
 export interface CacheContextValue {
-  set: <T>(key: string, data: T, level?: CacheLevel, customTtlMs?: number) => Promise<void>;
+  set: <T>(
+    key: string,
+    data: T,
+    level?: CacheLevel,
+    customTtlMs?: number,
+  ) => Promise<void>;
   get: <T>(key: string) => Promise<T | null>;
   invalidateByPattern: (pattern: string) => Promise<void>;
   cleanupExpired: () => Promise<void>;
