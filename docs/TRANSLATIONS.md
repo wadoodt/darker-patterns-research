@@ -2,6 +2,33 @@
 
 This document explains the contract for how the backend and frontend work together to display user-friendly, translatable messages for API responses, especially errors.
 
+## 0. Important: Interpolation Syntax for i18next
+
+**i18next requires double curly braces for variable interpolation in translation strings.**
+
+- Use `{{variable}}` in your translation JSON, not `{variable}`.
+- If you use single curly braces, interpolation will NOT work and the variable will not be replaced.
+
+**Example:**
+
+```json
+// Correct
+"newAccount": {
+  "description": "You are signing up for the {{plan}} plan."
+}
+
+// Incorrect
+"newAccount": {
+  "description": "You are signing up for the {plan} plan."
+}
+```
+
+**Why?**
+
+- i18next only recognizes double curly braces for interpolation. See: https://www.i18next.com/translation-function/interpolation.html
+
+---
+
 ## 1. The Backend-Frontend Translation Contract
 
 The core principle is a clear separation of concerns:
@@ -49,6 +76,18 @@ Next, add the key and its corresponding user-friendly text to the translation fi
 "error": {
   "validation": {
     "password_too_weak": "Password is not secure enough. Please choose a stronger password."
+  }
+}
+```
+
+**If you need to interpolate a variable, use double curly braces:**
+
+```json
+"signup": {
+  "alerts": {
+    "newAccount": {
+      "description": "You are signing up for the {{plan}} plan."
+    }
   }
 }
 ```

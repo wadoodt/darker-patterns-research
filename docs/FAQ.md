@@ -4,6 +4,39 @@ This document covers common issues and their solutions that may arise during dev
 
 ---
 
+## **Problem:** i18next interpolation does not work (variable is not replaced)
+
+### Symptoms:
+- You see `{plan}` or another variable name in your UI instead of the expected value (e.g., "You are signing up for the {plan} plan.").
+- The variable is not replaced with the actual value.
+
+### Root Cause & Solution:
+- **Root Cause:** i18next requires double curly braces for interpolation in translation files. If you use single curly braces (e.g., `{plan}`), interpolation will not work.
+
+**Solution:**
+- Always use double curly braces for variables in your translation JSON: `{{plan}}`.
+
+**Example:**
+
+```json
+// Correct
+"newAccount": {
+  "description": "You are signing up for the {{plan}} plan."
+}
+
+// Incorrect
+"newAccount": {
+  "description": "You are signing up for the {plan} plan."
+}
+```
+
+**How to avoid this in the future:**
+- When adding any variable to a translation string, always use double curly braces: `{{variable}}`.
+- Review the [i18next interpolation documentation](https://www.i18next.com/translation-function/interpolation.html) for more details.
+- If you see a variable not being replaced, check your translation file for this mistake first.
+
+---
+
 ## **Problem:** Nested routes (e.g., `/dashboard/settings`) don't render, or the UI doesn't update correctly.
 
 ### Symptoms:
