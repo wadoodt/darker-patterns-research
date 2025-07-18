@@ -1,11 +1,19 @@
-export default function LandingPage() {
+import React from "react";
+import { useTranslation } from 'react-i18next';
+import HeroSection from "./HeroSection";
+import HowItWorksSection from "./HowItWorksSection";
+import FAQSection from "./FAQSection";
+
+const LandingPage: React.FC = () => {
+  useTranslation(); // Ensures i18n is initialized for this page
   return (
-    <div>
-      <h1>Public Landing Page</h1>
-      <img src="/images/email_placeholder.png" alt="Email Placeholder" style={{ width: '300px', height: '300px' }} />
-      <img src="/images/penguin_logo_placeholder.png" alt="Penguin Logo Placeholder" style={{ width: '300px', height: '300px' }} />
-      <a href="/pricing.html">See Pricing</a>
-    </div>
+    <>
+      <HeroSection />
+      <HowItWorksSection />
+      <FAQSection />
+    </>
   );
-}
+};
+
+export default LandingPage;
 

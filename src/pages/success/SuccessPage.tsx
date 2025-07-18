@@ -12,7 +12,7 @@ const SuccessPage = () => {
     timerRef.current = setInterval(() => {
       setSeconds((s) => {
         if (s <= 1) {
-          window.location.href = '/dashboard';
+          window.location.href = '/login';
           return 0;
         }
         return s - 1;
@@ -23,9 +23,9 @@ const SuccessPage = () => {
     };
   }, []);
 
-  const handleGoDashboard = () => {
+  const handleGoLogin = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    window.location.href = '/dashboard';
+    window.location.href = '/login';
   };
 
   return (
@@ -35,7 +35,7 @@ const SuccessPage = () => {
         <h1 style={{ fontSize: 28, fontWeight: 700 }}>{t('success.title')}</h1>
         <p style={{ margin: '16px 0' }}>{t('success.description')}</p>
         <button
-          onClick={handleGoDashboard}
+          onClick={handleGoLogin}
           style={{
             marginTop: 24,
             padding: '12px 32px',
@@ -47,9 +47,9 @@ const SuccessPage = () => {
             border: 'none',
             cursor: 'pointer',
           }}
-          aria-label={t('success.goToDashboard')}
+          aria-label={t('signup.footer.login')}
         >
-          {t('success.goToDashboard')}
+          {t('signup.footer.login')}
         </button>
         <div style={{ marginTop: 16, color: '#666', fontSize: 14 }}>
           {t('success.autoRedirect', { seconds })}
