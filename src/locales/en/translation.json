@@ -32,7 +32,8 @@
       "team": "Team",
       "billing": "Billing",
       "infra": "Infrastructure",
-      "domains": "Domains"
+      "domains": "Domains",
+      "support": "Support"
     },
     "admin": {
       "title": "Admin Panel",
@@ -40,11 +41,17 @@
       "settings": "Admin Settings",
       "users": "Users",
       "companies": "Companies",
-      "infra": "Admin Infrastructure"
+      "infra": "Admin Infrastructure",
+      "tickets": "Tickets",
+      "config": "Configurations"
     },
     "user": {
       "profile": "Profile",
       "settings": "Settings"
+    },
+    "status": {
+      "title": "System Status",
+      "allSystemsOperational": "All systems operational"
     }
   },
   "settings": {
@@ -212,5 +219,14 @@
     "description": "Your account is ready. You can now access your dashboard.",
     "goToDashboard": "Go to Dashboard",
     "autoRedirect": "You will be redirected to the dashboard in {{seconds}} seconds."
+  },
+  "errorBoundary": {
+    "title": "Something went wrong.",
+    "description": "We've been notified of the issue and are working to fix it. Please try again later or contact our client service.",
+    "contactSupport": "You can also report the bug directly to our support team.",
+    "reportLink": "Report Bug",
+    "errorDetails": "Error Details",
+    "tryAgain": "Try Again",
+    "goToHome": "Go to Home"
   }
 }

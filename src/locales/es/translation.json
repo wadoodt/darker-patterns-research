@@ -35,7 +35,8 @@
       "team": "Equipo",
       "billing": "Facturación",
       "infra": "Infraestructura",
-      "domains": "Dominios"
+      "domains": "Dominios",
+      "support": "Soporte"
     },
     "admin": {
       "title": "Panel de Administración",
@@ -43,11 +44,17 @@
       "settings": "Configuración de Administrador",
       "users": "Usuarios",
       "companies": "Empresas",
-      "infra": "Infraestructura de Administración"
+      "infra": "Infraestructura de Administración",
+      "tickets": "Tickets",
+      "config": "Configuraciones"
     },
     "user": {
       "profile": "Perfil",
       "settings": "Configuración"
+    },
+    "status": {
+      "title": "Estado del Sistema",
+      "allSystemsOperational": "Todos los sistemas operativos"
     }
   },
   "settings": {
@@ -215,5 +222,14 @@
     "description": "Tu cuenta está lista. Ahora puedes acceder a tu panel.",
     "goToDashboard": "Ir al panel",
     "autoRedirect": "Serás redirigido al panel en {{seconds}} segundos."
+  },
+  "errorBoundary": {
+    "title": "Algo salió mal.",
+    "description": "Hemos sido notificados del problema y estamos trabajando para solucionarlo. Por favor, inténtalo de nuevo más tarde o contacta con nuestro servicio de atención al cliente.",
+    "contactSupport": "También puedes reportar el error directamente a nuestro equipo de soporte.",
+    "reportLink": "Reportar Error",
+    "errorDetails": "Detalles del Error",
+    "tryAgain": "Intentar de Nuevo",
+    "goToHome": "Ir al Inicio"
   }
 }

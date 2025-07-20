@@ -1,63 +1,41 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import ProtectedRoute from "@components/ProtectedRoute";
-import DashboardLayout from "@layouts/DashboardLayout";
+import React from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useAuth } from '@hooks/useAuth';
+import DashboardLayout from '@layouts/DashboardLayout';
+import ProtectedRoute from '@layouts/dashboard/ProtectedRoute';
+import { dashboardNavigation, adminNavigation } from '@layouts/dashboard/navigation';
+import NotFoundPage from '@features/dashboard/pages/NotFoundPage';
 
-// Dashboard Pages
-import DashboardHomePage from "@features/dashboard/pages/DashboardHomePage";
-import ProfilePage from "@features/profile/pages/ProfilePage";
-import TeamPage from "@features/dashboard/pages/TeamPage";
-import BillingPage from "@features/dashboard/pages/BillingPage";
-import InfraPage from "@features/dashboard/pages/InfraPage";
-import DomainsPage from "@features/dashboard/pages/DomainsPage";
-import SettingsPage from "@features/dashboard/pages/SettingsPage";
-import NotFoundPage from "@features/dashboard/pages/NotFoundPage";
+const DashboardPage: React.FC = () => {
+  const { user, isLoading } = useAuth();
+  const location = useLocation();
 
-// Admin Pages
-import AdminPanelPage from "@features/admin-panel/pages/AdminPanelPage";
-import AdminPanelSettingsPage from "@features/admin-panel/pages/SettingsPage";
-import AdminPanelUsersPage from "@features/admin-panel/pages/UsersPage";
-import AdminPanelCompaniesPage from "@features/admin-panel/pages/CompaniesPage";
-import AdminPanelInfraPage from "@features/admin-panel/pages/InfraPage";
+  if (isLoading) {
+    return <div>Loading...</div>; // Or a proper loading spinner
+  }
 
-const DashboardPage = () => (
-  <Routes>
-    {/* Dashboard routes */}
-    <Route path="/dashboard" element={<DashboardLayout />}>
-      <Route
-        element={<ProtectedRoute roles={["admin", "super-admin", "qa"]} />}
-      >
-        <Route index element={<DashboardHomePage />} />
-        <Route path="team" element={<TeamPage />} />
-        <Route path="billing" element={<BillingPage />} />
-        <Route path="infra" element={<InfraPage />} />
-        <Route path="domains" element={<DomainsPage />} />
-      </Route>
-      <Route
-        element={
-          <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]} />
-        }
-      >
-        <Route path="settings" element={<SettingsPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-      </Route>
-      <Route path="*" element={<NotFoundPage />} />
-    </Route>
+  if (!user) {
+    window.location.href = '/login';
+    return null;
+  }
 
-    {/* Super Admin routes */}
-    <Route path="/admin-panel" element={<DashboardLayout />}>
-      <Route element={<ProtectedRoute roles={["super-admin", "qa"]} />}>
-        <Route index element={<AdminPanelPage />} />
-        <Route path="settings" element={<AdminPanelSettingsPage />} />
-        <Route path="users" element={<AdminPanelUsersPage />} />
-        <Route path="companies" element={<AdminPanelCompaniesPage />} />
-        <Route path="infra" element={<AdminPanelInfraPage />} />
+  const allNavigation = [...dashboardNavigation, ...adminNavigation];
+  const filteredNav = allNavigation.filter(item => item.roles?.includes(user.role));
+
+  return (
+    <DashboardLayout path={location.pathname} user={user}>
+      <Routes>
+        {filteredNav.map((item) => (
+          <Route
+            key={item.name}
+            path={item.path}
+            element={<ProtectedRoute roles={item.roles}><item.component /></ProtectedRoute>}
+          />
+        ))}
         <Route path="*" element={<NotFoundPage />} />
-      </Route>
-    </Route>
-
-    {/* Redirect root to dashboard */}
-    <Route path="/" element={<Navigate to="/dashboard" replace />} />
-  </Routes>
-);
+      </Routes>
+    </DashboardLayout>
+  );
+};
 
 export default DashboardPage;

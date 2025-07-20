@@ -7,7 +7,7 @@ import "@styles/theme-overrides.css";
 import "@radix-ui/themes/styles.css";
 import "@locales/i18n";
 import { AuthProvider } from "@contexts/AuthContext";
-import ErrorBoundary from "@components/ErrorBoundary";
+import ErrorBoundary from "@layouts/dashboard/ErrorBoundary";
 import { CacheProvider } from "@contexts/CacheContext";
 import { AppProvider } from "@contexts/AppContext";
 import DashboardPage from "./dashboard/DashboardPage";

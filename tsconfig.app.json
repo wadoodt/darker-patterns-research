@@ -31,7 +31,7 @@
       "@components/*": ["components/*"],
       "@contexts/*": ["contexts/*"],
       "@hooks/*": ["hooks/*"],
-      "@styles/*": ["styles/*"],
+      "@config/*": ["config/*"],
       "@locales/*": ["locales/*"],
       "@api/*": ["api/*"],
       "@utils/*": ["utils/*"],
