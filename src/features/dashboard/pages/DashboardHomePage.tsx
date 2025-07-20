@@ -1,6 +1,6 @@
 import { CompaniesList } from "@components/CompaniesList";
 
-export default function DashboardPage() {
+export default function DashboardHomePage() {
   return (
     <div>
       <p>

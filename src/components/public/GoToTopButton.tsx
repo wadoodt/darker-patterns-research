@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./GoToTopButton.module.css";
 
 const GoToTopButton: React.FC = () => {
   const [visible, setVisible] = React.useState(false);
@@ -17,25 +18,10 @@ const GoToTopButton: React.FC = () => {
 
   return visible ? (
     <button
-      className="go-to-top-btn"
+      className={styles.button}
       onClick={handleClick}
       aria-label="Go to top"
       tabIndex={0}
-      style={{
-        position: "fixed",
-        right: 24,
-        bottom: 32,
-        zIndex: 1000,
-        background: "var(--accent-9)",
-        color: "var(--accent-1)",
-        border: "none",
-        borderRadius: 24,
-        padding: "12px 18px",
-        boxShadow: "0 2px 8px var(--gray-a5)",
-        cursor: "pointer",
-        fontSize: 18,
-        transition: "background 0.2s",
-      }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") handleClick();
       }}

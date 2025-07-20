@@ -27,6 +27,29 @@
       "operation_success": "Operación completada con éxito."
     }
   },
+  "sidebar": {
+    "dashboard": {
+      "title": "Panel de Control",
+      "home": "Inicio",
+      "settings": "Configuración",
+      "team": "Equipo",
+      "billing": "Facturación",
+      "infra": "Infraestructura",
+      "domains": "Dominios"
+    },
+    "admin": {
+      "title": "Panel de Administración",
+      "home": "Inicio de Administrador",
+      "settings": "Configuración de Administrador",
+      "users": "Usuarios",
+      "companies": "Empresas",
+      "infra": "Infraestructura de Administración"
+    },
+    "user": {
+      "profile": "Perfil",
+      "settings": "Configuración"
+    }
+  },
   "settings": {
     "title": "Configuración",
     "language": {
@@ -47,7 +70,8 @@
     "system": {
       "title": "Acciones a Nivel de Sistema",
       "warning": "Estas acciones afectan a todos los usuarios y deben usarse con precaución.",
-      "emergencyShutdown": "Parada de Emergencia"
+      "emergencyShutdown": "Parada de Emergencia",
+      "shutdown": "Apagar el Sistema"
     }
   },
   "pricing": {

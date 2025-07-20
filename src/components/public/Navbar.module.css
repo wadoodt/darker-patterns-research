@@ -1,0 +1,132 @@
+/* src/components/public/Navbar.module.css */
+
+.navbar {
+  padding: 1rem 1.5rem;
+  position: static; /* Default to no sticky */
+  top: 0;
+  z-index: 50;
+  transition: background-color 0.3s, backdrop-filter 0.3s;
+}
+
+/* Theme-specific sticky behavior */
+.stickyLight, .stickyDark, .stickyContrast {
+    position: sticky;
+}
+
+.stickyLight {
+    background-color: var(--gray-a3);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.stickyDark {
+    background-color: var(--gray-a3);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.stickyContrast {
+    background-color: var(--gray-2);
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.links {
+  display: none; /* Hidden on mobile */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media only screen and (min-width: 768px) {
+  .links {
+    display: flex; /* Visible on desktop */
+  }
+}
+
+.links a {
+  text-decoration: none;
+  color: var(--gray-11);
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-3);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.links a:hover {
+  color: var(--gray-12);
+  background-color: var(--gray-a4);
+}
+
+.signup {
+  background-color: var(--accent-9);
+  color: var(--accent-9-contrast) !important; /* Radix override */
+}
+
+.signup:hover {
+  background-color: var(--accent-10);
+  color: var(--accent-9-contrast) !important;
+}
+
+/* Mobile Menu Button */
+.mobileMenuButton {
+  display: block;
+  background: none;
+  border: none;
+  color: var(--gray-12);
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 60;
+}
+
+@media only screen and (min-width: 768px) {
+  .mobileMenuButton {
+    display: none;
+  }
+}
+
+/* Mobile Menu Panel */
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--gray-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 55;
+}
+
+.mobileMenu ul {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+.mobileMenu li {
+  margin: 1.5rem 0;
+}
+
+.mobileMenu a {
+  font-size: var(--font-size-6);
+  color: var(--gray-12);
+  text-decoration: none;
+  padding: 1rem;
+}

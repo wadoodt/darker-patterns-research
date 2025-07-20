@@ -1,3 +1,11 @@
-h1 {
-  color: red;
+/* src/styles/global.css */
+
+@import './responsive.css';
+
+body {
+  margin: 0;
+  font-family: var(--default-font-family);
+  background-color: var(--gray-1);
+  color: var(--gray-12);
 }
+

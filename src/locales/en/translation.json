@@ -24,6 +24,29 @@
       "email_invalid": "The email address is not valid."
     }
   },
+  "sidebar": {
+    "dashboard": {
+      "title": "Dashboard",
+      "home": "Home",
+      "settings": "Settings",
+      "team": "Team",
+      "billing": "Billing",
+      "infra": "Infrastructure",
+      "domains": "Domains"
+    },
+    "admin": {
+      "title": "Admin Panel",
+      "home": "Admin Home",
+      "settings": "Admin Settings",
+      "users": "Users",
+      "companies": "Companies",
+      "infra": "Admin Infrastructure"
+    },
+    "user": {
+      "profile": "Profile",
+      "settings": "Settings"
+    }
+  },
   "settings": {
     "title": "Settings",
     "language": {
@@ -44,7 +67,8 @@
     "system": {
       "title": "System-Wide Actions",
       "warning": "These actions affect all users and should be used with caution.",
-      "emergencyShutdown": "Emergency Shutdown"
+      "emergencyShutdown": "Emergency Shutdown",
+      "shutdown": "Shutdown System"
     }
   },
   "pricing": {

@@ -1,0 +1,20 @@
+/* src/styles/theme-overrides.css */
+
+/* Define custom properties for components */
+:root {
+  --custom-card-background: var(--gray-1);
+  --custom-card-border: 1px solid var(--gray-5);
+  --custom-button-primary-bg: var(--accent-9);
+  --custom-button-primary-text: var(--accent-9-contrast);
+}
+
+/* Override for dark theme */
+.theme-dark {
+  --custom-card-background: var(--gray-2);
+  --custom-card-border: 1px solid var(--gray-6);
+}
+
+/* Override for high-contrast themes */
+.theme-high-contrast-dark, .theme-high-contrast-light {
+  --custom-card-border: 1px solid var(--gray-12);
+}

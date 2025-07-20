@@ -1,6 +1,6 @@
 # Styling Guide
 
-This guide explains how to style components in the PenguinMails Dashboard using Radix UI, TailwindCSS, and best practices for maintainable, accessible, and consistent UI.
+This guide explains how to style components in the PenguinMails Dashboard using Radix UI, Radix Themes, and our approach to custom CSS and CSS modules for maintainable, accessible, and consistent UI.
 
 ---
 
@@ -9,37 +9,65 @@ This guide explains how to style components in the PenguinMails Dashboard using 
 - **Consistency:** Use shared components and centralized theme config whenever possible.
 - **Accessibility:** Always add ARIA attributes, keyboard navigation, and proper focus management.
 - **Maintainability:** Prefer composable, reusable components and avoid inline styles except for quick layout tweaks.
-- **Responsiveness:** Use Tailwind's responsive utilities for layouts and spacing.
+- **Responsiveness:** Use CSS modules or global CSS for layouts and spacing.
+- **File Organization:** Whenever possible, keep style files (CSS or CSS modules) next to the component or view they style. Only place global or page-level styles in `src/styles/`. Do not populate `src/styles/` with styles for lower-level components.
 
 ---
 
-## 2. **Radix UI**
+## 2. **Radix UI & Radix Themes**
 
 - Use Radix UI components for all interactive elements (buttons, selects, dialogs, etc.) for accessibility and design consistency.
 - Use the `<Theme>` provider (from `@radix-ui/themes`) to control appearance, accent color, and other theme props. The theme config is centralized in `src/styles/themes.ts`.
 - Override Radix component props (e.g., `color`, `radius`, `highContrast`) as needed for your use case.
-- For custom styles, use Tailwind classes via the `className` prop on Radix components.
+- For custom styles, use CSS classes or CSS modules and apply them via the `className` prop on Radix components.
 
 ---
 
-## 3. **TailwindCSS**
+## 3. **Custom CSS & CSS Modules**
 
-- Use Tailwind utility classes for layout, spacing, typography, and custom visual tweaks.
-- Prefer Tailwind for:
-  - Layout (flex, grid, spacing, width, height)
-  - Typography (font size, weight, color)
-  - Responsive design
-  - Quick visual adjustments
-- Use `class:` syntax for conditional classes when possible.
-- Avoid writing custom CSS unless absolutely necessary. If you must, use `src/styles/` and document why.
+- When Radix UI or Radix Themes do not support a required style, use custom CSS or CSS modules.
+- Place global CSS in `src/styles/` and component-specific CSS in the same directory as the component or in a `components/` subfolder if shared by several components.
+- For theme-based custom styling, create CSS classes for each theme variant (e.g., `.my-component-light`, `.my-component-dark`).
+- Dynamically select the appropriate class based on the current theme from settings. See the example below for how to apply theme-based classes.
+- Avoid writing inline styles except for quick layout fixes; prefer CSS classes or Radix props.
 
 ---
 
-## 4. **When to Use What**
+## 4. **Theme-based Styling Example**
 
-- **Radix UI:** For all interactive and accessible UI primitives.
-- **Tailwind:** For layout, spacing, and visual tweaks.
-- **Custom CSS:** Only for project-wide overrides or when neither Radix nor Tailwind can achieve the result.
+Suppose you have a component that needs different styles for light and dark themes:
+
+```css
+/* src/components/MyComponent.css */
+.my-component-light {
+  background: #fff;
+  color: #222;
+}
+.my-component-dark {
+  background: #222;
+  color: #fff;
+}
+```
+
+```tsx
+// src/components/MyComponent.tsx
+import React from "react";
+import { useApp } from "@hooks/useApp";
+import "./MyComponent.css";
+
+const MyComponent: React.FC = () => {
+  const { settings } = useApp();
+  const themeClass = settings.theme === "dark" ? "my-component-dark" : "my-component-light";
+
+  return (
+    <div className={themeClass}>
+      {/* ...component content... */}
+    </div>
+  );
+};
+
+export default MyComponent;
+```
 
 ---
 
@@ -57,7 +85,7 @@ This guide explains how to style components in the PenguinMails Dashboard using 
 - Use descriptive variable and function names.
 - Use early returns in event handlers for clarity.
 - Keep components small and focused.
-- Avoid inline styles except for quick layout fixes; prefer Tailwind or Radix props.
+- Avoid inline styles except for quick layout fixes; prefer Radix props or CSS classes.
 - Use centralized theme config for all theming (see `src/styles/themes.ts`).
 - Document any custom CSS or overrides.
 
@@ -65,12 +93,13 @@ This guide explains how to style components in the PenguinMails Dashboard using 
 
 ## 7. **Examples**
 
-### Radix Button with Tailwind
+### Radix Button with Custom Class
 
 ```tsx
 import { Button } from "@radix-ui/themes";
+import "@styles/components/Button.css";
 
-<Button className="w-full py-2" color="blue" radius="large">
+<Button className="my-button-class" color="blue" radius="large">
   Submit
 </Button>;
 ```
@@ -79,7 +108,7 @@ import { Button } from "@radix-ui/themes";
 
 ```tsx
 <button
-  className="px-4 py-2 rounded bg-blue-600 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400"
+  className="my-custom-button"
   tabIndex={0}
   aria-label="Submit form"
   onClick={handleClick}
@@ -94,5 +123,4 @@ import { Button } from "@radix-ui/themes";
 ## 8. **Where to Learn More**
 
 - [Radix UI Themes Docs](https://radix-ui.com/themes/docs/components/theme)
-- [TailwindCSS Docs](https://tailwindcss.com/docs/utility-first)
 - [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)

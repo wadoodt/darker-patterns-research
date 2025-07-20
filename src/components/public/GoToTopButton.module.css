@@ -1,0 +1,33 @@
+/* src/components/public/GoToTopButton.module.css */
+
+.button {
+  position: fixed;
+  right: 16px;
+  bottom: 24px;
+  z-index: 1000;
+  background: var(--accent-9);
+  color: var(--accent-1);
+  border: none;
+  border-radius: 9999px; /* Fully rounded */
+  width: 48px; /* Larger tap target */
+  height: 48px;
+  box-shadow: 0 4px 12px var(--gray-a5);
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.button:hover {
+  background: var(--accent-10);
+  transform: translateY(-2px);
+}
+
+@media (--sm) {
+  .button {
+    right: 24px;
+    bottom: 32px;
+  }
+}

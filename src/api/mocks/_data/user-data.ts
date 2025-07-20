@@ -34,4 +34,14 @@ export const mockUsers: User[] = [
     companyId: "comp-004",
     status: "active",
   },
+  {
+    id: "4",
+    name: "Super Admin",
+    username: "super-admin",
+    email: "superadmin@example.com",
+    password: "password",
+    role: "super-admin",
+    companyId: "comp-001",
+    status: "active",
+  },
 ];
