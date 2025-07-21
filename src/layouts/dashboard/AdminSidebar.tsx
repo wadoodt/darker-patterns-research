@@ -2,8 +2,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from './AdminSidebar.module.css';
-import { adminNavigation, dashboardNavigation } from '@layouts/dashboard/navigation';
-import type { NavigationItem } from '@layouts/dashboard/navigation';
+import { adminNavigation, dashboardNavigation } from '@pages/dashboard/navigation';
+import type { NavigationItem } from '@pages/dashboard/navigation';
 import type { AuthenticatedUser } from "types/auth";
 
 interface AdminSidebarProps {

@@ -1,0 +1,10 @@
+.statusMessage {
+  font-size: var(--font-size-2);
+  margin-top: var(--space-3);
+}
+
+.notReadyMessage {
+  font-size: var(--font-size-2);
+  margin-top: var(--space-3);
+  color: var(--red-9);
+}

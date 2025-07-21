@@ -1,10 +1,14 @@
-import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { useAuth } from '@hooks/useAuth';
-import DashboardLayout from '@layouts/DashboardLayout';
-import ProtectedRoute from '@layouts/dashboard/ProtectedRoute';
-import { dashboardNavigation, adminNavigation } from '@layouts/dashboard/navigation';
-import NotFoundPage from '@features/dashboard/pages/NotFoundPage';
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useAuth } from "@hooks/useAuth";
+import DashboardLayout from "@layouts/DashboardLayout";
+import ProtectedRoute from "@layouts/dashboard/ProtectedRoute";
+import {
+  dashboardNavigation,
+  adminNavigation,
+} from "@pages/dashboard/navigation";
+import NotFoundPage from "@features/dashboard/pages/NotFoundPage";
+import ProfilePage from "@features/dashboard/pages/ProfilePage";
 
 const DashboardPage: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -15,12 +19,14 @@ const DashboardPage: React.FC = () => {
   }
 
   if (!user) {
-    window.location.href = '/login';
+    window.location.href = "/login";
     return null;
   }
 
   const allNavigation = [...dashboardNavigation, ...adminNavigation];
-  const filteredNav = allNavigation.filter(item => item.roles?.includes(user.role));
+  const filteredNav = allNavigation.filter((item) =>
+    item.roles?.includes(user.role)
+  );
 
   return (
     <DashboardLayout path={location.pathname} user={user}>
@@ -29,9 +35,21 @@ const DashboardPage: React.FC = () => {
           <Route
             key={item.name}
             path={item.path}
-            element={<ProtectedRoute roles={item.roles}><item.component /></ProtectedRoute>}
+            element={
+              <ProtectedRoute roles={item.roles}>
+                <item.component />
+              </ProtectedRoute>
+            }
           />
         ))}
+        <Route
+          path="/dashboard/profile"
+          element={
+            <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </DashboardLayout>

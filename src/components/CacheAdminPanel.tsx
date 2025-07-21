@@ -3,6 +3,8 @@
 
 import { useState } from "react";
 import { useCache } from "@contexts/CacheContext";
+import { Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
+import styles from "./CacheAdminPanel.module.css";
 
 const CacheAdminPanelButtons = ({
   invalidateCompanies,
@@ -17,50 +19,29 @@ const CacheAdminPanelButtons = ({
   isLoading: boolean;
   isReady: boolean;
 }) => (
-  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-    <button
+  <Flex wrap="wrap" gap="2">
+    <Button
       onClick={invalidateCompanies}
       disabled={isLoading || !isReady}
-      style={{
-        padding: "8px 12px",
-        borderRadius: "4px",
-        color: "white",
-        backgroundColor: "#3b82f6",
-        border: "none",
-        cursor: "pointer",
-      }}
+      color="blue"
     >
       Invalidate Companies Cache
-    </button>
-    <button
+    </Button>
+    <Button
       onClick={invalidateProfile}
       disabled={isLoading || !isReady}
-      style={{
-        padding: "8px 12px",
-        borderRadius: "4px",
-        color: "white",
-        backgroundColor: "#8b5cf6",
-        border: "none",
-        cursor: "pointer",
-      }}
+      color="violet"
     >
       Invalidate Profile Cache
-    </button>
-    <button
+    </Button>
+    <Button
       onClick={clearAllExpired}
       disabled={isLoading || !isReady}
-      style={{
-        padding: "8px 12px",
-        borderRadius: "4px",
-        color: "white",
-        backgroundColor: "#ef4444",
-        border: "none",
-        cursor: "pointer",
-      }}
+      color="red"
     >
       Clear All Expired
-    </button>
-  </div>
+    </Button>
+  </Flex>
 );
 
 export function CacheAdminPanel() {
@@ -84,7 +65,7 @@ export function CacheAdminPanel() {
       setStatusMessage(`Error: ${errorMessage}`);
     } finally {
       setIsLoading(false);
-      setTimeout(() => setStatusMessage(""), 3000); // Clear message after 3 seconds
+      setTimeout(() => setStatusMessage(""), 3000);
     }
   };
 
@@ -107,42 +88,29 @@ export function CacheAdminPanel() {
     );
 
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        padding: "16px",
-        backgroundColor: "#f9f9f9",
-      }}
-    >
-      <h3
-        style={{
-          marginBottom: "12px",
-          fontSize: "1.125rem",
-          fontWeight: "600",
-        }}
-      >
-        Cache Management
-      </h3>
-      <CacheAdminPanelButtons
-        invalidateCompanies={invalidateCompanies}
-        invalidateProfile={invalidateProfile}
-        clearAllExpired={clearAllExpired}
-        isLoading={isLoading}
-        isReady={isReady}
-      />
-      {statusMessage && (
-        <p style={{ marginTop: "12px", fontSize: "0.875rem" }}>
-          {statusMessage}
-        </p>
-      )}
-      {!isReady && (
-        <p
-          style={{ marginTop: "12px", fontSize: "0.875rem", color: "#c2410c" }}
-        >
-          Cache system is not ready.
-        </p>
-      )}
-    </div>
+    <Card>
+      <Box>
+        <Heading as="h3" size="3" mb="3">
+          Cache Management
+        </Heading>
+        <CacheAdminPanelButtons
+          invalidateCompanies={invalidateCompanies}
+          invalidateProfile={invalidateProfile}
+          clearAllExpired={clearAllExpired}
+          isLoading={isLoading}
+          isReady={isReady}
+        />
+        {statusMessage && (
+          <Text as="p" className={styles.statusMessage}>
+            {statusMessage}
+          </Text>
+        )}
+        {!isReady && (
+          <Text as="p" className={styles.notReadyMessage}>
+            Cache system is not ready.
+          </Text>
+        )}
+      </Box>
+    </Card>
   );
 }

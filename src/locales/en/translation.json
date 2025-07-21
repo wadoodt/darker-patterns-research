@@ -33,7 +33,8 @@
       "billing": "Billing",
       "infra": "Infrastructure",
       "domains": "Domains",
-      "support": "Support"
+      "support": "Support",
+      "profile": "Profile"
     },
     "admin": {
       "title": "Admin Panel",

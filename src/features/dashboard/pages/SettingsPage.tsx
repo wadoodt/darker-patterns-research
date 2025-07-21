@@ -3,9 +3,7 @@ import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
 import { useAuth } from "@hooks/useAuth";
 import { useApp } from "@hooks/useApp";
 import { useTranslation } from "react-i18next";
-import LanguageSelector from "@components/LanguageSelector";
 import SettingSection from "@components/SettingSection";
-import ThemeSwitcher from "@components/ThemeSwitcher";
 
 const SettingsPage: React.FC = () => {
   const { hasRole } = useAuth();
@@ -18,19 +16,6 @@ const SettingsPage: React.FC = () => {
         {t("settings.title")}
       </Heading>
       <Flex direction="column" gap="4">
-        <SettingSection title={t("settings.language.title")}>
-          <Flex direction="column" gap="2">
-            <Text>{t("settings.language.description")}</Text>
-            <LanguageSelector />
-          </Flex>
-        </SettingSection>
-
-        <SettingSection title={t("settings.theme.title")}>
-          <Flex direction="column" gap="2">
-            <Text>{t("settings.theme.description")}</Text>
-            <ThemeSwitcher />
-          </Flex>
-        </SettingSection>
 
         {hasRole(["super-admin"]) && (
           <SettingSection title={t("settings.system.title")}>

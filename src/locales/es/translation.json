@@ -36,7 +36,8 @@
       "billing": "Facturación",
       "infra": "Infraestructura",
       "domains": "Dominios",
-      "support": "Soporte"
+      "support": "Soporte",
+      "profile": "Perfil"
     },
     "admin": {
       "title": "Panel de Administración",
