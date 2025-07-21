@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Header from "@layouts/dashboard/Header";
-import { Theme } from "@radix-ui/themes";
+import { Container, Theme } from "@radix-ui/themes";
 import AdminSidebar from "@layouts/dashboard/AdminSidebar";
 import styles from "@layouts/DashboardLayout.module.css";
 import clsx from "clsx";
@@ -39,10 +39,10 @@ const DashboardLayout = ({ path, user, children }: DashboardLayoutProps) => {
           <AdminSidebar path={path} user={user} isOpen={sidebarOpen} />
         </div>
         <div className={styles.mainContent}>
-          <Header
-            onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-          />
-          <main className={styles.main}>{children}</main>
+          <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+          <main className={styles.main}>
+            <Container>{children}</Container>
+          </main>
         </div>
       </div>
     </Theme>

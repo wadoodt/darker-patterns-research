@@ -1,0 +1,8 @@
+.videoOverlay {
+  background-color: var(--black-a8);
+}
+
+.playIcon {
+  color: white;
+  fill: white;
+}

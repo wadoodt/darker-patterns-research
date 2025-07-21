@@ -2,6 +2,7 @@ import React from 'react';
 import { Heading, Grid, Card, Flex, Box, Text, IconButton } from '@radix-ui/themes';
 import { Play, Video } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import styles from './VideoTutorialsSection.module.css';
 import type { VideoTutorial } from '../../SupportPage';
 
 interface VideoTutorialsSectionProps {
@@ -27,8 +28,8 @@ export const VideoTutorialsSection: React.FC<VideoTutorialsSectionProps> = ({ on
                         <Box>
                             <Box mb="3" className="relative group">
                                 <img src={video.thumbnail} alt={video.title} className="rounded-lg w-full aspect-video object-cover" />
-                                <Flex align="center" justify="center" className="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <IconButton size="3" radius="full"><Play className="text-white" fill="white" /></IconButton>
+                                <Flex align="center" justify="center" className={`absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity ${styles.videoOverlay}`}>
+                                    <IconButton size="3" radius="full"><Play className={styles.playIcon} /></IconButton>
                                 </Flex>
                             </Box>
                             <Heading as="h3" size="4" mb="1">{video.title}</Heading>

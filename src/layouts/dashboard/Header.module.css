@@ -1,7 +1,7 @@
 .header {
-  background-color: white;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid #e5e7eb;
+  background-color: var(--gray-1);
+  box-shadow: var(--shadow-2);
+  border-bottom: 1px solid var(--gray-4);
   padding: .5rem;
 }
 
@@ -20,13 +20,13 @@
 .logo {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #111827;
+  color: var(--gray-12);
 }
 
 .title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--gray-12);
 }
 
 .actionsContainer {
@@ -37,7 +37,7 @@
 
 .searchContainer {
   position: relative;
-  color: #9ca3af;
+  color: var(--gray-9);
 }
 
 .searchIcon {
@@ -54,28 +54,30 @@
   padding-right: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--gray-7);
   border-radius: 0.5rem;
+  background-color: var(--gray-1);
+  color: var(--gray-12);
 }
 
 .searchInput:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
-  box-shadow: 0 0 0 2px #3b82f6;
+  box-shadow: 0 0 0 2px var(--accent-9);
   border-color: transparent;
 }
 
 .notificationButton {
   position: relative;
   padding: 0.5rem;
-  color: #9ca3af;
+  color: var(--gray-9);
   background: none;
   border: none;
   cursor: pointer;
 }
 
 .notificationButton:hover {
-  color: #6b7280;
+  color: var(--gray-11);
 }
 
 .notificationIcon {
@@ -89,7 +91,7 @@
   right: -0.25rem;
   width: 1rem;
   height: 1rem;
-  background-color: #ef4444;
+  background-color: var(--red-9);
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -111,12 +113,12 @@
 .userName {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #111827;
+  color: var(--gray-12);
 }
 
 .userRole {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--gray-11);
 }
 
 .userName, .userRole {
@@ -126,7 +128,7 @@
 .userAvatar {
   width: 2rem;
   height: 2rem;
-  background-color: #dbeafe;
+  background-color: var(--accent-3);
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -136,19 +138,19 @@
 .userAvatarIcon {
   width: 1.25rem;
   height: 1.25rem;
-  color: #3b82f6;
+  color: var(--accent-9);
 }
 
 .logoutButton {
   padding: 0.5rem;
-  color: #9ca3af;
+  color: var(--gray-9);
   background: none;
   border: none;
   cursor: pointer;
 }
 
 .logoutButton:hover {
-  color: #6b7280;
+  color: var(--gray-11);
 }
 
 .logoutIcon {

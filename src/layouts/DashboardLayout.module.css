@@ -1,6 +1,5 @@
 .adminLayout {
   min-height: 100vh;
-  background-color: #f9fafb;
   display: flex;
 }
 
@@ -11,9 +10,7 @@
 }
 
 .main {
-  flex: 1;
   padding: 1.5rem;
-  overflow-y: auto;
 }
 
 .sidebar {

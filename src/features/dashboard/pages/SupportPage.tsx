@@ -51,7 +51,7 @@ const useVideoTutorials = () => {
 
 // --- MAIN COMPONENT ---
 const fetchKnowledgeArticles = async () => {
-  const response = await api.get<KnowledgeBaseArticle[]>('/api/support/articles');
+  const response = await api.get<KnowledgeBaseArticle[]>('/support/articles');
   return response.data;
 };
 

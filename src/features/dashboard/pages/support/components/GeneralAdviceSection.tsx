@@ -79,7 +79,7 @@ export const GeneralAdviceSection = () => {
                             <Box>
                                 <Flex justify="between" align="start" mb="2">
                                     <Text size="2" color="gray">{article.category}</Text>
-                                    <ExternalLink size={16} className="text-gray-500" />
+                                    <ExternalLink size={16} />
                                 </Flex>
                                 <Heading as="h3" size="4" mb="1">{article.title}</Heading>
                                 <Text as="p" size="2" color="gray">{article.description}</Text>
