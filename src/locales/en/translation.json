@@ -78,6 +78,15 @@
       "warning": "These actions affect all users and should be used with caution.",
       "emergencyShutdown": "Emergency Shutdown",
       "shutdown": "Shutdown System"
+    },
+    "company": {
+      "title": "Company Settings",
+      "name": "Company Name",
+      "email": "Company Email Contact",
+      "contactInfo": "Company Contact Information (optional)",
+      "notifications": "Enable Email Notifications",
+      "save": "Save Changes",
+      "support": "Need help? Visit our support page."
     }
   },
   "pricing": {

@@ -81,6 +81,15 @@
       "warning": "Estas acciones afectan a todos los usuarios y deben usarse con precaución.",
       "emergencyShutdown": "Parada de Emergencia",
       "shutdown": "Apagar el Sistema"
+    },
+    "company": {
+      "title": "Configuración de la Empresa",
+      "name": "Nombre de la Empresa",
+      "email": "Correo Electrónico de Contacto de la Empresa",
+      "contactInfo": "Información de Contacto de la Empresa (opcional)",
+      "notifications": "Habilitar Notificaciones por Correo Electrónico",
+      "save": "Guardar Cambios",
+      "support": "¿Necesitas ayuda? Visita nuestra página de soporte."
     }
   },
   "pricing": {

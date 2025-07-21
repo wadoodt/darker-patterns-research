@@ -41,7 +41,7 @@ export const dashboardNavigation: NavigationItem[] = [
   { name: 'sidebar.dashboard.home', path: '/dashboard/*', href: '/dashboard', icon: LayoutDashboard, component: DashboardHomePage, roles: ['admin', 'super-admin', 'qa'] },
   { name: 'sidebar.dashboard.team', path: '/dashboard/team', href: '/dashboard/team', icon: Users, component: TeamPage, roles: ['admin', 'super-admin', 'qa'] },
   { name: 'sidebar.dashboard.billing', path: '/dashboard/billing', href: '/dashboard/billing', icon: CreditCard, component: BillingPage, roles: ['admin', 'super-admin', 'qa'] },
-  { name: 'sidebar.dashboard.settings', path: '/dashboard/settings', href: '/dashboard/settings', icon: Settings, component: SettingsPage, roles: ['user', 'admin', 'super-admin', 'qa'] },
+  { name: 'sidebar.dashboard.settings', path: '/dashboard/settings', href: '/dashboard/settings', icon: Settings, component: SettingsPage, roles: ['admin', 'qa'] },
   { name: 'sidebar.dashboard.support', path: '/dashboard/support', href: '/dashboard/support', icon: HelpCircle, component: SupportPage, roles: ['user', 'admin', 'super-admin', 'qa'] },
 ];
 
