@@ -37,6 +37,7 @@
     },
     "admin": {
       "title": "Admin Panel",
+      "articles": "Knowledge Base Articles",
       "home": "Admin Home",
       "settings": "Admin Settings",
       "users": "Users",
@@ -152,6 +153,88 @@
       ]
     }
   },
+  "support": {
+    "contact_form": {
+      "title": "Contact Support",
+      "subtitle": "Can't find what you're looking for? Our team is here to help.",
+      "fields": {
+        "name": "Your Name",
+        "email": "Email Address",
+        "subject": "Subject",
+        "message": "How can we help?",
+        "submit": "Send Message"
+      },
+      "success": {
+        "title": "Message Sent!",
+        "message": "We've received your message and will get back to you soon."
+      },
+      "error": {
+        "title": "Something went wrong",
+        "message": "Please try again or contact us at support@penguinmails.com"
+      }
+    },
+    "video_tutorials": {
+      "title": "Video Tutorials"
+    },
+    "knowledge_base": {
+      "title": "Knowledge Library",
+      "loading": "Loading articles..."
+    },
+    "general_advice": {
+      "title": "General Advice",
+      "articles": {
+        "campaigns": {
+          "title": "Getting Started with Cold Email Campaigns",
+          "description": "Learn how to create your first cold email campaign from setup to launch.",
+          "category": "Campaigns"
+        },
+        "domain_setup": {
+          "title": "Domain Setup and DNS Configuration",
+          "description": "Complete guide to setting up your domain with proper DNS records for email delivery.",
+          "category": "Domains"
+        },
+        "email_warmup": {
+          "title": "Email Warmup Best Practices",
+          "description": "How to properly warm up your mailboxes for optimal deliverability and inbox placement.",
+          "category": "Warmup"
+        },
+        "deliverability": {
+          "title": "Understanding Email Deliverability",
+          "description": "Learn about factors that affect email deliverability and how to improve your sender reputation.",
+          "category": "Deliverability"
+        },
+        "templates": {
+          "title": "Creating Effective Email Templates",
+          "description": "Tips and strategies for writing compelling cold emails that get responses.",
+          "category": "Templates"
+        },
+        "lead_management": {
+          "title": "Managing Lead Lists and Imports",
+          "description": "How to import, organize, and manage your lead lists for maximum campaign effectiveness.",
+          "category": "Leads"
+        }
+      }
+    },
+    "header": {
+      "title": "Help & Support",
+      "subtitle": "Welcome to our support center. Find articles, tutorials, and contact our team."
+    },
+    "search_placeholder": "Search articles...",
+    "videos": {
+      "complete_campaign_setup": {
+        "title": "Complete Campaign Setup Walkthrough",
+        "description": "A step-by-step guide to creating your first campaign."
+      },
+      "domain_config": {
+        "title": "Domain and Mailbox Configuration",
+        "description": "How to set up domains and create mailboxes for sending."
+      },
+      "warmup_process": {
+        "title": "Warmup Process Explained",
+        "description": "Understanding and optimizing the email warmup process."
+      }
+    }
+  },
   "signup": {
     "header": {
       "title": "Create your Penguin Mails Account",
@@ -219,6 +302,15 @@
     "description": "Your account is ready. You can now access your dashboard.",
     "goToDashboard": "Go to Dashboard",
     "autoRedirect": "You will be redirected to the dashboard in {{seconds}} seconds."
+  },
+  "articlesPage": {
+    "manageArticles": "Manage Knowledge Base Articles",
+    "createArticle": "Create Article",
+    "edit": "Edit",
+    "delete": "Delete",
+    "title": "Title",
+    "category": "Category",
+    "errorLoading": "Error loading articles. Please try again."
   },
   "errorBoundary": {
     "title": "Something went wrong.",

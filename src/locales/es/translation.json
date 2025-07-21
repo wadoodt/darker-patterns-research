@@ -40,6 +40,7 @@
     },
     "admin": {
       "title": "Panel de Administración",
+      "articles": "Artículos de la base de conocimiento",
       "home": "Inicio de Administrador",
       "settings": "Configuración de Administrador",
       "users": "Usuarios",
@@ -155,6 +156,88 @@
       ]
     }
   },
+  "support": {
+    "contact_form": {
+      "title": "Contactar al Soporte",
+      "subtitle": "¿No encuentras lo que buscas? Nuestro equipo está aquí para ayudarte.",
+      "fields": {
+        "name": "Tu Nombre",
+        "email": "Correo Electrónico",
+        "subject": "Asunto",
+        "message": "¿En qué podemos ayudarte?",
+        "submit": "Enviar Mensaje"
+      },
+      "success": {
+        "title": "¡Mensaje Enviado!",
+        "message": "Hemos recibido tu mensaje y nos pondremos en contacto contigo pronto."
+      },
+      "error": {
+        "title": "Algo salió mal",
+        "message": "Por favor, inténtalo de nuevo o contáctanos en support@penguinmails.com"
+      }
+    },
+    "video_tutorials": {
+      "title": "Tutoriales en Video"
+    },
+    "knowledge_base": {
+      "title": "Biblioteca de Conocimiento",
+      "loading": "Cargando artículos..."
+    },
+    "general_advice": {
+      "title": "Consejos Generales",
+      "articles": {
+        "campaigns": {
+          "title": "Cómo Empezar con Campañas de Correo Frío",
+          "description": "Aprende a crear tu primera campaña de correo frío desde la configuración hasta el lanzamiento.",
+          "category": "Campañas"
+        },
+        "domain_setup": {
+          "title": "Configuración de Dominio y DNS",
+          "description": "Guía completa para configurar tu dominio con los registros DNS adecuados para la entrega de correos.",
+          "category": "Dominios"
+        },
+        "email_warmup": {
+          "title": "Mejores Prácticas para el Calentamiento de Correos",
+          "description": "Cómo calentar correctamente tus buzones para una óptima capacidad de entrega y ubicación en la bandeja de entrada.",
+          "category": "Calentamiento"
+        },
+        "deliverability": {
+          "title": "Entendiendo la Capacidad de Entrega de Correos",
+          "description": "Aprende sobre los factores que afectan la capacidad de entrega de correos y cómo mejorar tu reputación como remitente.",
+          "category": "Entrega"
+        },
+        "templates": {
+          "title": "Creando Plantillas de Correo Efectivas",
+          "description": "Consejos y estrategias para escribir correos fríos convincentes que obtengan respuestas.",
+          "category": "Plantillas"
+        },
+        "lead_management": {
+          "title": "Gestión de Listas de Prospectos",
+          "description": "Cómo importar, organizar y gestionar tus listas de prospectos para maximizar la efectividad de tus campañas.",
+          "category": "Prospectos"
+        }
+      }
+    },
+    "header": {
+      "title": "Ayuda y Soporte",
+      "subtitle": "Bienvenido a nuestro centro de soporte. Encuentra artículos, tutoriales y contacta a nuestro equipo."
+    },
+    "search_placeholder": "Buscar artículos...",
+    "videos": {
+      "complete_campaign_setup": {
+        "title": "Guía completa de configuración de campaña",
+        "description": "Una guía paso a paso para crear tu primera campaña."
+      },
+      "domain_config": {
+        "title": "Configuración de dominio y buzones",
+        "description": "Cómo configurar dominios y crear buzones para envíos."
+      },
+      "warmup_process": {
+        "title": "Proceso de calentamiento explicado",
+        "description": "Entendiendo y optimizando el proceso de calentamiento de correos."
+      }
+    }
+  },
   "signup": {
     "header": {
       "title": "Crea tu cuenta en Penguin Mails",
@@ -222,6 +305,15 @@
     "description": "Tu cuenta está lista. Ahora puedes acceder a tu panel.",
     "goToDashboard": "Ir al panel",
     "autoRedirect": "Serás redirigido al panel en {{seconds}} segundos."
+  },
+  "articlesPage": {
+    "manageArticles": "Gestionar artículos de la base de conocimiento",
+    "createArticle": "Crear artículo",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "title": "Título",
+    "category": "Categoría",
+    "errorLoading": "Error al cargar los artículos. Por favor, inténtalo de nuevo."
   },
   "errorBoundary": {
     "title": "Algo salió mal.",

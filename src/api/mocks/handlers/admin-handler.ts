@@ -113,3 +113,28 @@ export const updateUser = async (request: Request): Promise<Response> => {
   const response = createSuccessResponse(userResponse, "OPERATION_SUCCESS");
   return new Response(JSON.stringify(response));
 };
+
+/**
+ * Handles the request to get all support tickets.
+ */
+export const getSupportTickets = async (): Promise<Response> => {
+    // MOCK: Simulate an authenticated admin user for authorization.
+    const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
+
+    if (!mockAdminUser) {
+        const errorResponse = createErrorResponse("UNAUTHORIZED", {
+            detail: "No admin user found in mock DB.",
+        });
+        return new Response(JSON.stringify(errorResponse), {
+            status: ERROR_CODES.UNAUTHORIZED.status,
+        });
+    }
+
+    const tickets = db.supportTickets.findMany({});
+
+    const response = createSuccessResponse(
+        { tickets },
+        "OPERATION_SUCCESS",
+    );
+    return new Response(JSON.stringify(response));
+};

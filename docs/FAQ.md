@@ -249,12 +249,46 @@ The `Headers` object is not a plain JavaScript object. If you need to convert it
 
 _Example (`api/client.ts`):_
 
-```ts
-const headersObject = (() => {
-  const h: Record<string, string> = {};
-  response.headers.forEach((value, key) => {
-    h[key] = value;
-  });
-  return h;
-})();
 ```
+
+---
+
+## **Problem:** TypeScript/ESLint errors for `[key: string]: any` in interfaces (mock DB compatibility)
+
+### Symptoms:
+- You see errors like `Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any` in interfaces with `[key: string]: any;`.
+- Lint or build fails in files like `types/support-ticket.ts`.
+
+### Solution:
+- Replace `any` with `unknown` in the index signature:
+
+```ts
+// Instead of:
+export interface SupportTicket {
+  [key: string]: any;
+  // ...fields
+}
+
+// Use:
+export interface SupportTicket {
+  [key: string]: unknown;
+  // ...fields
+}
+```
+
+- This satisfies the linter and works for most mock DB/dev cases. If you need to access a dynamic property, cast it as needed:
+
+```ts
+const value = ticket[someKey] as string;
+```
+
+- **Avoid using `any` unless absolutely necessary.** If you must use it, add an inline eslint-disable comment, but note that some configs will auto-remove it:
+
+```ts
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+[key: string]: any;
+```
+
+- For production code, avoid index signatures entirely unless you truly need dynamic keys.
+
+---

@@ -1,9 +1,11 @@
 import { createTable } from "./lib/createTable";
 import type { Company, AdminSettings } from "types";
+import type { ContactSubmission } from "../../types/support";
 import { mockCompanies } from "./_data/companies-data.ts";
 import { mockUsers } from "./_data/user-data.ts";
 import { mockAdminSettings } from "./_data/admin-settings-data";
 import { mockPayments } from "./_data/payments-data";
+import { mockSupportArticles, mockSupportTickets } from "./_data/support";
 
 // The global mock database instance.
 export const db = {
@@ -11,4 +13,7 @@ export const db = {
   companies: createTable<Company>(mockCompanies),
   adminSettings: createTable<AdminSettings>([mockAdminSettings]),
   payments: createTable(mockPayments),
+  supportArticles: createTable(mockSupportArticles),
+  contactSubmissions: createTable<ContactSubmission>([]),
+  supportTickets: createTable(mockSupportTickets),
 };

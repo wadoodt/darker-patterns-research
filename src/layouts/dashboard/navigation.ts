@@ -8,6 +8,7 @@ import {
   Ticket,
   Building,
   Shield,
+  BookText,
 } from 'lucide-react';
 
 // Dashboard Pages
@@ -21,6 +22,7 @@ import SupportPage from '@features/dashboard/pages/SupportPage';
 import AdminPanelPage from "@features/admin-panel/pages/AdminPanelPage";
 import AdminPanelUsersPage from "@features/admin-panel/pages/UsersPage";
 import TicketsPage from '@features/admin-panel/pages/TicketsPage';
+import ArticlesPage from '@features/admin-panel/pages/ArticlesPage';
 import AdminPanelCompaniesPage from "@features/admin-panel/pages/CompaniesPage";
 import AdminPanelSettingsPage from "@features/admin-panel/pages/SettingsPage";
 import AdminPanelInfraPage from "@features/admin-panel/pages/InfraPage";
@@ -36,7 +38,7 @@ export interface NavigationItem {
 }
 
 export const dashboardNavigation: NavigationItem[] = [
-  { name: 'sidebar.dashboard.home', path: '/dashboard', href: '/dashboard', icon: LayoutDashboard, component: DashboardHomePage, roles: ['admin', 'super-admin', 'qa'] },
+  { name: 'sidebar.dashboard.home', path: '/dashboard/*', href: '/dashboard', icon: LayoutDashboard, component: DashboardHomePage, roles: ['admin', 'super-admin', 'qa'] },
   { name: 'sidebar.dashboard.team', path: '/dashboard/team', href: '/dashboard/team', icon: Users, component: TeamPage, roles: ['admin', 'super-admin', 'qa'] },
   { name: 'sidebar.dashboard.billing', path: '/dashboard/billing', href: '/dashboard/billing', icon: CreditCard, component: BillingPage, roles: ['admin', 'super-admin', 'qa'] },
   { name: 'sidebar.dashboard.settings', path: '/dashboard/settings', href: '/dashboard/settings', icon: Settings, component: SettingsPage, roles: ['user', 'admin', 'super-admin', 'qa'] },
@@ -44,9 +46,10 @@ export const dashboardNavigation: NavigationItem[] = [
 ];
 
 export const adminNavigation: NavigationItem[] = [
-  { name: 'sidebar.admin.home', path: '/admin-panel', href: '/admin-panel', icon: LayoutDashboard, component: AdminPanelPage, roles: ['super-admin', 'qa'] },
+  { name: 'sidebar.admin.home', path: '/admin-panel/*', href: '/admin-panel', icon: LayoutDashboard, component: AdminPanelPage, roles: ['super-admin', 'qa'] },
   { name: 'sidebar.admin.users', path: '/admin-panel/users', href: '/admin-panel/users', icon: Users, component: AdminPanelUsersPage, roles: ['super-admin', 'qa'] },
   { name: 'sidebar.admin.tickets', path: '/admin-panel/tickets', href: '/admin-panel/tickets', icon: Ticket, component: TicketsPage, roles: ['super-admin', 'qa'] },
+  { name: 'sidebar.admin.articles', path: '/admin-panel/articles', href: '/admin-panel/articles', icon: BookText, component: ArticlesPage, roles: ['super-admin', 'qa'] },
   { name: 'sidebar.admin.companies', path: '/admin-panel/companies', href: '/admin-panel/companies', icon: Building, component: AdminPanelCompaniesPage, roles: ['super-admin', 'qa'] },
   { name: 'sidebar.admin.config', path: '/admin-panel/config', href: '/admin-panel/config', icon: Shield, component: AdminPanelSettingsPage, roles: ['super-admin', 'qa'] },
   { name: 'sidebar.admin.infra', path: '/admin-panel/infra', href: '/admin-panel/infra', icon: Settings, component: AdminPanelInfraPage, roles: ['super-admin', 'qa'] },
