@@ -10,6 +10,15 @@ For a detailed explanation of the mock API's internal workings, see the **[Mock 
 
 When the backend changes a data model, the frontend must reflect that change in its own types and mocks _before_ the new backend code is deployed. This prevents integration bugs and ensures a smooth development workflow.
 
+### API Client Prefix
+
+**IMPORTANT**: The `apiClient` instance is configured with a `baseURL` of `/api`. This means all API calls made with `apiClient.get()`, `apiClient.post()`, etc., will be automatically prefixed with `/api`.
+
+- **Correct**: `apiClient.get('/users/me')` -> sends request to `/api/users/me`
+- **Incorrect**: `apiClient.get('/api/users/me')` -> sends request to `/api/api/users/me` (will fail)
+
+Always omit the `/api` prefix from your API calls.
+
 ---
 
 ## Workflow for Handling Backend API Changes

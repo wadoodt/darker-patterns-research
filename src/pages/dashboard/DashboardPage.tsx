@@ -9,6 +9,10 @@ import {
 } from "@pages/dashboard/navigation";
 import NotFoundPage from "@features/dashboard/pages/NotFoundPage";
 import ProfilePage from "@features/dashboard/pages/ProfilePage";
+import TicketDetailPage from "@features/admin-panel/pages/TicketDetailPage";
+import SettingsPage from '@features/dashboard/pages/SettingsPage';
+import SupportPage from '@features/dashboard/pages/SupportPage';
+import UserTicketDetailPage from '@features/dashboard/pages/UserTicketDetailPage';
 
 const DashboardPage: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -47,6 +51,38 @@ const DashboardPage: React.FC = () => {
           element={
             <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-panel/tickets/:ticketId"
+          element={
+            <ProtectedRoute roles={["super-admin"]}>
+              <TicketDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/support"
+          element={
+            <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
+              <SupportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/support/tickets/:ticketId"
+          element={
+            <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
+              <UserTicketDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
+              <SettingsPage />
             </ProtectedRoute>
           }
         />

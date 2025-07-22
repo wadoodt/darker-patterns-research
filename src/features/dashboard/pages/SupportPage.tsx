@@ -9,6 +9,7 @@ import { SupportHeader } from './support/components/SupportHeader';
 import { KnowledgeBaseSection } from './support/components/KnowledgeBaseSection';
 import { VideoTutorialsSection } from './support/components/VideoTutorialsSection';
 import { ContactFormSection } from './support/components/ContactFormSection';
+import MyTickets from './support/components/MyTickets';
 import { GeneralAdviceSection } from './support/components/GeneralAdviceSection';
 import type { KnowledgeBaseArticle } from '../../../types/knowledge-base';
 
@@ -110,6 +111,10 @@ export default function SupportPage() {
       <Separator my="6" size="4" />
 
       <ContactFormSection />
+
+      <Separator my="6" size="4" />
+
+      <MyTickets />
 
       <Dialog.Root open={showVideoModal} onOpenChange={setShowVideoModal}>
         <Dialog.Content style={{ maxWidth: 800 }}>

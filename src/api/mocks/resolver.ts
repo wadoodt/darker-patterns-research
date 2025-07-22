@@ -5,7 +5,6 @@ import * as adminHandlers from "./handlers/admin-handler";
 import * as paymentsHandlers from "./handlers/payments-handler";
 import * as supportHandlers from "./handlers/support";
 import { getArticles, createArticle, updateArticle, deleteArticle } from './handlers/admin-articles-handler';
-import { createContactSubmission } from "./handlers/support";
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Array<[string, RegExp, unknown]> = [
@@ -24,13 +23,18 @@ const routes: Array<[string, RegExp, unknown]> = [
     // Admin
     ["GET /api/admin/users", /^\/api\/admin\/users$/, adminHandlers.getUsers],
     ["PATCH /api/admin/users/:userId", /^\/api\/admin\/users\/([^/]+)$/, adminHandlers.updateUser],
+    ["GET /api/admin/tickets", /^\/api\/admin\/tickets$/, adminHandlers.getSupportTickets],
+    ["PATCH /api/admin/tickets/:ticketId", /^\/api\/admin\/tickets\/([^/]+)$/, adminHandlers.updateTicketStatus],
 
     // Payments
     ["POST /api/payments", /^\/api\/payments$/, paymentsHandlers.createPayment],
 
     // Support
     ["GET /api/support/articles", /^\/api\/support\/articles$/, supportHandlers.getSupportArticles],
-    ["POST /api/support/contact", /^\/api\/support\/contact$/, createContactSubmission],
+    ["POST /api/support/contact", /^\/api\/support\/contact$/, supportHandlers.createContactSubmission],
+    ["GET /api/support/my-tickets", /^\/api\/support\/my-tickets$/, supportHandlers.getMyTickets],
+    ["GET /api/support/tickets/:ticketId", /^\/api\/support\/tickets\/([^/]+)$/, supportHandlers.getTicketById],
+    ["POST /api/support/tickets/:ticketId/reply", /^\/api\/support\/tickets\/([^/]+)\/reply$/, supportHandlers.createTicketReply],
 
     // Admin - Articles
     ["GET /api/admin/articles", /^\/api\/admin\/articles$/, getArticles],

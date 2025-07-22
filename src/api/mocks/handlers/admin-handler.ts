@@ -117,24 +117,91 @@ export const updateUser = async (request: Request): Promise<Response> => {
 /**
  * Handles the request to get all support tickets.
  */
-export const getSupportTickets = async (): Promise<Response> => {
-    // MOCK: Simulate an authenticated admin user for authorization.
-    const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
+export const getSupportTickets = async (request: Request): Promise<Response> => {
+  // MOCK: Simulate an authenticated admin user for authorization.
+  const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
 
-    if (!mockAdminUser) {
-        const errorResponse = createErrorResponse("UNAUTHORIZED", {
-            detail: "No admin user found in mock DB.",
-        });
-        return new Response(JSON.stringify(errorResponse), {
-            status: ERROR_CODES.UNAUTHORIZED.status,
-        });
-    }
+  if (!mockAdminUser) {
+    const errorResponse = createErrorResponse("UNAUTHORIZED", {
+      detail: "No admin user found in mock DB.",
+    });
+    return new Response(JSON.stringify(errorResponse), {
+      status: ERROR_CODES.UNAUTHORIZED.status,
+    });
+  }
 
-    const tickets = db.supportTickets.findMany({});
+  const url = new URL(request.url);
+  const page = parseInt(url.searchParams.get('page') || '1', 10);
+  const limit = parseInt(url.searchParams.get('limit') || '10', 10);
 
-    const response = createSuccessResponse(
-        { tickets },
-        "OPERATION_SUCCESS",
-    );
-    return new Response(JSON.stringify(response));
+  const allTickets = db.supportTickets.findMany({});
+  const totalTickets = allTickets.length;
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const tickets = allTickets.slice(startIndex, endIndex);
+
+  const response = createSuccessResponse(
+    {
+      tickets,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalTickets / limit),
+        totalTickets,
+      },
+    },
+    "OPERATION_SUCCESS",
+  );
+  return new Response(JSON.stringify(response));
+};
+
+/**
+ * Handles the request to update a support ticket's status.
+ */
+export const updateTicketStatus = async (
+  request: Request,
+  params: { ticketId: string },
+): Promise<Response> => {
+  const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
+  if (!mockAdminUser) {
+    const errorResponse = createErrorResponse("UNAUTHORIZED", {
+      detail: "No admin user found in mock DB.",
+    });
+    return new Response(JSON.stringify(errorResponse), {
+      status: ERROR_CODES.UNAUTHORIZED.status,
+    });
+  }
+
+  const { ticketId } = params;
+    const { status } = (await request.json()) as {
+    status: 'open' | 'in_progress' | 'closed';
+  };
+
+  if (!ticketId) {
+    const errorResponse = createErrorResponse("VALIDATION_ERROR", {
+      error: "Ticket ID is missing from the URL.",
+    });
+    return new Response(JSON.stringify(errorResponse), {
+      status: ERROR_CODES.VALIDATION_ERROR.status,
+    });
+  }
+
+  const ticketToUpdate = db.supportTickets.findFirst({ where: { id: ticketId } });
+
+  if (!ticketToUpdate) {
+    const errorResponse = createErrorResponse("NOT_FOUND", {
+      detail: "Ticket to update was not found.",
+    });
+    return new Response(JSON.stringify(errorResponse), {
+      status: ERROR_CODES.NOT_FOUND.status,
+    });
+  }
+
+  const updatedTicket = db.supportTickets.update({
+    where: { id: ticketId },
+    data: { status },
+  });
+
+  const response = createSuccessResponse({ ticket: updatedTicket }, "OPERATION_SUCCESS");
+  return new Response(JSON.stringify(response));
 };

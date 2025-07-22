@@ -43,13 +43,27 @@ export function CacheProvider({
       },
       get: async <T,>(key: string): Promise<T | null> => {
         if (!kvRef.current) return null;
-        const entry: CacheEntry<T> | undefined = await kvRef.current.get(key);
-        if (!entry) return null;
-        if (entry.expiresAt <= Date.now()) {
+        try {
+          const entry: CacheEntry<T> | undefined = await kvRef.current.get(key);
+
+          if (!entry) {
+            return null;
+          }
+
+          if (entry.expiresAt <= Date.now()) {
+            await kvRef.current.del(key);
+            return null;
+          }
+
+          return entry.data as T;
+        } catch (error) {
+          console.error(
+            `[CacheContext] Failed to get item '${key}' from cache:`,
+            error,
+          );
           await kvRef.current.del(key);
           return null;
         }
-        return entry.data as T;
       },
       invalidateByPattern: async (pattern: string) => {
         if (!kvRef.current) return;

@@ -292,3 +292,35 @@ const value = ticket[someKey] as string;
 - For production code, avoid index signatures entirely unless you truly need dynamic keys.
 
 ---
+
+## **Problem:** API calls are failing with a 404 error, and the URL seems incorrect (e.g., `/api/api/users`).
+
+### Symptoms:
+
+- Network requests in your browser's developer tools show a URL with a duplicated `/api` prefix, like `http://localhost:5173/api/api/admin/tickets`.
+- The request fails with a 404 Not Found error.
+
+### Root Cause & Solution:
+
+- **Root Cause:** The `apiClient` instance in `src/api/client.ts` is already configured with a `baseURL` of `/api`. When you include `/api` in your specific API call (e.g., `api.get('/api/admin/tickets')`), it gets prepended to the `baseURL`, resulting in a malformed URL.
+
+**Solution:**
+
+- Always omit the `/api` prefix from your `apiClient` calls. The client handles it for you.
+
+**Example:**
+
+```tsx
+// Correct - sends a request to /api/admin/tickets
+const response = await api.get('/admin/tickets');
+
+// Incorrect - sends a request to /api/api/admin/tickets
+const response = await api.get('/api/admin/tickets');
+```
+
+**How to avoid this in the future:**
+
+- Remember that all API calls are relative to the `/api` base.
+- Review the **[Endpoint Integration Guide](./ENDPOINT_INTEGRATION.md)** for more details on making API calls.
+
+---
