@@ -11,7 +11,7 @@ import {
   Heading,
 } from "@radix-ui/themes";
 import type { User } from "types";
-import apiClient from "../../../api/client";
+import apiClient from "@api/client";
 
 interface UserTableRowProps {
   user: User;

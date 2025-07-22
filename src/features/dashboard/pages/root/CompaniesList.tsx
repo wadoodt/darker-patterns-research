@@ -1,4 +1,3 @@
-// src/components/CompaniesList.tsx
 "use client";
 
 import apiClient from "@api/client";

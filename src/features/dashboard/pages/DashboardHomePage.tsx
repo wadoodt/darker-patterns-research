@@ -1,4 +1,4 @@
-import { CompaniesList } from "@components/CompaniesList";
+import { CompaniesList } from "@features/dashboard/pages/root/CompaniesList";
 
 export default function DashboardHomePage() {
   return (

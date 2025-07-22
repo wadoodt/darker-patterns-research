@@ -1,5 +1,5 @@
 import { Card, Box, Text, Flex, Heading } from "@radix-ui/themes";
-import type { TicketMessage } from "../../../../types/support-ticket";
+import type { TicketMessage } from "types/support-ticket";
 
 interface TicketMessagesListProps {
   messages: TicketMessage[];

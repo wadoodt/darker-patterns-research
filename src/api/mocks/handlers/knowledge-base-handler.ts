@@ -1,7 +1,5 @@
 import { db } from '../db';
 
-
-
 export const getArticles = async () => {
   const articles = db.knowledgeBaseArticle.findMany({});
 

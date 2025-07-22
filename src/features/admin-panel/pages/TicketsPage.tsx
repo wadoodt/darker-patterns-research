@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Flex, Heading, Table, Badge, DropdownMenu, IconButton, Button } from '@radix-ui/themes';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
-import { useAsyncCache } from '../../../hooks/useAsyncCache';
-import api from '../../../api/client';
-import type { SupportTicket } from '../../../types/support-ticket';
+import { useAsyncCache } from '@hooks/useAsyncCache';
+import api from '@api/client';
+import type { SupportTicket } from 'types/support-ticket';
 
 const fetchAdminTickets = async (page: number) => {
   const response = await api.get(`/admin/tickets?page=${page}&limit=10`);

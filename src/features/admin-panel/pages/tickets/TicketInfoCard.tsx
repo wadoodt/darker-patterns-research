@@ -1,5 +1,5 @@
 import { Card, Flex, Text } from "@radix-ui/themes";
-import type { SupportTicket } from "../../../../types/support-ticket";
+import type { SupportTicket } from "types/support-ticket";
 
 interface TicketInfoCardProps {
   ticket: SupportTicket;

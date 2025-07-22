@@ -1,8 +1,8 @@
 import { useAsyncCache } from '@hooks/useAsyncCache';
-import type { KnowledgeBaseArticle, Translation } from '../../../types/knowledge-base';
+import type { KnowledgeBaseArticle, Translation } from 'types/knowledge-base';
 import { useTranslation } from 'react-i18next';
-import api from '../../../api/client';
-import { CacheLevel } from '../../../lib/cache/types';
+import api from '@api/client';
+import { CacheLevel } from '@lib/cache/types';
 
 export const useArticleManagement = () => {
     const { t } = useTranslation();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Dialog, Flex, Tabs, TextArea, TextField } from '@radix-ui/themes';
 import { useTranslation } from 'react-i18next';
-import type { Translation } from '../../../types/knowledge-base';
+import type { Translation } from 'types/knowledge-base';
 
 interface CreateArticleModalProps {
   isOpen: boolean;

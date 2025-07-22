@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Heading, Grid, Flex, Box, Text, TextField, TextArea, Button, Callout } from '@radix-ui/themes';
 import { CheckCircleIcon, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import api from '../../../../../api/client';
+import api from '@api/client';
 
 interface FormFields {
     name: string;

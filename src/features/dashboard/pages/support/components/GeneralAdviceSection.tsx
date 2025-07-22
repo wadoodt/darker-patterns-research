@@ -2,7 +2,7 @@
 import { Heading, Grid, Card, Flex, Box, Text } from '@radix-ui/themes';
 import { HelpCircle, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type { KnowledgeBaseArticle } from '../../../../../types/knowledge-base';
+import type { KnowledgeBaseArticle } from 'types/knowledge-base';
 
 const useGeneralAdviceArticles = (): KnowledgeBaseArticle[] => {
     const { t } = useTranslation();

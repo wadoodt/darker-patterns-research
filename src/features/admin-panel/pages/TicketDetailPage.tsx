@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { useAsyncCache } from "../../../hooks/useAsyncCache";
-import api from "../../../api/client";
-import type { SupportTicket } from "../../../types/support-ticket";
-import { CacheLevel } from "../../../lib/cache/types";
+import { useAsyncCache } from "@hooks/useAsyncCache";
+import api from "@api/client";
+import type { SupportTicket } from "types/support-ticket";
+import { CacheLevel } from "@lib/cache/types";
 import { Box, Spinner, Callout, Heading, Text } from "@radix-ui/themes";
 import { z } from "zod";
 import { useForm } from "react-hook-form";

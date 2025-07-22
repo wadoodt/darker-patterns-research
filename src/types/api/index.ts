@@ -5,7 +5,7 @@
 
 // These imports are necessary because the types reference the code dictionaries.
 // Using `type` ensures they are erased at compile time and cause no circular dependencies.
-import type { RESPONSE_CODES, ERROR_CODES } from "../../api/codes";
+import type { RESPONSE_CODES, ERROR_CODES } from "@api/codes";
 
 /**
  * Represents a successful API response payload.

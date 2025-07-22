@@ -1,6 +1,6 @@
 // src/contexts/CacheContext/useCacheInitialization.ts
 import { useRef, useState, useEffect } from "react";
-import kvidb from "../../lib/cache/kvidb";
+import kvidb from "@lib/cache/kvidb";
 import type { KvDbType } from "./types";
 import { deleteDatabase, cleanupExpiredEntries } from "./utils";
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Select, Button, Flex } from '@radix-ui/themes';
-import api from '../../../../api/client';
-import type { SupportTicket } from '../../../../types/support-ticket';
+import api from '@api/client';
+import type { SupportTicket } from 'types/support-ticket';
 
 interface TicketStatusUpdaterProps {
   ticket: SupportTicket;

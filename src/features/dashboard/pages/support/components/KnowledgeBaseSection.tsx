@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Heading, Grid, Card, Flex, Box, Text, Dialog, IconButton } from '@radix-ui/themes';
 import { HelpCircle, Loader2, XIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type { KnowledgeBaseArticle } from '../../../../../types/knowledge-base';
+import type { KnowledgeBaseArticle } from 'types/knowledge-base';
 
 interface KnowledgeBaseSectionProps {
     articles: KnowledgeBaseArticle[];

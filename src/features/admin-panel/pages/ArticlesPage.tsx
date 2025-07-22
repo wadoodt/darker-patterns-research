@@ -1,12 +1,12 @@
 import React from 'react';
 import { Box, Flex, Heading, IconButton, DropdownMenu, Button, Table } from '@radix-ui/themes';
-import type { KnowledgeBaseArticle } from '../../../types/knowledge-base';
+import type { KnowledgeBaseArticle } from 'types/knowledge-base';
 import { MoreHorizontal, PencilIcon, TrashIcon, PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { CreateArticleModal } from '../components/CreateArticleModal';
-import { EditArticleModal } from '../components/EditArticleModal';
-import { useArticleManagement } from '../hooks/useArticleManagement';
-import { getLanguage, fallbackLanguage } from '../../../locales/i18n';
+import { CreateArticleModal } from './articles/CreateArticleModal';
+import { EditArticleModal } from './articles/EditArticleModal';
+import { useArticleManagement } from './articles/hooks/useArticleManagement';
+import { getLanguage, fallbackLanguage } from '@locales/i18n';
 
 const ArticlesPage: React.FC = () => {
     const { t } = useTranslation();

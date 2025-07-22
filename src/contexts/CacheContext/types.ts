@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CacheLevel, type CacheEntry } from "../../lib/cache/types";
+import { CacheLevel, type CacheEntry } from "@lib/cache/types";
 
 export interface CacheContextValue {
   set: <T>(

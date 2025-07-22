@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex, TextField, Separator, Dialog, IconButton } from '@radix-ui/themes';
 import { Search, X } from 'lucide-react';
-import { useAsyncCache } from '../../../hooks/useAsyncCache';
-import api from '../../../api/client';
-import { CacheLevel } from '../../../lib/cache/types';
+import { useAsyncCache } from '@hooks/useAsyncCache';
+import api from '@api/client';
+import { CacheLevel } from '@lib/cache/types';
 import { SupportHeader } from './support/components/SupportHeader';
 import { KnowledgeBaseSection } from './support/components/KnowledgeBaseSection';
 import { VideoTutorialsSection } from './support/components/VideoTutorialsSection';
 import { ContactFormSection } from './support/components/ContactFormSection';
 import MyTickets from './support/components/MyTickets';
 import { GeneralAdviceSection } from './support/components/GeneralAdviceSection';
-import type { KnowledgeBaseArticle } from '../../../types/knowledge-base';
+import type { KnowledgeBaseArticle } from 'types/knowledge-base';
 
 export interface VideoTutorial {
   id: string;

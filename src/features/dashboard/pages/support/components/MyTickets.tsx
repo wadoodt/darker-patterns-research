@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Table, Badge, Flex, Button } from '@radix-ui/themes';
-import { useAsyncCache } from '../../../../../hooks/useAsyncCache';
-import api from '../../../../../api/client';
-import type { SupportTicket } from '../../../../../types/support-ticket';
+import { useAsyncCache } from '@hooks/useAsyncCache';
+import api from '@api/client';
+import type { SupportTicket } from 'types/support-ticket';
 
 const fetchMyTickets = async (page: number) => {
   const response = await api.get(`/support/my-tickets?page=${page}&limit=5`);
