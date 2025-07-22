@@ -7,10 +7,10 @@ import { Box, Spinner, Callout, Heading, Text } from "@radix-ui/themes";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TicketInfoCard from "./tickets/TicketInfoCard";
-import TicketMessagesList from "./tickets/TicketMessagesList";
-import TicketReplyForm from "./tickets/TicketReplyForm";
-import TicketStatusUpdater from "./tickets/TicketStatusUpdater";
+import TicketInfoCard from "./tickets/sections/TicketInfoCard";
+import TicketMessagesList from "./tickets/sections/TicketMessagesList";
+import TicketReplyForm from "./tickets/sections/TicketReplyForm";
+import TicketStatusUpdater from "./tickets/sections/TicketStatusUpdater";
 
 const replySchema = z.object({
   content: z.string().min(1, "Reply content cannot be empty."),

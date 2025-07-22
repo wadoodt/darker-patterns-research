@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Select, Button, Flex } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 import api from "@api/client";
 import type { SupportTicket } from "types/support-ticket";
 
@@ -12,6 +13,7 @@ const TicketStatusUpdater = ({
   ticket,
   onStatusChange,
 }: TicketStatusUpdaterProps) => {
+  const { t } = useTranslation();
   const [newStatus, setNewStatus] = useState<"open" | "in_progress" | "closed">(
     ticket.status,
   );
@@ -39,16 +41,16 @@ const TicketStatusUpdater = ({
       >
         <Select.Trigger />
         <Select.Content>
-          <Select.Item value="open">Open</Select.Item>
-          <Select.Item value="in_progress">In Progress</Select.Item>
-          <Select.Item value="closed">Closed</Select.Item>
+          <Select.Item value="open">{t("tickets.status.open")}</Select.Item>
+          <Select.Item value="in_progress">{t("tickets.status.inProgress")}</Select.Item>
+          <Select.Item value="closed">{t("tickets.status.closed")}</Select.Item>
         </Select.Content>
       </Select.Root>
       <Button
         onClick={handleUpdateStatus}
         disabled={isUpdating || newStatus === ticket.status}
       >
-        {isUpdating ? "Updating..." : "Update Status"}
+        {isUpdating ? t("tickets.status.updating") : t("tickets.status.update")}
       </Button>
     </Flex>
   );
