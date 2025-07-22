@@ -63,7 +63,6 @@ export function useAsyncCache<T>(
         // Try fetching from cache first if possible and not forced
         if (canUseCache && !forceRefresh) {
           const cachedData = await get<T>(cacheKey);
-          debugger;
           if (cachedData !== null && cachedData !== undefined) {
             if (mounted.current) {
               setData(cachedData);
