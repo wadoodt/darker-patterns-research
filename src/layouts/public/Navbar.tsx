@@ -37,9 +37,9 @@ const Navbar: React.FC = () => {
   );
 
   const navbarClasses = clsx(styles.navbar, {
-    [styles.stickyLight]: settings.theme === 'light',
-    [styles.stickyDark]: settings.theme === 'dark',
-    [styles.stickyContrast]: settings.theme.startsWith('high-contrast'),
+    [styles.stickyLight]: settings.theme === "light",
+    [styles.stickyDark]: settings.theme === "dark",
+    [styles.stickyContrast]: settings.theme.startsWith("high-contrast"),
   });
 
   return (

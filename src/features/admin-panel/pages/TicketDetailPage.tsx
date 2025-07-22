@@ -30,7 +30,7 @@ const TicketDetailPage = () => {
     [`ticket-${ticketId}`],
     async () => {
       const { data: response, status } = await api.get(
-        `/support/tickets/${ticketId}`
+        `/support/tickets/${ticketId}`,
       );
       if (status !== 200) {
         throw new Error(response.data.message);
@@ -38,7 +38,7 @@ const TicketDetailPage = () => {
       return response.data;
     },
     CacheLevel.PERSISTENT,
-    { enabled: !!ticketId }
+    { enabled: !!ticketId },
   );
 
   const {

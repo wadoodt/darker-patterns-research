@@ -14,7 +14,9 @@ export const db = {
   companies: createTable<Company>(mockCompanies),
   adminSettings: createTable<AdminSettings>([mockAdminSettings]),
   payments: createTable(mockPayments),
-  knowledgeBaseArticle: createTable<KnowledgeBaseArticle>(mockKnowledgeBaseArticles),
+  knowledgeBaseArticle: createTable<KnowledgeBaseArticle>(
+    mockKnowledgeBaseArticles,
+  ),
   contactSubmissions: createTable<ContactSubmission>([]),
   supportTickets: createTable(mockSupportTickets),
 };

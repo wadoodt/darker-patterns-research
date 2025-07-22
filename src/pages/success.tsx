@@ -14,5 +14,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <SuccessPage />
       </PublicLayout>
     </AppProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

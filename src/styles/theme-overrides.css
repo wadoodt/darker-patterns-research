@@ -15,6 +15,7 @@
 }
 
 /* Override for high-contrast themes */
-.theme-high-contrast-dark, .theme-high-contrast-light {
+.theme-high-contrast-dark,
+.theme-high-contrast-light {
   --custom-card-border: 1px solid var(--gray-12);
 }

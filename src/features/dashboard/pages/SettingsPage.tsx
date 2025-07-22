@@ -1,5 +1,14 @@
 import React from "react";
-import { Box, Button, Flex, Heading, Text, TextField, TextArea, Switch } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  TextField,
+  TextArea,
+  Switch,
+} from "@radix-ui/themes";
 import { useAuth } from "@hooks/useAuth";
 import { useApp } from "@hooks/useApp";
 import { useTranslation } from "react-i18next";
@@ -16,7 +25,6 @@ const SettingsPage: React.FC = () => {
         {t("settings.title")}
       </Heading>
       <Flex direction="column" gap="4">
-
         {hasRole(["admin", "qa"]) && (
           <SettingSection title={t("settings.company.title")}>
             <Flex direction="column" gap="4">

@@ -4,7 +4,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import enTranslation from "./en/translation.json";
 import esTranslation from "./es/translation.json";
 
-export const fallbackLanguage = 'en';
+export const fallbackLanguage = "en";
 
 i18n
   .use(LanguageDetector)
@@ -28,7 +28,9 @@ i18n
 export default i18n;
 
 export const getLanguage = () => {
-  return i18n.language ||
-    (typeof window !== 'undefined' && window.localStorage.i18nextLng) ||
-    fallbackLanguage;
+  return (
+    i18n.language ||
+    (typeof window !== "undefined" && window.localStorage.i18nextLng) ||
+    fallbackLanguage
+  );
 };

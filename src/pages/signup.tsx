@@ -13,8 +13,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <PublicLayout>
           <SignupIndex />
-      </PublicLayout>
-    </AuthProvider>
+        </PublicLayout>
+      </AuthProvider>
     </AppProvider>
   </React.StrictMode>,
 );

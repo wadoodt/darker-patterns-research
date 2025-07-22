@@ -1,4 +1,9 @@
-import { Component, type ErrorInfo, type ReactNode, type ComponentType } from "react";
+import {
+  Component,
+  type ErrorInfo,
+  type ReactNode,
+  type ComponentType,
+} from "react";
 import { Box, Heading, Text, Button } from "@radix-ui/themes";
 import { withTranslation, type WithTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -32,7 +37,7 @@ class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       const errorDetails = this.state.error?.toString();
       const mailtoLink = `mailto:support@penguinmails.com?subject=Bug%20Report&body=${encodeURIComponent(
-        `Hello,\n\nI encountered an error. Here are the details:\n\n${errorDetails}`
+        `Hello,\n\nI encountered an error. Here are the details:\n\n${errorDetails}`,
       )}`;
 
       return (
@@ -49,8 +54,12 @@ class ErrorBoundary extends Component<Props, State> {
             <summary>{t("errorBoundary.errorDetails")}</summary>
             {errorDetails}
           </details>
-          <Box style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-            <Button onClick={() => this.setState({ hasError: false, error: null })}>
+          <Box
+            style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+          >
+            <Button
+              onClick={() => this.setState({ hasError: false, error: null })}
+            >
               {t("errorBoundary.tryAgain")}
             </Button>
             <Link to="/dashboard">
@@ -65,7 +74,8 @@ class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-const TranslatedErrorBoundary: ComponentType<Omit<Props, keyof WithTranslation>> = withTranslation()(ErrorBoundary);
+const TranslatedErrorBoundary: ComponentType<
+  Omit<Props, keyof WithTranslation>
+> = withTranslation()(ErrorBoundary);
 
 export default TranslatedErrorBoundary;
-

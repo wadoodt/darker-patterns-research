@@ -1,6 +1,6 @@
 /* src/styles/global.css */
 
-@import './responsive.css';
+@import "./responsive.css";
 
 body {
   margin: 0;
@@ -8,4 +8,3 @@ body {
   background-color: var(--gray-1);
   color: var(--gray-12);
 }
-

@@ -10,9 +10,9 @@ import {
 import NotFoundPage from "@features/dashboard/pages/NotFoundPage";
 import ProfilePage from "@features/dashboard/pages/ProfilePage";
 import TicketDetailPage from "@features/admin-panel/pages/TicketDetailPage";
-import SettingsPage from '@features/dashboard/pages/SettingsPage';
-import SupportPage from '@features/dashboard/pages/SupportPage';
-import UserTicketDetailPage from '@features/dashboard/pages/UserTicketDetailPage';
+import SettingsPage from "@features/dashboard/pages/SettingsPage";
+import SupportPage from "@features/dashboard/pages/SupportPage";
+import UserTicketDetailPage from "@features/dashboard/pages/UserTicketDetailPage";
 
 const DashboardPage: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -29,7 +29,7 @@ const DashboardPage: React.FC = () => {
 
   const allNavigation = [...dashboardNavigation, ...adminNavigation];
   const filteredNav = allNavigation.filter((item) =>
-    item.roles?.includes(user.role)
+    item.roles?.includes(user.role),
   );
 
   return (

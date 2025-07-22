@@ -117,7 +117,9 @@ export const updateUser = async (request: Request): Promise<Response> => {
 /**
  * Handles the request to get all support tickets.
  */
-export const getSupportTickets = async (request: Request): Promise<Response> => {
+export const getSupportTickets = async (
+  request: Request,
+): Promise<Response> => {
   // MOCK: Simulate an authenticated admin user for authorization.
   const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
 
@@ -131,8 +133,8 @@ export const getSupportTickets = async (request: Request): Promise<Response> => 
   }
 
   const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get('page') || '1', 10);
-  const limit = parseInt(url.searchParams.get('limit') || '10', 10);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
   const allTickets = db.supportTickets.findMany({});
   const totalTickets = allTickets.length;
@@ -173,8 +175,8 @@ export const updateTicketStatus = async (
   }
 
   const { ticketId } = params;
-    const { status } = (await request.json()) as {
-    status: 'open' | 'in_progress' | 'closed';
+  const { status } = (await request.json()) as {
+    status: "open" | "in_progress" | "closed";
   };
 
   if (!ticketId) {
@@ -186,7 +188,9 @@ export const updateTicketStatus = async (
     });
   }
 
-  const ticketToUpdate = db.supportTickets.findFirst({ where: { id: ticketId } });
+  const ticketToUpdate = db.supportTickets.findFirst({
+    where: { id: ticketId },
+  });
 
   if (!ticketToUpdate) {
     const errorResponse = createErrorResponse("NOT_FOUND", {
@@ -202,6 +206,9 @@ export const updateTicketStatus = async (
     data: { status },
   });
 
-  const response = createSuccessResponse({ ticket: updatedTicket }, "OPERATION_SUCCESS");
+  const response = createSuccessResponse(
+    { ticket: updatedTicket },
+    "OPERATION_SUCCESS",
+  );
   return new Response(JSON.stringify(response));
 };

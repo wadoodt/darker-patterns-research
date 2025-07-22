@@ -249,7 +249,7 @@ The `Headers` object is not a plain JavaScript object. If you need to convert it
 
 _Example (`api/client.ts`):_
 
-```
+````
 
 ---
 
@@ -274,7 +274,7 @@ export interface SupportTicket {
   [key: string]: unknown;
   // ...fields
 }
-```
+````
 
 - This satisfies the linter and works for most mock DB/dev cases. If you need to access a dynamic property, cast it as needed:
 
@@ -312,10 +312,10 @@ const value = ticket[someKey] as string;
 
 ```tsx
 // Correct - sends a request to /api/admin/tickets
-const response = await api.get('/admin/tickets');
+const response = await api.get("/admin/tickets");
 
 // Incorrect - sends a request to /api/api/admin/tickets
-const response = await api.get('/api/admin/tickets');
+const response = await api.get("/api/admin/tickets");
 ```
 
 **How to avoid this in the future:**

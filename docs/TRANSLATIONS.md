@@ -157,12 +157,13 @@ Sometimes you need to access the current language directly in your code (for exa
 ### Usage
 
 ```typescript
-import { getLanguage, fallbackLanguage } from 'src/locales/i18n';
+import { getLanguage, fallbackLanguage } from "src/locales/i18n";
 
 const lang = getLanguage(); // e.g., 'en' or 'es'
 
 // Example: selecting the correct translation for an article
-const translation = article.translations[lang] || article.translations[fallbackLanguage];
+const translation =
+  article.translations[lang] || article.translations[fallbackLanguage];
 console.log(translation.title); // Shows the title in the current language, or fallback language (usually English)
 ```
 

@@ -57,13 +57,10 @@ import "./MyComponent.css";
 
 const MyComponent: React.FC = () => {
   const { settings } = useApp();
-  const themeClass = settings.theme === "dark" ? "my-component-dark" : "my-component-light";
+  const themeClass =
+    settings.theme === "dark" ? "my-component-dark" : "my-component-light";
 
-  return (
-    <div className={themeClass}>
-      {/* ...component content... */}
-    </div>
-  );
+  return <div className={themeClass}>{/* ...component content... */}</div>;
 };
 
 export default MyComponent;

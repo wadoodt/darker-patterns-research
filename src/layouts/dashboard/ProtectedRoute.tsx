@@ -28,7 +28,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
   }
 
   // If authenticated and authorized, render the child components.
-  return children ? <React.Fragment>{children}</React.Fragment> : <><Outlet /></>;
+  return children ? (
+    <React.Fragment>{children}</React.Fragment>
+  ) : (
+    <>
+      <Outlet />
+    </>
+  );
 };
 
 export default ProtectedRoute;

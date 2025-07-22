@@ -14,5 +14,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <LandingPage />
       </PublicLayout>
     </AppProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

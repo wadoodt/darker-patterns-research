@@ -13,11 +13,13 @@ interface TicketReplyFormProps {
   register: UseFormRegister<ReplyFormData>;
 }
 
-const TicketReplyForm = ({ onSubmit, isSubmitting, errors, register }: TicketReplyFormProps) => (
-  <form
-    onSubmit={onSubmit}
-    style={{ marginTop: "var(--space-6)" }}
-  >
+const TicketReplyForm = ({
+  onSubmit,
+  isSubmitting,
+  errors,
+  register,
+}: TicketReplyFormProps) => (
+  <form onSubmit={onSubmit} style={{ marginTop: "var(--space-6)" }}>
     <Heading as="h3" size="4" mb="2">
       Post a Reply
     </Heading>

@@ -5,28 +5,32 @@
   position: static; /* Default to no sticky */
   top: 0;
   z-index: 50;
-  transition: background-color 0.3s, backdrop-filter 0.3s;
+  transition:
+    background-color 0.3s,
+    backdrop-filter 0.3s;
 }
 
 /* Theme-specific sticky behavior */
-.stickyLight, .stickyDark, .stickyContrast {
-    position: sticky;
+.stickyLight,
+.stickyDark,
+.stickyContrast {
+  position: sticky;
 }
 
 .stickyLight {
-    background-color: var(--gray-a3);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+  background-color: var(--gray-a3);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .stickyDark {
-    background-color: var(--gray-a3);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+  background-color: var(--gray-a3);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .stickyContrast {
-    background-color: var(--gray-2);
+  background-color: var(--gray-2);
 }
 
 .inner {
@@ -64,7 +68,9 @@
   font-weight: 500;
   padding: 0.5rem 0.75rem;
   border-radius: var(--radius-3);
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 .links a:hover {

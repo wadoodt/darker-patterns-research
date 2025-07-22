@@ -8,38 +8,78 @@ import * as knowledgeBaseHandlers from "./handlers/knowledge-base-handler";
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Array<[string, RegExp, unknown]> = [
-    // Auth
-    ["POST /api/auth/login", /^\/api\/auth\/login$/, authHandlers.login],
-    ["POST /api/auth/logout", /^\/api\/auth\/logout$/, authHandlers.logout],
-    ["POST /api/auth/signup", /^\/api\/auth\/signup$/, authHandlers.signup],
+  // Auth
+  ["POST /api/auth/login", /^\/api\/auth\/login$/, authHandlers.login],
+  ["POST /api/auth/logout", /^\/api\/auth\/logout$/, authHandlers.logout],
+  ["POST /api/auth/signup", /^\/api\/auth\/signup$/, authHandlers.signup],
 
-    // App Data
-    ["GET /api/companies", /^\/api\/companies$/, companyHandlers.getCompanies],
+  // App Data
+  ["GET /api/companies", /^\/api\/companies$/, companyHandlers.getCompanies],
 
-    // User
-    ["GET /api/users/me", /^\/api\/users\/me$/, userHandlers.getUserMe],
-    ["PATCH /api/users/me", /^\/api\/users\/me$/, userHandlers.updateUserMe],
+  // User
+  ["GET /api/users/me", /^\/api\/users\/me$/, userHandlers.getUserMe],
+  ["PATCH /api/users/me", /^\/api\/users\/me$/, userHandlers.updateUserMe],
 
-    // Admin
-    ["GET /api/admin/users", /^\/api\/admin\/users$/, adminHandlers.getUsers],
-    ["PATCH /api/admin/users/:userId", /^\/api\/admin\/users\/([^/]+)$/, adminHandlers.updateUser],
-    ["GET /api/admin/tickets", /^\/api\/admin\/tickets$/, adminHandlers.getSupportTickets],
-    ["PATCH /api/admin/tickets/:ticketId", /^\/api\/admin\/tickets\/([^/]+)$/, adminHandlers.updateTicketStatus],
+  // Admin
+  ["GET /api/admin/users", /^\/api\/admin\/users$/, adminHandlers.getUsers],
+  [
+    "PATCH /api/admin/users/:userId",
+    /^\/api\/admin\/users\/([^/]+)$/,
+    adminHandlers.updateUser,
+  ],
+  [
+    "GET /api/admin/tickets",
+    /^\/api\/admin\/tickets$/,
+    adminHandlers.getSupportTickets,
+  ],
+  [
+    "PATCH /api/admin/tickets/:ticketId",
+    /^\/api\/admin\/tickets\/([^/]+)$/,
+    adminHandlers.updateTicketStatus,
+  ],
 
-    // Payments
-    ["POST /api/payments", /^\/api\/payments$/, paymentsHandlers.createPayment],
+  // Payments
+  ["POST /api/payments", /^\/api\/payments$/, paymentsHandlers.createPayment],
 
-    // Support
-    ['POST /api/support/contact', /^\/api\/support\/contact$/, supportTicketsHandlers.createContactSubmission],
-    ['GET /api/support/tickets', /^\/api\/support\/tickets$/, supportTicketsHandlers.getMyTickets],
-    ['GET /api/support/tickets/:ticketId', /^\/api\/support\/tickets\/([^/]+)$/, supportTicketsHandlers.getTicketById],
-    ['POST /api/support/tickets/:ticketId/replies', /^\/api\/support\/tickets\/([^/]+)\/replies$/, supportTicketsHandlers.createTicketReply],
+  // Support
+  [
+    "POST /api/support/contact",
+    /^\/api\/support\/contact$/,
+    supportTicketsHandlers.createContactSubmission,
+  ],
+  [
+    "GET /api/support/tickets",
+    /^\/api\/support\/tickets$/,
+    supportTicketsHandlers.getMyTickets,
+  ],
+  [
+    "GET /api/support/tickets/:ticketId",
+    /^\/api\/support\/tickets\/([^/]+)$/,
+    supportTicketsHandlers.getTicketById,
+  ],
+  [
+    "POST /api/support/tickets/:ticketId/replies",
+    /^\/api\/support\/tickets\/([^/]+)\/replies$/,
+    supportTicketsHandlers.createTicketReply,
+  ],
 
-    // Knowledge Base Articles
-    ["GET /api/articles", /^\/api\/articles$/, knowledgeBaseHandlers.getArticles],
-    ["POST /api/articles", /^\/api\/articles$/, knowledgeBaseHandlers.createArticle],
-    ["PUT /api/articles/:id", /^\/api\/articles\/([^/]+)$/, knowledgeBaseHandlers.updateArticle],
-    ["DELETE /api/articles/:id", /^\/api\/articles\/([^/]+)$/, knowledgeBaseHandlers.deleteArticle],
+  // Knowledge Base Articles
+  ["GET /api/articles", /^\/api\/articles$/, knowledgeBaseHandlers.getArticles],
+  [
+    "POST /api/articles",
+    /^\/api\/articles$/,
+    knowledgeBaseHandlers.createArticle,
+  ],
+  [
+    "PUT /api/articles/:id",
+    /^\/api\/articles\/([^/]+)$/,
+    knowledgeBaseHandlers.updateArticle,
+  ],
+  [
+    "DELETE /api/articles/:id",
+    /^\/api\/articles\/([^/]+)$/,
+    knowledgeBaseHandlers.deleteArticle,
+  ],
 ];
 
 /**
@@ -48,44 +88,44 @@ const routes: Array<[string, RegExp, unknown]> = [
  * @returns A promise that resolves to a Response object.
  */
 export const resolve = async (request: Request): Promise<Response> => {
-    const { method, url } = request;
-    const { pathname } = new URL(url);
+  const { method, url } = request;
+  const { pathname } = new URL(url);
 
-    for (const [route, pattern, handler] of routes) {
-        const [reqMethod] = route.split(' ');
-        if (method.toUpperCase() !== reqMethod) continue;
+  for (const [route, pattern, handler] of routes) {
+    const [reqMethod] = route.split(" ");
+    if (method.toUpperCase() !== reqMethod) continue;
 
-        const match = pathname.match(pattern);
-        if (match) {
-            const params: Record<string, string> = {};
-            const paramNames = (route.match(/:(\w+)/g) || []).map(name => name.substring(1));
-            if (paramNames.length > 0) {
-                paramNames.forEach((name, index) => {
-                    params[name] = match[index + 1];
-                });
-            }
-            if (typeof handler === 'function') {
-                return handler(request, params);
-            } else {
-                return new Response('Mock handler is not a function', { status: 500 });
-            }
-        }
+    const match = pathname.match(pattern);
+    if (match) {
+      const params: Record<string, string> = {};
+      const paramNames = (route.match(/:(\w+)/g) || []).map((name) =>
+        name.substring(1),
+      );
+      if (paramNames.length > 0) {
+        paramNames.forEach((name, index) => {
+          params[name] = match[index + 1];
+        });
+      }
+      if (typeof handler === "function") {
+        return handler(request, params);
+      } else {
+        return new Response("Mock handler is not a function", { status: 500 });
+      }
     }
+  }
 
-    // Legacy dynamic routes - can be refactored into the main routes array later
-    if (
-        request.method.toUpperCase() === "GET" &&
-        pathname.startsWith("/api/payments/")
-    ) {
-        const paymentId = pathname.split("/").pop();
-        if (paymentId) {
-            return paymentsHandlers.getPayment(request, paymentId);
-        }
+  // Legacy dynamic routes - can be refactored into the main routes array later
+  if (
+    request.method.toUpperCase() === "GET" &&
+    pathname.startsWith("/api/payments/")
+  ) {
+    const paymentId = pathname.split("/").pop();
+    if (paymentId) {
+      return paymentsHandlers.getPayment(request, paymentId);
     }
+  }
 
-    
-
-    return new Response(`Mock handler not found for ${method} ${pathname}`, {
-        status: 404,
-    });
+  return new Response(`Mock handler not found for ${method} ${pathname}`, {
+    status: 404,
+  });
 };

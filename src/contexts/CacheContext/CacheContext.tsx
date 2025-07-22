@@ -1,9 +1,5 @@
 import { useMemo } from "react";
-import {
-  CacheLevel,
-  type CacheEntry,
-  CACHE_TTL_MAP,
-} from "@lib/cache/types";
+import { CacheLevel, type CacheEntry, CACHE_TTL_MAP } from "@lib/cache/types";
 import { CacheContext } from "./context";
 import type { CacheContextValue, CacheProviderProps } from "./types";
 import { normalizeKeys, cleanupExpiredEntries, matchPattern } from "./utils";
