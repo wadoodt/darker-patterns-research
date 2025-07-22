@@ -12,7 +12,7 @@ import ProfilePage from "@features/dashboard/pages/ProfilePage";
 import TicketDetailPage from "@features/admin-panel/pages/TicketDetailPage";
 import SettingsPage from "@features/dashboard/pages/SettingsPage";
 import SupportPage from "@features/dashboard/pages/SupportPage";
-import UserTicketDetailPage from "@features/dashboard/pages/UserTicketDetailPage";
+import UserTicketDetailPage from "@features/dashboard/pages/support/UserTicketDetailPage";
 
 const DashboardPage: React.FC = () => {
   const { user, isLoading } = useAuth();
