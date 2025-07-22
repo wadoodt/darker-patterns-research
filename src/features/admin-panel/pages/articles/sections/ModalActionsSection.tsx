@@ -8,15 +8,15 @@ interface ModalActionsSectionProps {
   saveLabel: string;
 }
 
-export const ModalActionsSection: React.FC<ModalActionsSectionProps> = ({ onClose, saving, t, saveLabel }) => (
+export const ModalActionsSection: React.FC<ModalActionsSectionProps> = ({
+  onClose,
+  saving,
+  t,
+  saveLabel,
+}) => (
   <Flex mt="4" gap="3" justify="end">
     <Dialog.Close>
-      <Button
-        variant="soft"
-        color="gray"
-        type="button"
-        onClick={onClose}
-      >
+      <Button variant="soft" color="gray" type="button" onClick={onClose}>
         {t("common.cancel")}
       </Button>
     </Dialog.Close>
@@ -24,4 +24,4 @@ export const ModalActionsSection: React.FC<ModalActionsSectionProps> = ({ onClos
       {saveLabel}
     </Button>
   </Flex>
-); 
+);

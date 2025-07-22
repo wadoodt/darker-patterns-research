@@ -31,9 +31,7 @@ const TicketDetailPage = () => {
   } = useAsyncCache<SupportTicket>(
     [`ticket-${ticketId}`],
     async () => {
-      const { data, status } = await api.get(
-        `/support/tickets/${ticketId}`,
-      );
+      const { data, status } = await api.get(`/support/tickets/${ticketId}`);
       if (status !== 200) {
         throw new Error(data.message);
       }

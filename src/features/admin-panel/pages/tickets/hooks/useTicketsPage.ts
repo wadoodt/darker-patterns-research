@@ -47,4 +47,4 @@ export function useTicketsPage() {
     pagination,
     errorMessage,
   };
-} 
+}

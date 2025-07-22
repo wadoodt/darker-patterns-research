@@ -17,7 +17,8 @@ export function useArticlesPage() {
 
   const [isCreateModalOpen, setCreateModalOpen] = React.useState(false);
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);
-  const [editingArticle, setEditingArticle] = React.useState<KnowledgeBaseArticle | null>(null);
+  const [editingArticle, setEditingArticle] =
+    React.useState<KnowledgeBaseArticle | null>(null);
 
   const handleEditClick = (article: KnowledgeBaseArticle) => {
     setEditingArticle(article);
@@ -42,4 +43,4 @@ export function useArticlesPage() {
     getLanguage,
     fallbackLanguage,
   };
-} 
+}

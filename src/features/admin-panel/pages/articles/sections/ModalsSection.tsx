@@ -37,4 +37,4 @@ export const ModalsSection: React.FC<ModalsSectionProps> = ({
       />
     )}
   </>
-); 
+);

@@ -11,7 +11,7 @@ const replySchema = z.object({
   message: z.string().min(1, "Reply message cannot be empty.").max(5000),
 });
 
-type ReplyFormData = z.infer<typeof replySchema>;
+export type ReplyFormData = z.infer<typeof replySchema>;
 
 export function useUserTicketDetailPage() {
   const { ticketId } = useParams<{ ticketId: string }>();
@@ -58,4 +58,4 @@ export function useUserTicketDetailPage() {
     isSubmitting,
     onSubmit,
   };
-} 
+}

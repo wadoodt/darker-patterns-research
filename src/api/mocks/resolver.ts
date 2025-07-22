@@ -99,7 +99,7 @@ export const resolve = async (request: Request): Promise<Response> => {
     if (match) {
       const params: Record<string, string> = {};
       const paramNames = (route.match(/:(\w+)/g) || []).map((name) =>
-        name.substring(1)
+        name.substring(1),
       );
       if (paramNames.length > 0) {
         paramNames.forEach((name, index) => {

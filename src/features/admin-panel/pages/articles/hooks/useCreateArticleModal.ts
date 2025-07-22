@@ -6,7 +6,10 @@ const initialFormState = {
   es: { title: "", category: "", description: "", body: "" },
 };
 
-export function useCreateArticleModal(onSave: (translations: { [key: string]: Translation }) => Promise<void>, onClose: () => void) {
+export function useCreateArticleModal(
+  onSave: (translations: { [key: string]: Translation }) => Promise<void>,
+  onClose: () => void,
+) {
   const [form, setForm] = useState(initialFormState);
   const [activeLang, setActiveLang] = useState<"en" | "es">("en");
   const [saving, setSaving] = useState(false);
@@ -42,4 +45,4 @@ export function useCreateArticleModal(onSave: (translations: { [key: string]: Tr
     handleFieldChange,
     handleSubmit,
   };
-} 
+}

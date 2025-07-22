@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import type { KnowledgeBaseArticle, Translation } from "types/knowledge-base";
 
-export function useEditArticleModal(article: KnowledgeBaseArticle | null, onSave: (article: KnowledgeBaseArticle) => Promise<void>, onClose: () => void) {
-  const [editingArticle, setEditingArticle] = useState<KnowledgeBaseArticle | null>(article);
+export function useEditArticleModal(
+  article: KnowledgeBaseArticle | null,
+  onSave: (article: KnowledgeBaseArticle) => Promise<void>,
+  onClose: () => void,
+) {
+  const [editingArticle, setEditingArticle] =
+    useState<KnowledgeBaseArticle | null>(article);
   const [activeLang, setActiveLang] = useState<"en" | "es">("en");
   const [saving, setSaving] = useState(false);
 
@@ -50,4 +55,4 @@ export function useEditArticleModal(article: KnowledgeBaseArticle | null, onSave
     handleFieldChange,
     handleSubmit,
   };
-} 
+}

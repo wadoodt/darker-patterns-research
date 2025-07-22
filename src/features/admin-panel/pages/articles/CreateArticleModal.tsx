@@ -31,9 +31,9 @@ export const CreateArticleModal: React.FC<CreateArticleModalProps> = ({
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Content style={{ maxWidth: 600 }}>
         <Dialog.Title>{t("articlesPage.createArticle")}</Dialog.Title>
-          <Dialog.Description>
-            {t("articlesPage.createArticleDescription")}
-          </Dialog.Description>
+        <Dialog.Description>
+          {t("articlesPage.createArticleDescription")}
+        </Dialog.Description>
         <form onSubmit={handleSubmit}>
           <LanguageTabsSection
             form={form}
@@ -42,7 +42,12 @@ export const CreateArticleModal: React.FC<CreateArticleModalProps> = ({
             handleFieldChange={handleFieldChange}
             t={t}
           />
-          <ModalActionsSection onClose={onClose} saving={saving} t={t} saveLabel={t("common.save")} />
+          <ModalActionsSection
+            onClose={onClose}
+            saving={saving}
+            t={t}
+            saveLabel={t("common.save")}
+          />
         </form>
       </Dialog.Content>
     </Dialog.Root>

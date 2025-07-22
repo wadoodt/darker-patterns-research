@@ -27,7 +27,10 @@ const TicketsPage: React.FC = () => {
         handleStatusChange={handleStatusChange}
         navigate={navigate}
       />
-      <PaginationSection pagination={pagination} setCurrentPage={setCurrentPage} />
+      <PaginationSection
+        pagination={pagination}
+        setCurrentPage={setCurrentPage}
+      />
     </Box>
   );
 };

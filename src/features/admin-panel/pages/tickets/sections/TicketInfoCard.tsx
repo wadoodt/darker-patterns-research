@@ -15,7 +15,8 @@ const TicketInfoCard = ({ ticket }: TicketInfoCardProps) => {
           <strong>{t("tickets.userLabel")}</strong> {ticket.email}
         </Text>
         <Text>
-          <strong>{t("tickets.createdLabel")}</strong> {new Date(ticket.createdAt).toLocaleString()}
+          <strong>{t("tickets.createdLabel")}</strong>{" "}
+          {new Date(ticket.createdAt).toLocaleString()}
         </Text>
       </Flex>
     </Card>

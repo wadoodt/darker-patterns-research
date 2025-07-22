@@ -28,15 +28,21 @@ export const ArticlesTableSection: React.FC<ArticlesTableSectionProps> = ({
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeaderCell>{t("articlesPage.title")}</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>{t("articlesPage.category")}</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            {t("articlesPage.title")}
+          </Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            {t("articlesPage.category")}
+          </Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {articles.map((article) => {
           const lang = getLanguage();
-          const translation = article.translations[lang] || article.translations[fallbackLanguage];
+          const translation =
+            article.translations[lang] ||
+            article.translations[fallbackLanguage];
           return (
             <Table.Row key={article.id}>
               <Table.Cell>{translation.title}</Table.Cell>
@@ -50,12 +56,17 @@ export const ArticlesTableSection: React.FC<ArticlesTableSectionProps> = ({
                       </IconButton>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
-                      <DropdownMenu.Item onClick={() => handleEditClick(article)}>
+                      <DropdownMenu.Item
+                        onClick={() => handleEditClick(article)}
+                      >
                         <PencilIcon size={14} style={{ marginRight: "8px" }} />
                         {t("articlesPage.edit")}
                       </DropdownMenu.Item>
                       <DropdownMenu.Separator />
-                      <DropdownMenu.Item color="red" onClick={() => handleDelete(article.id)}>
+                      <DropdownMenu.Item
+                        color="red"
+                        onClick={() => handleDelete(article.id)}
+                      >
                         <TrashIcon size={14} style={{ marginRight: "8px" }} />
                         {t("articlesPage.delete")}
                       </DropdownMenu.Item>
@@ -69,4 +80,4 @@ export const ArticlesTableSection: React.FC<ArticlesTableSectionProps> = ({
       </Table.Body>
     </Table.Root>
   );
-}; 
+};

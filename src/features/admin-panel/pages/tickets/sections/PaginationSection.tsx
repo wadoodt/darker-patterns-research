@@ -7,7 +7,10 @@ interface PaginationSectionProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const PaginationSection: React.FC<PaginationSectionProps> = ({ pagination, setCurrentPage }) => {
+export const PaginationSection: React.FC<PaginationSectionProps> = ({
+  pagination,
+  setCurrentPage,
+}) => {
   const { t } = useTranslation();
   return (
     <Flex justify="between" mt="4">
@@ -18,14 +21,19 @@ export const PaginationSection: React.FC<PaginationSectionProps> = ({ pagination
         {t("tickets.previous")}
       </Button>
       <span>
-        {t("tickets.pageInfo", { currentPage: pagination?.currentPage, totalPages: pagination?.totalPages })}
+        {t("tickets.pageInfo", {
+          currentPage: pagination?.currentPage,
+          totalPages: pagination?.totalPages,
+        })}
       </span>
       <Button
         onClick={() => setCurrentPage((p) => p + 1)}
-        disabled={!pagination || pagination.currentPage === pagination.totalPages}
+        disabled={
+          !pagination || pagination.currentPage === pagination.totalPages
+        }
       >
         {t("tickets.next")}
       </Button>
     </Flex>
   );
-}; 
+};

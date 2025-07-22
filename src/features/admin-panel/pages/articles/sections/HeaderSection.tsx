@@ -7,7 +7,10 @@ interface HeaderSectionProps {
   onCreate: () => void;
 }
 
-export const HeaderSection: React.FC<HeaderSectionProps> = ({ t, onCreate }) => (
+export const HeaderSection: React.FC<HeaderSectionProps> = ({
+  t,
+  onCreate,
+}) => (
   <Flex justify="between" align="center" mb="6">
     <Heading as="h1">{t("articlesPage.manageArticles")}</Heading>
     <Button onClick={onCreate}>
@@ -15,4 +18,4 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ t, onCreate }) => 
       {t("articlesPage.createArticle")}
     </Button>
   </Flex>
-); 
+);

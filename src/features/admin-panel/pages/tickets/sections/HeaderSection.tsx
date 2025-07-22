@@ -9,4 +9,4 @@ export const HeaderSection: React.FC = () => {
       <Heading as="h1">{t("tickets.header")}</Heading>
     </Flex>
   );
-}; 
+};
