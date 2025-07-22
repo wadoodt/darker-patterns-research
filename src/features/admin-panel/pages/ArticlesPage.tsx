@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { CreateArticleModal } from '../components/CreateArticleModal';
 import { EditArticleModal } from '../components/EditArticleModal';
 import { useArticleManagement } from '../hooks/useArticleManagement';
-import { getLanguage } from '../../../locales/i18n';
+import { getLanguage, fallbackLanguage } from '../../../locales/i18n';
 
 const ArticlesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -54,7 +54,7 @@ const ArticlesPage: React.FC = () => {
                     <Table.Body>
                         {articles.map(article => {
                             const lang = getLanguage();
-                            const translation = article.translations[lang] || article.translations.en;
+                            const translation = article.translations[lang] || article.translations[fallbackLanguage];
                             return (
                                 <Table.Row key={article.id}>
                                     <Table.Cell>{translation.title}</Table.Cell>

@@ -147,3 +147,29 @@ const handleSubmit = async (data) => {
 ```
 
 By following this workflow, we ensure all API-driven messages are managed consistently and are fully translatable.
+
+---
+
+## 3. Getting the Current Language in Code
+
+Sometimes you need to access the current language directly in your code (for example, to select the correct translation from a multilingual data object). For this, use the `getLanguage` utility and the `fallbackLanguage` export from `src/locales/i18n.ts`.
+
+### Usage
+
+```typescript
+import { getLanguage, fallbackLanguage } from 'src/locales/i18n';
+
+const lang = getLanguage(); // e.g., 'en' or 'es'
+
+// Example: selecting the correct translation for an article
+const translation = article.translations[lang] || article.translations[fallbackLanguage];
+console.log(translation.title); // Shows the title in the current language, or fallback language (usually English)
+```
+
+- `getLanguage()` returns the current language as determined by i18next, localStorage, or defaults to `fallbackLanguage`.
+- `fallbackLanguage` is exported from the i18n module and should be used as the standard fallback for missing translations.
+- Always provide a fallback in case the translation for the current language is missing.
+
+This is useful for multilingual content that is not handled by the `t()` function, such as user-generated or API-provided translations.
+
+---
