@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Badge, DropdownMenu, IconButton } from "@radix-ui/themes";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { useTranslation } from "react-i18next";
 import type { SupportTicket } from "types/support-ticket";
 
 interface TicketsTableSectionProps {
@@ -20,18 +21,19 @@ export const TicketsTableSection: React.FC<TicketsTableSectionProps> = ({
   handleStatusChange,
   navigate,
 }) => {
-  if (loading) return <p>Loading tickets...</p>;
+  const { t } = useTranslation();
+  if (loading) return <p>{t("tickets.loading")}</p>;
   if (errorMessage) return <p style={{ color: "red" }}>{errorMessage}</p>;
-  if (!loading && !error && tickets.length === 0) return <p>No tickets found.</p>;
+  if (!loading && !error && tickets.length === 0) return <p>{t("tickets.noTickets")}</p>;
   return (
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeaderCell>Subject</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Created</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>{t("tickets.subject")}</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>{t("tickets.email")}</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>{t("tickets.statusLabel")}</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>{t("tickets.actions")}</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>{t("tickets.createdLabel")}</Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -49,7 +51,7 @@ export const TicketsTableSection: React.FC<TicketsTableSectionProps> = ({
                     : "green"
                 }
               >
-                {ticket.status}
+                {t(`tickets.status.${ticket.status}`)}
               </Badge>
             </Table.Cell>
             <Table.Cell>
@@ -65,25 +67,25 @@ export const TicketsTableSection: React.FC<TicketsTableSectionProps> = ({
                       navigate(`/admin-panel/tickets/${ticket.id}`)
                     }
                   >
-                    View Details
+                    {t("tickets.viewDetails")}
                   </DropdownMenu.Item>
                   <DropdownMenu.Separator />
                   <DropdownMenu.Item
                     onClick={() => handleStatusChange(ticket.id, "open")}
                   >
-                    Mark as Open
+                    {t("tickets.markAsOpen")}
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
                     onClick={() =>
                       handleStatusChange(ticket.id, "in_progress")
                     }
                   >
-                    Mark as In Progress
+                    {t("tickets.markAsInProgress")}
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
                     onClick={() => handleStatusChange(ticket.id, "closed")}
                   >
-                    Mark as Closed
+                    {t("tickets.markAsClosed")}
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
               </DropdownMenu.Root>

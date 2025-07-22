@@ -26,18 +26,19 @@ const TicketDetailPage = () => {
     loading: isLoading,
     error,
     refresh,
-  } = useAsyncCache<{ ticket: SupportTicket }>(
+  } = useAsyncCache<SupportTicket>(
     [`ticket-${ticketId}`],
     async () => {
-      const { data: response, status } = await api.get(
+      const { data, status } = await api.get(
         `/support/tickets/${ticketId}`,
       );
+      console.log("response", data, status);
       if (status !== 200) {
-        throw new Error(response.data.message);
+        throw new Error(data.message);
       }
-      return response.data;
+      return data;
     },
-    CacheLevel.PERSISTENT,
+    CacheLevel.STANDARD,
     { enabled: !!ticketId },
   );
 
@@ -70,21 +71,19 @@ const TicketDetailPage = () => {
     );
   if (!data) return <Text>No ticket data found.</Text>;
 
-  const { ticket } = data;
-
   return (
     <Box>
       <Heading as="h1" size="6" mb="4">
-        Ticket: {ticket.subject}
+        Ticket: {data.subject}
       </Heading>
 
-      <TicketInfoCard ticket={ticket} />
+      <TicketInfoCard ticket={data} />
 
       <Box my="4">
-        <TicketStatusUpdater ticket={ticket} onStatusChange={refresh} />
+        <TicketStatusUpdater ticket={data} onStatusChange={refresh} />
       </Box>
 
-      <TicketMessagesList messages={ticket.messages} />
+      <TicketMessagesList messages={data.messages} />
 
       <TicketReplyForm
         onSubmit={handleSubmit(onSubmit)}

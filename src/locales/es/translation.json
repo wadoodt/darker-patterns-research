@@ -345,5 +345,42 @@
     "errorDetails": "Detalles del Error",
     "tryAgain": "Intentar de Nuevo",
     "goToHome": "Ir al Inicio"
+  },
+  "tickets": {
+    "header": "Tickets de Soporte",
+    "subject": "Asunto",
+    "email": "Correo electrónico",
+    "statusLabel": "Estado",
+    "actions": "Acciones",
+    "createdLabel": "Creado",
+    "loading": "Cargando tickets...",
+    "noTickets": "No se encontraron tickets.",
+    "viewDetails": "Ver detalles",
+    "markAsOpen": "Marcar como Abierto",
+    "markAsInProgress": "Marcar como En Progreso",
+    "markAsClosed": "Marcar como Cerrado",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pageInfo": "Página {{currentPage}} de {{totalPages}}",
+    "ticket": "Ticket",
+    "userLabel": "Usuario:",
+    "status": {
+      "open": "Abierto",
+      "in_progress": "En Progreso",
+      "closed": "Cerrado",
+      "update": "Actualizar Estado",
+      "updating": "Actualizando...",
+      "inProgress": "En Progreso"
+    },
+    "user": "Usuario",
+    "submittedLabel": "Enviado:",
+    "conversation": "Conversación",
+    "you": "Tú",
+    "supportTeam": "Equipo de Soporte",
+    "postReply": "Publicar una respuesta",
+    "replyPlaceholder": "Escribe tu respuesta aquí...",
+    "submitReply": "Enviar respuesta",
+    "errorLoading": "Error al cargar los detalles del ticket.",
+    "notFound": "Ticket no encontrado."
   }
 }

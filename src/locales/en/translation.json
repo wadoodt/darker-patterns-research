@@ -342,5 +342,42 @@
     "errorDetails": "Error Details",
     "tryAgain": "Try Again",
     "goToHome": "Go to Home"
+  },
+  "tickets": {
+    "header": "Support Tickets",
+    "subject": "Subject",
+    "email": "Email",
+    "statusLabel": "Status",
+    "actions": "Actions",
+    "createdLabel": "Created",
+    "loading": "Loading tickets...",
+    "noTickets": "No tickets found.",
+    "viewDetails": "View Details",
+    "markAsOpen": "Mark as Open",
+    "markAsInProgress": "Mark as In Progress",
+    "markAsClosed": "Mark as Closed",
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Page {{currentPage}} of {{totalPages}}",
+    "ticket": "Ticket",
+    "userLabel": "User:",
+    "status": {
+      "open": "Open",
+      "in_progress": "In Progress",
+      "closed": "Closed",
+      "update": "Update Status",
+      "updating": "Updating...",
+      "inProgress": "In Progress"
+    },
+    "user": "User",
+    "submittedLabel": "Submitted:",
+    "conversation": "Conversation",
+    "you": "You",
+    "supportTeam": "Support Team",
+    "postReply": "Post a Reply",
+    "replyPlaceholder": "Type your reply here...",
+    "submitReply": "Submit Reply",
+    "errorLoading": "Error loading ticket details.",
+    "notFound": "Ticket not found."
   }
 }
