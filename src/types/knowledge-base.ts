@@ -14,4 +14,5 @@ export interface KnowledgeBaseArticle {
   translations: {
     [key: string]: Translation;
   };
+  [key: string]: unknown;
 }

@@ -319,11 +319,21 @@
   "articlesPage": {
     "manageArticles": "Gestionar artículos de la base de conocimiento",
     "createArticle": "Crear artículo",
+    "editArticle": "Editar Artículo",
     "edit": "Editar",
     "delete": "Eliminar",
     "title": "Título",
     "category": "Categoría",
+    "description": "Descripción",
+    "body": "Cuerpo",
+    "english": "Inglés",
+    "spanish": "Español",
+    "saveChanges": "Guardar Cambios",
     "errorLoading": "Error al cargar los artículos. Por favor, inténtalo de nuevo."
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "save": "Guardar"
   },
   "errorBoundary": {
     "title": "Algo salió mal.",

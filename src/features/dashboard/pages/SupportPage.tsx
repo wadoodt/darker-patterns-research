@@ -52,7 +52,7 @@ const useVideoTutorials = () => {
 
 // --- MAIN COMPONENT ---
 const fetchKnowledgeArticles = async () => {
-  const response = await api.get<KnowledgeBaseArticle[]>('/support/articles');
+  const response = await api.get<KnowledgeBaseArticle[]>('/articles');
   return response.data;
 };
 

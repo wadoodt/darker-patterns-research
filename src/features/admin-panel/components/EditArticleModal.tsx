@@ -58,31 +58,31 @@ export const EditArticleModal: React.FC<EditArticleModalProps> = ({ isOpen, onCl
                 <form onSubmit={handleSubmit}>
                     <Tabs.Root value={activeLang} onValueChange={v => setActiveLang(v as 'en' | 'es')}>
                         <Tabs.List>
-                            <Tabs.Trigger value="en">English</Tabs.Trigger>
-                            <Tabs.Trigger value="es">Spanish</Tabs.Trigger>
+                            <Tabs.Trigger value="en">{t('articlesPage.english')}</Tabs.Trigger>
+                            <Tabs.Trigger value="es">{t('articlesPage.spanish')}</Tabs.Trigger>
                         </Tabs.List>
                         <Tabs.Content value="en">
                             <Box my="4">
-                                <TextField.Root placeholder="Title" value={editingArticle.translations.en.title} onChange={e => handleFieldChange('en', 'title', e.target.value)} mb="2" />
-                                <TextField.Root placeholder="Category" value={editingArticle.translations.en.category} onChange={e => handleFieldChange('en', 'category', e.target.value)} mb="2" />
-                                <TextField.Root placeholder="Description" value={editingArticle.translations.en.description} onChange={e => handleFieldChange('en', 'description', e.target.value)} mb="2" />
-                                <TextArea placeholder="Body" value={editingArticle.translations.en.body} onChange={e => handleFieldChange('en', 'body', e.target.value)} rows={6} />
+                                <TextField.Root placeholder={t('articlesPage.title')} value={editingArticle.translations.en.title} onChange={e => handleFieldChange('en', 'title', e.target.value)} mb="2" />
+                                <TextField.Root placeholder={t('articlesPage.category')} value={editingArticle.translations.en.category} onChange={e => handleFieldChange('en', 'category', e.target.value)} mb="2" />
+                                <TextField.Root placeholder={t('articlesPage.description')} value={editingArticle.translations.en.description} onChange={e => handleFieldChange('en', 'description', e.target.value)} mb="2" />
+                                <TextArea placeholder={t('articlesPage.body')} value={editingArticle.translations.en.body} onChange={e => handleFieldChange('en', 'body', e.target.value)} rows={6} />
                             </Box>
                         </Tabs.Content>
                         <Tabs.Content value="es">
                             <Box my="4">
-                                <TextField.Root placeholder="Título" value={editingArticle.translations.es.title} onChange={e => handleFieldChange('es', 'title', e.target.value)} mb="2" />
-                                <TextField.Root placeholder="Categoría" value={editingArticle.translations.es.category} onChange={e => handleFieldChange('es', 'category', e.target.value)} mb="2" />
-                                <TextField.Root placeholder="Descripción" value={editingArticle.translations.es.description} onChange={e => handleFieldChange('es', 'description', e.target.value)} mb="2" />
-                                <TextArea placeholder="Cuerpo" value={editingArticle.translations.es.body} onChange={e => handleFieldChange('es', 'body', e.target.value)} rows={6} />
+                                <TextField.Root placeholder={t('articlesPage.title')} value={editingArticle.translations.es.title} onChange={e => handleFieldChange('es', 'title', e.target.value)} mb="2" />
+                                <TextField.Root placeholder={t('articlesPage.category')} value={editingArticle.translations.es.category} onChange={e => handleFieldChange('es', 'category', e.target.value)} mb="2" />
+                                <TextField.Root placeholder={t('articlesPage.description')} value={editingArticle.translations.es.description} onChange={e => handleFieldChange('es', 'description', e.target.value)} mb="2" />
+                                <TextArea placeholder={t('articlesPage.body')} value={editingArticle.translations.es.body} onChange={e => handleFieldChange('es', 'body', e.target.value)} rows={6} />
                             </Box>
                         </Tabs.Content>
                     </Tabs.Root>
                     <Flex mt="4" gap="3" justify="end">
                         <Dialog.Close>
-                            <Button variant="soft" color="gray" type="button" onClick={onClose}>Cancel</Button>
+                            <Button variant="soft" color="gray" type="button" onClick={onClose}>{t('common.cancel')}</Button>
                         </Dialog.Close>
-                        <Button type="submit" loading={saving} disabled={saving}>Save Changes</Button>
+                        <Button type="submit" loading={saving} disabled={saving}>{t('articlesPage.saveChanges')}</Button>
                     </Flex>
                 </form>
             </Dialog.Content>

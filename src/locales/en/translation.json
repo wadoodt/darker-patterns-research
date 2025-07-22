@@ -316,11 +316,21 @@
   "articlesPage": {
     "manageArticles": "Manage Knowledge Base Articles",
     "createArticle": "Create Article",
+    "editArticle": "Edit Article",
     "edit": "Edit",
     "delete": "Delete",
     "title": "Title",
     "category": "Category",
+    "description": "Description",
+    "body": "Body",
+    "english": "English",
+    "spanish": "Spanish",
+    "saveChanges": "Save Changes",
     "errorLoading": "Error loading articles. Please try again."
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "errorBoundary": {
     "title": "Something went wrong.",

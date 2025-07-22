@@ -1,22 +1,23 @@
 import { useAsyncCache } from '@hooks/useAsyncCache';
 import type { KnowledgeBaseArticle, Translation } from '../../../types/knowledge-base';
 import { useTranslation } from 'react-i18next';
+import api from '../../../api/client';
+import { CacheLevel } from '../../../lib/cache/types';
 
 export const useArticleManagement = () => {
     const { t } = useTranslation();
     const { data: articles, loading: isLoading, error, refresh: mutate } = useAsyncCache<KnowledgeBaseArticle[]>(
         ['admin-articles'],
-        () => fetch('/api/admin/articles').then(res => res.json()),
+        async () => {
+            const response = await api.get<KnowledgeBaseArticle[]>('/articles');
+            return response.data;
+        },
+        CacheLevel.SESSION
     );
 
     const handleCreate = async (translations: { [key: string]: Translation }) => {
         try {
-            const response = await fetch('/api/admin/articles', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ translations }),
-            });
-            if (!response.ok) throw new Error('Failed to create article');
+            await api.post('/articles', { translations });
             await mutate();
         } catch (err) {
             console.error(err);
@@ -26,12 +27,7 @@ export const useArticleManagement = () => {
 
     const handleUpdate = async (article: KnowledgeBaseArticle) => {
         try {
-            const response = await fetch(`/api/admin/articles/${article.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(article),
-            });
-            if (!response.ok) throw new Error('Failed to update article');
+            await api.put(`/articles/${article.id}`, article);
             await mutate();
         } catch (err) {
             console.error(err);
@@ -44,8 +40,7 @@ export const useArticleManagement = () => {
             return;
 
         try {
-            const response = await fetch(`/api/admin/articles/${id}`, { method: 'DELETE' });
-            if (!response.ok) throw new Error('Failed to delete article');
+            await api.delete(`/articles/${id}`);
             await mutate();
         } catch (err) {
             console.error(err);

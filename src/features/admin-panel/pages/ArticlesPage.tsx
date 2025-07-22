@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { CreateArticleModal } from '../components/CreateArticleModal';
 import { EditArticleModal } from '../components/EditArticleModal';
 import { useArticleManagement } from '../hooks/useArticleManagement';
+import { getLanguage } from '../../../locales/i18n';
 
 const ArticlesPage: React.FC = () => {
     const { t } = useTranslation();
@@ -51,34 +52,38 @@ const ArticlesPage: React.FC = () => {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {articles.map(article => (
-                            <Table.Row key={article.id}>
-                                <Table.Cell>{article.translations.en.title}</Table.Cell>
-                                <Table.Cell>{article.translations.en.category}</Table.Cell>
-                                <Table.Cell>
-                                    <Flex justify="end">
-                                        <DropdownMenu.Root>
-                                            <DropdownMenu.Trigger>
-                                                <IconButton variant="ghost">
-                                                    <MoreHorizontal size={16} />
-                                                </IconButton>
-                                            </DropdownMenu.Trigger>
-                                            <DropdownMenu.Content>
-                                                <DropdownMenu.Item onClick={() => handleEditClick(article)}>
-                                                    <PencilIcon size={14} style={{ marginRight: '8px' }} />
-                                                    {t('articlesPage.edit')}
-                                                </DropdownMenu.Item>
-                                                <DropdownMenu.Separator />
-                                                <DropdownMenu.Item color="red" onClick={() => handleDelete(article.id)}>
-                                                    <TrashIcon size={14} style={{ marginRight: '8px' }} />
-                                                    {t('articlesPage.delete')}
-                                                </DropdownMenu.Item>
-                                            </DropdownMenu.Content>
-                                        </DropdownMenu.Root>
-                                    </Flex>
-                                </Table.Cell>
-                            </Table.Row>
-                        ))}
+                        {articles.map(article => {
+                            const lang = getLanguage();
+                            const translation = article.translations[lang] || article.translations.en;
+                            return (
+                                <Table.Row key={article.id}>
+                                    <Table.Cell>{translation.title}</Table.Cell>
+                                    <Table.Cell>{translation.category}</Table.Cell>
+                                    <Table.Cell>
+                                        <Flex justify="end">
+                                            <DropdownMenu.Root>
+                                                <DropdownMenu.Trigger>
+                                                    <IconButton variant="ghost">
+                                                        <MoreHorizontal size={16} />
+                                                    </IconButton>
+                                                </DropdownMenu.Trigger>
+                                                <DropdownMenu.Content>
+                                                    <DropdownMenu.Item onClick={() => handleEditClick(article)}>
+                                                        <PencilIcon size={14} style={{ marginRight: '8px' }} />
+                                                        {t('articlesPage.edit')}
+                                                    </DropdownMenu.Item>
+                                                    <DropdownMenu.Separator />
+                                                    <DropdownMenu.Item color="red" onClick={() => handleDelete(article.id)}>
+                                                        <TrashIcon size={14} style={{ marginRight: '8px' }} />
+                                                        {t('articlesPage.delete')}
+                                                    </DropdownMenu.Item>
+                                                </DropdownMenu.Content>
+                                            </DropdownMenu.Root>
+                                        </Flex>
+                                    </Table.Cell>
+                                </Table.Row>
+                            );
+                        })}
                     </Table.Body>
                 </Table.Root>
             )}

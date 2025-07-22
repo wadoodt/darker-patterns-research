@@ -24,3 +24,9 @@ i18n
   });
 
 export default i18n;
+
+export const getLanguage = () => {
+  return i18n.language ||
+    (typeof window !== 'undefined' && window.localStorage.i18nextLng) ||
+    'en';
+};

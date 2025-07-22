@@ -3,8 +3,8 @@ import * as userHandlers from "./handlers/user-handler";
 import * as companyHandlers from "./handlers/companies-handler";
 import * as adminHandlers from "./handlers/admin-handler";
 import * as paymentsHandlers from "./handlers/payments-handler";
-import * as supportHandlers from "./handlers/support";
-import { getArticles, createArticle, updateArticle, deleteArticle } from './handlers/admin-articles-handler';
+import * as supportTicketsHandlers from "./handlers/support-tickets-handler";
+import * as knowledgeBaseHandlers from "./handlers/knowledge-base-handler";
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Array<[string, RegExp, unknown]> = [
@@ -30,17 +30,16 @@ const routes: Array<[string, RegExp, unknown]> = [
     ["POST /api/payments", /^\/api\/payments$/, paymentsHandlers.createPayment],
 
     // Support
-    ["GET /api/support/articles", /^\/api\/support\/articles$/, supportHandlers.getSupportArticles],
-    ["POST /api/support/contact", /^\/api\/support\/contact$/, supportHandlers.createContactSubmission],
-    ["GET /api/support/my-tickets", /^\/api\/support\/my-tickets$/, supportHandlers.getMyTickets],
-    ["GET /api/support/tickets/:ticketId", /^\/api\/support\/tickets\/([^/]+)$/, supportHandlers.getTicketById],
-    ["POST /api/support/tickets/:ticketId/reply", /^\/api\/support\/tickets\/([^/]+)\/reply$/, supportHandlers.createTicketReply],
+    ['POST /api/support/contact', /^\/api\/support\/contact$/, supportTicketsHandlers.createContactSubmission],
+    ['GET /api/support/tickets', /^\/api\/support\/tickets$/, supportTicketsHandlers.getMyTickets],
+    ['GET /api/support/tickets/:ticketId', /^\/api\/support\/tickets\/([^/]+)$/, supportTicketsHandlers.getTicketById],
+    ['POST /api/support/tickets/:ticketId/replies', /^\/api\/support\/tickets\/([^/]+)\/replies$/, supportTicketsHandlers.createTicketReply],
 
-    // Admin - Articles
-    ["GET /api/admin/articles", /^\/api\/admin\/articles$/, getArticles],
-    ["POST /api/admin/articles", /^\/api\/admin\/articles$/, createArticle],
-    ["PUT /api/admin/articles/:id", /^\/api\/admin\/articles\/([^/]+)$/, updateArticle],
-    ["DELETE /api/admin/articles/:id", /^\/api\/admin\/articles\/([^/]+)$/, deleteArticle],
+    // Knowledge Base Articles
+    ["GET /api/articles", /^\/api\/articles$/, knowledgeBaseHandlers.getArticles],
+    ["POST /api/articles", /^\/api\/articles$/, knowledgeBaseHandlers.createArticle],
+    ["PUT /api/articles/:id", /^\/api\/articles\/([^/]+)$/, knowledgeBaseHandlers.updateArticle],
+    ["DELETE /api/articles/:id", /^\/api\/articles\/([^/]+)$/, knowledgeBaseHandlers.deleteArticle],
 ];
 
 /**

@@ -1,6 +1,6 @@
 import type { SupportTicket } from '../../../types/support-ticket';
 
-export const mockSupportArticles = [
+export const mockKnowledgeBaseArticles = [
     {
         id: 'kl-1',
         title: 'Integrating with Third-Party APIs',
