@@ -326,7 +326,9 @@
     "english": "English",
     "spanish": "Spanish",
     "saveChanges": "Save Changes",
-    "errorLoading": "Error loading articles. Please try again."
+    "errorLoading": "Error loading articles. Please try again.",
+    "createArticleDescription": "Fill out the fields below to create a new knowledge base article. You can provide translations for each language tab.",
+    "editArticleDescription": "Edit the fields below to update this knowledge base article. You can provide translations for each language tab."
   },
   "common": {
     "cancel": "Cancel",
