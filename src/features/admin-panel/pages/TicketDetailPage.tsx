@@ -11,6 +11,7 @@ import TicketInfoCard from "./tickets/sections/TicketInfoCard";
 import TicketMessagesList from "./tickets/sections/TicketMessagesList";
 import TicketReplyForm from "./tickets/sections/TicketReplyForm";
 import TicketStatusUpdater from "./tickets/sections/TicketStatusUpdater";
+import { useTranslation } from "react-i18next";
 
 const replySchema = z.object({
   content: z.string().min(1, "Reply content cannot be empty."),
@@ -19,6 +20,7 @@ const replySchema = z.object({
 type ReplyFormData = z.infer<typeof replySchema>;
 
 const TicketDetailPage = () => {
+  const { t } = useTranslation();
   const { ticketId = null } = useParams<{ ticketId: string }>();
 
   const {
@@ -32,7 +34,6 @@ const TicketDetailPage = () => {
       const { data, status } = await api.get(
         `/support/tickets/${ticketId}`,
       );
-      console.log("response", data, status);
       if (status !== 200) {
         throw new Error(data.message);
       }
@@ -66,15 +67,15 @@ const TicketDetailPage = () => {
   if (error)
     return (
       <Callout.Root color="red">
-        Error loading ticket: {error.message}
+        {t("tickets.errorLoading")}: {t(error.message)}
       </Callout.Root>
     );
-  if (!data) return <Text>No ticket data found.</Text>;
+  if (!data) return <Text>{t("tickets.notFound")}</Text>;
 
   return (
     <Box>
       <Heading as="h1" size="6" mb="4">
-        Ticket: {data.subject}
+        {t("tickets.ticket")}: {data.subject}
       </Heading>
 
       <TicketInfoCard ticket={data} />
