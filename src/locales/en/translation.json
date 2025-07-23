@@ -343,6 +343,74 @@
     "tryAgain": "Try Again",
     "goToHome": "Go to Home"
   },
+  "profile": {
+    "title": "Profile & Settings",
+    "tabs": {
+      "general": "General",
+      "security": "Security",
+      "notifications": "Notifications"
+    },
+    "general": {
+      "title": "General Settings",
+      "description": "Manage your account preferences and profile information",
+      "userInformation": "User Information",
+      "appExperience": "App Experience",
+      "cacheManagement": "Cache Management"
+    },
+    "security": {
+      "title": "Security Settings",
+      "description": "Manage your account security and authentication",
+      "changePassword": {
+        "title": "Change Password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "submit": "Update Password",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "placeholders": {
+          "current": "Enter current password",
+          "new": "Enter new password",
+          "confirm": "Confirm new password"
+        },
+        "errors": {
+          "mismatch": "New passwords do not match",
+          "tooShort": "Password must be at least 8 characters long"
+        }
+      },
+      "passwordStrength": {
+        "label": "Password Strength:",
+        "tooWeak": "Too weak",
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong"
+      },
+      "twoFactorAuth": {
+        "title": "Two-Factor Authentication",
+        "description": "Add an extra layer of security to your account.",
+        "enableLabel": "Enable Two-Factor Authentication",
+        "status_enabled": "Enabled",
+        "status_disabled": "Disabled",
+        "activeMessage": "Two-factor authentication is active.",
+        "protectedMessage": "Your account is protected with an additional layer of security."
+      }
+    },
+    "notifications": {
+      "title": "Notification Preferences",
+      "description": "Choose how you want to be notified",
+      "emailNotifications": "Email Notifications",
+      "options": {
+        "newReplies": "New replies to campaigns",
+        "campaignStatus": "Campaign status updates",
+        "weeklyReports": "Weekly performance reports",
+        "domainAlerts": "Domain verification alerts",
+        "warmupCompletion": "Mailbox warmup completion",
+        "silenceWebapp": "Silence incoming webapp notifications",
+        "onlyUrgent": "Only send bill and urgent business emails"
+      }
+    }
+  },
   "tickets": {
     "header": "Support Tickets",
     "subject": "Subject",

@@ -1,53 +1,64 @@
-// src/features/profile/pages/ProfilePage.tsx
-import { Profile } from "@components/Profile";
-import { CacheAdminPanel } from "@components/CacheAdminPanel";
-
-import { Box, Flex, Heading, Text } from "@radix-ui/themes";
-import LanguageSelector from "@components/LanguageSelector";
-import SettingSection from "@components/SettingSection";
-import ThemeSwitcher from "@components/ThemeSwitcher";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Box, Flex, Heading, Text, Button } from "@radix-ui/themes";
+import { User, Shield, Bell } from "lucide-react";
+
+import { GeneralTab } from "./profile/sections/GeneralTab";
+import { SecurityTab } from "./profile/sections/SecurityTab";
+import { NotificationsTab } from "./profile/sections/NotificationsTab";
+import styles from "./profile/ProfilePage.module.css";
+
+type TabId = "general" | "security" | "notifications";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState<TabId>("general");
+
+  const tabs = [
+    { id: "general", label: t("profile.tabs.general"), icon: User },
+    { id: "security", label: t("profile.tabs.security"), icon: Shield },
+    { id: "notifications", label: t("profile.tabs.notifications"), icon: Bell },
+  ];
 
   return (
-    <Box p="4">
-      <Heading as="h1" size="6" mb="4">
-        Profile & Settings
-      </Heading>
-      <Flex direction="column" gap="4">
-        <SettingSection title="User Information">
-          <Profile />
-        </SettingSection>
+    <Flex className={styles.profileContainer}>
+      {/* Sidebar */}
+      <Box className={styles.sidebar}>
+        <Box className={styles.sidebarHeader}>
+          <Heading as="h1" size="4">
+            {t("profile.title")}
+          </Heading>
+        </Box>
 
-        <SettingSection title="App Experience">
-          <Flex direction="column" gap="4">
-            <Box>
-              <Heading as="h3" size="4" mb="2">
-                {t("settings.language.title")}
-              </Heading>
-              <Text as="p" size="2" color="gray" mb="2">
-                {t("settings.language.description")}
-              </Text>
-              <LanguageSelector />
-            </Box>
-            <Box>
-              <Heading as="h3" size="4" mb="2">
-                {t("settings.theme.title")}
-              </Heading>
-              <Text as="p" size="2" color="gray" mb="2">
-                {t("settings.theme.description")}
-              </Text>
-              <ThemeSwitcher />
-            </Box>
-          </Flex>
-        </SettingSection>
+        <nav className={styles.sidebarNav}>
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
 
-        <SettingSection title="Cache Management">
-          <CacheAdminPanel />
-        </SettingSection>
-      </Flex>
-    </Box>
+            return (
+              <Button
+                key={tab.id}
+                variant="ghost"
+                color="gray"
+                onClick={() => setActiveTab(tab.id as TabId)}
+                className={`${styles.tabButton} ${isActive ? styles.active : ""}`}
+              >
+                <Icon className={styles.icon} />
+                <Text as="span" weight="medium">
+                  {tab.label}
+                </Text>
+              </Button>
+            );
+          })}
+        </nav>
+      </Box>
+
+      {/* Content */}
+      <Box className={styles.contentArea}>
+        {activeTab === "general" && <GeneralTab />}
+        {activeTab === "security" && <SecurityTab />}
+        {activeTab === "notifications" && <NotificationsTab />}
+      </Box>
+    </Flex>
   );
 }

@@ -346,6 +346,81 @@
     "tryAgain": "Intentar de Nuevo",
     "goToHome": "Ir al Inicio"
   },
+  "profile": {
+    "title": "Perfil y Configuración",
+    "tabs": {
+      "general": "General",
+      "security": "Seguridad",
+      "notifications": "Notificaciones"
+    },
+    "general": {
+      "title": "Configuración General",
+      "description": "Administra las preferencias de tu cuenta e información de perfil",
+      "userInformation": "Información del Usuario",
+      "appExperience": "Experiencia de la Aplicación",
+      "cacheManagement": "Gestión de Caché",
+      "language": "Idioma",
+      "theme": "Tema",
+      "clearCache": "Borrar Caché",
+      "clearCacheConfirm": "¿Estás seguro de que deseas borrar la caché local?",
+      "clearCacheSuccess": "Caché borrada exitosamente",
+      "clearCacheError": "Error al borrar la caché"
+    },
+    "security": {
+      "title": "Configuración de Seguridad",
+      "description": "Administra la seguridad y autenticación de tu cuenta",
+      "changePassword": {
+        "title": "Cambiar Contraseña",
+        "currentPassword": "Contraseña Actual",
+        "newPassword": "Nueva Contraseña",
+        "confirmPassword": "Confirmar Nueva Contraseña",
+        "submit": "Actualizar Contraseña",
+        "showPassword": "Mostrar contraseña",
+        "hidePassword": "Ocultar contraseña",
+        "placeholders": {
+          "current": "Ingresa tu contraseña actual",
+          "new": "Ingresa una nueva contraseña",
+          "confirm": "Confirma tu nueva contraseña"
+        },
+        "errors": {
+          "mismatch": "Las contraseñas no coinciden",
+          "tooShort": "La contraseña debe tener al menos 8 caracteres"
+        }
+      },
+      "passwordStrength": {
+        "label": "Seguridad de la contraseña:",
+        "tooWeak": "Demasiado débil",
+        "weak": "Débil",
+        "fair": "Aceptable",
+        "good": "Buena",
+        "strong": "Fuerte",
+        "veryStrong": "Muy fuerte"
+      },
+      "twoFactorAuth": {
+        "title": "Autenticación de dos factores",
+        "description": "Añade una capa extra de seguridad a tu cuenta.",
+        "enableLabel": "Habilitar autenticación de dos factores",
+        "status_enabled": "Habilitado",
+        "status_disabled": "Deshabilitado",
+        "activeMessage": "La autenticación de dos factores está activa.",
+        "protectedMessage": "Tu cuenta está protegida con una capa de seguridad adicional."
+      }
+    },
+    "notifications": {
+      "title": "Preferencias de Notificaciones",
+      "description": "Elige cómo deseas recibir notificaciones",
+      "emailNotifications": "Notificaciones por Correo Electrónico",
+      "options": {
+        "newReplies": "Nuevas respuestas a campañas",
+        "campaignStatus": "Actualizaciones de estado de campañas",
+        "weeklyReports": "Informes de rendimiento semanales",
+        "domainAlerts": "Alertas de verificación de dominio",
+        "warmupCompletion": "Finalización de calentamiento de buzón",
+        "silenceWebapp": "Silenciar notificaciones entrantes de la aplicación web",
+        "onlyUrgent": "Solo enviar facturas y correos urgentes de negocios"
+      }
+    }
+  },
   "tickets": {
     "header": "Tickets de Soporte",
     "subject": "Asunto",
