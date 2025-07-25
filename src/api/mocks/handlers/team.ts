@@ -116,6 +116,15 @@ export const deleteTeamMember = async (
     const authUser = getAuthenticatedUser(request);
     if (!authUser) return handleUnauthorized();
 
+    // New check: Managers cannot delete members
+    if (authUser.companyRole === 'manager') {
+      return new Response(JSON.stringify(createErrorResponse("FORBIDDEN", {
+        message: "Managers cannot delete team members"
+      })), {
+        status: 403,
+      });
+    }
+
     const { id } = params;
     const memberToDelete = db.users.findFirst({
       where: { id: id },
@@ -234,6 +243,15 @@ export const updateTeamMember = async (
   try {
     const authUser = getAuthenticatedUser(request);
     if (!authUser) return handleUnauthorized();
+
+    // New check: Employees cannot edit members
+    if (authUser.companyRole === 'employee') {
+      return new Response(JSON.stringify(createErrorResponse("FORBIDDEN", {
+        message: "Employees cannot edit team members"
+      })), {
+        status: 403,
+      });
+    }
 
     const body = (await request.json()) as Partial<User>;
 

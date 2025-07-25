@@ -360,3 +360,31 @@ const response = await api.get("/api/admin/tickets");
 - Review the **[Endpoint Integration Guide](./ENDPOINT_INTEGRATION.md)** for more details on making API calls.
 
 ---
+
+## Role-Based Authorization Implementation
+
+**Q: What are the key considerations when implementing role-based authorization?**
+
+1. **Defense in Depth**:
+   - Implement checks at both UI and API layers
+   - UI provides user-friendly experience by hiding unavailable actions
+   - API provides security enforcement
+
+2. **Common Pitfalls**:
+   - Forgetting to check roles in both UI and API
+   - Not handling edge cases (e.g., users modifying their own roles)
+   - Inconsistent role definitions between frontend and backend
+
+3. **Best Practices**:
+   - Centralize role definitions (see ROLES_AND_RELATIONSHIPS.md)
+   - Use helper functions for common checks (e.g., `canEdit`, `canDelete`)
+   - Document all role requirements clearly
+   - Test all role combinations thoroughly
+
+**Key Lessons from Team Implementation**:
+- Separating visual components from logic helps maintainability
+- Mock API handlers should mirror real security checks
+- TypeScript enums help prevent role typos
+- Translation keys should be organized by feature area
+
+---

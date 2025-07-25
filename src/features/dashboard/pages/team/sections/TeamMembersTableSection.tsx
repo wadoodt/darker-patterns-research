@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Table, Badge, Button, Flex, Switch, Text } from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import type { User } from "types/api/user";
 import { useAuth } from "contexts/AuthContext";
+import { TeamMemberRow } from "./TeamMemberRow";
 import EditMemberModal from "../modals/EditMemberModal";
 import DeleteMemberModal from "../modals/DeleteMemberModal";
 
@@ -16,7 +17,15 @@ interface TeamMembersTableSectionProps {
   onUpdatePlatformRole: (memberId: string, platformRole: "admin" | "user") => void;
 }
 
-export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = ({ members, loading, error, errorMessage, onUpdateMember, onDeleteMember, onUpdatePlatformRole }) => {
+export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = ({
+  members,
+  loading,
+  error,
+  errorMessage,
+  onUpdateMember,
+  onDeleteMember,
+  onUpdatePlatformRole,
+}) => {
   const { t } = useTranslation();
   const { user: authUser } = useAuth();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -24,6 +33,8 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
   const [selectedMember, setSelectedMember] = useState<User | null>(null);
 
   const canManageRoles = authUser?.companyRole === 'owner' || authUser?.platformRole === 'admin';
+  const canEdit = authUser?.companyRole !== 'employee';
+  const canDelete = authUser?.companyRole !== 'manager';
 
   const handleEditClick = (member: User) => {
     setSelectedMember(member);
@@ -72,40 +83,21 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
             </Table.Row>
           ) : (
             members.map((member) => (
-              <Table.Row key={member.id}>
-                <Table.Cell>{member.name}</Table.Cell>
-                <Table.Cell>
-                  <Badge color="grass">{member.status}</Badge>
-                </Table.Cell>
-                <Table.Cell>{member.companyRole}</Table.Cell>
-                <Table.Cell>
-                  <Text as="label" size="2">
-                    <Flex gap="2">
-                      <Switch
-                        checked={member.platformRole === 'admin'}
-                        onCheckedChange={(isChecked) => {
-                          const newRole = isChecked ? 'admin' : 'user';
-                          onUpdatePlatformRole(member.id, newRole);
-                        }}
-                        disabled={!canManageRoles || member.id === authUser?.id || member.companyRole === 'owner'}
-                      />
-                      {member.platformRole}
-                    </Flex>
-                  </Text>
-                </Table.Cell>
-                <Table.Cell>{member.lastActive}</Table.Cell>
-                <Table.Cell>
-                  <Flex gap="3">
-                    <Button size="1" variant="soft" onClick={() => handleEditClick(member)}>{t("team.edit")}</Button>
-                    <Button size="1" variant="soft" color="red" onClick={() => handleDeleteClick(member)}>{t("team.delete")}</Button>
-                  </Flex>
-                </Table.Cell>
-              </Table.Row>
+              <TeamMemberRow
+                key={member.id}
+                member={member}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                canManageRoles={canManageRoles}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteClick}
+                onUpdatePlatformRole={onUpdatePlatformRole}
+              />
             ))
           )}
         </Table.Body>
       </Table.Root>
-            <EditMemberModal
+      <EditMemberModal
         isOpen={isEditModalOpen}
         onClose={handleModalClose}
         member={selectedMember}

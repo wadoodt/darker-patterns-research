@@ -10,8 +10,6 @@ import {
 import NotFoundPage from "@features/dashboard/pages/NotFoundPage";
 import ProfilePage from "@features/dashboard/pages/ProfilePage";
 import TicketDetailPage from "@features/admin-panel/pages/TicketDetailPage";
-import SettingsPage from "@features/dashboard/pages/SettingsPage";
-import SupportPage from "@features/dashboard/pages/SupportPage";
 import UserTicketDetailPage from "@features/dashboard/pages/support/UserTicketDetailPage";
 import CreateTeamMemberPage from "@features/dashboard/pages/team/new/CreateTeamMemberPage";
 
@@ -64,15 +62,7 @@ const DashboardPage: React.FC = () => {
           }
         />
         <Route
-          path="/support"
-          element={
-            <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
-              <SupportPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/support/tickets/:ticketId"
+          path="/dashboard/support/tickets/:ticketId"
           element={
             <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
               <UserTicketDetailPage />
@@ -80,7 +70,7 @@ const DashboardPage: React.FC = () => {
           }
         />
         <Route
-          path="/team/new"
+          path="/dashboard/team/new"
           element={
             <ProtectedRoute roles={["admin", "super-admin"]}>
               <CreateTeamMemberPage />
