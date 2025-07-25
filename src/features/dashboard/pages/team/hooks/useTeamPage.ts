@@ -4,10 +4,10 @@ import { useAsyncCache } from "@hooks/useAsyncCache";
 import { useCache } from "@contexts/CacheContext";
 import api from "@api/client";
 import type {
-  TeamMember,
+  User,
   TeamMembersResponse,
   NewTeamMember,
-} from "types/api";
+} from "types/api/user";
 import { AxiosError } from "axios";
 import { CacheLevel } from "@lib/cache/types";
 
@@ -33,7 +33,7 @@ export const useTeamPage = () => {
     setSearchParams({ page: page.toString() });
   };
 
-  const teamMembers: TeamMember[] = data?.members || [];
+  const teamMembers: User[] = data?.members || [];
   const pagination = data
     ? {
         currentPage: data.currentPage,
@@ -75,7 +75,7 @@ export const useTeamPage = () => {
     }
   };
 
-    const handleUpdateMember = async (member: TeamMember) => {
+    const handleUpdateMember = async (member: User) => {
     try {
       await api.patch(`/team/${member.id}`, member);
       await invalidate("^team-members");

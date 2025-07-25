@@ -102,7 +102,7 @@ const useAuthProvider = (): AuthContextType => {
   const hasRole = useCallback(
     (roles: string[]): boolean => {
       if (!user) return false;
-      return roles.includes(user.role);
+      return roles.includes(user.platformRole);
     },
     [user],
   );

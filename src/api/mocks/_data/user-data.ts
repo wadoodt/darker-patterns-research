@@ -1,4 +1,4 @@
-// src/api/mocks/user-data.ts
+// src/api/mocks/_data/user-data.ts
 
 import type { User } from "types";
 
@@ -10,7 +10,7 @@ export const mockUsers: User[] = [
     username: "admin",
     email: "admin@example.com",
     password: "password",
-    role: "admin",
+    platformRole: "admin",
     companyId: "comp-001",
     status: "active",
   },
@@ -20,7 +20,7 @@ export const mockUsers: User[] = [
     username: "user",
     email: "user@example.com",
     password: "password",
-    role: "user",
+    platformRole: "user",
     companyId: "comp-002",
     status: "active",
   },
@@ -30,7 +30,7 @@ export const mockUsers: User[] = [
     username: "qa",
     email: "qa@example.com",
     password: "password",
-    role: "qa",
+    platformRole: "qa",
     companyId: "comp-004",
     status: "active",
   },
@@ -40,8 +40,53 @@ export const mockUsers: User[] = [
     username: "super-admin",
     email: "superadmin@example.com",
     password: "password",
-    role: "super-admin",
+    platformRole: "super-admin",
     companyId: "comp-001",
     status: "active",
+  },
+  // Team members
+  {
+    id: "user-1",
+    name: "John Doe",
+    email: "john.doe@example.com",
+    username: "johndoe",
+    platformRole: "user",
+    companyId: "comp-123",
+    companyRole: "owner",
+    status: "active",
+    lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "user-2",
+    name: "Jane Smith",
+    email: "jane.smith@example.com",
+    username: "janesmith",
+    platformRole: "user",
+    companyId: "comp-123",
+    companyRole: "admin",
+    status: "active",
+    lastActive: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "user-3",
+    name: "Peter Jones",
+    email: "peter.jones@example.com",
+    username: "peterjones",
+    platformRole: "user",
+    companyId: "comp-123",
+    companyRole: "employee",
+    status: "invited",
+    lastActive: undefined,
+  },
+  {
+    id: "user-4",
+    name: "Mary Williams",
+    email: "mary.williams@example.com",
+    username: "marywilliams",
+    platformRole: "user",
+    companyId: "comp-123",
+    companyRole: "employee",
+    status: "inactive",
+    lastActive: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(), // ~3 months ago
   },
 ];

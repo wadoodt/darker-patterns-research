@@ -21,7 +21,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ path, user, isOpen }) => {
 
   const navigation = [...adminNavigation, ...dashboardNavigation].filter(
     (item) => {
-      return item.roles?.includes(user.role);
+      if (!item.roles) return true; // Show items that don't require a specific role
+      return item.roles.includes(user.platformRole);
     },
   );
 

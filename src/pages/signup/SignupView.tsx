@@ -46,38 +46,43 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
     }
   };
 
-  const handleSignup = async (event: React.FormEvent) => {
+    const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
     setError(null);
+
     if (password !== confirmPassword) {
       setError(t("auth.signup.alerts.error.passwordMismatch"));
       setIsLoading(false);
       return;
     }
+
     try {
-      // TODO: Integrate with real backend user creation and Stripe session creation
-      // For now, simulate payment session creation with the mock API
-      const paymentRes = await fetch("/api/payments", {
+      const response = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          companyId: "comp-001", // TODO: Replace with actual companyId from signup
-          userId: "user-001", // TODO: Replace with actual userId from signup
-          amount:
-            selectedPlan === "business"
-              ? 9900
-              : selectedPlan === "premium"
-                ? 24900
-                : 0, // Example pricing
-          currency: "usd",
+          action: "create",
+          companyName: businessName,
+          name: `${firstName} ${lastName}`,
+          email,
+          password,
+          plan: selectedPlan,
         }),
       });
-      await paymentRes.json();
-      // TODO: When backend is ready, redirect to paymentData.stripeUrl for real Stripe onboarding
-      window.location.href = "/success";
-    } catch {
-      setError(t("auth.signup.alerts.error.generic"));
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error?.message || t("auth.signup.alerts.error.generic"));
+      }
+
+      // On successful signup, the API returns a token which should be stored.
+      // For this mock, we'll just redirect to the dashboard.
+      window.location.href = "/dashboard";
+
+    } catch (err) {
+      setError((err as Error).message);
     } finally {
       setIsLoading(false);
     }

@@ -7,28 +7,35 @@ export const mockCompanies: Company[] = [
     id: "comp-001",
     name: "Innovate Inc.",
     plan: "Enterprise",
-    stripeCustomerId: "cus_enterprise_1",
     status: "active",
+    stripeCustomerId: "cus_enterprise_1",
+    officialEmail: "contact@innovate.com",
+    taxId: "IE1234567T",
+    taxIdCountry: "IE"
   },
   {
     id: "comp-002",
     name: "DataDriven LLC",
     plan: "Pro",
-    stripeCustomerId: "cus_pro_1",
     status: "active",
+    stripeCustomerId: "cus_pro_1",
+    officialEmail: "billing@datadriven.com"
   },
   {
     id: "comp-003",
     name: "Cloud Solutions Co.",
     plan: "Enterprise",
-    stripeCustomerId: "cus_enterprise_2",
     status: "past_due",
+    stripeCustomerId: "cus_enterprise_2",
+    officialEmail: "accounts@cloudsolutions.com",
+    taxId: "DE811234567",
+    taxIdCountry: "DE"
   },
   {
     id: "comp-004",
     name: "QuantumLeap Corp.",
     plan: "Free",
-    stripeCustomerId: "cus_free_1",
     status: "inactive",
+    stripeCustomerId: "cus_free_1"
   },
 ];

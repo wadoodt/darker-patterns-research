@@ -4,28 +4,36 @@ import { ERROR_CODES } from "../../codes";
 import type { User } from "types/api";
 
 /**
- * Handles the request to get all users within the admin's company.
+ * Handles the request to get all users. 
+ * If the requester is a super-admin, it returns all users.
+ * Otherwise, it returns users from the requester's company.
  */
 export const getUsers = async (): Promise<Response> => {
   // MOCK: Simulate an authenticated admin user for authorization.
-  // In a real app, this would come from the session/token.
-  const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
+  const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
 
   if (!mockAdminUser) {
     const errorResponse = createErrorResponse("UNAUTHORIZED", {
-      detail: "No admin user found in mock DB.",
+      detail: "No admin user found in mock DB for this operation.",
     });
     return new Response(JSON.stringify(errorResponse), {
       status: ERROR_CODES.UNAUTHORIZED.status,
     });
   }
 
-  const usersInCompany = db.users.findMany({
-    where: { companyId: mockAdminUser.companyId },
-  });
+  let users;
+  if (mockAdminUser.platformRole === 'super-admin') {
+    // Super admin gets all users
+    users = db.users.findMany({});
+  } else {
+    // Company admin gets users from their own company
+    users = db.users.findMany({
+      where: { companyId: mockAdminUser.companyId },
+    });
+  }
 
   // Exclude password from the response
-  const usersResponse = usersInCompany.map((user) => {
+  const usersResponse = users.map((user) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...rest } = user;
     return rest;
@@ -42,20 +50,21 @@ export const getUsers = async (): Promise<Response> => {
  * Handles the request to update a user's role or status.
  */
 export const updateUser = async (request: Request): Promise<Response> => {
-  const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
-  if (!mockAdminUser) {
-    const errorResponse = createErrorResponse("UNAUTHORIZED", {
-      detail: "No admin user found in mock DB.",
+  // MOCK: For this operation, we need a super-admin.
+  const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
+  if (!mockAdminUser || mockAdminUser.platformRole !== 'super-admin') {
+    const errorResponse = createErrorResponse("FORBIDDEN", {
+      detail: "This operation requires super-admin privileges.",
     });
     return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.UNAUTHORIZED.status,
+      status: ERROR_CODES.FORBIDDEN.status,
     });
   }
 
   const url = new URL(request.url);
   const userId = url.pathname.split("/").pop();
-  const { role, status } = (await request.json()) as Partial<
-    Pick<User, "role" | "status">
+  const { platformRole, status } = (await request.json()) as Partial<
+    Pick<User, "platformRole" | "status">
   >;
 
   if (!userId) {
@@ -78,26 +87,15 @@ export const updateUser = async (request: Request): Promise<Response> => {
     });
   }
 
-  // Authorization check: ensure the admin is updating a user in their own company
-  if (userToUpdate.companyId !== mockAdminUser.companyId) {
-    const errorResponse = createErrorResponse("FORBIDDEN", {
-      detail: "You can only update users in your own company.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.FORBIDDEN.status,
-    });
-  }
-
   const updatedUser = db.users.update({
     where: { id: userId },
     data: {
-      ...(role && { role }),
+      ...(platformRole && { platformRole }),
       ...(status && { status }),
     },
   });
 
   if (!updatedUser) {
-    // This case should theoretically not be reached if userToUpdate was found, but it's good practice
     const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
       detail: "Failed to update the user.",
     });
@@ -121,7 +119,7 @@ export const getSupportTickets = async (
   request: Request,
 ): Promise<Response> => {
   // MOCK: Simulate an authenticated admin user for authorization.
-  const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
+  const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
 
   if (!mockAdminUser) {
     const errorResponse = createErrorResponse("UNAUTHORIZED", {
@@ -164,7 +162,7 @@ export const updateTicketStatus = async (
   request: Request,
   params: { ticketId: string },
 ): Promise<Response> => {
-  const mockAdminUser = db.users.findFirst({ where: { role: "admin" } });
+  const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
   if (!mockAdminUser) {
     const errorResponse = createErrorResponse("UNAUTHORIZED", {
       detail: "No admin user found in mock DB.",

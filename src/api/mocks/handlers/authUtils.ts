@@ -40,7 +40,7 @@ export const createCompanyAndAdminUser = (payload: SignupPayload) => {
     email: email!,
     password: password!,
     companyId: newCompany.id,
-    role: "admin",
+    platformRole: "admin",
     status: "active",
   });
   return {
@@ -59,7 +59,7 @@ export const createUserForCompany = (payload: SignupPayload) => {
     email: email!,
     password: password!,
     companyId: companyId!,
-    role: "user",
+    platformRole: "user",
     status: "created",
   });
 };

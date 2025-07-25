@@ -18,7 +18,7 @@ const HeroSection: React.FC = () => {
           <p className="hero-description">{t("pricing.hero.description")}</p>
           <div className="hero-buttons-row">
             <Button asChild size="3">
-              <a href="/signup" aria-label={t("signup.header.title")}>
+              <a href="/signup" aria-label={t("auth.signup.header.title")}>
                 {t("pricing.plans.business.ctaText")}
               </a>
             </Button>

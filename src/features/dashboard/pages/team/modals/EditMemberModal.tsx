@@ -1,24 +1,30 @@
 import { Dialog, Button, Flex, Text, Select } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import type { TeamMember } from "types/api/team";
+import type { User, CompanyRole } from "types/api/user";
 
 interface EditMemberModalProps {
-  member: TeamMember | null;
+  member: User | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (member: TeamMember) => void;
+  onSave: (member: User) => void;
 }
 
 const EditMemberModal: React.FC<EditMemberModalProps> = ({ member, isOpen, onClose, onSave }) => {
   const { t } = useTranslation();
-  const [editedMember, setEditedMember] = useState<TeamMember | null>(member);
+  const [editedMember, setEditedMember] = useState<User | null>(member);
 
   useEffect(() => {
     setEditedMember(member);
   }, [member]);
 
   if (!editedMember) return null;
+
+  const handleRoleChange = (value: string) => {
+    if (editedMember) {
+      setEditedMember({ ...editedMember, companyRole: value as CompanyRole });
+    }
+  };
 
   const handleSave = () => {
     if (editedMember) {
@@ -38,8 +44,8 @@ const EditMemberModal: React.FC<EditMemberModalProps> = ({ member, isOpen, onClo
               {t("team.role")}
             </Text>
             <Select.Root
-              value={editedMember.role}
-              onValueChange={(value: 'admin' | 'user') => setEditedMember({ ...editedMember, role: value })}
+              value={editedMember.companyRole}
+              onValueChange={handleRoleChange}
             >
               <Select.Trigger />
               <Select.Content>

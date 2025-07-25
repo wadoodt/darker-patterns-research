@@ -30,7 +30,7 @@ const DashboardPage: React.FC = () => {
 
   const allNavigation = [...dashboardNavigation, ...adminNavigation];
   const filteredNav = allNavigation.filter((item) =>
-    item.roles?.includes(user.role),
+    item.roles?.includes(user.platformRole),
   );
 
   return (

@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Table, Badge, Button, Flex } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import type { TeamMember } from "types/api/team";
+import type { User } from "types/api/user";
 import EditMemberModal from "../modals/EditMemberModal";
 import DeleteMemberModal from "../modals/DeleteMemberModal";
 
 interface TeamMembersTableSectionProps {
-  members: TeamMember[];
+  members: User[];
   loading: boolean;
   error: boolean;
   errorMessage: string | null;
-  onUpdateMember: (member: TeamMember) => void;
+  onUpdateMember: (member: User) => void;
   onDeleteMember: (memberId: string) => void;
 }
 
@@ -18,14 +18,14 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
   const { t } = useTranslation();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const [selectedMember, setSelectedMember] = useState<User | null>(null);
 
-  const handleEditClick = (member: TeamMember) => {
+  const handleEditClick = (member: User) => {
     setSelectedMember(member);
     setEditModalOpen(true);
   };
 
-  const handleDeleteClick = (member: TeamMember) => {
+  const handleDeleteClick = (member: User) => {
     setSelectedMember(member);
     setDeleteModalOpen(true);
   };
@@ -71,7 +71,7 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
                 <Table.Cell>
                   <Badge color="grass">{member.status}</Badge>
                 </Table.Cell>
-                <Table.Cell>{member.role}</Table.Cell>
+                <Table.Cell>{member.companyRole}</Table.Cell>
                 <Table.Cell>{member.lastActive}</Table.Cell>
                 <Table.Cell>
                   <Flex gap="3">

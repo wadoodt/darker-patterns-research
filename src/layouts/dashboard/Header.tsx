@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             <div className={styles.userContainer}>
               <div className={styles.userInfo}>
                 <p className={styles.userName}>{user?.name}</p>
-                <p className={styles.userRole}>{user?.role}</p>
+                <p className={styles.userRole}>{user?.platformRole}</p>
               </div>
               <div className={styles.userAvatar}>
                 <User className={styles.userAvatarIcon} />

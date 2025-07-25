@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTeamPage } from "../hooks/useTeamPage";
-import type { NewTeamMember } from "types/api";
+import type { NewTeamMember, CompanyRole } from "types/api/user";
 import {
   Flex,
   Heading,
@@ -17,7 +17,7 @@ const CreateTeamMemberPage = () => {
   const [formData, setFormData] = useState<NewTeamMember>({
     name: "",
     email: "",
-    role: "user",
+    companyRole: "employee",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,8 +25,8 @@ const CreateTeamMemberPage = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleRoleChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, role: value as "user" | "admin" }));
+  const handleRoleChange = (value: CompanyRole) => {
+    setFormData((prev) => ({ ...prev, companyRole: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,15 +71,15 @@ const CreateTeamMemberPage = () => {
               Role
             </Text>
             <Select.Root
-              name="role"
+              name="companyRole"
               required
-              value={formData.role}
+              value={formData.companyRole}
               onValueChange={handleRoleChange}
             >
               <Select.Trigger />
               <Select.Content>
-                <Select.Item value="user">User</Select.Item>
                 <Select.Item value="admin">Admin</Select.Item>
+                <Select.Item value="employee">Employee</Select.Item>
               </Select.Content>
             </Select.Root>
           </label>

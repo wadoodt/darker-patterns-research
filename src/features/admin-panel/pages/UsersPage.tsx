@@ -17,7 +17,7 @@ interface UserTableRowProps {
   user: User;
   onUpdate: (
     userId: string,
-    updates: Partial<Pick<User, "role" | "status">>,
+    updates: Partial<Pick<User, "platformRole" | "status">>,
   ) => void;
 }
 
@@ -33,9 +33,9 @@ const UserTableRow: React.FC<UserTableRowProps> = ({ user, onUpdate }) => (
     </Table.RowHeaderCell>
     <Table.Cell>
       <Select.Root
-        defaultValue={user.role}
+        defaultValue={user.platformRole}
         onValueChange={(newRole) =>
-          onUpdate(user.id, { role: newRole as "admin" | "user" })
+          onUpdate(user.id, { platformRole: newRole as "admin" | "user" })
         }
       >
         <Select.Trigger />
@@ -94,7 +94,7 @@ const UsersPage: React.FC = () => {
 
   const handleUpdateUser = async (
     userId: string,
-    updates: Partial<Pick<User, "role" | "status">>,
+    updates: Partial<Pick<User, "platformRole" | "status">>,
   ) => {
     try {
       const response = await apiClient.patch(`/admin/users/${userId}`, updates);

@@ -34,10 +34,21 @@ export type ApiResponse<T> =
   | { data: null; error: ApiError };
 
 /**
- * Represents the structure of a User object.
+ * User and Team Member types
  */
-export type { User, UserProfile, UserSettings, CreateUserPayload } from "./user";
-export type { TeamMember, TeamMembersResponse, NewTeamMember } from "./team";
+export type {
+  User,
+  UserProfile,
+  UserSettings,
+  CreateUserPayload,
+  // Team-related types (aliased for clarity)
+  User as TeamMember,
+  TeamMembersResponse,
+  NewTeamMember,
+  CompanyRole,
+  PlatformRole,
+  UserStatus,
+} from "./user";
 
 
 
@@ -47,9 +58,18 @@ export type { TeamMember, TeamMembersResponse, NewTeamMember } from "./team";
 export type Company = {
   id: string;
   name: string;
-  plan: "Enterprise" | "Pro" | "Free";
-  stripeCustomerId: string;
+
+  // Billing & Subscription
+  stripeCustomerId?: string;
+  plan: "Free" | "Pro" | "Enterprise";
   status: "active" | "inactive" | "past_due";
+
+  // Legal & Contact
+  officialEmail?: string;
+  taxId?: string;
+  taxIdCountry?: string;
+
+  // Note: ownerId has been removed in favor of role-based ownership
 };
 
 /**
