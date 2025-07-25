@@ -200,14 +200,19 @@
           "title": "Managing Lead Lists and Imports",
           "description": "How to import, organize, and manage your lead lists for maximum campaign effectiveness.",
           "category": "Leads"
+        },
+        "email_warmup": {
+          "title": "Email Warmup Best Practices",
+          "description": "Learn how to properly warm up your email accounts to improve deliverability.",
+          "category": "Deliverability"
+        },
+        "domain_setup": {
+          "title": "Domain Configuration Guide",
+          "description": "Step-by-step instructions for setting up your domain for email sending.",
+          "category": "Setup"
         }
       }
     },
-    "header": {
-      "title": "Help & Support",
-      "subtitle": "Welcome to our support center. Find articles, tutorials, and contact our team."
-    },
-    "search_placeholder": "Search articles...",
     "videos": {
       "getting_started": {
         "title": "Quick Start Guide",
@@ -220,6 +225,14 @@
       "warmup_process": {
         "title": "Warmup Process Explained",
         "description": "Understanding and optimizing the email warmup process."
+      },
+      "domain_config": {
+        "title": "Domain Configuration Video Tutorial",
+        "description": "Watch how to configure your domain settings for optimal email deliverability."
+      },
+      "complete_campaign_setup": {
+        "title": "Complete Campaign Setup Walkthrough",
+        "description": "Follow along as we set up a complete email campaign from start to finish."
       }
     }
   },
@@ -322,7 +335,8 @@
   },
   "common": {
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "sending": "Sending"
   },
   "errorBoundary": {
     "title": "Something went wrong.",

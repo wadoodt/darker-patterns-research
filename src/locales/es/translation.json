@@ -203,6 +203,16 @@
           "title": "Gestión de Listas de Prospectos",
           "description": "Cómo importar, organizar y gestionar tus listas de prospectos para maximizar la efectividad de tus campañas.",
           "category": "Prospectos"
+        },
+        "email_warmup": {
+          "title": "Mejores Prácticas para Calentamiento de Emails",
+          "description": "Aprende cómo calentar correctamente tus cuentas de email para mejorar la capacidad de entrega.",
+          "category": "Capacidad de Entrega"
+        },
+        "domain_setup": {
+          "title": "Guía de Configuración de Dominio",
+          "description": "Instrucciones paso a paso para configurar tu dominio para el envío de emails.",
+          "category": "Configuración"
         }
       }
     },
@@ -223,6 +233,14 @@
       "warmup_process": {
         "title": "Proceso de calentamiento explicado",
         "description": "Entendiendo y optimizando el proceso de calentamiento de correos."
+      },
+      "domain_config": {
+        "title": "Video Tutorial de Configuración de Dominio",
+        "description": "Mira cómo configurar los ajustes de tu dominio para una óptima capacidad de entrega de emails."
+      },
+      "complete_campaign_setup": {
+        "title": "Recorrido Completo de Configuración de Campaña",
+        "description": "Sigue el proceso de configuración de una campaña de email de principio a fin."
       }
     }
   },
@@ -326,7 +344,8 @@
   },
   "common": {
     "cancel": "Cancelar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "sending": "Enviando"
   },
   "errorBoundary": {
     "title": "Algo salió mal.",
