@@ -6,6 +6,7 @@ import { mockUsers } from "./_data/user-data.ts";
 import { mockAdminSettings } from "./_data/admin-settings-data";
 import { mockPayments } from "./_data/payments-data";
 import { mockKnowledgeBaseArticles, mockSupportTickets } from "./_data/support";
+import { teamMembers } from "./_data/team-data";
 import type { KnowledgeBaseArticle } from "types/knowledge-base";
 
 // The global mock database instance.
@@ -18,5 +19,6 @@ export const db = {
     mockKnowledgeBaseArticles,
   ),
   contactSubmissions: createTable<ContactSubmission>([]),
-  supportTickets: createTable(mockSupportTickets),
+    supportTickets: createTable(mockSupportTickets),
+  teamMembers: createTable(teamMembers),
 };

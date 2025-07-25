@@ -9,12 +9,14 @@ import styles from "./CacheAdminPanel.module.css";
 const CacheAdminPanelButtons = ({
   invalidateCompanies,
   invalidateProfile,
+  invalidateTeam,
   clearAllExpired,
   isLoading,
   isReady,
 }: {
   invalidateCompanies: () => void;
   invalidateProfile: () => void;
+  invalidateTeam: () => void;
   clearAllExpired: () => void;
   isLoading: boolean;
   isReady: boolean;
@@ -33,6 +35,13 @@ const CacheAdminPanelButtons = ({
       color="violet"
     >
       Invalidate Profile Cache
+    </Button>
+    <Button
+      onClick={invalidateTeam}
+      disabled={isLoading || !isReady}
+      color="green"
+    >
+      Invalidate Team Cache
     </Button>
     <Button
       onClick={clearAllExpired}
@@ -77,8 +86,14 @@ export function CacheAdminPanel() {
 
   const invalidateProfile = () =>
     handleAction(
-      () => invalidateByPattern("async-data:user-profile*"),
-      "Successfully invalidated user profile cache.",
+      () => invalidateByPattern("user-profile"),
+      "User profile cache cleared.",
+    );
+
+  const invalidateTeam = () =>
+    handleAction(
+      () => invalidateByPattern("team-members"),
+      "Team members cache cleared.",
     );
 
   const clearAllExpired = () =>
@@ -96,6 +111,7 @@ export function CacheAdminPanel() {
         <CacheAdminPanelButtons
           invalidateCompanies={invalidateCompanies}
           invalidateProfile={invalidateProfile}
+          invalidateTeam={invalidateTeam}
           clearAllExpired={clearAllExpired}
           isLoading={isLoading}
           isReady={isReady}

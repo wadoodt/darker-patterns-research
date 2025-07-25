@@ -5,6 +5,7 @@ import * as adminHandlers from "./handlers/admin-handler";
 import * as paymentsHandlers from "./handlers/payments-handler";
 import * as supportTicketsHandlers from "./handlers/support-tickets-handler";
 import * as knowledgeBaseHandlers from "./handlers/knowledge-base-handler";
+import * as teamHandlers from "./handlers/team";
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Array<[string, RegExp, unknown]> = [
@@ -79,6 +80,14 @@ const routes: Array<[string, RegExp, unknown]> = [
     "DELETE /api/articles/:id",
     /^\/api\/articles\/([^/]+)$/,
     knowledgeBaseHandlers.deleteArticle,
+  ],
+
+  // Team
+  ["GET /api/team", /^\/api\/team$/, teamHandlers.getTeamMembers],
+  [
+    "PATCH /api/team/:id",
+    /^\/api\/team\/([^/]+)$/,
+    teamHandlers.updateTeamMember,
   ],
 ];
 

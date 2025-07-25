@@ -146,19 +146,11 @@
       "items": [
         {
           "question": "Is there a free tier or trial?",
-          "answer": "No, we currently do not offer a free tier or a traditional free trial. However, you can explore the platform using our test account to see how things work. Use credentials: Email: `test@email.com` Password: `Test#1234` Business ID: `Test1234567890` Referral Code: `Test1234567890` Please note that actions within this test account are mocked and no real emails are sent or domains warmed up. When you're ready to use the service actively, please select one of our paid plans."
-        },
-        {
-          "question": "What payment methods do you accept?",
-          "answer": "We use Stripe as our payment processor. This allows us to accept a wide variety of payment methods, including major credit cards (Visa, Mastercard, American Express), debit cards, and potentially other regional payment options like SEPA Direct Debit, iDEAL, etc., depending on your location."
+          "answer": "We do not offer a free tier, but we do have a 30-day money-back guarantee. If you are not satisfied, contact us within 30 days, and we will refund your payment."
         },
         {
           "question": "I don't like some part of the plan or have suggestions.",
-          "answer": "We appreciate your feedback! If specific features in the Business or Premium plans don't perfectly fit your needs, or if you have suggestions for improvement, please reach out to us via our Contact Us page. For highly specific requirements or significant modifications, the 'Custom' plan is designed to offer tailored solutions. Contact our sales team to discuss how we can build a plan that works best for you."
-        },
-        {
-          "question": "Can I get a discount?",
-          "answer": "We occasionally offer promotions or discounts, especially for annual commitments or non-profit organizations. Please contact our sales or support team through the Contact Us page to inquire about any current offers or discuss potential discounts based on your specific situation (e.g., volume, commitment length). Choosing the 'Custom' plan also allows for negotiation based on the scope of services."
+          "answer": "We'd love to hear from you! Please email us at feedback@penguinmails.com with your suggestions. If we implement your suggestion, we'll give you a lifetime discount on your plan."
         }
       ]
     }
@@ -171,17 +163,13 @@
         "name": "Your Name",
         "email": "Email Address",
         "subject": "Subject",
-        "message": "How can we help?",
+        "message": "Message",
         "submit": "Send Message"
       },
-      "success": {
-        "title": "Message Sent!",
-        "message": "We've received your message and will get back to you soon."
-      },
-      "error": {
-        "title": "Something went wrong",
-        "message": "Please try again or contact us at support@penguinmails.com"
-      }
+      "success_message": "Thanks for reaching out. We'll get back to you shortly."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions"
     },
     "video_tutorials": {
       "title": "Video Tutorials"
@@ -198,23 +186,13 @@
           "description": "Learn how to create your first cold email campaign from setup to launch.",
           "category": "Campaigns"
         },
-        "domain_setup": {
-          "title": "Domain Setup and DNS Configuration",
-          "description": "Complete guide to setting up your domain with proper DNS records for email delivery.",
-          "category": "Domains"
-        },
-        "email_warmup": {
-          "title": "Email Warmup Best Practices",
-          "description": "How to properly warm up your mailboxes for optimal deliverability and inbox placement.",
-          "category": "Warmup"
-        },
         "deliverability": {
-          "title": "Understanding Email Deliverability",
-          "description": "Learn about factors that affect email deliverability and how to improve your sender reputation.",
+          "title": "Improving Email Deliverability",
+          "description": "Strategies to ensure your emails land in the inbox, not the spam folder.",
           "category": "Deliverability"
         },
         "templates": {
-          "title": "Creating Effective Email Templates",
+          "title": "Crafting Effective Email Templates",
           "description": "Tips and strategies for writing compelling cold emails that get responses.",
           "category": "Templates"
         },
@@ -231,12 +209,12 @@
     },
     "search_placeholder": "Search articles...",
     "videos": {
-      "complete_campaign_setup": {
-        "title": "Complete Campaign Setup Walkthrough",
-        "description": "A step-by-step guide to creating your first campaign."
+      "getting_started": {
+        "title": "Quick Start Guide",
+        "description": "A complete walkthrough of our platform's key features."
       },
-      "domain_config": {
-        "title": "Domain and Mailbox Configuration",
+      "domain_setup": {
+        "title": "Domain & Mailbox Setup",
         "description": "How to set up domains and create mailboxes for sending."
       },
       "warmup_process": {
@@ -245,71 +223,83 @@
       }
     }
   },
-  "signup": {
-    "header": {
-      "title": "Create your Penguin Mails Account",
-      "description": "Join an existing team or start your own."
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "emailPlaceholder": "name@example.com",
+      "passwordPlaceholder": "Your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot your password?",
+      "submitButton": "Sign In",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
     },
-    "form": {
-      "typeLabel": "Are you joining an existing business or creating a new account?",
-      "options": {
-        "new": "Create New",
-        "existing": "Join Existing"
+    "signup": {
+      "header": {
+        "title": "Create Your Account",
+        "description": "Join PenguinMails to start sending successful campaigns."
       },
-      "labels": {
-        "email": "Email",
-        "password": "Password",
-        "confirmPassword": "Confirm Password",
-        "businessId": "Business ID",
-        "referralCode": "Referral Code",
-        "firstName": "First Name",
-        "lastName": "Last Name",
-        "businessName": "Business Name"
+      "form": {
+        "typeLabel": "Signup Type",
+        "options": {
+          "new": "Create a new business account",
+          "existing": "Join an existing business"
+        },
+        "labels": {
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "email": "Email Address",
+          "password": "Password",
+          "confirmPassword": "Confirm Password",
+          "businessName": "Business Name",
+          "businessId": "Business ID",
+          "referralCode": "Referral Code (Optional)"
+        }
       },
-      "placeholders": {
-        "email": "you@example.com",
-        "businessId": "Enter the ID provided by your team",
-        "referralCode": "Enter the code provided by your team",
-        "firstName": "John",
-        "lastName": "Doe",
-        "businessName": "Your Company Name"
+      "buttons": {
+        "signingUp": "Signing Up...",
+        "createAccount": "Create Account",
+        "joinBusiness": "Join Business"
+      },
+      "alerts": {
+        "newAccount": {
+          "title": "You are creating a new account.",
+          "description": "You have selected the '{{plan}}' plan."
+        },
+        "joining": {
+          "title": "You are joining an existing business.",
+          "description": "Your account will be associated with the provided Business ID."
+        },
+        "error": {
+          "title": "Error",
+          "selectPlan": "Please select a plan to continue.",
+          "passwordMismatch": "Passwords do not match.",
+          "generic": "An unexpected error occurred. Please try again."
+        }
+      },
+      "footer": {
+        "haveAccount": "Already have an account?",
+        "login": "Login"
       }
     },
-    "alerts": {
-      "joining": {
-        "title": "Joining a Team",
-        "description": "Make sure you have the correct Business ID and Referral Code from your administrator."
-      },
-      "newAccount": {
-        "title": "Creating New Account",
-        "description": "You are signing up for the {{plan}} plan. You can manage your subscription later."
-      },
-      "planRequired": {
-        "title": "Plan Required",
-        "description": "Please select a plan before creating a new account."
-      },
-      "error": {
-        "title": "Error",
-        "passwordMismatch": "Passwords do not match.",
-        "noPlan": "Cannot create a new account without selecting a plan. Please visit the Pricing page.",
-        "missingBusinessInfo": "Business ID and Referral Code are required to join an existing business.",
-        "generic": "Signup failed. Please try again.",
-        "selectPlan": "Please select a plan from the Pricing page before creating a new account."
-      }
-    },
-    "buttons": {
-      "createAccount": "Create Account",
-      "joinBusiness": "Join Business",
-      "signingUp": "Signing Up..."
-    },
-    "footer": {
-      "haveAccount": "Already have an account?",
-      "login": "Login"
+    "register": {
+      "title": "Create an Account",
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "emailPlaceholder": "name@example.com",
+      "passwordPlaceholder": "Create a password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "submitButton": "Sign Up",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
     }
   },
   "success": {
-    "title": "Signup Successful!",
-    "description": "Your account is ready. You can now access your dashboard.",
+    "title": "Registration Successful!",
+    "description": "Your account is ready. You can now log in to your dashboard.",
     "goToDashboard": "Go to Dashboard",
     "autoRedirect": "You will be redirected to the dashboard in {{seconds}} seconds."
   },
@@ -327,8 +317,8 @@
     "spanish": "Spanish",
     "saveChanges": "Save Changes",
     "errorLoading": "Error loading articles. Please try again.",
-    "createArticleDescription": "Fill out the fields below to create a new knowledge base article. You can provide translations for each language tab.",
-    "editArticleDescription": "Edit the fields below to update this knowledge base article. You can provide translations for each language tab."
+    "createArticleDescription": "Fill out the fields below to create a new knowledge base article. You can provide translations for each language.",
+    "editArticleDescription": "Edit the fields below to update this knowledge base article. You can provide translations for each language."
   },
   "common": {
     "cancel": "Cancel",
@@ -336,9 +326,9 @@
   },
   "errorBoundary": {
     "title": "Something went wrong.",
-    "description": "We've been notified of the issue and are working to fix it. Please try again later or contact our client service.",
-    "contactSupport": "You can also report the bug directly to our support team.",
-    "reportLink": "Report Bug",
+    "description": "We've been notified of the issue and are working to fix it. Please try again later or contact our support team.",
+    "contactSupport": "You can also report the error directly to our support team.",
+    "reportLink": "Report Error",
     "errorDetails": "Error Details",
     "tryAgain": "Try Again",
     "goToHome": "Go to Home"
@@ -447,5 +437,23 @@
     "submitReply": "Submit Reply",
     "errorLoading": "Error loading ticket details.",
     "notFound": "Ticket not found."
+  },
+  "team": {
+    "header": "Team Management",
+    "invite": "Invite Member",
+    "member": "Member",
+    "role": "Role",
+    "status": "Status",
+    "last_active": "Last Active",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading team members...",
+    "no_members": "No team members found."
+  },
+  "pagination": {
+    "page_of": "Page {{currentPage}} of {{totalPages}}",
+    "previous": "Previous",
+    "next": "Next"
   }
 }

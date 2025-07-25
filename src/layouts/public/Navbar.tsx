@@ -20,17 +20,17 @@ const Navbar: React.FC = () => {
         </a>
       </li>
       <li>
-        <a href="/login" aria-label={t("signup.footer.login")}>
-          {t("signup.footer.login")}
+        <a href="/login" aria-label={t("auth.login.title")}>
+          {t("auth.login.title")}
         </a>
       </li>
       <li>
         <a
           href="/signup"
           className={styles.signup}
-          aria-label={t("signup.header.title")}
+          aria-label={t("auth.login.signUp")}
         >
-          {t("signup.header.title")}
+          {t("auth.login.signUp")}
         </a>
       </li>
     </>

@@ -17,7 +17,7 @@ const EmailField: React.FC<EmailFieldProps> = ({
 }) => (
   <div className="mb-4">
     <label htmlFor="email" className="block mb-1 font-medium">
-      {t("signup.form.labels.email")}
+      {t("auth.signup.form.labels.email")}
     </label>
     <input
       id="email"

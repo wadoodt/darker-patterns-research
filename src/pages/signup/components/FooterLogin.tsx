@@ -8,12 +8,12 @@ const FooterLogin: React.FC<FooterLoginProps> = ({ t }) => (
   <div
     style={{ textAlign: "center", marginTop: 16, fontSize: 14, color: "#666" }}
   >
-    {t("signup.footer.haveAccount")}{" "}
+    {t("auth.signup.footer.haveAccount")}{" "}
     <a
       href="/login"
       style={{ color: "#111", textDecoration: "underline", fontWeight: 500 }}
     >
-      {t("signup.footer.login")}
+      {t("auth.signup.footer.login")}
     </a>
   </div>
 );

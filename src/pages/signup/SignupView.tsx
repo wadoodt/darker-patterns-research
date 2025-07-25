@@ -27,7 +27,7 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
 
   useEffect(() => {
     if (signupType === "new" && !selectedPlan) {
-      setError(t("signup.alerts.error.selectPlan"));
+      setError(t("auth.signup.alerts.error.selectPlan"));
     } else {
       setError(null);
     }
@@ -51,7 +51,7 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
     setIsLoading(true);
     setError(null);
     if (password !== confirmPassword) {
-      setError(t("signup.alerts.error.passwordMismatch"));
+      setError(t("auth.signup.alerts.error.passwordMismatch"));
       setIsLoading(false);
       return;
     }
@@ -77,7 +77,7 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
       // TODO: When backend is ready, redirect to paymentData.stripeUrl for real Stripe onboarding
       window.location.href = "/success";
     } catch {
-      setError(t("signup.alerts.error.generic"));
+      setError(t("auth.signup.alerts.error.generic"));
     } finally {
       setIsLoading(false);
     }

@@ -17,7 +17,7 @@ const NameFields: React.FC<NameFieldsProps> = ({
 }) => (
   <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
     <div style={{ flex: 1 }}>
-      <label htmlFor="firstName">{t("signup.form.labels.firstName")}</label>
+      <label htmlFor="firstName">{t("auth.signup.form.labels.firstName")}</label>
       <input
         id="firstName"
         type="text"
@@ -33,7 +33,7 @@ const NameFields: React.FC<NameFieldsProps> = ({
       />
     </div>
     <div style={{ flex: 1 }}>
-      <label htmlFor="lastName">{t("signup.form.labels.lastName")}</label>
+      <label htmlFor="lastName">{t("auth.signup.form.labels.lastName")}</label>
       <input
         id="lastName"
         type="text"

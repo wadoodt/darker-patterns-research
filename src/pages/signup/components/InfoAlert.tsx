@@ -29,11 +29,11 @@ const InfoAlert: React.FC<InfoAlertProps> = ({
     >
       <KeyRound size={18} />
       <div>
-        <strong>{t("signup.alerts.newAccount.title")}</strong>
+        <strong>{t("auth.signup.alerts.newAccount.title")}</strong>
         <div>
-          {t("signup.alerts.newAccount.description", {
+          <p>{t("auth.signup.alerts.newAccount.description", {
             plan: getPlanLabel(selectedPlan),
-          })}
+          })}</p>
         </div>
       </div>
     </div>

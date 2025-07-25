@@ -36,21 +36,10 @@ export type ApiResponse<T> =
 /**
  * Represents the structure of a User object.
  */
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  username: string;
-  role: "user" | "admin" | "super-admin" | "qa";
-  companyId: string;
-  status: "created" | "active" | "inactive";
-  // The password should never be sent to the client, but is here for mock DB purposes.
-  password?: string;
-};
+export type { User, UserProfile, UserSettings, CreateUserPayload } from "./user";
+export type { TeamMember, TeamMembersResponse } from "./team";
 
-export type CreateUserPayload = Omit<User, "id" | "status"> & {
-  password: string;
-};
+
 
 /**
  * Represents the structure of a Company object.

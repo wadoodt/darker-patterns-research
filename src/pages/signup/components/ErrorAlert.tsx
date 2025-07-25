@@ -23,7 +23,7 @@ const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, t }) => {
     >
       <Terminal size={18} />
       <div>
-        <strong>{t("signup.alerts.error.title")}</strong>
+        <strong>{t("auth.signup.alerts.error.title")}</strong>
         <div>{error}</div>
       </div>
     </div>

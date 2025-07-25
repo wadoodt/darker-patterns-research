@@ -115,7 +115,7 @@
       },
       "premium": {
         "title": "Premium",
-        "description": "Para empresas establecidas que escalan su alcance.",
+        "description": "Para empresas establecidas que escalan sus esfuerzos de divulgación.",
         "price": "$249",
         "interval": "/mes",
         "features": [
@@ -135,7 +135,7 @@
         "price": "Contáctanos",
         "features": [
           "Límites de dominio personalizados",
-          "Volumen de envío de correos personalizado",
+          "Volumen de envío de correo personalizado",
           "Desarrollo de funciones a medida",
           "Gerente de cuenta dedicado",
           "Acuerdos de nivel de servicio (SLA)",
@@ -149,19 +149,11 @@
       "items": [
         {
           "question": "¿Hay un plan gratuito o prueba?",
-          "answer": "No, actualmente no ofrecemos un plan gratuito ni una prueba tradicional. Sin embargo, puedes explorar la plataforma usando nuestra cuenta de prueba para ver cómo funciona. Usa las credenciales: Correo: `test@email.com` Contraseña: `Test#1234` ID de empresa: `Test1234567890` Código de referencia: `Test1234567890`. Ten en cuenta que las acciones en esta cuenta están simuladas y no se envían correos reales ni se calientan dominios. Cuando estés listo para usar el servicio activamente, selecciona uno de nuestros planes pagos."
-        },
-        {
-          "question": "¿Qué métodos de pago aceptan?",
-          "answer": "Usamos Stripe como procesador de pagos. Esto nos permite aceptar una amplia variedad de métodos, incluyendo tarjetas de crédito principales (Visa, Mastercard, American Express), tarjetas de débito y otras opciones regionales como SEPA Direct Debit, iDEAL, etc., dependiendo de tu ubicación."
+          "answer": "No ofrecemos un plan gratuito, pero sí una garantía de devolución de dinero de 30 días. Si no estás satisfecho, contáctanos dentro de los 30 días y te reembolsaremos tu pago."
         },
         {
           "question": "No me convence alguna parte del plan o tengo sugerencias.",
-          "answer": "¡Agradecemos tus comentarios! Si alguna función de los planes Negocios o Premium no se ajusta a tus necesidades, o tienes sugerencias de mejora, contáctanos a través de la página de Contacto. Para requerimientos muy específicos o modificaciones importantes, el plan 'Personalizado' está diseñado para ofrecer soluciones a medida. Habla con nuestro equipo de ventas para crear el plan ideal para ti."
-        },
-        {
-          "question": "¿Puedo obtener un descuento?",
-          "answer": "Ocasionalmente ofrecemos promociones o descuentos, especialmente para compromisos anuales o entidades sin fines de lucro. Por favor, contacta a nuestro equipo de ventas o soporte para consultar ofertas actuales o discutir descuentos según tu situación (volumen, duración, etc.). El plan 'Personalizado' también permite negociar según el alcance del servicio."
+          "answer": "¡Nos encantaría escucharte! Envíanos un correo electrónico a feedback@penguinmails.com con tus sugerencias. Si implementamos tu sugerencia, te daremos un descuento de por vida en tu plan."
         }
       ]
     }
@@ -174,17 +166,13 @@
         "name": "Tu Nombre",
         "email": "Correo Electrónico",
         "subject": "Asunto",
-        "message": "¿En qué podemos ayudarte?",
+        "message": "Mensaje",
         "submit": "Enviar Mensaje"
       },
-      "success": {
-        "title": "¡Mensaje Enviado!",
-        "message": "Hemos recibido tu mensaje y nos pondremos en contacto contigo pronto."
-      },
-      "error": {
-        "title": "Algo salió mal",
-        "message": "Por favor, inténtalo de nuevo o contáctanos en support@penguinmails.com"
-      }
+      "success_message": "Gracias por contactarnos. Nos pondremos en contacto contigo pronto."
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes"
     },
     "video_tutorials": {
       "title": "Tutoriales en Video"
@@ -201,20 +189,10 @@
           "description": "Aprende a crear tu primera campaña de correo frío desde la configuración hasta el lanzamiento.",
           "category": "Campañas"
         },
-        "domain_setup": {
-          "title": "Configuración de Dominio y DNS",
-          "description": "Guía completa para configurar tu dominio con los registros DNS adecuados para la entrega de correos.",
-          "category": "Dominios"
-        },
-        "email_warmup": {
-          "title": "Mejores Prácticas para el Calentamiento de Correos",
-          "description": "Cómo calentar correctamente tus buzones para una óptima capacidad de entrega y ubicación en la bandeja de entrada.",
-          "category": "Calentamiento"
-        },
         "deliverability": {
-          "title": "Entendiendo la Capacidad de Entrega de Correos",
-          "description": "Aprende sobre los factores que afectan la capacidad de entrega de correos y cómo mejorar tu reputación como remitente.",
-          "category": "Entrega"
+          "title": "Mejorando la Entregabilidad del Correo Electrónico",
+          "description": "Estrategias para asegurar que tus correos lleguen a la bandeja de entrada, no a la carpeta de spam.",
+          "category": "Entregabilidad"
         },
         "templates": {
           "title": "Creando Plantillas de Correo Efectivas",
@@ -234,13 +212,13 @@
     },
     "search_placeholder": "Buscar artículos...",
     "videos": {
-      "complete_campaign_setup": {
-        "title": "Guía completa de configuración de campaña",
-        "description": "Una guía paso a paso para crear tu primera campaña."
+      "getting_started": {
+        "title": "Guía de Inicio Rápido",
+        "description": "Un recorrido completo por las características clave de nuestra plataforma."
       },
-      "domain_config": {
-        "title": "Configuración de dominio y buzones",
-        "description": "Cómo configurar dominios y crear buzones para envíos."
+      "domain_setup": {
+        "title": "Configuración de Dominio y Buzón",
+        "description": "Cómo configurar dominios y crear buzones para enviar."
       },
       "warmup_process": {
         "title": "Proceso de calentamiento explicado",
@@ -248,66 +226,79 @@
       }
     }
   },
-  "signup": {
-    "header": {
-      "title": "Crea tu cuenta en Penguin Mails",
-      "description": "Únete a un equipo existente o crea el tuyo propio."
+  "auth": {
+
+    "login": {
+      "title": "Iniciar Sesión",
+      "emailLabel": "Correo Electrónico",
+      "passwordLabel": "Contraseña",
+      "emailPlaceholder": "nombre@ejemplo.com",
+      "passwordPlaceholder": "Tu contraseña",
+      "rememberMe": "Recuérdame",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submitButton": "Iniciar Sesión",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Regístrate"
     },
-    "form": {
-      "typeLabel": "¿Te unes a una empresa existente o creas una nueva cuenta?",
-      "options": {
-        "new": "Crear nueva",
-        "existing": "Unirse a existente"
+    "signup": {
+      "header": {
+        "title": "Crea Tu Cuenta",
+        "description": "Únete a PenguinMails para empezar a enviar campañas exitosas."
       },
-      "labels": {
-        "email": "Correo electrónico",
-        "password": "Contraseña",
-        "confirmPassword": "Confirmar contraseña",
-        "businessId": "ID de empresa",
-        "referralCode": "Código de referencia",
-        "firstName": "Nombre",
-        "lastName": "Apellido",
-        "businessName": "Nombre de la empresa"
+      "form": {
+        "typeLabel": "Tipo de Registro",
+        "options": {
+          "new": "Crear una nueva cuenta de empresa",
+          "existing": "Unirse a una empresa existente"
+        },
+        "labels": {
+          "firstName": "Nombre",
+          "lastName": "Apellido",
+          "email": "Correo Electrónico",
+          "password": "Contraseña",
+          "confirmPassword": "Confirmar Contraseña",
+          "businessName": "Nombre de la Empresa",
+          "businessId": "ID de la Empresa",
+          "referralCode": "Código de Referencia (Opcional)"
+        }
       },
-      "placeholders": {
-        "email": "tu@email.com",
-        "businessId": "Ingresa el ID proporcionado por tu equipo",
-        "referralCode": "Ingresa el código proporcionado por tu equipo",
-        "firstName": "Juan",
-        "lastName": "Pérez",
-        "businessName": "Nombre de tu empresa"
+      "buttons": {
+        "signingUp": "Registrando...",
+        "createAccount": "Crear Cuenta",
+        "joinBusiness": "Unirse a la Empresa"
+      },
+      "alerts": {
+        "newAccount": {
+          "title": "Estás creando una nueva cuenta.",
+          "description": "Has seleccionado el plan '{{plan}}'."
+        },
+        "joining": {
+          "title": "Te estás uniendo a una empresa existente.",
+          "description": "Tu cuenta se asociará con el ID de empresa proporcionado."
+        },
+        "error": {
+          "title": "Error",
+          "selectPlan": "Por favor, selecciona un plan para continuar.",
+          "passwordMismatch": "Las contraseñas no coinciden.",
+          "generic": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
+        }
+      },
+      "footer": {
+        "haveAccount": "¿Ya tienes una cuenta?",
+        "login": "Iniciar Sesión"
       }
     },
-    "alerts": {
-      "joining": {
-        "title": "Uniéndote a un equipo",
-        "description": "Asegúrate de tener el ID de empresa y el código de referencia correctos de tu administrador."
-      },
-      "newAccount": {
-        "title": "Creando nueva cuenta",
-        "description": "Te estás registrando en el plan {{plan}}. Podrás gestionar tu suscripción más adelante."
-      },
-      "planRequired": {
-        "title": "Plan requerido",
-        "description": "Por favor selecciona un plan antes de crear una nueva cuenta."
-      },
-      "error": {
-        "title": "Error",
-        "passwordMismatch": "Las contraseñas no coinciden.",
-        "noPlan": "No puedes crear una cuenta nueva sin seleccionar un plan. Por favor visita la página de Precios.",
-        "missingBusinessInfo": "El ID de empresa y el código de referencia son obligatorios para unirse a una empresa existente.",
-        "generic": "El registro falló. Por favor, inténtalo de nuevo.",
-        "selectPlan": "Por favor selecciona un plan en la página de Precios antes de crear una cuenta nueva."
-      }
-    },
-    "buttons": {
-      "createAccount": "Crear cuenta",
-      "joinBusiness": "Unirse a empresa",
-      "signingUp": "Registrando..."
-    },
-    "footer": {
-      "haveAccount": "¿Ya tienes una cuenta?",
-      "login": "Iniciar sesión"
+    "register": {
+      "title": "Crear una Cuenta",
+      "emailLabel": "Correo Electrónico",
+      "passwordLabel": "Contraseña",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "emailPlaceholder": "nombre@ejemplo.com",
+      "passwordPlaceholder": "Crea una contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu contraseña",
+      "submitButton": "Registrarse",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar Sesión"
     }
   },
   "success": {
@@ -457,5 +448,38 @@
     "submitReply": "Enviar respuesta",
     "errorLoading": "Error al cargar los detalles del ticket.",
     "notFound": "Ticket no encontrado."
+  },
+  "team": {
+    "title": "Gestionar Equipo",
+    "description": "Invita y gestiona los miembros de tu equipo.",
+    "invite": "Invitar Miembro",
+    "invite_modal": {
+      "title": "Invitar Nuevo Miembro del Equipo",
+      "email": "Dirección de Correo Electrónico",
+      "role": "Rol",
+      "roles": {
+        "admin": "Administrador",
+        "member": "Miembro"
+      },
+      "send_invite": "Enviar Invitación"
+    },
+    "members": {
+      "title": "Miembros del Equipo",
+      "member": "Miembro",
+      "role": "Rol",
+      "status": "Estado",
+      "actions": "Acciones",
+      "statuses": {
+        "pending": "Pendiente",
+        "active": "Activo"
+      },
+      "remove_member_confirm": "¿Estás seguro de que quieres eliminar a este miembro del equipo?"
+    }
+  },
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "page": "Página",
+    "of": "de"
   }
 }

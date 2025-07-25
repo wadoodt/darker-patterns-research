@@ -15,7 +15,7 @@ const SignupTypeSelector: React.FC<SignupTypeSelectorProps> = ({
   t,
 }) => (
   <div style={{ marginBottom: 16 }}>
-    <label style={{ fontWeight: 500 }}>{t("signup.form.typeLabel")}</label>
+    <label style={{ fontWeight: 500 }}>{t("auth.signup.form.typeLabel")}</label>
     <div style={{ display: "flex", gap: 16, marginTop: 8 }}>
       <label
         style={{
@@ -36,7 +36,7 @@ const SignupTypeSelector: React.FC<SignupTypeSelectorProps> = ({
           style={{ display: "none" }}
         />
         <UserPlus style={{ marginBottom: 4 }} />
-        <div>{t("signup.form.options.new")}</div>
+        <div>{t("auth.signup.form.options.new")}</div>
       </label>
       <label
         style={{
@@ -58,7 +58,7 @@ const SignupTypeSelector: React.FC<SignupTypeSelectorProps> = ({
           style={{ display: "none" }}
         />
         <Building style={{ marginBottom: 4 }} />
-        <div>{t("signup.form.options.existing")}</div>
+        <div>{t("auth.signup.form.options.existing")}</div>
       </label>
     </div>
   </div>

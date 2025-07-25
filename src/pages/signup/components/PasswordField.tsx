@@ -17,7 +17,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
 }) => (
   <div className="mb-4">
     <label htmlFor="password" className="block mb-1 font-medium">
-      {t("signup.form.labels.password")}
+      {t("auth.signup.form.labels.password")}
     </label>
     <input
       id="password"

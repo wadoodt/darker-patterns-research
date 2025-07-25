@@ -19,17 +19,17 @@ const SignupSubmitButton: React.FC<SignupSubmitButtonProps> = ({
     disabled={isLoading || (signupType === "new" && !selectedPlan)}
     aria-label={
       isLoading
-        ? t("signup.buttons.signingUp")
+        ? t("auth.signup.buttons.signingUp")
         : signupType === "new"
-          ? t("signup.buttons.createAccount")
-          : t("signup.buttons.joinBusiness")
+          ? t("auth.signup.buttons.createAccount")
+          : t("auth.signup.buttons.joinBusiness")
     }
   >
     {isLoading
-      ? t("signup.buttons.signingUp")
+      ? t("auth.signup.buttons.signingUp")
       : signupType === "new"
-        ? t("signup.buttons.createAccount")
-        : t("signup.buttons.joinBusiness")}
+        ? t("auth.signup.buttons.createAccount")
+        : t("auth.signup.buttons.joinBusiness")}
   </button>
 );
 

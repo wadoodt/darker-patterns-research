@@ -26,7 +26,7 @@ const BusinessFields: React.FC<BusinessFieldsProps> = ({
     {signupType === "new" && (
       <div style={{ marginBottom: 16 }}>
         <label htmlFor="businessName">
-          {t("signup.form.labels.businessName")}
+          {t("auth.signup.form.labels.businessName")}
         </label>
         <input
           id="businessName"
@@ -47,7 +47,7 @@ const BusinessFields: React.FC<BusinessFieldsProps> = ({
       <>
         <div style={{ marginBottom: 16 }}>
           <label htmlFor="businessId">
-            {t("signup.form.labels.businessId")}
+            {t("auth.signup.form.labels.businessId")}
           </label>
           <input
             id="businessId"
@@ -65,7 +65,7 @@ const BusinessFields: React.FC<BusinessFieldsProps> = ({
         </div>
         <div style={{ marginBottom: 16 }}>
           <label htmlFor="referralCode">
-            {t("signup.form.labels.referralCode")}
+            {t("auth.signup.form.labels.referralCode")}
           </label>
           <input
             id="referralCode"
@@ -94,8 +94,8 @@ const BusinessFields: React.FC<BusinessFieldsProps> = ({
         >
           <Building size={18} />
           <div>
-            <strong>{t("signup.alerts.joining.title")}</strong>
-            <div>{t("signup.alerts.joining.description")}</div>
+            <strong>{t("auth.signup.alerts.joining.title")}</strong>
+            <div>{t("auth.signup.alerts.joining.description")}</div>
           </div>
         </div>
       </>

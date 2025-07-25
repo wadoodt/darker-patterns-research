@@ -64,9 +64,9 @@ const SignupTemplate: React.FC<SignupTemplateProps> = (props) => {
     <Card style={{ maxWidth: 400, margin: "2rem auto", padding: 24 }}>
       <div style={{ textAlign: "center", marginBottom: 16 }}>
         <h2 style={{ fontSize: 24, fontWeight: 700 }}>
-          {t("signup.header.title")}
+          {t("auth.signup.header.title")}
         </h2>
-        <p style={{ color: "#666" }}>{t("signup.header.description")}</p>
+        <p style={{ color: "#666" }}>{t("auth.signup.header.description")}</p>
       </div>
       <SignupForm
         t={t}
