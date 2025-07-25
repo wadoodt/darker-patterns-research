@@ -449,7 +449,11 @@
     "edit": "Edit",
     "delete": "Delete",
     "loading": "Loading team members...",
-    "no_members": "No team members found."
+    "no_members": "No team members found.",
+    "delete_member_title": "Delete Member",
+    "delete_member_confirmation": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm_delete": "Confirm Delete"
   },
   "pagination": {
     "page_of": "Page {{currentPage}} of {{totalPages}}",

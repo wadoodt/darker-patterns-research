@@ -83,11 +83,17 @@ const routes: Array<[string, RegExp, unknown]> = [
   ],
 
   // Team
+  ["POST /api/team", /^\/api\/team$/, teamHandlers.createTeamMember],
   ["GET /api/team", /^\/api\/team$/, teamHandlers.getTeamMembers],
   [
     "PATCH /api/team/:id",
     /^\/api\/team\/([^/]+)$/,
     teamHandlers.updateTeamMember,
+  ],
+  [
+    "DELETE /api/team/:id",
+    /^\/api\/team\/([^/]+)$/,
+    teamHandlers.deleteTeamMember,
   ],
 ];
 

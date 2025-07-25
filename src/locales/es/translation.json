@@ -450,31 +450,21 @@
     "notFound": "Ticket no encontrado."
   },
   "team": {
-    "title": "Gestionar Equipo",
-    "description": "Invita y gestiona los miembros de tu equipo.",
+    "header": "Gestión de Equipo",
     "invite": "Invitar Miembro",
-    "invite_modal": {
-      "title": "Invitar Nuevo Miembro del Equipo",
-      "email": "Dirección de Correo Electrónico",
-      "role": "Rol",
-      "roles": {
-        "admin": "Administrador",
-        "member": "Miembro"
-      },
-      "send_invite": "Enviar Invitación"
-    },
-    "members": {
-      "title": "Miembros del Equipo",
-      "member": "Miembro",
-      "role": "Rol",
-      "status": "Estado",
-      "actions": "Acciones",
-      "statuses": {
-        "pending": "Pendiente",
-        "active": "Activo"
-      },
-      "remove_member_confirm": "¿Estás seguro de que quieres eliminar a este miembro del equipo?"
-    }
+    "member": "Miembro",
+    "role": "Rol",
+    "status": "Estado",
+    "last_active": "Última vez activo",
+    "actions": "Acciones",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "loading": "Cargando miembros del equipo...",
+    "no_members": "No se encontraron miembros del equipo.",
+    "delete_member_title": "Eliminar Miembro",
+    "delete_member_confirmation": "¿Estás seguro de que quieres eliminar a {{name}}? Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm_delete": "Confirmar Eliminación"
   },
   "pagination": {
     "previous": "Anterior",

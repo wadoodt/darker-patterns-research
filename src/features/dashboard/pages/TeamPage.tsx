@@ -12,7 +12,8 @@ const TeamPage = () => {
     loading, 
     error, 
     errorMessage, 
-    handleUpdateMember, 
+    handleUpdateMember,
+    handleDeleteMember,
     setCurrentPage 
   } = useTeamPage();
 
@@ -38,6 +39,7 @@ const TeamPage = () => {
         error={error}
         errorMessage={errorMessage}
         onUpdateMember={handleUpdateMember}
+        onDeleteMember={handleDeleteMember}
       />
       <PaginationSection pagination={pagination} onPageChange={setCurrentPage} />
     </Box>

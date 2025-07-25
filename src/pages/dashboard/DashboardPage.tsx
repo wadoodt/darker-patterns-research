@@ -13,6 +13,7 @@ import TicketDetailPage from "@features/admin-panel/pages/TicketDetailPage";
 import SettingsPage from "@features/dashboard/pages/SettingsPage";
 import SupportPage from "@features/dashboard/pages/SupportPage";
 import UserTicketDetailPage from "@features/dashboard/pages/support/UserTicketDetailPage";
+import CreateTeamMemberPage from "@features/dashboard/pages/team/pages/CreateTeamMemberPage";
 
 const DashboardPage: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -83,6 +84,14 @@ const DashboardPage: React.FC = () => {
           element={
             <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
               <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/team/new"
+          element={
+            <ProtectedRoute roles={["admin", "super-admin"]}>
+              <CreateTeamMemberPage />
             </ProtectedRoute>
           }
         />

@@ -1,6 +1,7 @@
 import Button from "@components/Button";
 import { Flex, Heading } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export const HeaderSection = () => {
   const { t } = useTranslation();
@@ -10,7 +11,9 @@ export const HeaderSection = () => {
       <Heading as="h1" size="6">
         {t("team.header")}
       </Heading>
-      <Button>{t("team.invite")}</Button>
+      <Link to="/team/new">
+        <Button>{t("team.invite")}</Button>
+      </Link>
     </Flex>
   );
 };

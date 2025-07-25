@@ -3,6 +3,7 @@ import { Table, Badge, Button, Flex } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import type { TeamMember } from "types/api/team";
 import EditMemberModal from "../modals/EditMemberModal";
+import DeleteMemberModal from "../modals/DeleteMemberModal";
 
 interface TeamMembersTableSectionProps {
   members: TeamMember[];
@@ -10,21 +11,36 @@ interface TeamMembersTableSectionProps {
   error: boolean;
   errorMessage: string | null;
   onUpdateMember: (member: TeamMember) => void;
+  onDeleteMember: (memberId: string) => void;
 }
 
-export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = ({ members, loading, error, errorMessage, onUpdateMember }) => {
+export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = ({ members, loading, error, errorMessage, onUpdateMember, onDeleteMember }) => {
   const { t } = useTranslation();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   const handleEditClick = (member: TeamMember) => {
     setSelectedMember(member);
-    setModalOpen(true);
+    setEditModalOpen(true);
+  };
+
+  const handleDeleteClick = (member: TeamMember) => {
+    setSelectedMember(member);
+    setDeleteModalOpen(true);
   };
 
   const handleModalClose = () => {
-    setModalOpen(false);
+    setEditModalOpen(false);
+    setDeleteModalOpen(false);
     setSelectedMember(null);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedMember) {
+      onDeleteMember(selectedMember.id);
+    }
+    handleModalClose();
   };
 
   return (
@@ -60,7 +76,7 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
                 <Table.Cell>
                   <Flex gap="3">
                     <Button size="1" variant="soft" onClick={() => handleEditClick(member)}>{t("team.edit")}</Button>
-                    <Button size="1" variant="soft" color="red">{t("team.delete")}</Button>
+                    <Button size="1" variant="soft" color="red" onClick={() => handleDeleteClick(member)}>{t("team.delete")}</Button>
                   </Flex>
                 </Table.Cell>
               </Table.Row>
@@ -68,11 +84,17 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
           )}
         </Table.Body>
       </Table.Root>
-      <EditMemberModal
-        isOpen={isModalOpen}
+            <EditMemberModal
+        isOpen={isEditModalOpen}
         onClose={handleModalClose}
         member={selectedMember}
         onSave={onUpdateMember}
+      />
+      <DeleteMemberModal 
+        isOpen={isDeleteModalOpen} 
+        onClose={handleModalClose} 
+        onConfirm={handleDeleteConfirm} 
+        memberName={selectedMember?.name || ''} 
       />
     </>
   );

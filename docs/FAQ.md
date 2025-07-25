@@ -4,6 +4,42 @@ This document covers common issues and their solutions that may arise during dev
 
 ---
 
+## **Problem:** JSON translation files cause build or runtime errors.
+
+**Symptoms:**
+- The application fails to build or throws runtime errors related to i18next after modifying a `.json` translation file.
+
+**Root Cause & Solution:**
+- **Root Cause:** JSON has a very strict syntax. The most common errors are:
+    - **Trailing commas:** A comma after the last item in an object or array.
+    - **Duplicate keys:** The same key defined more than once within the same object.
+    - **Missing braces or brackets:** Malformed JSON structure.
+- **Solution:** Always validate your JSON files. Use a linter or an online validator to catch syntax errors before committing. A single misplaced comma can break the entire translation system.
+
+---
+
+## **Problem:** The UI displays a translation key path instead of the translated string.
+
+**Symptoms:**
+- You see a key path like `team.delete_member_title` in the UI instead of "Delete Member".
+
+**Root Cause & Solution:**
+- **Root Cause:** The key was added to the wrong level of the JSON object in the translation file. For example, adding `delete_member_title` inside `team.actions` when the code was calling `t('team.delete_member_title')`.
+- **Solution:** Ensure the structure of your translation objects in both English and other languages matches precisely. When adding a new key, double-check the path you are using in the `t()` function and verify it matches the object hierarchy in the JSON file.
+
+---
+
+## **Problem:** A new page or modal is created, but there is no way to access it from the UI.
+
+**Symptoms:**
+- The logic for a new feature is complete, but there is no button or link to trigger it.
+
+**Root Cause & Solution:**
+- **Root Cause:** It's easy to focus on building the logic and the destination component (e.g., `CreateTeamMemberPage`) and forget to connect the starting point (e.g., the "Invite" button in the header).
+- **Solution:** As a final step in any UI feature development, always trace the user flow from the beginning. Ensure every button or link that should trigger an action is correctly wired up with `useNavigate`, a `<Link>` component, or an `onClick` handler.
+
+---
+
 ## **New: How do I style public pages and use the new theming system?**
 
 **Q: How is theming handled for public pages?**

@@ -1,8 +1,13 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAsyncCache } from "@hooks/useAsyncCache";
+import { useCache } from "@contexts/CacheContext";
 import api from "@api/client";
-import type { TeamMember, TeamMembersResponse } from "types/api";
+import type {
+  TeamMember,
+  TeamMembersResponse,
+  NewTeamMember,
+} from "types/api";
 import { AxiosError } from "axios";
 import { CacheLevel } from "@lib/cache/types";
 
@@ -14,6 +19,7 @@ const fetchTeamMembers = async (page: number) => {
 };
 
 export const useTeamPage = () => {
+  const { invalidateByPattern: invalidate } = useCache();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
@@ -47,10 +53,32 @@ export const useTeamPage = () => {
     return null;
   }, [error]);
 
-  const handleUpdateMember = async (member: TeamMember) => {
+    const handleCreateMember = async (newMember: NewTeamMember) => {
+    try {
+      await api.post("/team", newMember);
+      // Invalidate all cache entries starting with 'team-members'
+      // to ensure the list is fresh on any page.
+      await invalidate("^team-members");
+    } catch (error) {
+      console.error("Failed to create team member", error);
+      // Optionally, set an error message to display in the UI
+    }
+  };
+
+    const handleDeleteMember = async (memberId: string) => {
+    try {
+      await api.delete(`/team/${memberId}`);
+      await invalidate("^team-members");
+    } catch (error) {
+      console.error("Failed to delete team member", error);
+      // Optionally, set an error message to display in the UI
+    }
+  };
+
+    const handleUpdateMember = async (member: TeamMember) => {
     try {
       await api.patch(`/team/${member.id}`, member);
-      refresh();
+      await invalidate("^team-members");
     } catch (error) {
       console.error("Failed to update team member", error);
       // Optionally, set an error message to display in the UI
@@ -64,6 +92,8 @@ export const useTeamPage = () => {
     teamMembers,
     pagination,
     setCurrentPage,
+    handleCreateMember,
+    handleDeleteMember,
     handleUpdateMember,
     invalidateCache: refresh,
   };

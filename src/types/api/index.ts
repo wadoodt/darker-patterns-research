@@ -37,7 +37,7 @@ export type ApiResponse<T> =
  * Represents the structure of a User object.
  */
 export type { User, UserProfile, UserSettings, CreateUserPayload } from "./user";
-export type { TeamMember, TeamMembersResponse } from "./team";
+export type { TeamMember, TeamMembersResponse, NewTeamMember } from "./team";
 
 
 

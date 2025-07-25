@@ -8,6 +8,12 @@ export type TeamMember = {
   lastActive: string;
 };
 
+export type NewTeamMember = {
+  name: string;
+  email: string;
+  role: "admin" | "user";
+};
+
 export type TeamMembersResponse = {
   members: TeamMember[];
   totalPages: number;
