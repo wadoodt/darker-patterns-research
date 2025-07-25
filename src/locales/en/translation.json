@@ -443,6 +443,7 @@
     "invite": "Invite Member",
     "member": "Member",
     "role": "Role",
+    "platform_role": "Platform Role",
     "status": "Status",
     "last_active": "Last Active",
     "actions": "Actions",

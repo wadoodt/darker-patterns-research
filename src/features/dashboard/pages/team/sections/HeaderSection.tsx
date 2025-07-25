@@ -11,7 +11,7 @@ export const HeaderSection = () => {
       <Heading as="h1" size="6">
         {t("team.header")}
       </Heading>
-      <Link to="/team/new">
+      <Link to="new">
         <Button>{t("team.invite")}</Button>
       </Link>
     </Flex>

@@ -44,7 +44,7 @@ export const dashboardNavigation: NavigationItem[] = [
     href: "/dashboard",
     icon: LayoutDashboard,
     component: DashboardHomePage,
-    roles: ["admin", "super-admin", "qa"],
+    roles: ["user", "admin", "super-admin", "qa"],
   },
   {
     name: "sidebar.dashboard.team",
@@ -87,7 +87,7 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin-panel",
     icon: LayoutDashboard,
     component: AdminPanelPage,
-    roles: ["super-admin", "qa"],
+    roles: ["representative", "super-admin", "qa"],
   },
   {
     name: "sidebar.admin.users",
@@ -103,7 +103,7 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin-panel/tickets",
     icon: Ticket,
     component: TicketsPage,
-    roles: ["super-admin", "qa"],
+    roles: ["representative", "super-admin", "qa"],
   },
   {
     name: "sidebar.admin.articles",
@@ -111,7 +111,7 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin-panel/articles",
     icon: BookText,
     component: ArticlesPage,
-    roles: ["super-admin", "qa"],
+    roles: ["representative", "super-admin", "qa"],
   },
   {
     name: "sidebar.admin.companies",
@@ -119,7 +119,7 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin-panel/companies",
     icon: Building,
     component: AdminPanelCompaniesPage,
-    roles: ["super-admin", "qa"],
+    roles: ["representative", "super-admin", "qa"],
   },
   {
     name: "sidebar.admin.config",
@@ -135,6 +135,6 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin-panel/infra",
     icon: Settings,
     component: AdminPanelInfraPage,
-    roles: ["super-admin", "qa"],
+    roles: ["representative", "super-admin", "qa"],
   },
 ];

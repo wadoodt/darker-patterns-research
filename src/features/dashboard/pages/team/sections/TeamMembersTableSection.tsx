@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Table, Badge, Button, Flex } from "@radix-ui/themes";
+import { Table, Badge, Button, Flex, Switch, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import type { User } from "types/api/user";
+import { useAuth } from "contexts/AuthContext";
 import EditMemberModal from "../modals/EditMemberModal";
 import DeleteMemberModal from "../modals/DeleteMemberModal";
 
@@ -12,13 +13,17 @@ interface TeamMembersTableSectionProps {
   errorMessage: string | null;
   onUpdateMember: (member: User) => void;
   onDeleteMember: (memberId: string) => void;
+  onUpdatePlatformRole: (memberId: string, platformRole: "admin" | "user") => void;
 }
 
-export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = ({ members, loading, error, errorMessage, onUpdateMember, onDeleteMember }) => {
+export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = ({ members, loading, error, errorMessage, onUpdateMember, onDeleteMember, onUpdatePlatformRole }) => {
   const { t } = useTranslation();
+  const { user: authUser } = useAuth();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<User | null>(null);
+
+  const canManageRoles = authUser?.companyRole === 'owner' || authUser?.platformRole === 'admin';
 
   const handleEditClick = (member: User) => {
     setSelectedMember(member);
@@ -51,6 +56,7 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
             <Table.ColumnHeaderCell>{t("team.member")}</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>{t("team.status")}</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>{t("team.role")}</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>{t("team.platform_role")}</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>{t("team.last_active")}</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>{t("team.actions")}</Table.ColumnHeaderCell>
           </Table.Row>
@@ -72,6 +78,21 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
                   <Badge color="grass">{member.status}</Badge>
                 </Table.Cell>
                 <Table.Cell>{member.companyRole}</Table.Cell>
+                <Table.Cell>
+                  <Text as="label" size="2">
+                    <Flex gap="2">
+                      <Switch
+                        checked={member.platformRole === 'admin'}
+                        onCheckedChange={(isChecked) => {
+                          const newRole = isChecked ? 'admin' : 'user';
+                          onUpdatePlatformRole(member.id, newRole);
+                        }}
+                        disabled={!canManageRoles || member.id === authUser?.id || member.companyRole === 'owner'}
+                      />
+                      {member.platformRole}
+                    </Flex>
+                  </Text>
+                </Table.Cell>
                 <Table.Cell>{member.lastActive}</Table.Cell>
                 <Table.Cell>
                   <Flex gap="3">

@@ -95,6 +95,11 @@ const routes: Array<[string, RegExp, unknown]> = [
     /^\/api\/team\/([^/]+)$/,
     teamHandlers.deleteTeamMember,
   ],
+  [
+    "PATCH /api/team/:id/platform-role",
+    /^\/api\/team\/([^/]+)\/platform-role$/,
+    teamHandlers.updatePlatformRole,
+  ],
 ];
 
 /**

@@ -22,6 +22,10 @@ export const RESPONSE_CODES = {
     status: 200,
     message: "response.general.operation_success",
   },
+  NO_DATA: {
+    status: 200,
+    message: "response.general.no_data",
+  },
 } as const;
 
 /**

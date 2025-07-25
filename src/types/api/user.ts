@@ -1,5 +1,5 @@
-export type PlatformRole = "user" | "admin" | "super-admin" | "qa";
-export type CompanyRole = "owner" | "admin" | "employee";
+export type PlatformRole = "user" | "admin" | "representative" | "super-admin" | "qa";
+export type CompanyRole = "owner" | "manager" | "employee";
 export type UserStatus = "created" | "active" | "inactive" | "invited";
 
 export type User = {

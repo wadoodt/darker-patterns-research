@@ -38,4 +38,15 @@ export const mockCompanies: Company[] = [
     status: "inactive",
     stripeCustomerId: "cus_free_1"
   },
+  // create a company with id comp-123 active
+  {
+    id: "comp-123",
+    name: "Cloud Solutions Co.",
+    plan: "Enterprise",
+    status: "active",
+    stripeCustomerId: "cus_enterprise_2",
+    officialEmail: "accounts@cloudsolutions.com",
+    taxId: "DE811234567",
+    taxIdCountry: "DE"
+  },
 ];

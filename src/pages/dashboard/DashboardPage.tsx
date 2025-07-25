@@ -80,14 +80,6 @@ const DashboardPage: React.FC = () => {
           }
         />
         <Route
-          path="/settings"
-          element={
-            <ProtectedRoute roles={["user", "admin", "super-admin", "qa"]}>
-              <SettingsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/team/new"
           element={
             <ProtectedRoute roles={["admin", "super-admin"]}>

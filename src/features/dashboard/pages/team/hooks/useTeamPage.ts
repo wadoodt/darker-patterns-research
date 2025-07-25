@@ -85,6 +85,16 @@ export const useTeamPage = () => {
     }
   };
 
+  const handleUpdatePlatformRole = async (memberId: string, platformRole: 'admin' | 'user') => {
+    try {
+      await api.patch(`/team/${memberId}/platform-role`, { platformRole });
+      await invalidate("^team-members");
+    } catch (error) {
+      console.error("Failed to update platform role", error);
+      // Optionally, set an error message to display in the UI
+    }
+  };
+
   return {
     loading,
     error: !!error,
@@ -95,6 +105,7 @@ export const useTeamPage = () => {
     handleCreateMember,
     handleDeleteMember,
     handleUpdateMember,
+    handleUpdatePlatformRole,
     invalidateCache: refresh,
   };
 };

@@ -1,29 +1,31 @@
 import { db } from "../db";
 import { createSuccessResponse, createErrorResponse } from "../../response";
+import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
 import type { User, NewTeamMember } from "types/api/user";
 import { mockUsers } from "../_data/user-data";
 import { mockCompanies } from "../_data/companies-data";
 
 // Helper function to get team members
-const fetchTeamMembers = (companyId: string): User[] => {
-  const company = mockCompanies.find(c => c.id === companyId);
+const fetchTeamMembers = (companyId: string, userCanReadAll: boolean = false): User[] => {
+  const company = mockCompanies.find((c) => c.id === companyId);
   if (!company) return [];
-  
-  return mockUsers.filter(user => 
-    user.companyId === companyId && 
-    user.companyRole && 
-    user.status === "active"
-  );
+
+  const filterUsers = userCanReadAll
+    ? mockUsers
+    : mockUsers.filter(
+        (user) =>
+          user.companyId === companyId && user.status !== "inactive"
+      );
+  return filterUsers;
 };
 
-// In a real app, these would come from the authenticated user's session
-const CURRENT_COMPANY_ID = "comp-123";
-
-export const createTeamMember = async (
-  request: Request
-): Promise<Response> => {
+export const createTeamMember = async (request: Request): Promise<Response> => {
   try {
-    const { name, email, companyRole } = (await request.json()) as NewTeamMember;
+    const user = getAuthenticatedUser(request);
+    if (!user) return handleUnauthorized();
+
+    const { name, email, companyRole } =
+      (await request.json()) as NewTeamMember;
 
     if (!name || !email || !companyRole) {
       const errorResponse = createErrorResponse("VALIDATION_ERROR", {
@@ -32,17 +34,13 @@ export const createTeamMember = async (
       return new Response(JSON.stringify(errorResponse), { status: 400 });
     }
 
-    // In a real app, we'd check if a user with this email already exists.
-    // If so, we'd invite them. If not, we'd create a new user record.
-    // For this mock, we'll create a new record every time.
-
     const newMember: User = {
       id: crypto.randomUUID(),
       name,
       email,
-      username: email.split('@')[0], // Create a username from the email
-      platformRole: "user", // Invited members are always standard users
-      companyId: CURRENT_COMPANY_ID,
+      username: email.split("@")[0],
+      platformRole: "user",
+      companyId: user.companyId,
       companyRole,
       status: "invited",
       lastActive: "-",
@@ -63,38 +61,43 @@ export const createTeamMember = async (
   }
 };
 
-export const getTeamMembersHandler = async (): Promise<Response> => {
-  try {
-    const members = fetchTeamMembers(CURRENT_COMPANY_ID);
-    const response = createSuccessResponse(members, "OPERATION_SUCCESS");
-    return new Response(JSON.stringify(response), { status: 200 });
-  } catch {
-    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
-      message: "Failed to fetch team members",
-    });
-    return new Response(JSON.stringify(errorResponse), { status: 500 });
-  }
-};
-
 export const getTeamMembers = (request: Request): Response => {
+  const user = getAuthenticatedUser(request);
+  if (!user) return handleUnauthorized();
+
   const url = new URL(request.url);
   const page = parseInt(url.searchParams.get("page") || "1", 10);
   const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-  const allMembers = db.users.findMany({});
+  const allMembers = fetchTeamMembers(user.companyId, user.platformRole === "super-admin" || user.platformRole === "qa");
   const totalMembers = allMembers.length;
+  // if length is zero retunr empty HTTP code, can use 200 but different message
+  if (totalMembers === 0) {
+    const response = createSuccessResponse(
+      {
+        members: [],
+        totalMembers: 0,
+        totalPages: 0,
+        currentPage: 0,
+        limit: 0,
+      },
+      "NO_DATA"
+    );
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   const totalPages = Math.ceil(totalMembers / limit);
   const data = allMembers.slice((page - 1) * limit, page * limit);
 
   const response = createSuccessResponse(
     {
       members: data,
-      pagination: {
-        total: totalMembers,
-        totalPages,
-        page,
-        limit,
-      },
+      totalMembers,
+      totalPages,
+      currentPage: page,
+      limit,
     },
     "OPERATION_SUCCESS"
   );
@@ -106,21 +109,30 @@ export const getTeamMembers = (request: Request): Response => {
 };
 
 export const deleteTeamMember = async (
-  _request: Request,
+  request: Request,
   params: { id: string }
 ): Promise<Response> => {
   try {
+    const authUser = getAuthenticatedUser(request);
+    if (!authUser) return handleUnauthorized();
+
     const { id } = params;
-    const member = db.users.findFirst({
+    const memberToDelete = db.users.findFirst({
       where: { id: id },
     });
 
-    if (!member) {
+    if (!memberToDelete) {
       const errorResponse = createErrorResponse("NOT_FOUND", {
         message: `Team member with id ${id} not found`,
       });
       return new Response(JSON.stringify(errorResponse), {
         status: 404,
+      });
+    }
+
+    if (memberToDelete.companyId !== authUser.companyId) {
+      return new Response(JSON.stringify(createErrorResponse("FORBIDDEN")), {
+        status: 403,
       });
     }
 
@@ -139,18 +151,28 @@ export const deleteTeamMember = async (
   }
 };
 
-export const updateTeamMember = async (
+export const updatePlatformRole = async (
   request: Request,
   params: { id: string }
 ): Promise<Response> => {
   try {
-    const body = (await request.json()) as Partial<User>;
+    const authUser = getAuthenticatedUser(request);
+    if (!authUser) return handleUnauthorized();
 
-    const member = db.users.findFirst({
+    // Authorization: Only owners or admins can change platform roles
+    if (authUser.companyRole !== 'owner' && authUser.platformRole !== 'admin') {
+      return new Response(JSON.stringify(createErrorResponse("FORBIDDEN")), {
+        status: 403,
+      });
+    }
+
+    const { platformRole } = (await request.json()) as { platformRole: 'admin' | 'user' };
+
+    const memberToUpdate = db.users.findFirst({
       where: { id: params.id },
     });
 
-    if (!member) {
+    if (!memberToUpdate) {
       const errorResponse = createErrorResponse("NOT_FOUND", {
         message: `Team member with id ${params.id} not found`,
       });
@@ -159,12 +181,87 @@ export const updateTeamMember = async (
       });
     }
 
+    // Ensure the user being updated is in the same company
+    if (memberToUpdate.companyId !== authUser.companyId) {
+      return new Response(JSON.stringify(createErrorResponse("FORBIDDEN")), {
+        status: 403,
+      });
+    }
+
+    // Prevent users from changing their own role or the owner's role
+    if (memberToUpdate.id === authUser.id || memberToUpdate.companyRole === 'owner') {
+        return new Response(JSON.stringify(createErrorResponse("FORBIDDEN")), {
+            status: 403,
+        });
+    }
+
     const updatedMember = db.users.update({
       where: {
         id: params.id,
       },
       data: {
-        ...member,
+        ...memberToUpdate,
+        platformRole,
+      },
+    });
+
+    if (!updatedMember) {
+      const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
+        message: "Failed to update platform role",
+      });
+      return new Response(JSON.stringify(errorResponse), {
+        status: 500,
+      });
+    }
+
+    const response = createSuccessResponse(updatedMember, "OPERATION_SUCCESS");
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch {
+    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
+      message: "Failed to update platform role",
+    });
+    return new Response(JSON.stringify(errorResponse), { status: 500 });
+  }
+};
+
+export const updateTeamMember = async (
+  request: Request,
+  params: { id: string }
+): Promise<Response> => {
+  try {
+    const authUser = getAuthenticatedUser(request);
+    if (!authUser) return handleUnauthorized();
+
+    const body = (await request.json()) as Partial<User>;
+
+    const memberToUpdate = db.users.findFirst({
+      where: { id: params.id },
+    });
+
+    if (!memberToUpdate) {
+      const errorResponse = createErrorResponse("NOT_FOUND", {
+        message: `Team member with id ${params.id} not found`,
+      });
+      return new Response(JSON.stringify(errorResponse), {
+        status: 404,
+      });
+    }
+
+    if (memberToUpdate.companyId !== authUser.companyId) {
+      return new Response(JSON.stringify(createErrorResponse("FORBIDDEN")), {
+        status: 403,
+      });
+    }
+
+    const updatedMember = db.users.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        ...memberToUpdate,
         ...body,
       },
     });
