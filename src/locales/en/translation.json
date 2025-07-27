@@ -1,94 +1,9 @@
 {
   "public_landing_page": "Public Landing Page",
-  "response": {
-    "auth": {
-      "login_success": "Login successful! Redirecting..."
-    },
-    "general": {
-      "operation_success": "Operation completed successfully."
-    }
-  },
-  "error": {
-    "general": {
-      "internal_server_error": "An internal server error occurred. Please try again later.",
-      "not_found": "The requested resource was not found."
-    },
-    "auth": {
-      "invalid_credentials": "Invalid username or password. Please try again.",
-      "unauthorized": "You are not authorized to perform this action.",
-      "forbidden": "You do not have permission to access this resource."
-    },
-    "validation": {
-      "validation_error": "There were errors with your submission. Please check the fields and try again.",
-      "password_too_short": "Password is too short.",
-      "email_invalid": "The email address is not valid."
-    }
-  },
-  "sidebar": {
-    "dashboard": {
-      "title": "Dashboard",
-      "home": "Home",
-      "settings": "Settings",
-      "team": "Team",
-      "billing": "Billing",
-      "infra": "Infrastructure",
-      "domains": "Domains",
-      "support": "Support",
-      "profile": "Profile"
-    },
-    "admin": {
-      "title": "Admin Panel",
-      "articles": "Knowledge Base Articles",
-      "home": "Admin Home",
-      "settings": "Admin Settings",
-      "users": "Users",
-      "companies": "Companies",
-      "infra": "Admin Infrastructure",
-      "tickets": "Tickets",
-      "config": "Configurations"
-    },
-    "user": {
-      "profile": "Profile",
-      "settings": "Settings"
-    },
-    "status": {
-      "title": "System Status",
-      "allSystemsOperational": "All systems operational"
-    }
-  },
-  "settings": {
-    "title": "Settings",
-    "language": {
-      "title": "Language Preferences",
-      "description": "Choose the language for the application."
-    },
-    "theme": {
-      "title": "Theme Preferences",
-      "description": "Choose the theme for the application.",
-      "options": {
-        "light": "Light",
-        "dark": "Dark",
-        "highContrastLight": "High Contrast Light",
-        "highContrastDark": "High Contrast Dark",
-        "lightSimple": "Light (Simple)"
-      }
-    },
-    "system": {
-      "title": "System-Wide Actions",
-      "warning": "These actions affect all users and should be used with caution.",
-      "emergencyShutdown": "Emergency Shutdown",
-      "shutdown": "Shutdown System"
-    },
-    "company": {
-      "title": "Company Settings",
-      "name": "Company Name",
-      "email": "Company Email Contact",
-      "contactInfo": "Company Contact Information (optional)",
-      "notifications": "Enable Email Notifications",
-      "save": "Save Changes",
-      "support": "Need help? Visit our support page."
-    }
-  },
+
+
+
+
   "pricing": {
     "hero": {
       "title": "Choose Your Plan",
@@ -153,87 +68,6 @@
           "answer": "We'd love to hear from you! Please email us at feedback@penguinmails.com with your suggestions. If we implement your suggestion, we'll give you a lifetime discount on your plan."
         }
       ]
-    }
-  },
-  "support": {
-    "contact_form": {
-      "title": "Contact Support",
-      "subtitle": "Can't find what you're looking for? Our team is here to help.",
-      "fields": {
-        "name": "Your Name",
-        "email": "Email Address",
-        "subject": "Subject",
-        "message": "Message",
-        "submit": "Send Message"
-      },
-      "success_message": "Thanks for reaching out. We'll get back to you shortly."
-    },
-    "faq": {
-      "title": "Frequently Asked Questions"
-    },
-    "video_tutorials": {
-      "title": "Video Tutorials"
-    },
-    "knowledge_base": {
-      "title": "Knowledge Library",
-      "loading": "Loading articles..."
-    },
-    "general_advice": {
-      "title": "General Advice",
-      "articles": {
-        "campaigns": {
-          "title": "Getting Started with Cold Email Campaigns",
-          "description": "Learn how to create your first cold email campaign from setup to launch.",
-          "category": "Campaigns"
-        },
-        "deliverability": {
-          "title": "Improving Email Deliverability",
-          "description": "Strategies to ensure your emails land in the inbox, not the spam folder.",
-          "category": "Deliverability"
-        },
-        "templates": {
-          "title": "Crafting Effective Email Templates",
-          "description": "Tips and strategies for writing compelling cold emails that get responses.",
-          "category": "Templates"
-        },
-        "lead_management": {
-          "title": "Managing Lead Lists and Imports",
-          "description": "How to import, organize, and manage your lead lists for maximum campaign effectiveness.",
-          "category": "Leads"
-        },
-        "email_warmup": {
-          "title": "Email Warmup Best Practices",
-          "description": "Learn how to properly warm up your email accounts to improve deliverability.",
-          "category": "Deliverability"
-        },
-        "domain_setup": {
-          "title": "Domain Configuration Guide",
-          "description": "Step-by-step instructions for setting up your domain for email sending.",
-          "category": "Setup"
-        }
-      }
-    },
-    "videos": {
-      "getting_started": {
-        "title": "Quick Start Guide",
-        "description": "A complete walkthrough of our platform's key features."
-      },
-      "domain_setup": {
-        "title": "Domain & Mailbox Setup",
-        "description": "How to set up domains and create mailboxes for sending."
-      },
-      "warmup_process": {
-        "title": "Warmup Process Explained",
-        "description": "Understanding and optimizing the email warmup process."
-      },
-      "domain_config": {
-        "title": "Domain Configuration Video Tutorial",
-        "description": "Watch how to configure your domain settings for optimal email deliverability."
-      },
-      "complete_campaign_setup": {
-        "title": "Complete Campaign Setup Walkthrough",
-        "description": "Follow along as we set up a complete email campaign from start to finish."
-      }
     }
   },
   "auth": {
@@ -415,43 +249,7 @@
       }
     }
   },
-  "tickets": {
-    "header": "Support Tickets",
-    "subject": "Subject",
-    "email": "Email",
-    "statusLabel": "Status",
-    "actions": "Actions",
-    "createdLabel": "Created",
-    "loading": "Loading tickets...",
-    "noTickets": "No tickets found.",
-    "viewDetails": "View Details",
-    "markAsOpen": "Mark as Open",
-    "markAsInProgress": "Mark as In Progress",
-    "markAsClosed": "Mark as Closed",
-    "previous": "Previous",
-    "next": "Next",
-    "pageInfo": "Page {{currentPage}} of {{totalPages}}",
-    "ticket": "Ticket",
-    "userLabel": "User:",
-    "status": {
-      "open": "Open",
-      "in_progress": "In Progress",
-      "closed": "Closed",
-      "update": "Update Status",
-      "updating": "Updating...",
-      "inProgress": "In Progress"
-    },
-    "user": "User",
-    "submittedLabel": "Submitted:",
-    "conversation": "Conversation",
-    "you": "You",
-    "supportTeam": "Support Team",
-    "postReply": "Post a Reply",
-    "replyPlaceholder": "Type your reply here...",
-    "submitReply": "Submit Reply",
-    "errorLoading": "Error loading ticket details.",
-    "notFound": "Ticket not found."
-  },
+
   "team": {
     "header": "Team Management",
     "invite": "Invite Member",
@@ -469,10 +267,6 @@
     "delete_member_confirmation": "Are you sure you want to delete {{name}}? This action cannot be undone.",
     "cancel": "Cancel",
     "confirm_delete": "Confirm Delete"
-  },
-  "pagination": {
-    "page_of": "Page {{currentPage}} of {{totalPages}}",
-    "previous": "Previous",
-    "next": "Next"
   }
+
 }

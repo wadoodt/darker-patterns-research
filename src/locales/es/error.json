@@ -1,0 +1,16 @@
+{
+  "general": {
+    "internal_server_error": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+    "not_found": "El recurso solicitado no fue encontrado."
+  },
+  "auth": {
+    "invalid_credentials": "Credenciales inválidas. Por favor, inténtalo de nuevo.",
+    "unauthorized": "No tienes autorización para realizar esta acción.",
+    "forbidden": "No tienes permiso para acceder a este recurso."
+  },
+  "validation": {
+    "validation_error": "Hubo errores con tu envío. Por favor, revisa los campos e inténtalo de nuevo.",
+    "password_too_short": "La contraseña es demasiado corta.",
+    "email_invalid": "La dirección de correo electrónico no es válida."
+  }
+}

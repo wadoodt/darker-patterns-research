@@ -1,0 +1,33 @@
+{
+  "title": "Settings",
+  "language": {
+    "title": "Language Preferences",
+    "description": "Choose the language for the application."
+  },
+  "theme": {
+    "title": "Theme Preferences",
+    "description": "Choose the theme for the application.",
+    "options": {
+      "light": "Light",
+      "dark": "Dark",
+      "highContrastLight": "High Contrast Light",
+      "highContrastDark": "High Contrast Dark",
+      "lightSimple": "Light (Simple)"
+    }
+  },
+  "company": {
+    "title": "Company Settings",
+    "name": "Company Name",
+    "email": "Company Email Contact",
+    "contactInfo": "Company Contact Information (optional)",
+    "notifications": "Enable Email Notifications",
+    "save": "Save Changes",
+    "support": "Need help? Visit our support page."
+  },
+  "admin": {
+    "title": "Admin Settings",
+    "description": "Manage system-wide configurations.",
+    "emergencyShutdown": "Emergency Shutdown",
+    "shutdown": "Shutdown System"
+  }
+}

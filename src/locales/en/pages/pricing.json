@@ -1,0 +1,49 @@
+{
+  "hero": {
+    "title": "Choose Your Plan",
+    "description": "Simple, transparent pricing for businesses of all sizes. Start warming up your domains and sending campaigns today."
+  },
+  "plans": {
+    "business": {
+      "title": "Business",
+      "description": "Ideal for growing businesses starting with email outreach.",
+      "price": "$49",
+      "interval": "/ month",
+      "features": [
+        "Up to 5 email accounts",
+        "AI-powered warmup",
+        "Real-time analytics",
+        "Standard support"
+      ],
+      "ctaText": "Choose Business"
+    },
+    "premium": {
+      "title": "Premium",
+      "description": "For established businesses scaling their outreach efforts.",
+      "price": "$99",
+      "interval": "/ month",
+      "features": [
+        "Unlimited email accounts",
+        "Advanced AI warmup",
+        "A/B testing features",
+        "Priority support"
+      ],
+      "ctaText": "Choose Premium"
+    },
+    "custom": {
+      "title": "Custom",
+      "description": "Tailored solutions for large enterprises or specific needs.",
+      "price": "Let's talk",
+      "features": [
+        "Volume discounts",
+        "Custom integrations",
+        "Dedicated account manager",
+        "24/7 enterprise support"
+      ],
+      "ctaText": "Contact Sales"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
+  }
+}

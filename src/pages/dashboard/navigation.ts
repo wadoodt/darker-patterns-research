@@ -26,6 +26,7 @@ import ArticlesPage from "@features/admin-panel/pages/ArticlesPage";
 import AdminPanelCompaniesPage from "@features/admin-panel/pages/CompaniesPage";
 import AdminPanelSettingsPage from "@features/admin-panel/pages/SettingsPage";
 import AdminPanelInfraPage from "@features/admin-panel/pages/InfraPage";
+import FAQPage from "@features/admin-panel/pages/faqs/FAQPage";
 
 export interface NavigationItem {
   name: string;
@@ -135,6 +136,14 @@ export const adminNavigation: NavigationItem[] = [
     href: "/admin-panel/infra",
     icon: Settings,
     component: AdminPanelInfraPage,
+    roles: ["representative", "super-admin", "qa"],
+  },
+  {
+    name: "sidebar.admin.faqs",
+    path: "/admin-panel/faqs",
+    href: "/admin-panel/faqs",
+    icon: HelpCircle,
+    component: FAQPage,
     roles: ["representative", "super-admin", "qa"],
   },
 ];

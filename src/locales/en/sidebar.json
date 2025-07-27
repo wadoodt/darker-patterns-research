@@ -1,0 +1,33 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "home": "Home",
+    "settings": "Settings",
+    "team": "Team",
+    "billing": "Billing",
+    "infra": "Infrastructure",
+    "domains": "Domains",
+    "support": "Support",
+    "profile": "Profile"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "articles": "Knowledge Base Articles",
+    "home": "Admin Home",
+    "settings": "Admin Settings",
+    "users": "Users",
+    "companies": "Companies",
+    "infra": "Admin Infrastructure",
+    "tickets": "Tickets",
+    "config": "Configurations",
+    "faqs": "FAQs"
+  },
+  "user": {
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "status": {
+    "title": "System Status",
+    "allSystemsOperational": "All systems operational"
+  }
+}

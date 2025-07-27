@@ -1,0 +1,8 @@
+{
+  "auth": {
+    "login_success": "Login successful! Redirecting..."
+  },
+  "general": {
+    "operation_success": "Operation completed successfully."
+  }
+}

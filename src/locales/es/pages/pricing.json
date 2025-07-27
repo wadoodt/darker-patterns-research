@@ -1,0 +1,49 @@
+{
+  "hero": {
+    "title": "Elige Tu Plan",
+    "description": "Precios simples y transparentes para negocios de todos los tamaños. Comienza a calentar tus dominios y enviar campañas hoy."
+  },
+  "plans": {
+    "business": {
+      "title": "Negocios",
+      "description": "Ideal para negocios en crecimiento que comienzan con outreach por email.",
+      "price": "$49",
+      "interval": "/ mes",
+      "features": [
+        "Hasta 5 cuentas de correo",
+        "Calentamiento con IA",
+        "Análisis en tiempo real",
+        "Soporte estándar"
+      ],
+      "ctaText": "Elegir Business"
+    },
+    "premium": {
+      "title": "Premium",
+      "description": "Para negocios establecidos que escalan sus esfuerzos de outreach.",
+      "price": "$99",
+      "interval": "/ mes",
+      "features": [
+        "Cuentas de correo ilimitadas",
+        "Calentamiento avanzado con IA",
+        "Pruebas A/B",
+        "Soporte prioritario"
+      ],
+      "ctaText": "Elegir Premium"
+    },
+    "custom": {
+      "title": "Personalizado",
+      "description": "Soluciones a medida para grandes empresas o necesidades específicas.",
+      "price": "Hablemos",
+      "features": [
+        "Descuentos por volumen",
+        "Integraciones personalizadas",
+        "Gestor de cuenta dedicado",
+        "Soporte empresarial 24/7"
+      ],
+      "ctaText": "Contactar Ventas"
+    }
+  },
+  "faq": {
+    "title": "Preguntas frecuentes"
+  }
+}

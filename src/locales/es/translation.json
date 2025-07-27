@@ -5,93 +5,8 @@
   "sidebar_placeholder": "Marcador de Posición de la Barra Lateral",
   "public_landing_page": "Página de Aterrizaje Pública",
   "protected_dashboard_home": "Inicio del Panel Protegido",
-  "error": {
-    "auth": {
-      "invalid_credentials": "Credenciales inválidas. Por favor, inténtalo de nuevo.",
-      "unauthorized": "No tienes autorización para realizar esta acción."
-    },
-    "validation": {
-      "password_too_short": "La contraseña es demasiado corta.",
-      "email_invalid": "La dirección de correo electrónico no es válida."
-    },
-    "general": {
-      "not_found": "El recurso solicitado no fue encontrado.",
-      "internal_server_error": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
-    }
-  },
-  "response": {
-    "auth": {
-      "login_success": "¡Inicio de sesión exitoso!"
-    },
-    "general": {
-      "operation_success": "Operación completada con éxito."
-    }
-  },
-  "sidebar": {
-    "dashboard": {
-      "title": "Panel de Control",
-      "home": "Inicio",
-      "settings": "Configuración",
-      "team": "Equipo",
-      "billing": "Facturación",
-      "infra": "Infraestructura",
-      "domains": "Dominios",
-      "support": "Soporte",
-      "profile": "Perfil"
-    },
-    "admin": {
-      "title": "Panel de Administración",
-      "articles": "Artículos de la base de conocimiento",
-      "home": "Inicio de Administrador",
-      "settings": "Configuración de Administrador",
-      "users": "Usuarios",
-      "companies": "Empresas",
-      "infra": "Infraestructura de Administración",
-      "tickets": "Tickets",
-      "config": "Configuraciones"
-    },
-    "user": {
-      "profile": "Perfil",
-      "settings": "Configuración"
-    },
-    "status": {
-      "title": "Estado del Sistema",
-      "allSystemsOperational": "Todos los sistemas operativos"
-    }
-  },
-  "settings": {
-    "title": "Configuración",
-    "language": {
-      "title": "Preferencias de Idioma",
-      "description": "Elige el idioma para la aplicación."
-    },
-    "theme": {
-      "title": "Preferencias de Tema",
-      "description": "Elige el tema para la aplicación.",
-      "options": {
-        "light": "Claro",
-        "dark": "Oscuro",
-        "highContrastLight": "Claro de Alto Contraste",
-        "highContrastDark": "Oscuro de Alto Contraste",
-        "lightSimple": "Claro (Simple)"
-      }
-    },
-    "system": {
-      "title": "Acciones a Nivel de Sistema",
-      "warning": "Estas acciones afectan a todos los usuarios y deben usarse con precaución.",
-      "emergencyShutdown": "Parada de Emergencia",
-      "shutdown": "Apagar el Sistema"
-    },
-    "company": {
-      "title": "Configuración de la Empresa",
-      "name": "Nombre de la Empresa",
-      "email": "Correo Electrónico de Contacto de la Empresa",
-      "contactInfo": "Información de Contacto de la Empresa (opcional)",
-      "notifications": "Habilitar Notificaciones por Correo Electrónico",
-      "save": "Guardar Cambios",
-      "support": "¿Necesitas ayuda? Visita nuestra página de soporte."
-    }
-  },
+
+
   "pricing": {
     "hero": {
       "title": "Elige tu plan",
@@ -156,92 +71,6 @@
           "answer": "¡Nos encantaría escucharte! Envíanos un correo electrónico a feedback@penguinmails.com con tus sugerencias. Si implementamos tu sugerencia, te daremos un descuento de por vida en tu plan."
         }
       ]
-    }
-  },
-  "support": {
-    "contact_form": {
-      "title": "Contactar al Soporte",
-      "subtitle": "¿No encuentras lo que buscas? Nuestro equipo está aquí para ayudarte.",
-      "fields": {
-        "name": "Tu Nombre",
-        "email": "Correo Electrónico",
-        "subject": "Asunto",
-        "message": "Mensaje",
-        "submit": "Enviar Mensaje"
-      },
-      "success_message": "Gracias por contactarnos. Nos pondremos en contacto contigo pronto."
-    },
-    "faq": {
-      "title": "Preguntas Frecuentes"
-    },
-    "video_tutorials": {
-      "title": "Tutoriales en Video"
-    },
-    "knowledge_base": {
-      "title": "Biblioteca de Conocimiento",
-      "loading": "Cargando artículos..."
-    },
-    "general_advice": {
-      "title": "Consejos Generales",
-      "articles": {
-        "campaigns": {
-          "title": "Cómo Empezar con Campañas de Correo Frío",
-          "description": "Aprende a crear tu primera campaña de correo frío desde la configuración hasta el lanzamiento.",
-          "category": "Campañas"
-        },
-        "deliverability": {
-          "title": "Mejorando la Entregabilidad del Correo Electrónico",
-          "description": "Estrategias para asegurar que tus correos lleguen a la bandeja de entrada, no a la carpeta de spam.",
-          "category": "Entregabilidad"
-        },
-        "templates": {
-          "title": "Creando Plantillas de Correo Efectivas",
-          "description": "Consejos y estrategias para escribir correos fríos convincentes que obtengan respuestas.",
-          "category": "Plantillas"
-        },
-        "lead_management": {
-          "title": "Gestión de Listas de Prospectos",
-          "description": "Cómo importar, organizar y gestionar tus listas de prospectos para maximizar la efectividad de tus campañas.",
-          "category": "Prospectos"
-        },
-        "email_warmup": {
-          "title": "Mejores Prácticas para Calentamiento de Emails",
-          "description": "Aprende cómo calentar correctamente tus cuentas de email para mejorar la capacidad de entrega.",
-          "category": "Capacidad de Entrega"
-        },
-        "domain_setup": {
-          "title": "Guía de Configuración de Dominio",
-          "description": "Instrucciones paso a paso para configurar tu dominio para el envío de emails.",
-          "category": "Configuración"
-        }
-      }
-    },
-    "header": {
-      "title": "Ayuda y Soporte",
-      "subtitle": "Bienvenido a nuestro centro de soporte. Encuentra artículos, tutoriales y contacta a nuestro equipo."
-    },
-    "search_placeholder": "Buscar artículos...",
-    "videos": {
-      "getting_started": {
-        "title": "Guía de Inicio Rápido",
-        "description": "Un recorrido completo por las características clave de nuestra plataforma."
-      },
-      "domain_setup": {
-        "title": "Configuración de Dominio y Buzón",
-        "description": "Cómo configurar dominios y crear buzones para enviar."
-      },
-      "warmup_process": {
-        "title": "Proceso de calentamiento explicado",
-        "description": "Entendiendo y optimizando el proceso de calentamiento de correos."
-      },
-      "domain_config": {
-        "title": "Video Tutorial de Configuración de Dominio",
-        "description": "Mira cómo configurar los ajustes de tu dominio para una óptima capacidad de entrega de emails."
-      },
-      "complete_campaign_setup": {
-        "title": "Recorrido Completo de Configuración de Campaña",
-        "description": "Sigue el proceso de configuración de una campaña de email de principio a fin."
-      }
     }
   },
   "auth": {
@@ -431,43 +260,6 @@
       }
     }
   },
-  "tickets": {
-    "header": "Tickets de Soporte",
-    "subject": "Asunto",
-    "email": "Correo electrónico",
-    "statusLabel": "Estado",
-    "actions": "Acciones",
-    "createdLabel": "Creado",
-    "loading": "Cargando tickets...",
-    "noTickets": "No se encontraron tickets.",
-    "viewDetails": "Ver detalles",
-    "markAsOpen": "Marcar como Abierto",
-    "markAsInProgress": "Marcar como En Progreso",
-    "markAsClosed": "Marcar como Cerrado",
-    "previous": "Anterior",
-    "next": "Siguiente",
-    "pageInfo": "Página {{currentPage}} de {{totalPages}}",
-    "ticket": "Ticket",
-    "userLabel": "Usuario:",
-    "status": {
-      "open": "Abierto",
-      "in_progress": "En Progreso",
-      "closed": "Cerrado",
-      "update": "Actualizar Estado",
-      "updating": "Actualizando...",
-      "inProgress": "En Progreso"
-    },
-    "user": "Usuario",
-    "submittedLabel": "Enviado:",
-    "conversation": "Conversación",
-    "you": "Tú",
-    "supportTeam": "Equipo de Soporte",
-    "postReply": "Publicar una respuesta",
-    "replyPlaceholder": "Escribe tu respuesta aquí...",
-    "submitReply": "Enviar respuesta",
-    "errorLoading": "Error al cargar los detalles del ticket.",
-    "notFound": "Ticket no encontrado."
-  },
   "team": {
     "header": "Gestión de Equipo",
     "invite": "Invitar Miembro",
@@ -485,11 +277,6 @@
     "delete_member_confirmation": "¿Estás seguro de que quieres eliminar a {{name}}? Esta acción no se puede deshacer.",
     "cancel": "Cancelar",
     "confirm_delete": "Confirmar Eliminación"
-  },
-  "pagination": {
-    "previous": "Anterior",
-    "next": "Siguiente",
-    "page": "Página",
-    "of": "de"
   }
+
 }

@@ -1,0 +1,23 @@
+{
+  "buttons": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "submit": "Enviar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "back": "Atrás"
+  },
+  "loading": "Cargando...",
+  "success": "Operación completada con éxito",
+  "error": {
+    "general": "Ocurrió un error",
+    "tryAgain": "Por favor inténtalo de nuevo",
+    "validation": "Error de validación"
+  },
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "page": "Página",
+    "of": "de"
+  }
+}

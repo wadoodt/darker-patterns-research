@@ -1,0 +1,27 @@
+{
+  "sidebar": {
+    "dashboard": {
+      "title": "Dashboard",
+      "home": "Home",
+      "settings": "Settings"
+    },
+    "user": {
+      "profile": "Profile",
+      "settings": "Settings"
+    },
+    "status": {
+      "title": "System Status",
+      "allSystemsOperational": "All systems operational"
+    }
+  },
+  "form": {
+    "labels": {
+      "email": "Email Address",
+      "password": "Password"
+    },
+    "placeholders": {
+      "email": "name@example.com",
+      "password": "Your password"
+    }
+  }
+}

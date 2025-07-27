@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { defaultSettings } from "./types";
 import { AppContext } from "./context";
+import { CacheProvider } from "@contexts/CacheContext";
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -46,7 +47,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     <AppContext.Provider
       value={{ settings, updateSettings, availableLanguages, isHighContrast }}
     >
-      {children}
+      <CacheProvider>{children}</CacheProvider>
     </AppContext.Provider>
   );
 };

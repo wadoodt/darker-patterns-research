@@ -1,0 +1,19 @@
+{
+  "contact_form": {
+    "title": "Contactar a Soporte",
+    "subtitle": "¿No encuentras lo que buscas? Nuestro equipo está aquí para ayudarte.",
+    "fields": {
+      "name": "Tu Nombre",
+      "email": "Correo Electrónico",
+      "subject": "Asunto",
+      "message": "Tu Mensaje"
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes"
+  },
+  "knowledge_base": {
+    "title": "Biblioteca de Conocimiento",
+    "loading": "Cargando artículos..."
+  }
+}

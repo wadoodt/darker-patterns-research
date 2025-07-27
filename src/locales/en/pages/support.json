@@ -1,0 +1,19 @@
+{
+  "contact_form": {
+    "title": "Contact Support",
+    "subtitle": "Can't find what you're looking for? Our team is here to help.",
+    "fields": {
+      "name": "Your Name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Your Message"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
+  },
+  "knowledge_base": {
+    "title": "Knowledge Library",
+    "loading": "Loading articles..."
+  }
+}

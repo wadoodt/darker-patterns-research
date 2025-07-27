@@ -1,0 +1,33 @@
+{
+  "title": "Configuración",
+  "language": {
+    "title": "Preferencias de Idioma",
+    "description": "Elige el idioma para la aplicación."
+  },
+  "theme": {
+    "title": "Preferencias de Tema",
+    "description": "Elige el tema para la aplicación.",
+    "options": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "highContrastLight": "Claro de Alto Contraste",
+      "highContrastDark": "Oscuro de Alto Contraste",
+      "lightSimple": "Claro (Simple)"
+    }
+  },
+  "company": {
+    "title": "Configuración de la Compañía",
+    "name": "Nombre de la Compañía",
+    "email": "Correo de Contacto de la Compañía",
+    "contactInfo": "Información de Contacto de la Compañía (opcional)",
+    "notifications": "Habilitar Notificaciones por Correo",
+    "save": "Guardar Cambios",
+    "support": "¿Necesitas ayuda? Visita nuestra página de soporte."
+  },
+  "admin": {
+    "title": "Configuración de Administrador",
+    "description": "Gestionar las configuraciones de todo el sistema.",
+    "emergencyShutdown": "Apagado de Emergencia",
+    "shutdown": "Apagar el Sistema"
+  }
+}
