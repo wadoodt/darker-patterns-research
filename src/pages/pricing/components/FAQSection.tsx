@@ -37,7 +37,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ t }) => {
       </h2>
       <div className="max-w-xl mx-auto">
         {loading ? (
-          <div className="flex justify-center">Loading FAQs...</div>
+          <div className="flex justify-center">{t("pricing.faq.loading")}</div>
         ) : faqItems && faqItems.length > 0 ? (
           <Accordion type="single" collapsible>
             {faqItems.map((item: FAQItem, idx: number) => {
@@ -55,7 +55,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ t }) => {
             })}
           </Accordion>
         ) : (
-          <div>No FAQ items found.</div>
+          <div>{t("pricing.faq.empty")}</div>
         )}
       </div>
     </section>

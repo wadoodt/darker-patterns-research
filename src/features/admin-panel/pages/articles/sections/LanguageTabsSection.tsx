@@ -34,19 +34,19 @@ export const LanguageTabsSection: React.FC<LanguageTabsSectionProps> = ({
       onValueChange={(v) => setActiveLang(v as "en" | "es")}
     >
       <Tabs.List>
-        <Tabs.Trigger value="en">{t("articlesPage.english")}</Tabs.Trigger>
-        <Tabs.Trigger value="es">{t("articlesPage.spanish")}</Tabs.Trigger>
+        <Tabs.Trigger value="en">{t("articles.english")}</Tabs.Trigger>
+        <Tabs.Trigger value="es">{t("articles.spanish")}</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="en">
         <Box my="4">
           <TextField.Root
-            placeholder={t("articlesPage.title")}
+            placeholder={t("articles.title")}
             value={getValue("en", "title")}
             onChange={(e) => handleFieldChange("en", "title", e.target.value)}
             mb="2"
           />
           <TextField.Root
-            placeholder={t("articlesPage.category")}
+            placeholder={t("articles.category")}
             value={getValue("en", "category")}
             onChange={(e) =>
               handleFieldChange("en", "category", e.target.value)
@@ -54,15 +54,13 @@ export const LanguageTabsSection: React.FC<LanguageTabsSectionProps> = ({
             mb="2"
           />
           <TextField.Root
-            placeholder={t("articlesPage.description")}
+            placeholder={t("articles.description")}
             value={getValue("en", "description")}
-            onChange={(e) =>
-              handleFieldChange("en", "description", e.target.value)
-            }
+            onChange={(e) => handleFieldChange("en", "description", e.target.value)}
             mb="2"
           />
           <TextArea
-            placeholder={t("articlesPage.body")}
+            placeholder={t("articles.body")}
             value={getValue("en", "body")}
             onChange={(e) => handleFieldChange("en", "body", e.target.value)}
             rows={6}
@@ -72,13 +70,13 @@ export const LanguageTabsSection: React.FC<LanguageTabsSectionProps> = ({
       <Tabs.Content value="es">
         <Box my="4">
           <TextField.Root
-            placeholder={t("articlesPage.title")}
+            placeholder={t("articles.title")}
             value={getValue("es", "title")}
             onChange={(e) => handleFieldChange("es", "title", e.target.value)}
             mb="2"
           />
           <TextField.Root
-            placeholder={t("articlesPage.category")}
+            placeholder={t("articles.category")}
             value={getValue("es", "category")}
             onChange={(e) =>
               handleFieldChange("es", "category", e.target.value)
@@ -86,15 +84,13 @@ export const LanguageTabsSection: React.FC<LanguageTabsSectionProps> = ({
             mb="2"
           />
           <TextField.Root
-            placeholder={t("articlesPage.description")}
+            placeholder={t("articles.description")}
             value={getValue("es", "description")}
-            onChange={(e) =>
-              handleFieldChange("es", "description", e.target.value)
-            }
+            onChange={(e) => handleFieldChange("es", "description", e.target.value)}
             mb="2"
           />
           <TextArea
-            placeholder={t("articlesPage.body")}
+            placeholder={t("articles.body")}
             value={getValue("es", "body")}
             onChange={(e) => handleFieldChange("es", "body", e.target.value)}
             rows={6}

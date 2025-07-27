@@ -15,11 +15,11 @@ const SettingsPage: React.FC = () => {
       <p>Manage application-wide settings and feature flags here.</p>
 
       {hasRole(["super-admin"]) && (
-        <SettingSection title={t("settings.system.title")}>
+        <SettingSection title={t("config.system.title")}>
           <Flex direction="column" gap="2">
-            <Text>{t("settings.system.warning")}</Text>
+            <Text>{t("config.system.warning")}</Text>
             <Button color="red" variant="soft" highContrast={isHighContrast}>
-              {t("settings.system.shutdown")}
+              {t("config.system.shutdown")}
             </Button>
           </Flex>
         </SettingSection>

@@ -175,6 +175,69 @@ This is useful for multilingual content that is not handled by the `t()` functio
 
 ---
 
+## 4. Troubleshooting Translation Issues
+
+### Problem: Missing Translation Keys
+**Symptoms:**
+- Console warnings like `i18next::translator: missingKey es translation profile.security.title`
+- UI shows translation keys instead of translated text
+
+**Solutions:**
+1. **Verify the key exists** in both English and target language files
+2. **Check nesting structure** - ensure keys match exactly between languages
+3. **Add missing keys** to all language files (use English as placeholder if needed)
+4. **Restart dev server** after adding new translation files
+
+### Problem: Build Fails with JSON Errors
+**Symptoms:**
+- Vite/TypeScript errors about JSON imports
+- Module not found errors for translation files
+
+**Solutions:**
+1. Ensure `tsconfig.app.json` has:
+```json
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}
+```
+2. Include `.json` extension in import paths
+3. Verify JSON files are valid (no trailing commas)
+
+### Problem: Variables Not Interpolating
+**Symptoms:**
+- `{{variable}}` shows literally in UI
+
+**Solutions:**
+1. Use double curly braces in JSON files
+2. Pass variables to `t()` function:
+```js
+t('key', { variable: value })
+```
+3. Check for typos in variable names
+
+## 5. Maintaining Translations
+
+### Adding New Features:
+1. Add keys to English file first
+2. Copy structure to other languages
+3. Translate content ASAP
+
+### Finding Missing Keys:
+```bash
+# Scan codebase for untranslated keys
+grep -r "t('\.*')" src/
+```
+
+### Best Practices:
+- Keep related keys grouped logically
+- Add comments explaining context
+- Review console warnings regularly
+
+---
+
 ## Translation Architecture
 
 ### New Structure

@@ -34,9 +34,9 @@ export const EditArticleModal: React.FC<EditArticleModalProps> = ({
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Content style={{ maxWidth: 600 }}>
-        <Dialog.Title>{t("articlesPage.editArticle")}</Dialog.Title>
+        <Dialog.Title>{t("articles.editArticle")}</Dialog.Title>
         <Dialog.Description>
-          {t("articlesPage.editArticleDescription")}
+          {t("articles.editArticleDescription")}
         </Dialog.Description>
         <form onSubmit={handleSubmit}>
           <LanguageTabsSection
@@ -50,7 +50,7 @@ export const EditArticleModal: React.FC<EditArticleModalProps> = ({
             onClose={onClose}
             saving={saving}
             t={t}
-            saveLabel={t("articlesPage.saveChanges")}
+            saveLabel={t("articles.saveChanges")}
           />
         </form>
       </Dialog.Content>

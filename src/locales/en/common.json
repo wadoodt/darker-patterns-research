@@ -1,0 +1,20 @@
+{
+  "save": "Save",
+  "cancel": "Cancel",
+  "edit": "Edit",
+  "delete": "Delete",
+  "confirm": "Confirm",
+  "back": "Back",
+  "next": "Next",
+  "sending": "Sending...",
+  "loading": "Loading...",
+  "error": "Error",
+  "previous": "Previous",
+  "page": "Page",
+  "email": "Email",
+  "password": "Password",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "login": "Login",
+  "signup": "Sign Up"
+}

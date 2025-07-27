@@ -12,10 +12,14 @@ import enSettings from "./en/pages/settings.json";
 import enSupport from "./en/pages/support.json";
 import enPricing from "./en/pages/pricing.json";
 import enTickets from "./en/pages/tickets.json";
+import enProfile from "./en/pages/profile.json";
 import enSidebar from "./en/sidebar.json";
 import enResponse from "./en/response.json";
 import enError from "./en/error.json";
 import enPagination from "./en/pagination.json";
+import enArticles from "./en/pages/articles.json";
+import enCommon from './en/common.json';
+import enConfig from './en/pages/config.json';
 
 // Import Spanish translations
 import esShared from "./es/shared.json";
@@ -27,10 +31,14 @@ import esSettings from "./es/pages/settings.json";
 import esSupport from "./es/pages/support.json";
 import esPricing from "./es/pages/pricing.json";
 import esTickets from "./es/pages/tickets.json";
+import esProfile from "./en/pages/profile.json";
+import esArticles from "./es/pages/articles.json";
 import esSidebar from "./es/sidebar.json";
 import esResponse from "./es/response.json";
 import esError from "./es/error.json";
 import esPagination from "./es/pagination.json";
+import esCommon from './es/common.json';
+import esConfig from './es/pages/config.json';
 
 export const fallbackLanguage = "en";
 
@@ -41,7 +49,8 @@ const resources = {
       ...enShared,
       ...enUI,
       ...enAPI,
-      ...enSidebar,
+      common: enCommon,
+      sidebar: enSidebar,
       response: enResponse,
       error: enError,
       pagination: enPagination,
@@ -50,7 +59,10 @@ const resources = {
       settings: enSettings,
       support: enSupport,
       pricing: enPricing,
-      tickets: enTickets
+      tickets: enTickets,
+      profile: enProfile,
+      articles: enArticles,
+      config: enConfig
     }
   },
   es: {
@@ -58,7 +70,8 @@ const resources = {
       ...esShared,
       ...esUI,
       ...esAPI,
-      ...esSidebar,
+      common: esCommon,
+      sidebar: esSidebar,
       response: esResponse,
       error: esError,
       pagination: esPagination,
@@ -67,7 +80,10 @@ const resources = {
       settings: esSettings,
       support: esSupport,
       pricing: esPricing,
-      tickets: esTickets
+      tickets: esTickets,
+      profile: esProfile,
+      articles: esArticles,
+      config: esConfig
     }
   }
 };

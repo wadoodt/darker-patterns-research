@@ -1,0 +1,55 @@
+{
+  "title": "Perfil",
+  "tabs": {
+    "general": "General",
+    "security": "Seguridad",
+    "notifications": "Notificaciones"
+  },
+  "general": {
+    "title": "Configuración General",
+    "description": "Administra tu información personal y preferencias",
+    "userInformation": "Información del Usuario",
+    "appExperience": "Experiencia de la Aplicación",
+    "cacheManagement": "Gestión de Caché"
+  },
+  "security": {
+    "title": "Configuración de Seguridad",
+    "description": "Administra la seguridad y autenticación de tu cuenta",
+    "changePassword": {
+      "title": "Cambiar Contraseña",
+      "currentPassword": "Contraseña Actual",
+      "placeholders": {
+        "current": "Ingresa tu contraseña actual",
+        "new": "Ingresa nueva contraseña",
+        "confirm": "Confirma nueva contraseña"
+      },
+      "newPassword": "Nueva Contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "errors": {
+        "mismatch": "Las contraseñas no coinciden"
+      },
+      "submit": "Actualizar Contraseña",
+      "showPassword": "Mostrar Contraseña"
+    },
+    "twoFactorAuth": {
+      "title": "Autenticación de Dos Factores",
+      "description": "Agrega una capa adicional de seguridad a tu cuenta",
+      "status": "Estado",
+      "enableLabel": "Habilitar 2FA"
+    }
+  },
+  "notifications": {
+    "title": "Preferencias de Notificación",
+    "description": "Personaliza cómo y cuándo recibes notificaciones",
+    "emailNotifications": "Notificaciones por Correo",
+    "options": {
+      "newReplies": "Notificaciones de nuevas respuestas",
+      "campaignStatus": "Actualizaciones de estado de campañas",
+      "weeklyReports": "Reportes semanales de rendimiento",
+      "domainAlerts": "Alertas de salud de dominio",
+      "warmupCompletion": "Avisos de finalización de warmup",
+      "silenceWebapp": "Silenciar notificaciones de la webapp",
+      "onlyUrgent": "Solo notificaciones urgentes"
+    }
+  }
+}

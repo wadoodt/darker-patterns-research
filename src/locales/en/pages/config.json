@@ -1,0 +1,7 @@
+{
+  "system": {
+    "title": "System Settings",
+    "warning": "Warning: These settings affect the entire system",
+    "shutdown": "Shutdown System"
+  }
+}

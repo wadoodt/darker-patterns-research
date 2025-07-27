@@ -30,9 +30,9 @@ export const CreateArticleModal: React.FC<CreateArticleModalProps> = ({
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Content style={{ maxWidth: 600 }}>
-        <Dialog.Title>{t("articlesPage.createArticle")}</Dialog.Title>
+        <Dialog.Title>{t("articles.createArticle")}</Dialog.Title>
         <Dialog.Description>
-          {t("articlesPage.createArticleDescription")}
+          {t("articles.createArticleDescription")}
         </Dialog.Description>
         <form onSubmit={handleSubmit}>
           <LanguageTabsSection

@@ -154,23 +154,6 @@
     "goToDashboard": "Ir al panel",
     "autoRedirect": "Serás redirigido al panel en {{seconds}} segundos."
   },
-  "articlesPage": {
-    "manageArticles": "Gestionar artículos de la base de conocimiento",
-    "createArticle": "Crear artículo",
-    "editArticle": "Editar Artículo",
-    "edit": "Editar",
-    "delete": "Eliminar",
-    "title": "Título",
-    "category": "Categoría",
-    "description": "Descripción",
-    "body": "Cuerpo",
-    "english": "Inglés",
-    "spanish": "Español",
-    "saveChanges": "Guardar Cambios",
-    "errorLoading": "Error al cargar los artículos. Por favor, inténtalo de nuevo.",
-    "createArticleDescription": "Complete los campos a continuación para crear un nuevo artículo de la base de conocimientos. Puede proporcionar traducciones para cada idioma.",
-    "editArticleDescription": "Edite los campos a continuación para actualizar este artículo de la base de conocimientos. Puede proporcionar traducciones para cada idioma."
-  },
   "common": {
     "cancel": "Cancelar",
     "save": "Guardar",

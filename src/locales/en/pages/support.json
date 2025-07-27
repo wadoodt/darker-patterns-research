@@ -15,5 +15,62 @@
   "knowledge_base": {
     "title": "Knowledge Library",
     "loading": "Loading articles..."
+  },
+  "general_advice": {
+    "title": "General Advice",
+    "articles": {
+      "campaigns": {
+        "title": "Campaigns",
+        "description": "Guides for setting up and managing your email campaigns",
+        "category": "Marketing"
+      },
+      "domain_setup": {
+        "title": "Domain Setup",
+        "description": "How to properly configure your domain for emails",
+        "category": "Setup"
+      },
+      "email_warmup": {
+        "title": "Email Warmup",
+        "description": "Improve deliverability with our warmup process",
+        "category": "Deliverability"
+      },
+      "deliverability": {
+        "title": "Deliverability",
+        "description": "Tips to improve your email delivery rates",
+        "category": "Optimization"
+      },
+      "templates": {
+        "title": "Templates",
+        "description": "How to create and use effective templates",
+        "category": "Productivity"
+      },
+      "lead_management": {
+        "title": "Lead Management",
+        "description": "How to organize and track your leads",
+        "category": "Sales"
+      }
+    }
+  },
+  "video_tutorials": {
+    "title": "Video Tutorials"
+  },
+  "videos": {
+    "complete_campaign_setup": {
+      "title": "Complete Campaign Setup",
+      "description": "Step-by-step guide to setting up a new campaign"
+    },
+    "domain_config": {
+      "title": "Domain Configuration",
+      "description": "How to configure DNS and authentication for your domain"
+    },
+    "warmup_process": {
+      "title": "Warmup Process",
+      "description": "How our email warmup system works"
+    }
+  },
+  "search_placeholder": "Search help articles...",
+  "header": {
+    "title": "Help Center",
+    "subtitle": "Find answers and resources to get the most out of our platform"
   }
 }

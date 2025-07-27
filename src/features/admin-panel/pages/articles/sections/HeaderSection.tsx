@@ -12,10 +12,10 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({
   onCreate,
 }) => (
   <Flex justify="between" align="center" mb="6">
-    <Heading as="h1">{t("articlesPage.manageArticles")}</Heading>
+    <Heading as="h1">{t("articles.manageArticles")}</Heading>
     <Button onClick={onCreate}>
       <PlusIcon size={16} style={{ marginRight: "4px" }} />
-      {t("articlesPage.createArticle")}
+      {t("articles.createArticle")}
     </Button>
   </Flex>
 );

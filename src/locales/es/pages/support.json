@@ -1,6 +1,6 @@
 {
   "contact_form": {
-    "title": "Contactar a Soporte",
+    "title": "Contactar al Soporte",
     "subtitle": "¿No encuentras lo que buscas? Nuestro equipo está aquí para ayudarte.",
     "fields": {
       "name": "Tu Nombre",
@@ -15,5 +15,62 @@
   "knowledge_base": {
     "title": "Biblioteca de Conocimiento",
     "loading": "Cargando artículos..."
+  },
+  "general_advice": {
+    "title": "Consejos Generales",
+    "articles": {
+      "campaigns": {
+        "title": "Campañas",
+        "description": "Guías para configurar y administrar tus campañas de email",
+        "category": "Marketing"
+      },
+      "domain_setup": {
+        "title": "Configuración de Dominio",
+        "description": "Cómo configurar correctamente tu dominio para emails",
+        "category": "Configuración"
+      },
+      "email_warmup": {
+        "title": "Calentamiento de Email",
+        "description": "Mejora la entregabilidad con nuestro proceso de calentamiento",
+        "category": "Entregabilidad"
+      },
+      "deliverability": {
+        "title": "Entregabilidad",
+        "description": "Consejos para mejorar la tasa de entrega de tus emails",
+        "category": "Optimización"
+      },
+      "templates": {
+        "title": "Plantillas",
+        "description": "Cómo crear y usar plantillas efectivas",
+        "category": "Productividad"
+      },
+      "lead_management": {
+        "title": "Gestión de Leads",
+        "description": "Cómo organizar y seguir tus leads",
+        "category": "Ventas"
+      }
+    }
+  },
+  "video_tutorials": {
+    "title": "Tutoriales en Video"
+  },
+  "videos": {
+    "complete_campaign_setup": {
+      "title": "Configuración Completa de Campaña",
+      "description": "Guía paso a paso para configurar una nueva campaña"
+    },
+    "domain_config": {
+      "title": "Configuración de Dominio",
+      "description": "Cómo configurar DNS y autenticación para tu dominio"
+    },
+    "warmup_process": {
+      "title": "Proceso de Calentamiento",
+      "description": "Cómo funciona nuestro sistema de calentamiento de emails"
+    }
+  },
+  "search_placeholder": "Buscar en artículos de ayuda...",
+  "header": {
+    "title": "Centro de Ayuda",
+    "subtitle": "Encuentra respuestas y recursos para sacar el máximo provecho"
   }
 }

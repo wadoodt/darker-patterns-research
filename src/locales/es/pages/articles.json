@@ -1,0 +1,18 @@
+{
+  "title": "Título",
+  "category": "Categoría",
+  "description": "Descripción",
+  "body": "Cuerpo",
+  "english": "Inglés",
+  "spanish": "Español",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "editArticle": "Editar Artículo",
+  "deleteConfirmation": "¿Estás seguro de que deseas eliminar este artículo? Esta acción no se puede deshacer.",
+  "manageArticles": "Administrar artículos",
+  "createArticle": "Crear artículo",
+  "saveChanges": "Guardar Cambios",
+  "errorLoading": "Error al cargar los artículos. Por favor, inténtalo de nuevo.",
+  "createArticleDescription": "Complete los campos a continuación para crear un nuevo artículo de la base de conocimientos. Puede proporcionar traducciones para cada idioma.",
+  "editArticleDescription": "Edite los campos a continuación para actualizar este artículo de la base de conocimientos. Puede proporcionar traducciones para cada idioma."
+}

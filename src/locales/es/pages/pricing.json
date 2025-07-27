@@ -44,6 +44,8 @@
     }
   },
   "faq": {
-    "title": "Preguntas frecuentes"
+    "title": "Preguntas frecuentes",
+    "loading": "Cargando preguntas frecuentes...",
+    "empty": "No se encontraron preguntas frecuentes"
   }
 }

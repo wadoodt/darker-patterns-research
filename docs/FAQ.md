@@ -361,6 +361,48 @@ const response = await api.get("/api/admin/tickets");
 
 ---
 
+## **Problem:** Missing translation keys in console
+
+**Symptoms:**
+- Warnings like `i18next::translator: missingKey es translation profile.security.title`
+- UI shows translation keys instead of translated text
+
+**Solutions:**
+1. Locate the missing key in the code (search for `t('profile.security.title')`)
+2. Add the key to both English and target language files
+3. Ensure proper nesting structure matches in all languages
+4. Restart dev server if keys were added to new files
+
+---
+
+## **Problem:** Translations not updating after changes
+
+**Symptoms:**
+- Changes to translation files don't reflect in the UI
+- Need to hard refresh to see updates
+
+**Solutions:**
+1. Ensure Vite dev server is running
+2. Check for JSON syntax errors
+3. Verify file imports include `.json` extension
+4. Clear browser cache if issues persist
+
+---
+
+## **Problem:** Translation variables not interpolating
+
+**Symptoms:**
+- `{{variable}}` shows literally in UI
+- Dynamic values not being inserted
+
+**Solutions:**
+1. Use double curly braces in JSON files: `{{variable}}`
+2. Pass variables object to `t()` function
+3. Check for typos in variable names
+4. Verify the variable exists in the scope where `t()` is called
+
+---
+
 ## Role-Based Authorization Implementation
 
 **Q: What are the key considerations when implementing role-based authorization?**

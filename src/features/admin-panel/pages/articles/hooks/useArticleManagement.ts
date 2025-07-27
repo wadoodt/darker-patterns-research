@@ -41,7 +41,7 @@ export const useArticleManagement = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm(t("articlesPage.deleteConfirmation"))) return;
+    if (!window.confirm(t("articles.deleteConfirmation"))) return;
 
     try {
       await api.delete(`/articles/${id}`);

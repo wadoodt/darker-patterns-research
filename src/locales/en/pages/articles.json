@@ -1,0 +1,18 @@
+{
+  "manageArticles": "Manage Articles",
+  "createArticle": "Create Article",
+  "createArticleDescription": "Create a new article for your knowledge base",
+  "editArticle": "Edit Article",
+  "editArticleDescription": "Edit an existing article in your knowledge base",
+  "saveChanges": "Save Changes",
+  "english": "English",
+  "spanish": "Spanish",
+  "description": "Description",
+  "body": "Body",
+  "deleteConfirmation": "Are you sure you want to delete this article?",
+  "title": "Title",
+  "category": "Category",
+  "edit": "Edit",
+  "delete": "Delete",
+  "errorLoading": "Error loading articles"
+}

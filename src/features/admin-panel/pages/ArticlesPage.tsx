@@ -24,7 +24,7 @@ const ArticlesPage: React.FC = () => {
     fallbackLanguage,
   } = useArticlesPage();
 
-  if (error) return <Box>{t("articlesPage.errorLoading")}</Box>;
+  if (error) return <Box>{t("articles.errorLoading")}</Box>;
 
   return (
     <Box>

@@ -1,0 +1,20 @@
+{
+  "sending": "Enviando...",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "loading": "Cargando...",
+  "error": "Error",
+  "previous": "Anterior",
+  "next": "Siguiente",
+  "page": "Página",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "firstName": "Nombre",
+  "lastName": "Apellido",
+  "login": "Iniciar sesión",
+  "signup": "Registrarse",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "confirm": "Confirmar",
+  "back": "Atrás"
+}
