@@ -1,15 +1,16 @@
 import React from "react";
-import { Bell, Search, LogOut, User } from "lucide-react";
+import { Search, LogOut, User } from "lucide-react";
 import { useAuth } from "@hooks/useAuth";
 import styles from "./Header.module.css";
-
 import { Link } from "react-router-dom";
+import NotificationsDropdown from "@components/NotificationsDropdown/NotificationsDropdown";
+import { NotificationsProvider } from "@contexts/NotificationsContext";
 
 interface HeaderProps {
   onMenuClick?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+const HeaderContent: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
 
   return (
@@ -33,7 +34,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               <line x1="3" y1="18" x2="21" y2="18"></line>
             </svg>
           </button>
-          {/* <h1 className={styles.title}>{path === "/admin-panel" ? "Admin Panel" : "User Dashboard"}</h1> */}
         </div>
 
         <div className={styles.actionsContainer}>
@@ -46,10 +46,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             />
           </div>
 
-          <button className={styles.notificationButton}>
-            <Bell className={styles.notificationIcon} />
-            <span className={styles.notificationBadge}>3</span>
-          </button>
+          <div className={styles.actions}>
+            <NotificationsDropdown />
+          </div>
 
           <Link to="/dashboard/profile" className={styles.userContainerLink}>
             <div className={styles.userContainer}>
@@ -68,6 +67,14 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </div>
       </div>
     </header>
+  );
+};
+
+const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+  return (
+    <NotificationsProvider>
+      <HeaderContent onMenuClick={onMenuClick} />
+    </NotificationsProvider>
   );
 };
 

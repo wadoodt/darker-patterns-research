@@ -8,6 +8,7 @@ import { mockPayments } from "./_data/payments-data";
 import { mockKnowledgeBaseArticles, mockSupportTickets } from "./_data/support";
 import type { KnowledgeBaseArticle } from "types/knowledge-base";
 import { mockFaqs } from "./_data/faqs-data";
+import { mockNotifications } from "./_data/notifications-data";
 
 // The global mock database instance.
 export const db = {
@@ -21,4 +22,5 @@ export const db = {
   contactSubmissions: createTable<ContactSubmission>([]),
   supportTickets: createTable(mockSupportTickets),
   faqs: createTable(mockFaqs),
+  notifications: createTable(mockNotifications),
 };

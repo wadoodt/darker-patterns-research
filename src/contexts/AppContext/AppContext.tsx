@@ -4,10 +4,13 @@ import { useTranslation } from "react-i18next";
 import { defaultSettings } from "./types";
 import { AppContext } from "./context";
 import { CacheProvider } from "@contexts/CacheContext";
+import type { ReactNode } from "react";
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+interface AppProviderProps {
+  children: ReactNode;
+}
+
+export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const { i18n } = useTranslation();
   const [settings, setSettings] = useState(() => {
     // Load settings from localStorage if available
