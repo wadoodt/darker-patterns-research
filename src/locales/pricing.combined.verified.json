@@ -8,32 +8,38 @@
     "hero.title": {
       "en": "Choose Your Plan",
       "es": "Elige Tu Plan",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "hero.description": {
       "en": "Simple, transparent pricing for businesses of all sizes. Start warming up your domains and sending campaigns today.",
       "es": "Precios simples y transparentes para negocios de todos los tamaños. Comienza a calentar tus dominios y enviar campañas hoy.",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.business.title": {
       "en": "Business",
       "es": "Negocios",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.business.description": {
       "en": "Ideal for growing businesses starting with email outreach.",
       "es": "Ideal para negocios en crecimiento que comienzan con outreach por email.",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.business.price": {
       "en": "$49",
       "es": "$49",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.business.interval": {
       "en": "/ month",
       "es": "/ mes",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.business.features": {
       "en": [
@@ -48,32 +54,38 @@
         "Análisis en tiempo real",
         "Soporte estándar"
       ],
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.business.ctaText": {
       "en": "Choose Business",
       "es": "Elegir Business",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.premium.title": {
       "en": "Premium",
       "es": "Premium",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.premium.description": {
       "en": "For established businesses scaling their outreach efforts.",
       "es": "Para negocios establecidos que escalan sus esfuerzos de outreach.",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.premium.price": {
       "en": "$99",
       "es": "$99",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.premium.interval": {
       "en": "/ month",
       "es": "/ mes",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.premium.features": {
       "en": [
@@ -88,27 +100,32 @@
         "Pruebas A/B",
         "Soporte prioritario"
       ],
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.premium.ctaText": {
       "en": "Choose Premium",
       "es": "Elegir Premium",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.custom.title": {
       "en": "Custom",
       "es": "Personalizado",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.custom.description": {
       "en": "Tailored solutions for large enterprises or specific needs.",
       "es": "Soluciones a medida para grandes empresas o necesidades específicas.",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.custom.price": {
       "en": "Let's talk",
       "es": "Hablemos",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.custom.features": {
       "en": [
@@ -123,27 +140,32 @@
         "Gestor de cuenta dedicado",
         "Soporte empresarial 24/7"
       ],
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "plans.custom.ctaText": {
       "en": "Contact Sales",
       "es": "Contactar Ventas",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "faq.title": {
       "en": "Frequently Asked Questions",
       "es": "Preguntas frecuentes",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "faq.loading": {
       "en": "Loading FAQs...",
       "es": "Cargando preguntas frecuentes...",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "faq.empty": {
       "en": "No FAQ items found",
       "es": "No se encontraron preguntas frecuentes",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     }
   }
 }

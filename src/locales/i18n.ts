@@ -3,8 +3,6 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { processCombinedTranslations } from './translationUtils';
 
-// All translations have been migrated to the combined format
-
 // Import combined translation files
 import articlesCombined from './articles.combined.json';
 import commonCombined from './common.combined.json';

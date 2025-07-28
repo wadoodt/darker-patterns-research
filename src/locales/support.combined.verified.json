@@ -14,182 +14,224 @@
     "contact_form.subtitle": {
       "en": "Can't find what you're looking for? Our team is here to help.",
       "es": "¿No encuentras lo que buscas? Nuestro equipo está aquí para ayudarte.",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "contact_form.fields.name": {
       "en": "Your Name",
       "es": "Tu Nombre",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "contact_form.fields.email": {
       "en": "Email Address",
       "es": "Correo Electrónico",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "contact_form.fields.subject": {
       "en": "Subject",
       "es": "Asunto",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "contact_form.fields.message": {
       "en": "Your Message",
       "es": "Tu Mensaje",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "faq.title": {
       "en": "Frequently Asked Questions",
       "es": "Preguntas Frecuentes",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "knowledge_base.title": {
       "en": "Knowledge Library",
       "es": "Biblioteca de Conocimiento",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "knowledge_base.loading": {
       "en": "Loading articles...",
       "es": "Cargando artículos...",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.title": {
       "en": "General Advice",
       "es": "Consejos Generales",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
-    "general_advice.articles.campaigns": {
+    "general_advice.articles.campaigns.title": {
       "en": "Campaigns",
       "es": "Campañas",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.campaigns.description": {
       "en": "Guides for setting up and managing your email campaigns",
       "es": "Guías para configurar y administrar tus campañas de email",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.campaigns.category": {
       "en": "Marketing",
       "es": "Marketing",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
-    "general_advice.articles.domain_setup": {
+    "general_advice.articles.domain_setup.title": {
       "en": "Domain Setup",
       "es": "Configuración de Dominio",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.domain_setup.description": {
       "en": "How to properly configure your domain for emails",
       "es": "Cómo configurar correctamente tu dominio para emails",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.domain_setup.category": {
       "en": "Setup",
       "es": "Configuración",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
-    "general_advice.articles.email_warmup": {
+    "general_advice.articles.email_warmup.title": {
       "en": "Email Warmup",
       "es": "Calentamiento de Email",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.email_warmup.description": {
       "en": "Improve deliverability with our warmup process",
       "es": "Mejora la entregabilidad con nuestro proceso de calentamiento",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.email_warmup.category": {
       "en": "Deliverability",
       "es": "Entregabilidad",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
-    "general_advice.articles.deliverability": {
+    "general_advice.articles.deliverability.title": {
       "en": "Deliverability",
       "es": "Entregabilidad",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.deliverability.description": {
       "en": "Tips to improve your email delivery rates",
       "es": "Consejos para mejorar la tasa de entrega de tus emails",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.deliverability.category": {
       "en": "Optimization",
       "es": "Optimización",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
-    "general_advice.articles.templates": {
+    "general_advice.articles.templates.title": {
       "en": "Templates",
       "es": "Plantillas",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.templates.description": {
       "en": "How to create and use effective templates",
       "es": "Cómo crear y usar plantillas efectivas",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.templates.category": {
       "en": "Productivity",
       "es": "Productividad",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
-    "general_advice.articles.lead_management": {
+    "general_advice.articles.lead_management.title": {
       "en": "Lead Management",
       "es": "Gestión de Leads",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.lead_management.description": {
       "en": "How to organize and track your leads",
       "es": "Cómo organizar y seguir tus leads",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "general_advice.articles.lead_management.category": {
       "en": "Sales",
       "es": "Ventas",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "video_tutorials.title": {
       "en": "Video Tutorials",
       "es": "Tutoriales en Video",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "videos.complete_campaign_setup.title": {
       "en": "Complete Campaign Setup",
       "es": "Configuración Completa de Campaña",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "videos.complete_campaign_setup.description": {
       "en": "Step-by-step guide to setting up a new campaign",
       "es": "Guía paso a paso para configurar una nueva campaña",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "videos.domain_config.title": {
       "en": "Domain Configuration",
       "es": "Configuración de Dominio",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "videos.domain_config.description": {
       "en": "How to configure DNS and authentication for your domain",
       "es": "Cómo configurar DNS y autenticación para tu dominio",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "videos.warmup_process.title": {
       "en": "Warmup Process",
       "es": "Proceso de Calentamiento",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "videos.warmup_process.description": {
       "en": "How our email warmup system works",
       "es": "Cómo funciona nuestro sistema de calentamiento de emails",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "header.title": {
       "en": "Help Center",
       "es": "Centro de Ayuda",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "header.subtitle": {
       "en": "Find answers and resources to get the most out of our platform",
       "es": "Encuentra respuestas y recursos para sacar el máximo provecho",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
+    },
+    "search_placeholder": {
+      "en": "Search help articles...",
+      "es": "Buscar artículos de ayuda...",
+      "usedOn": [],
+      "notes": ""
     }
   }
 }

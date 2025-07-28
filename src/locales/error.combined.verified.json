@@ -1,40 +1,59 @@
 {
+  "metadata": {
+    "namespace": "error"
+  },
   "general": {
     "internal_server_error": {
       "en": "An internal server error occurred. Please try again later.",
-      "es": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
+      "es": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+      "usedOn": [],
+      "notes": ""
     },
     "not_found": {
       "en": "The requested resource was not found.",
-      "es": "El recurso solicitado no fue encontrado."
+      "es": "El recurso solicitado no fue encontrado.",
+      "usedOn": [],
+      "notes": ""
     }
   },
   "auth": {
     "invalid_credentials": {
       "en": "Invalid username or password. Please try again.",
-      "es": "Credenciales inválidas. Por favor, inténtalo de nuevo."
+      "es": "Credenciales inválidas. Por favor, inténtalo de nuevo.",
+      "usedOn": [],
+      "notes": ""
     },
     "unauthorized": {
       "en": "You are not authorized to perform this action.",
-      "es": "No tienes autorización para realizar esta acción."
+      "es": "No tienes autorización para realizar esta acción.",
+      "usedOn": [],
+      "notes": ""
     },
     "forbidden": {
       "en": "You do not have permission to access this resource.",
-      "es": "No tienes permiso para acceder a este recurso."
+      "es": "No tienes permiso para acceder a este recurso.",
+      "usedOn": [],
+      "notes": ""
     }
   },
   "validation": {
     "validation_error": {
       "en": "There were errors with your submission. Please check the fields and try again.",
-      "es": "Hubo errores con tu envío. Por favor, revisa los campos e inténtalo de nuevo."
+      "es": "Hubo errores con tu envío. Por favor, revisa los campos e inténtalo de nuevo.",
+      "usedOn": [],
+      "notes": ""
     },
     "password_too_short": {
       "en": "Password is too short.",
-      "es": "La contraseña es demasiado corta."
+      "es": "La contraseña es demasiado corta.",
+      "usedOn": [],
+      "notes": ""
     },
     "email_invalid": {
       "en": "The email address is not valid.",
-      "es": "La dirección de correo electrónico no es válida."
+      "es": "La dirección de correo electrónico no es válida.",
+      "usedOn": [],
+      "notes": ""
     }
   }
 }

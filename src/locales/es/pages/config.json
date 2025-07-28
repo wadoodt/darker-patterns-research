@@ -1,7 +1,0 @@
-{
-  "system": {
-    "title": "Configuración del Sistema",
-    "warning": "Advertencia: Estas configuraciones afectan todo el sistema",
-    "shutdown": "Apagar Sistema"
-  }
-}

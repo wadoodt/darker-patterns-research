@@ -1,16 +1,18 @@
 interface TranslationMetadata {
   namespace: string;
-  description: string;
-  lastUpdated: string;
-  usedOn?: Record<string, string[]>;
-  notes?: Record<string, string>;
+  description?: string;
 }
 
 export type LegacyTranslations = Record<string, unknown>;
 
 export type CombinedTranslationsFile = {
   metadata: TranslationMetadata;
-  translations: Record<string, { en: string; es: string; usedOn?: string[]; notes?: string; }>;
+  translations: Record<string, { 
+    en: string; 
+    es: string; 
+    usedOn: string[];
+    notes?: string; 
+  }>;
 };
 
 export type LanguageResources = {

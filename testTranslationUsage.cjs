@@ -1,35 +1,81 @@
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
 const { execSync } = require('child_process');
 
 // Function to find key usages in codebase
-function findKeyUsage(namespace, key) {
-  const searchDir = path.join(__dirname, 'src');
-  const fullKey = `${namespace}.${key}`;
-  const command = `grep -rl "t('${fullKey}')" ${searchDir}`;
+function findKeyUsage(namespace, keyPath) {
+  if (!namespace) return [];
+  
+  const fullKey = keyPath ? `${namespace}.${keyPath}` : namespace;
+  
+  // Simplified search pattern - looks for the exact key in t() calls
+  const pattern = `t\(['"]${fullKey.replace(/\./g, '\\\\\\.')}['"]\)`;
+  
+  const usages = new Set();
+  
+  // Search all relevant source files
+  const srcFiles = glob.sync('src/**/*.{js,jsx,ts,tsx}', { ignore: 'src/locales/**' });
+  
+  srcFiles.forEach(file => {
+    try {
+      const content = fs.readFileSync(file, 'utf8');
+      const regex = new RegExp(pattern, 'g');
+      let match;
+      
+      while ((match = regex.exec(content)) !== null) {
+        usages.add(path.relative(process.cwd(), file));
+      }
+    } catch (error) {
+      console.error(`Error processing file ${file}:`, error.message);
+    }
+  });
+  
+  return Array.from(usages);
+}
 
-  try {
-    const output = execSync(command).toString();
-    return output.split('\n').filter(Boolean).map(file => path.relative(searchDir, file));
-  } catch (error) {
-    return [];
+// Recursive function to process translation objects
+function processTranslationObject(obj, namespace, currentPath = '') {
+  // Check if this is a translation entry (has both en and es)
+  if (obj.en && obj.es) {
+    const fullKey = currentPath ? `${currentPath}` : namespace;
+    const usages = findKeyUsage(namespace, fullKey);
+    
+    obj.usedOn = Array.isArray(obj.usedOn) 
+      ? [...new Set([...obj.usedOn, ...usages])]
+      : usages;
+      
+    if (typeof obj.notes !== 'string') {
+      obj.notes = '';
+    }
+    return;
+  }
+  
+  // Process nested objects
+  for (const key in obj) {
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      const newPath = currentPath ? `${currentPath}.${key}` : key;
+      processTranslationObject(obj[key], namespace, newPath);
+    }
   }
 }
 
 // Process a combined translation file
 function verifyCombinedFile(filePath) {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  const namespace = data.metadata && data.metadata.namespace || path.basename(filePath, '.combined.json');
-  const verifiedData = JSON.parse(JSON.stringify(data)); // Deep clone
+  const verifiedData = {
+    metadata: {
+      namespace: data.metadata?.namespace || path.basename(filePath, '.combined.json')
+    },
+    ...data
+  };
   
-  console.log(`\nVerifying ${namespace} translations:`);
+  console.log(`\nProcessing ${verifiedData.metadata.namespace} translations:`);
   
-  const translations = verifiedData.translations;
-
-  for (const key in translations) {
-    if (Object.hasOwnProperty.call(translations, key)) {
-      const usages = findKeyUsage(namespace, key);
-      translations[key].usedOn = [...new Set([...(translations[key].usedOn || []), ...usages])];
+  // Process all top-level keys that aren't metadata
+  for (const key in verifiedData) {
+    if (key !== 'metadata' && typeof verifiedData[key] === 'object') {
+      processTranslationObject(verifiedData[key], verifiedData.metadata.namespace);
     }
   }
   
@@ -38,14 +84,27 @@ function verifyCombinedFile(filePath) {
     verifiedPath, 
     JSON.stringify(verifiedData, null, 2)
   );
-  console.log(`\nVerified file saved to: ${verifiedPath}`);
+  console.log(`\nProcessed file saved to: ${verifiedPath}`);
 }
 
 // Main execution
 const combinedFiles = [
-  'team.combined.json',
+  'articles.combined.json',
+  'auth.combined.json',
+  'common.combined.json',
+  'config.combined.json',
+  'error.combined.json',
+  'pagination.combined.json',
+  'pricing.combined.json',
+  'profile.combined.json',
+  'response.combined.json',
+  'settings.combined.json',
+  'shared.combined.json',
+  'sidebar.combined.json',
   'support.combined.json',
-  // Add other combined files as needed
+  'team.combined.json',
+  'tickets.combined.json',
+  'ui.combined.json',
 ];
 
 combinedFiles.forEach(file => {

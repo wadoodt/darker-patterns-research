@@ -1,16 +1,25 @@
 {
+  "metadata": {
+    "namespace": "config"
+  },
   "system": {
     "title": {
       "en": "System Settings",
-      "es": "Configuración del Sistema"
+      "es": "Configuración del Sistema",
+      "usedOn": [],
+      "notes": ""
     },
     "warning": {
       "en": "Warning: These settings affect the entire system",
-      "es": "Advertencia: Estas configuraciones afectan todo el sistema"
+      "es": "Advertencia: Estas configuraciones afectan todo el sistema",
+      "usedOn": [],
+      "notes": ""
     },
     "shutdown": {
       "en": "Shutdown System",
-      "es": "Apagar Sistema"
+      "es": "Apagar Sistema",
+      "usedOn": [],
+      "notes": ""
     }
   }
 }

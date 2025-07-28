@@ -1,4 +1,7 @@
 {
+  "metadata": {
+    "namespace": "articles"
+  },
   "manageArticles": {
     "usedOn": [
       "src/features/admin-panel/pages/articles/sections/HeaderSection.tsx"

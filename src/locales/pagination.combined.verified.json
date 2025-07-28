@@ -1,14 +1,23 @@
 {
+  "metadata": {
+    "namespace": "pagination"
+  },
   "page_of": {
     "en": "Page {{currentPage}} of {{totalPages}}",
-    "es": "Página {{currentPage}} de {{totalPages}}"
+    "es": "Página {{currentPage}} de {{totalPages}}",
+    "usedOn": [],
+    "notes": ""
   },
   "previous": {
     "en": "Previous",
-    "es": "Anterior"
+    "es": "Anterior",
+    "usedOn": [],
+    "notes": ""
   },
   "next": {
     "en": "Next",
-    "es": "Siguiente"
+    "es": "Siguiente",
+    "usedOn": [],
+    "notes": ""
   }
 }

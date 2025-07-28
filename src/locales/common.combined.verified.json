@@ -1,4 +1,7 @@
 {
+  "metadata": {
+    "namespace": "common"
+  },
   "save": {
     "usedOn": [
       "features/admin-panel/components/FormActions.tsx",
@@ -19,66 +22,98 @@
   },
   "edit": {
     "en": "Edit",
-    "es": "Editar"
+    "es": "Editar",
+    "usedOn": [],
+    "notes": ""
   },
   "delete": {
     "en": "Delete",
-    "es": "Eliminar"
+    "es": "Eliminar",
+    "usedOn": [],
+    "notes": ""
   },
   "confirm": {
     "en": "Confirm",
-    "es": "Confirmar"
+    "es": "Confirmar",
+    "usedOn": [],
+    "notes": ""
   },
   "back": {
     "en": "Back",
-    "es": "Atrás"
+    "es": "Atrás",
+    "usedOn": [],
+    "notes": ""
   },
   "next": {
     "en": "Next",
-    "es": "Siguiente"
+    "es": "Siguiente",
+    "usedOn": [],
+    "notes": ""
   },
   "sending": {
     "en": "Sending...",
-    "es": "Enviando..."
+    "es": "Enviando...",
+    "usedOn": [],
+    "notes": ""
   },
   "loading": {
     "en": "Loading...",
-    "es": "Cargando..."
+    "es": "Cargando...",
+    "usedOn": [],
+    "notes": ""
   },
   "error": {
     "en": "Error",
-    "es": "Error"
+    "es": "Error",
+    "usedOn": [],
+    "notes": ""
   },
   "previous": {
     "en": "Previous",
-    "es": "Anterior"
+    "es": "Anterior",
+    "usedOn": [],
+    "notes": ""
   },
   "page": {
     "en": "Page",
-    "es": "Página"
+    "es": "Página",
+    "usedOn": [],
+    "notes": ""
   },
   "email": {
     "en": "Email",
-    "es": "Correo electrónico"
+    "es": "Correo electrónico",
+    "usedOn": [],
+    "notes": ""
   },
   "password": {
     "en": "Password",
-    "es": "Contraseña"
+    "es": "Contraseña",
+    "usedOn": [],
+    "notes": ""
   },
   "firstName": {
     "en": "First Name",
-    "es": "Nombre"
+    "es": "Nombre",
+    "usedOn": [],
+    "notes": ""
   },
   "lastName": {
     "en": "Last Name",
-    "es": "Apellido"
+    "es": "Apellido",
+    "usedOn": [],
+    "notes": ""
   },
   "login": {
     "en": "Login",
-    "es": "Iniciar sesión"
+    "es": "Iniciar sesión",
+    "usedOn": [],
+    "notes": ""
   },
   "signup": {
     "en": "Sign Up",
-    "es": "Registrarse"
+    "es": "Registrarse",
+    "usedOn": [],
+    "notes": ""
   }
 }

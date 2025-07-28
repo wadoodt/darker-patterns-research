@@ -1,122 +1,4 @@
 {
-  "member": {
-    "en": "Member",
-    "es": "Miembro"
-  },
-  "status": {
-    "en": "Status",
-    "es": "Estado"
-  },
-  "role": {
-    "en": "Role",
-    "es": "Rol"
-  },
-  "platform_role": {
-    "en": "Platform Role",
-    "es": "Rol de Plataforma"
-  },
-  "last_active": {
-    "en": "Last Active",
-    "es": "Última Actividad"
-  },
-  "loading": {
-    "en": "Loading team members...",
-    "es": "Cargando miembros del equipo..."
-  },
-  "edit": {
-    "en": "Edit",
-    "es": "Editar"
-  },
-  "delete": {
-    "en": "Delete",
-    "es": "Eliminar"
-  },
-  "roles": {
-    "admin": {
-      "en": "Admin",
-      "es": "Administrador"
-    },
-    "editor": {
-      "en": "Editor",
-      "es": "Editor"
-    },
-    "viewer": {
-      "en": "Viewer",
-      "es": "Espectador"
-    }
-  },
-  "actions": {
-    "table_header": {
-      "en": "Actions",
-      "es": "Acciones"
-    },
-    "invite": {
-      "en": "Invite Member",
-      "es": "Invitar Miembro"
-    },
-    "remove": {
-      "en": "Remove",
-      "es": "Eliminar"
-    }
-  },
-  "create_member": {
-    "title": {
-      "en": "Create Team Member",
-      "es": "Crear Miembro del Equipo"
-    },
-    "name_label": {
-      "en": "Name",
-      "es": "Nombre"
-    },
-    "email_label": {
-      "en": "Email",
-      "es": "Correo Electrónico"
-    },
-    "role_label": {
-      "en": "Role",
-      "es": "Rol"
-    },
-    "submit_button": {
-      "en": "Create Member",
-      "es": "Crear Miembro"
-    },
-    "name_placeholder": {
-      "en": "Enter full name",
-      "es": "Ingrese nombre completo"
-    },
-    "email_placeholder": {
-      "en": "Enter email address",
-      "es": "Ingrese dirección de correo"
-    }
-  },
-  "header": {
-    "en": "Team Management",
-    "es": "Gestión de Equipo"
-  },
-  "invite": {
-    "en": "Invite Member",
-    "es": "Invitar Miembro"
-  },
-  "no_members": {
-    "en": "No team members found.",
-    "es": "No se encontraron miembros del equipo."
-  },
-  "delete_member_title": {
-    "en": "Delete Member",
-    "es": "Eliminar Miembro"
-  },
-  "delete_member_confirmation": {
-    "en": "Are you sure you want to delete {{name}}? This action cannot be undone.",
-    "es": "¿Estás seguro de que deseas eliminar a {{name}}? Esta acción no se puede deshacer."
-  },
-  "cancel": {
-    "en": "Cancel",
-    "es": "Cancelar"
-  },
-  "confirm_delete": {
-    "en": "Confirm Delete",
-    "es": "Confirmar Eliminación"
-  },
   "metadata": {
     "usedOn": {
       "member": [
@@ -153,5 +35,179 @@
       "create_member.title": "Create team member page title",
       "create_member.submit_button": "Create member button text"
     }
+  },
+  "member": {
+    "en": "Member",
+    "es": "Miembro",
+    "usedOn": [],
+    "notes": ""
+  },
+  "status": {
+    "en": "Status",
+    "es": "Estado",
+    "usedOn": [],
+    "notes": ""
+  },
+  "role": {
+    "en": "Role",
+    "es": "Rol",
+    "usedOn": [],
+    "notes": ""
+  },
+  "platform_role": {
+    "en": "Platform Role",
+    "es": "Rol de Plataforma",
+    "usedOn": [],
+    "notes": ""
+  },
+  "last_active": {
+    "en": "Last Active",
+    "es": "Última Actividad",
+    "usedOn": [],
+    "notes": ""
+  },
+  "loading": {
+    "en": "Loading team members...",
+    "es": "Cargando miembros del equipo...",
+    "usedOn": [],
+    "notes": ""
+  },
+  "edit": {
+    "en": "Edit",
+    "es": "Editar",
+    "usedOn": [],
+    "notes": ""
+  },
+  "delete": {
+    "en": "Delete",
+    "es": "Eliminar",
+    "usedOn": [],
+    "notes": ""
+  },
+  "roles": {
+    "admin": {
+      "en": "Admin",
+      "es": "Administrador",
+      "usedOn": [],
+      "notes": ""
+    },
+    "editor": {
+      "en": "Editor",
+      "es": "Editor",
+      "usedOn": [],
+      "notes": ""
+    },
+    "viewer": {
+      "en": "Viewer",
+      "es": "Espectador",
+      "usedOn": [],
+      "notes": ""
+    }
+  },
+  "actions": {
+    "table_header": {
+      "en": "Actions",
+      "es": "Acciones",
+      "usedOn": [],
+      "notes": ""
+    },
+    "invite": {
+      "en": "Invite Member",
+      "es": "Invitar Miembro",
+      "usedOn": [],
+      "notes": ""
+    },
+    "remove": {
+      "en": "Remove",
+      "es": "Eliminar",
+      "usedOn": [],
+      "notes": ""
+    }
+  },
+  "create_member": {
+    "title": {
+      "en": "Create Team Member",
+      "es": "Crear Miembro del Equipo",
+      "usedOn": [],
+      "notes": ""
+    },
+    "name_label": {
+      "en": "Name",
+      "es": "Nombre",
+      "usedOn": [],
+      "notes": ""
+    },
+    "email_label": {
+      "en": "Email",
+      "es": "Correo Electrónico",
+      "usedOn": [],
+      "notes": ""
+    },
+    "role_label": {
+      "en": "Role",
+      "es": "Rol",
+      "usedOn": [],
+      "notes": ""
+    },
+    "submit_button": {
+      "en": "Create Member",
+      "es": "Crear Miembro",
+      "usedOn": [],
+      "notes": ""
+    },
+    "name_placeholder": {
+      "en": "Enter full name",
+      "es": "Ingrese nombre completo",
+      "usedOn": [],
+      "notes": ""
+    },
+    "email_placeholder": {
+      "en": "Enter email address",
+      "es": "Ingrese dirección de correo",
+      "usedOn": [],
+      "notes": ""
+    }
+  },
+  "header": {
+    "en": "Team Management",
+    "es": "Gestión de Equipo",
+    "usedOn": [],
+    "notes": ""
+  },
+  "invite": {
+    "en": "Invite Member",
+    "es": "Invitar Miembro",
+    "usedOn": [],
+    "notes": ""
+  },
+  "no_members": {
+    "en": "No team members found.",
+    "es": "No se encontraron miembros del equipo.",
+    "usedOn": [],
+    "notes": ""
+  },
+  "delete_member_title": {
+    "en": "Delete Member",
+    "es": "Eliminar Miembro",
+    "usedOn": [],
+    "notes": ""
+  },
+  "delete_member_confirmation": {
+    "en": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+    "es": "¿Estás seguro de que deseas eliminar a {{name}}? Esta acción no se puede deshacer.",
+    "usedOn": [],
+    "notes": ""
+  },
+  "cancel": {
+    "en": "Cancel",
+    "es": "Cancelar",
+    "usedOn": [],
+    "notes": ""
+  },
+  "confirm_delete": {
+    "en": "Confirm Delete",
+    "es": "Confirmar Eliminación",
+    "usedOn": [],
+    "notes": ""
   }
 }

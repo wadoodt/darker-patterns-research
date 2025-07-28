@@ -1,96 +1,147 @@
 {
+  "metadata": {
+    "namespace": "auth"
+  },
   "login": {
     "title": {
       "en": "Sign In",
-      "es": "Iniciar Sesión"
+      "es": "Iniciar Sesión",
+      "usedOn": [],
+      "notes": ""
     },
     "emailLabel": {
       "en": "Email Address",
-      "es": "Correo Electrónico"
+      "es": "Correo Electrónico",
+      "usedOn": [],
+      "notes": ""
     },
     "passwordLabel": {
       "en": "Password",
-      "es": "Contraseña"
+      "es": "Contraseña",
+      "usedOn": [],
+      "notes": ""
     },
     "emailPlaceholder": {
       "en": "name@example.com",
-      "es": "nombre@ejemplo.com"
+      "es": "nombre@ejemplo.com",
+      "usedOn": [],
+      "notes": ""
     },
     "passwordPlaceholder": {
       "en": "Your password",
-      "es": "Tu contraseña"
+      "es": "Tu contraseña",
+      "usedOn": [],
+      "notes": ""
     },
     "rememberMe": {
       "en": "Remember me",
-      "es": "Recordarme"
+      "es": "Recordarme",
+      "usedOn": [],
+      "notes": ""
     },
     "forgotPassword": {
       "en": "Forgot your password?",
-      "es": "¿Olvidaste tu contraseña?"
+      "es": "¿Olvidaste tu contraseña?",
+      "usedOn": [],
+      "notes": ""
     },
     "submitButton": {
       "en": "Sign In",
-      "es": "Iniciar Sesión"
+      "es": "Iniciar Sesión",
+      "usedOn": [],
+      "notes": ""
     },
     "noAccount": {
       "en": "Don't have an account?",
-      "es": "¿No tienes una cuenta?"
+      "es": "¿No tienes una cuenta?",
+      "usedOn": [],
+      "notes": ""
     },
     "signUp": {
       "en": "Sign up",
-      "es": "Registrarse"
+      "es": "Registrarse",
+      "usedOn": [],
+      "notes": ""
+    },
+    "loading": {
+      "en": "Loading",
+      "es": "Cargando",
+      "usedOn": [],
+      "notes": ""
     }
   },
   "signup": {
     "header": {
       "title": {
         "en": "Create Account",
-        "es": "Crear una Cuenta"
+        "es": "Crear una Cuenta",
+        "usedOn": [],
+        "notes": ""
       },
       "description": {
         "en": "Join us to start managing your email campaigns efficiently.",
-        "es": "Únete a nosotros para comenzar a gestionar tus campañas de correo electrónico de manera eficiente."
+        "es": "Únete a nosotros para comenzar a gestionar tus campañas de correo electrónico de manera eficiente.",
+        "usedOn": [],
+        "notes": ""
       }
     },
     "form": {
       "typeLabel": {
         "en": "Account Type",
-        "es": "Tipo de Cuenta"
+        "es": "Tipo de Cuenta",
+        "usedOn": [],
+        "notes": ""
       },
       "options": {
         "new": {
           "en": "New Team",
-          "es": "Equipo Nuevo"
+          "es": "Equipo Nuevo",
+          "usedOn": [],
+          "notes": ""
         },
         "existing": {
           "en": "Join Existing Team",
-          "es": "Unirse a un Equipo Existente"
+          "es": "Unirse a un Equipo Existente",
+          "usedOn": [],
+          "notes": ""
         }
       },
       "labels": {
         "firstName": {
           "en": "First Name",
-          "es": "Nombre"
+          "es": "Nombre",
+          "usedOn": [],
+          "notes": ""
         },
         "lastName": {
           "en": "Last Name",
-          "es": "Apellido"
+          "es": "Apellido",
+          "usedOn": [],
+          "notes": ""
         },
         "businessName": {
           "en": "Business Name",
-          "es": "Nombre de la Empresa"
+          "es": "Nombre de la Empresa",
+          "usedOn": [],
+          "notes": ""
         },
         "email": {
           "en": "Email Address",
-          "es": "Correo Electrónico"
+          "es": "Correo Electrónico",
+          "usedOn": [],
+          "notes": ""
         },
         "password": {
           "en": "Password",
-          "es": "Contraseña"
+          "es": "Contraseña",
+          "usedOn": [],
+          "notes": ""
         },
         "confirmPassword": {
           "en": "Confirm Password",
-          "es": "Confirmar Contraseña"
+          "es": "Confirmar Contraseña",
+          "usedOn": [],
+          "notes": ""
         }
       }
     },
@@ -98,28 +149,38 @@
       "newAccount": {
         "title": {
           "en": "Welcome!",
-          "es": "¡Bienvenido!"
+          "es": "¡Bienvenido!",
+          "usedOn": [],
+          "notes": ""
         },
         "description": {
           "en": "Your account has been created successfully. Please check your email to verify your account.",
-          "es": "Tu cuenta ha sido creada exitosamente. Por favor, revisa tu correo electrónico para verificar tu cuenta."
+          "es": "Tu cuenta ha sido creada exitosamente. Por favor, revisa tu correo electrónico para verificar tu cuenta.",
+          "usedOn": [],
+          "notes": ""
         }
       }
     },
     "buttons": {
       "createAccount": {
         "en": "Create Account",
-        "es": "Crear Cuenta"
+        "es": "Crear Cuenta",
+        "usedOn": [],
+        "notes": ""
       }
     },
     "footer": {
       "haveAccount": {
         "en": "Already have an account?",
-        "es": "¿Ya tienes una cuenta?"
+        "es": "¿Ya tienes una cuenta?",
+        "usedOn": [],
+        "notes": ""
       },
       "login": {
         "en": "Login",
-        "es": "Iniciar Sesión"
+        "es": "Iniciar Sesión",
+        "usedOn": [],
+        "notes": ""
       }
     }
   }

@@ -20,37 +20,44 @@
     "dashboard.settings": {
       "en": "Settings",
       "es": "Configuración",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "dashboard.team": {
       "en": "Team",
       "es": "Equipo",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "dashboard.billing": {
       "en": "Billing",
       "es": "Facturación",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "dashboard.infra": {
       "en": "Infrastructure",
       "es": "Infraestructura",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "dashboard.domains": {
       "en": "Domains",
       "es": "Dominios",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "dashboard.support": {
       "en": "Support",
       "es": "Soporte",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "dashboard.profile": {
       "en": "Profile",
       "es": "Perfil",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.title": {
       "en": "Admin Panel",
@@ -61,67 +68,80 @@
     "admin.articles": {
       "en": "Knowledge Base Articles",
       "es": "Artículos de la Base de Conocimiento",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.home": {
       "en": "Admin Home",
       "es": "Inicio de Admin",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.settings": {
       "en": "Admin Settings",
       "es": "Configuración de Admin",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.users": {
       "en": "Users",
       "es": "Usuarios",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.companies": {
       "en": "Companies",
       "es": "Compañías",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.infra": {
       "en": "Admin Infrastructure",
       "es": "Infraestructura de Admin",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.tickets": {
       "en": "Tickets",
       "es": "Tickets",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.config": {
       "en": "Configurations",
       "es": "Configuraciones",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "admin.faqs": {
       "en": "FAQs",
       "es": "FAQs",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "user.profile": {
       "en": "Profile",
       "es": "Perfil",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "user.settings": {
       "en": "Settings",
       "es": "Configuración",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "status.title": {
       "en": "System Status",
       "es": "Estado del Sistema",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     },
     "status.allSystemsOperational": {
       "en": "All systems operational",
       "es": "Todos los sistemas operativos",
-      "usedOn": []
+      "usedOn": [],
+      "notes": ""
     }
   }
 }
