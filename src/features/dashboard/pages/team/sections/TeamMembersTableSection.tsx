@@ -69,7 +69,7 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
             <Table.ColumnHeaderCell>{t("team.role")}</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>{t("team.platform_role")}</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>{t("team.last_active")}</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>{t("team.actions")}</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>{t("team.actions.table_header")}</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

@@ -1,0 +1,130 @@
+{
+  "login": {
+    "title": {
+      "en": "Sign In",
+      "es": "Iniciar Sesión"
+    },
+    "emailLabel": {
+      "en": "Email Address",
+      "es": "Correo Electrónico"
+    },
+    "passwordLabel": {
+      "en": "Password",
+      "es": "Contraseña"
+    },
+    "emailPlaceholder": {
+      "en": "name@example.com",
+      "es": "nombre@ejemplo.com"
+    },
+    "passwordPlaceholder": {
+      "en": "Your password",
+      "es": "Tu contraseña"
+    },
+    "rememberMe": {
+      "en": "Remember me",
+      "es": "Recordarme"
+    },
+    "forgotPassword": {
+      "en": "Forgot your password?",
+      "es": "¿Olvidaste tu contraseña?"
+    },
+    "submitButton": {
+      "en": "Sign In",
+      "es": "Iniciar Sesión"
+    },
+    "noAccount": {
+      "en": "Don't have an account?",
+      "es": "¿No tienes una cuenta?"
+    },
+    "signUp": {
+      "en": "Sign up",
+      "es": "Registrarse"
+    },
+    "loading": {
+      "en": "Loading",
+      "es": "Cargando"
+    }
+  },
+  "signup": {
+    "header": {
+      "title": {
+        "en": "Create Account",
+        "es": "Crear una Cuenta"
+      },
+      "description": {
+        "en": "Join us to start managing your email campaigns efficiently.",
+        "es": "Únete a nosotros para comenzar a gestionar tus campañas de correo electrónico de manera eficiente."
+      }
+    },
+    "form": {
+      "typeLabel": {
+        "en": "Account Type",
+        "es": "Tipo de Cuenta"
+      },
+      "options": {
+        "new": {
+          "en": "New Team",
+          "es": "Equipo Nuevo"
+        },
+        "existing": {
+          "en": "Join Existing Team",
+          "es": "Unirse a un Equipo Existente"
+        }
+      },
+      "labels": {
+        "firstName": {
+          "en": "First Name",
+          "es": "Nombre"
+        },
+        "lastName": {
+          "en": "Last Name",
+          "es": "Apellido"
+        },
+        "businessName": {
+          "en": "Business Name",
+          "es": "Nombre de la Empresa"
+        },
+        "email": {
+          "en": "Email Address",
+          "es": "Correo Electrónico"
+        },
+        "password": {
+          "en": "Password",
+          "es": "Contraseña"
+        },
+        "confirmPassword": {
+          "en": "Confirm Password",
+          "es": "Confirmar Contraseña"
+        }
+      }
+    },
+    "alerts": {
+      "newAccount": {
+        "title": {
+          "en": "Welcome!",
+          "es": "¡Bienvenido!"
+        },
+        "description": {
+          "en": "Your account has been created successfully. Please check your email to verify your account.",
+          "es": "Tu cuenta ha sido creada exitosamente. Por favor, revisa tu correo electrónico para verificar tu cuenta."
+        }
+      }
+    },
+    "buttons": {
+      "createAccount": {
+        "en": "Create Account",
+        "es": "Crear Cuenta"
+      }
+    },
+    "footer": {
+      "haveAccount": {
+        "en": "Already have an account?",
+        "es": "¿Ya tienes una cuenta?"
+      },
+      "login": {
+        "en": "Login",
+        "es": "Iniciar Sesión"
+      }
+    }
+  }
+}

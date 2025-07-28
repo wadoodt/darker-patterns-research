@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "namespace": "response",
+    "description": "API response messages and user feedback",
+    "lastUpdated": "2025-07-28"
+  },
+  "translations": {
+    "auth.login_success": {
+      "en": "Login successful! Redirecting...",
+      "es": "¡Inicio de sesión exitoso!",
+      "usedOn": [],
+      "notes": ""
+    },
+    "general.operation_success": {
+      "en": "Operation completed successfully.",
+      "es": "Operación completada con éxito.",
+      "usedOn": [],
+      "notes": ""
+    }
+  }
+}

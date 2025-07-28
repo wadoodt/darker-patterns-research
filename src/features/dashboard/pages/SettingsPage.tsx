@@ -1,47 +1,51 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-  TextArea,
-  Switch,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, Heading, Switch, Text, TextArea, TextField } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@hooks/useAuth";
 import { useApp } from "@hooks/useApp";
-import { useTranslation } from "react-i18next";
 import SettingSection from "@components/SettingSection";
+
+type CompanySettings = {
+  name: string;
+  email: string;
+  contactInfo: string;
+  notificationsEnabled: boolean;
+};
 
 const SettingsPage: React.FC = () => {
   const { hasRole } = useAuth();
-  const { t } = useTranslation();
   const { isHighContrast } = useApp();
+  const { t } = useTranslation();
+  
+  // Mock data - replace with actual data fetching
+  const company: CompanySettings = {
+    name: "Acme Inc.",
+    email: "contact@acme.com",
+    contactInfo: "123 Main St, City",
+    notificationsEnabled: true,
+  };
 
   return (
     <Box p="4">
-      <Heading as="h2" size="6" mb="4">
-        {t("settings.title")}
-      </Heading>
+      <Heading>{t("settings.title")}</Heading>
       <Flex direction="column" gap="4">
         {hasRole(["admin", "qa"]) && (
           <SettingSection title={t("settings.company.title")}>
             <Flex direction="column" gap="4">
               <Flex direction="column" gap="2">
                 <Text>{t("settings.company.name")}</Text>
-                <TextField.Root />
+                <TextField.Root defaultValue={company.name} />
               </Flex>
               <Flex direction="column" gap="2">
                 <Text>{t("settings.company.email")}</Text>
-                <TextField.Root type="email" />
+                <TextField.Root defaultValue={company.email} type="email" />
               </Flex>
               <Flex direction="column" gap="2">
                 <Text>{t("settings.company.contactInfo")}</Text>
-                <TextArea />
+                <TextArea defaultValue={company.contactInfo} />
               </Flex>
-              <Flex direction="row" align="center" gap="2">
-                <Switch defaultChecked />
+              <Flex align="center" gap="2">
+                <Switch defaultChecked={company.notificationsEnabled} />
                 <Text>{t("settings.company.notifications")}</Text>
               </Flex>
               <Button highContrast={isHighContrast}>

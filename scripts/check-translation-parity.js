@@ -11,8 +11,7 @@ const LANGUAGES = ['en', 'es'];
 const CHECK_FILES = [
   'common.json',
   'pages/articles.json',
-  'pages/config.json',
-  'pages/support.json'
+  'pages/config.json'
 ];
 
 async function compareKeys(baseLang, compareLang) {

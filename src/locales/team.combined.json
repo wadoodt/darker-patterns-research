@@ -1,0 +1,141 @@
+{
+  "member": {
+    "en": "Member",
+    "es": "Miembro"
+  },
+  "status": {
+    "en": "Status",
+    "es": "Estado"
+  },
+  "role": {
+    "en": "Role",
+    "es": "Rol"
+  },
+  "platform_role": {
+    "en": "Platform Role",
+    "es": "Rol de Plataforma"
+  },
+  "last_active": {
+    "en": "Last Active",
+    "es": "Última Actividad"
+  },
+  "loading": {
+    "en": "Loading team members...",
+    "es": "Cargando miembros del equipo..."
+  },
+  "edit": {
+    "en": "Edit",
+    "es": "Editar"
+  },
+  "delete": {
+    "en": "Delete",
+    "es": "Eliminar"
+  },
+  "roles": {
+    "admin": {
+      "en": "Admin",
+      "es": "Administrador"
+    },
+    "editor": {
+      "en": "Editor",
+      "es": "Editor"
+    },
+    "viewer": {
+      "en": "Viewer",
+      "es": "Espectador"
+    }
+  },
+  "actions": {
+    "table_header": {
+      "en": "Actions",
+      "es": "Acciones"
+    },
+    "invite": {
+      "en": "Invite Member",
+      "es": "Invitar Miembro"
+    },
+    "remove": {
+      "en": "Remove",
+      "es": "Eliminar"
+    }
+  },
+  "create_member": {
+    "title": {
+      "en": "Create Team Member",
+      "es": "Crear Miembro del Equipo"
+    },
+    "name_label": {
+      "en": "Name",
+      "es": "Nombre"
+    },
+    "email_label": {
+      "en": "Email",
+      "es": "Correo Electrónico"
+    },
+    "role_label": {
+      "en": "Role",
+      "es": "Rol"
+    },
+    "submit_button": {
+      "en": "Create Member",
+      "es": "Crear Miembro"
+    },
+    "name_placeholder": {
+      "en": "Enter full name",
+      "es": "Ingrese nombre completo"
+    },
+    "email_placeholder": {
+      "en": "Enter email address",
+      "es": "Ingrese dirección de correo"
+    }
+  },
+  "header": {
+    "en": "Team Management",
+    "es": "Gestión de Equipo"
+  },
+  "invite": {
+    "en": "Invite Member",
+    "es": "Invitar Miembro"
+  },
+  "no_members": {
+    "en": "No team members found.",
+    "es": "No se encontraron miembros del equipo."
+  },
+  "delete_member_title": {
+    "en": "Delete Member",
+    "es": "Eliminar Miembro"
+  },
+  "delete_member_confirmation": {
+    "en": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+    "es": "¿Estás seguro de que deseas eliminar a {{name}}? Esta acción no se puede deshacer."
+  },
+  "cancel": {
+    "en": "Cancel",
+    "es": "Cancelar"
+  },
+  "confirm_delete": {
+    "en": "Confirm Delete",
+    "es": "Confirmar Eliminación"
+  },
+  "metadata": {
+    "usedOn": {
+      "member": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
+      "role": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
+      "loading": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
+      "actions.table_header": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
+      "edit": ["src/features/dashboard/pages/team/sections/TeamMemberRow.tsx"],
+      "delete": ["src/features/dashboard/pages/team/sections/TeamMemberRow.tsx"],
+      "create_member.title": ["src/features/dashboard/pages/team/new/CreateTeamMemberPage.tsx"],
+      "create_member.submit_button": ["src/features/dashboard/pages/team/new/CreateTeamMemberPage.tsx"]
+    },
+    "notes": {
+      "member": "Table column header for team members",
+      "role": "Table column header for member roles",
+      "actions.table_header": "Table column header for actions",
+      "edit": "Edit button text in team member row",
+      "delete": "Delete button text in team member row",
+      "create_member.title": "Create team member page title",
+      "create_member.submit_button": "Create member button text"
+    }
+  }
+}

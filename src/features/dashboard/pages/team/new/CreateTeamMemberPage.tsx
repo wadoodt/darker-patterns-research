@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTeamPage } from "../hooks/useTeamPage";
+import { useTranslation } from "react-i18next";
 import type { NewTeamMember, CompanyRole } from "types/api/user";
 import {
   Flex,
@@ -14,6 +15,7 @@ import {
 const CreateTeamMemberPage = () => {
   const navigate = useNavigate();
   const { handleCreateMember } = useTeamPage();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<NewTeamMember>({
     name: "",
     email: "",
@@ -37,12 +39,12 @@ const CreateTeamMemberPage = () => {
 
   return (
     <Flex direction="column" gap="4" p="4">
-      <Heading>Create Team Member</Heading>
+      <Heading>{t("team.create_member.title")}</Heading>
       <form onSubmit={handleSubmit}>
         <Flex direction="column" gap="4" style={{ maxWidth: 500 }}>
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
-              Name
+              {t("team.create_member.name_label")}
             </Text>
             <TextField.Root
               name="name"
@@ -50,12 +52,12 @@ const CreateTeamMemberPage = () => {
               required
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter full name"
+              placeholder={t("team.create_member.name_placeholder")}
             />
           </label>
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
-              Email
+              {t("team.create_member.email_label")}
             </Text>
             <TextField.Root
               name="email"
@@ -63,12 +65,12 @@ const CreateTeamMemberPage = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter email address"
+              placeholder={t("team.create_member.email_placeholder")}
             />
           </label>
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
-              Role
+              {t("team.create_member.role_label")}
             </Text>
             <Select.Root
               name="companyRole"
@@ -78,13 +80,13 @@ const CreateTeamMemberPage = () => {
             >
               <Select.Trigger />
               <Select.Content>
-                <Select.Item value="admin">Admin</Select.Item>
-                <Select.Item value="employee">Employee</Select.Item>
+                <Select.Item value="admin">{t("team.roles.admin")}</Select.Item>
+                <Select.Item value="employee">{t("team.roles.employee")}</Select.Item>
               </Select.Content>
             </Select.Root>
           </label>
           <Button type="submit" size="3" style={{ width: 'fit-content' }}>
-            Create Member
+            {t("team.create_member.submit_button")}
           </Button>
         </Flex>
       </form>

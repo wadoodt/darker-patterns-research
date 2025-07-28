@@ -1,44 +1,45 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import { processCombinedTranslations } from './translationUtils';
 
-// Import English translations
-import enShared from "./en/shared.json";
-import enUI from "./en/ui.json";
-import enAPI from "./en/api.json";
-import enAuth from "./en/pages/auth.json";
-import enTeam from "./en/pages/team.json";
-import enSettings from "./en/pages/settings.json";
-import enSupport from "./en/pages/support.json";
-import enPricing from "./en/pages/pricing.json";
-import enTickets from "./en/pages/tickets.json";
-import enProfile from "./en/pages/profile.json";
-import enSidebar from "./en/sidebar.json";
-import enResponse from "./en/response.json";
-import enError from "./en/error.json";
-import enPagination from "./en/pagination.json";
-import enArticles from "./en/pages/articles.json";
-import enCommon from './en/common.json';
-import enConfig from './en/pages/config.json';
+// All translations have been migrated to the combined format
 
-// Import Spanish translations
-import esShared from "./es/shared.json";
-import esUI from "./es/ui.json";
-import esAPI from "./es/api.json";
-import esAuth from "./es/pages/auth.json";
-import esTeam from "./es/pages/team.json";
-import esSettings from "./es/pages/settings.json";
-import esSupport from "./es/pages/support.json";
-import esPricing from "./es/pages/pricing.json";
-import esTickets from "./es/pages/tickets.json";
-import esProfile from "./en/pages/profile.json";
-import esArticles from "./es/pages/articles.json";
-import esSidebar from "./es/sidebar.json";
-import esResponse from "./es/response.json";
-import esError from "./es/error.json";
-import esPagination from "./es/pagination.json";
-import esCommon from './es/common.json';
-import esConfig from './es/pages/config.json';
+// Import combined translation files
+import articlesCombined from './articles.combined.json';
+import commonCombined from './common.combined.json';
+import authCombined from './auth.combined.json';
+import pricingCombined from './pricing.combined.json';
+import teamCombined from './team.combined.json';
+import settingsCombined from './settings.combined.json';
+import supportCombined from './support.combined.json';
+import ticketsCombined from './tickets.combined.json';
+import sidebarCombined from './sidebar.combined.json';
+import paginationCombined from './pagination.combined.json';
+import responseCombined from './response.combined.json';
+import errorCombined from './error.combined.json';
+import configCombined from './config.combined.json';
+import profileCombined from './profile.combined.json';
+import sharedCombined from './shared.combined.json';
+import uiCombined from './ui.combined.json';
+
+// Process combined files
+const articlesResources = processCombinedTranslations(articlesCombined, 'articles');
+const commonResources = processCombinedTranslations(commonCombined, 'common');
+const authResources = processCombinedTranslations(authCombined, 'auth');
+const pricingResources = processCombinedTranslations(pricingCombined, 'pricing');
+const teamResources = processCombinedTranslations(teamCombined, 'team');
+const settingsResources = processCombinedTranslations(settingsCombined, 'settings');
+const supportResources = processCombinedTranslations(supportCombined, 'support');
+const ticketsResources = processCombinedTranslations(ticketsCombined, 'tickets');
+const sidebarResources = processCombinedTranslations(sidebarCombined, 'sidebar');
+const paginationResources = processCombinedTranslations(paginationCombined, 'pagination');
+const responseResources = processCombinedTranslations(responseCombined, 'response');
+const errorResources = processCombinedTranslations(errorCombined, 'error');
+const configResources = processCombinedTranslations(configCombined, 'config');
+const profileResources = processCombinedTranslations(profileCombined, 'profile');
+const sharedResources = processCombinedTranslations(sharedCombined, 'shared');
+const uiResources = processCombinedTranslations(uiCombined, 'ui');
 
 export const fallbackLanguage = "en";
 
@@ -46,44 +47,42 @@ export const fallbackLanguage = "en";
 const resources = {
   en: {
     translation: {
-      ...enShared,
-      ...enUI,
-      ...enAPI,
-      common: enCommon,
-      sidebar: enSidebar,
-      response: enResponse,
-      error: enError,
-      pagination: enPagination,
-      auth: enAuth,
-      team: enTeam,
-      settings: enSettings,
-      support: enSupport,
-      pricing: enPricing,
-      tickets: enTickets,
-      profile: enProfile,
-      articles: enArticles,
-      config: enConfig
+      articles: articlesResources.en.articles,
+      common: commonResources.en.common,
+      auth: authResources.en.auth,
+      pricing: pricingResources.en.pricing,
+      team: teamResources.en.team,
+      shared: sharedResources.en.shared,
+      ui: uiResources.en.ui,
+      response: responseResources.en.response,
+      error: errorResources.en.error,
+      pagination: paginationResources.en.pagination,
+      settings: settingsResources.en.settings,
+      support: supportResources.en.support,
+      tickets: ticketsResources.en.tickets,
+      sidebar: sidebarResources.en.sidebar,
+      profile: profileResources.en.profile,
+      config: configResources.en.config,
     }
   },
   es: {
     translation: {
-      ...esShared,
-      ...esUI,
-      ...esAPI,
-      common: esCommon,
-      sidebar: esSidebar,
-      response: esResponse,
-      error: esError,
-      pagination: esPagination,
-      auth: esAuth,
-      team: esTeam,
-      settings: esSettings,
-      support: esSupport,
-      pricing: esPricing,
-      tickets: esTickets,
-      profile: esProfile,
-      articles: esArticles,
-      config: esConfig
+      articles: articlesResources.es.articles,
+      common: commonResources.es.common,
+      auth: authResources.es.auth,
+      pricing: pricingResources.es.pricing,
+      team: teamResources.es.team,
+      shared: sharedResources.es.shared,
+      ui: uiResources.es.ui,
+      response: responseResources.es.response,
+      error: errorResources.es.error,
+      pagination: paginationResources.es.pagination,
+      settings: settingsResources.es.settings,
+      support: supportResources.es.support,
+      tickets: ticketsResources.es.tickets,
+      sidebar: sidebarResources.es.sidebar,
+      profile: profileResources.es.profile,
+      config: configResources.es.config,
     }
   }
 };

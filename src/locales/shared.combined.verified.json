@@ -1,0 +1,99 @@
+{
+  "metadata": {
+    "namespace": "shared",
+    "description": "Shared translations for common UI elements like buttons, and status messages.",
+    "lastUpdated": "2025-07-28"
+  },
+  "translations": {
+    "buttons.save": {
+      "en": "Save",
+      "es": "Guardar",
+      "usedOn": [],
+      "notes": ""
+    },
+    "buttons.cancel": {
+      "en": "Cancel",
+      "es": "Cancelar",
+      "usedOn": [],
+      "notes": ""
+    },
+    "buttons.submit": {
+      "en": "Submit",
+      "es": "Enviar",
+      "usedOn": [],
+      "notes": ""
+    },
+    "buttons.delete": {
+      "en": "Delete",
+      "es": "Eliminar",
+      "usedOn": [],
+      "notes": ""
+    },
+    "buttons.confirm": {
+      "en": "Confirm",
+      "es": "Confirmar",
+      "usedOn": [],
+      "notes": ""
+    },
+    "buttons.back": {
+      "en": "Back",
+      "es": "Atrás",
+      "usedOn": [],
+      "notes": ""
+    },
+    "loading": {
+      "en": "Loading...",
+      "es": "Cargando...",
+      "usedOn": [],
+      "notes": ""
+    },
+    "success": {
+      "en": "Operation completed successfully",
+      "es": "Operación completada con éxito",
+      "usedOn": [],
+      "notes": ""
+    },
+    "error.general": {
+      "en": "An error occurred",
+      "es": "Ocurrió un error",
+      "usedOn": [],
+      "notes": ""
+    },
+    "error.tryAgain": {
+      "en": "Please try again",
+      "es": "Por favor inténtalo de nuevo",
+      "usedOn": [],
+      "notes": ""
+    },
+    "error.validation": {
+      "en": "Validation error",
+      "es": "Error de validación",
+      "usedOn": [],
+      "notes": ""
+    },
+    "pagination.previous": {
+      "en": "Previous",
+      "es": "Anterior",
+      "usedOn": [],
+      "notes": ""
+    },
+    "pagination.next": {
+      "en": "Next",
+      "es": "Siguiente",
+      "usedOn": [],
+      "notes": ""
+    },
+    "pagination.page": {
+      "en": "Page",
+      "es": "Página",
+      "usedOn": [],
+      "notes": ""
+    },
+    "pagination.of": {
+      "en": "of",
+      "es": "de",
+      "usedOn": [],
+      "notes": ""
+    }
+  }
+}

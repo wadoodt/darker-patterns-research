@@ -403,6 +403,24 @@ const response = await api.get("/api/admin/tickets");
 
 ---
 
+## Translation Workflow
+
+### Why use combined translation files?
+- Single source of truth for all languages
+- Built-in context for translators/developers
+- Easier to maintain consistency
+
+### How to handle existing translations?
+1. Migrate gradually, one namespace at a time
+2. Keep old files until new structure is verified
+3. Update components to use new keys as needed
+
+### What about translation validation?
+- The existing `check-translation-parity` script still works
+- Consider updating it to also validate context fields
+
+---
+
 ## Role-Based Authorization Implementation
 
 **Q: What are the key considerations when implementing role-based authorization?**

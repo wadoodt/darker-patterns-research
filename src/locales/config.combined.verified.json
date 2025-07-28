@@ -1,0 +1,16 @@
+{
+  "system": {
+    "title": {
+      "en": "System Settings",
+      "es": "Configuración del Sistema"
+    },
+    "warning": {
+      "en": "Warning: These settings affect the entire system",
+      "es": "Advertencia: Estas configuraciones afectan todo el sistema"
+    },
+    "shutdown": {
+      "en": "Shutdown System",
+      "es": "Apagar Sistema"
+    }
+  }
+}

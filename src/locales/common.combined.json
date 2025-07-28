@@ -1,0 +1,84 @@
+{
+  "save": {
+    "usedOn": [
+      "features/admin-panel/components/FormActions.tsx",
+      "features/settings/components/SaveButton.tsx"
+    ],
+    "notes": "Primary save action across the app",
+    "en": "Save",
+    "es": "Guardar"
+  },
+  "cancel": {
+    "usedOn": [
+      "features/admin-panel/components/FormActions.tsx",
+      "components/modals/BaseModal.tsx"
+    ],
+    "notes": "Cancel/close action used in forms and modals",
+    "en": "Cancel",
+    "es": "Cancelar"
+  },
+  "edit": {
+    "en": "Edit",
+    "es": "Editar"
+  },
+  "delete": {
+    "en": "Delete",
+    "es": "Eliminar"
+  },
+  "confirm": {
+    "en": "Confirm",
+    "es": "Confirmar"
+  },
+  "back": {
+    "en": "Back",
+    "es": "Atrás"
+  },
+  "next": {
+    "en": "Next",
+    "es": "Siguiente"
+  },
+  "sending": {
+    "en": "Sending...",
+    "es": "Enviando..."
+  },
+  "loading": {
+    "en": "Loading...",
+    "es": "Cargando..."
+  },
+  "error": {
+    "en": "Error",
+    "es": "Error"
+  },
+  "previous": {
+    "en": "Previous",
+    "es": "Anterior"
+  },
+  "page": {
+    "en": "Page",
+    "es": "Página"
+  },
+  "email": {
+    "en": "Email",
+    "es": "Correo electrónico"
+  },
+  "password": {
+    "en": "Password",
+    "es": "Contraseña"
+  },
+  "firstName": {
+    "en": "First Name",
+    "es": "Nombre"
+  },
+  "lastName": {
+    "en": "Last Name",
+    "es": "Apellido"
+  },
+  "login": {
+    "en": "Login",
+    "es": "Iniciar sesión"
+  },
+  "signup": {
+    "en": "Sign Up",
+    "es": "Registrarse"
+  }
+}

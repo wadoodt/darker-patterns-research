@@ -1,0 +1,219 @@
+{
+  "metadata": {
+    "namespace": "profile",
+    "description": "User profile and settings translations",
+    "lastUpdated": "2025-07-28"
+  },
+  "translations": {
+    "title": {
+      "en": "Profile",
+      "es": "Perfil",
+      "usedOn": [],
+      "notes": ""
+    },
+    "tabs.general": {
+      "en": "General",
+      "es": "General",
+      "usedOn": [],
+      "notes": ""
+    },
+    "tabs.security": {
+      "en": "Security",
+      "es": "Seguridad",
+      "usedOn": [],
+      "notes": ""
+    },
+    "tabs.notifications": {
+      "en": "Notifications",
+      "es": "Notificaciones",
+      "usedOn": [],
+      "notes": ""
+    },
+    "general.title": {
+      "en": "General Settings",
+      "es": "Configuración General",
+      "usedOn": [],
+      "notes": ""
+    },
+    "general.description": {
+      "en": "Manage your personal information and preferences",
+      "es": "Administra tu información personal y preferencias",
+      "usedOn": [],
+      "notes": ""
+    },
+    "general.userInformation": {
+      "en": "User Information",
+      "es": "Información del Usuario",
+      "usedOn": [],
+      "notes": ""
+    },
+    "general.appExperience": {
+      "en": "App Experience",
+      "es": "Experiencia de la Aplicación",
+      "usedOn": [],
+      "notes": ""
+    },
+    "general.cacheManagement": {
+      "en": "Cache Management",
+      "es": "Gestión de Caché",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.title": {
+      "en": "Security Settings",
+      "es": "Configuración de Seguridad",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.description": {
+      "en": "Manage your account security and authentication",
+      "es": "Administra la seguridad y autenticación de tu cuenta",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.title": {
+      "en": "Change Password",
+      "es": "Cambiar Contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.currentPassword": {
+      "en": "Current Password",
+      "es": "Contraseña Actual",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.placeholders.current": {
+      "en": "Enter current password",
+      "es": "Ingresa tu contraseña actual",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.placeholders.new": {
+      "en": "Enter new password",
+      "es": "Ingresa nueva contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.placeholders.confirm": {
+      "en": "Confirm new password",
+      "es": "Confirma nueva contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.newPassword": {
+      "en": "New Password",
+      "es": "Nueva Contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.confirmPassword": {
+      "en": "Confirm Password",
+      "es": "Confirmar Contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.errors.mismatch": {
+      "en": "Passwords do not match",
+      "es": "Las contraseñas no coinciden",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.submit": {
+      "en": "Update Password",
+      "es": "Actualizar Contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.changePassword.showPassword": {
+      "en": "Show Password",
+      "es": "Mostrar Contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.twoFactorAuth.title": {
+      "en": "Two-Factor Authentication",
+      "es": "Autenticación de Dos Factores",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.twoFactorAuth.description": {
+      "en": "Add an extra layer of security to your account",
+      "es": "Agrega una capa adicional de seguridad a tu cuenta",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.twoFactorAuth.status": {
+      "en": "Status",
+      "es": "Estado",
+      "usedOn": [],
+      "notes": ""
+    },
+    "security.twoFactorAuth.enableLabel": {
+      "en": "Enable 2FA",
+      "es": "Habilitar 2FA",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.title": {
+      "en": "Notification Preferences",
+      "es": "Preferencias de Notificación",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.description": {
+      "en": "Customize how and when you receive notifications",
+      "es": "Personaliza cómo y cuándo recibes notificaciones",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.emailNotifications": {
+      "en": "Email Notifications",
+      "es": "Notificaciones por Correo",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.options.newReplies": {
+      "en": "New reply notifications",
+      "es": "Notificaciones de nuevas respuestas",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.options.campaignStatus": {
+      "en": "Campaign status updates",
+      "es": "Actualizaciones de estado de campañas",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.options.weeklyReports": {
+      "en": "Weekly performance reports",
+      "es": "Reportes semanales de rendimiento",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.options.domainAlerts": {
+      "en": "Domain health alerts",
+      "es": "Alertas de salud de dominio",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.options.warmupCompletion": {
+      "en": "Warmup completion notices",
+      "es": "Avisos de finalización de warmup",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.options.silenceWebapp": {
+      "en": "Silence webapp notifications",
+      "es": "Silenciar notificaciones de la webapp",
+      "usedOn": [],
+      "notes": ""
+    },
+    "notifications.options.onlyUrgent": {
+      "en": "Only urgent notifications",
+      "es": "Solo notificaciones urgentes",
+      "usedOn": [],
+      "notes": ""
+    }
+  }
+}

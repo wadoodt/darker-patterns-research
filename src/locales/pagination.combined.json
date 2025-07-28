@@ -1,0 +1,14 @@
+{
+  "page_of": {
+    "en": "Page {{currentPage}} of {{totalPages}}",
+    "es": "Página {{currentPage}} de {{totalPages}}"
+  },
+  "previous": {
+    "en": "Previous",
+    "es": "Anterior"
+  },
+  "next": {
+    "en": "Next",
+    "es": "Siguiente"
+  }
+}

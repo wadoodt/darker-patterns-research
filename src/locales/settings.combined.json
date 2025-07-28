@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "namespace": "settings",
+    "description": "Translations for all user and application settings.",
+    "lastUpdated": "2025-07-28",
+    "usedOn": []
+  },
+  "translations": {
+    "title": {
+      "en": "Settings",
+      "es": "Configuración",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "profile.title": {
+      "en": "Profile",
+      "es": "Perfil",
+      "usedOn": [],
+      "notes": ""
+    },
+    "profile.name": {
+      "en": "Name",
+      "es": "Nombre",
+      "usedOn": [],
+      "notes": ""
+    },
+    "profile.email": {
+      "en": "Email",
+      "es": "Correo Electrónico",
+      "usedOn": [],
+      "notes": ""
+    },
+    "account.title": {
+      "en": "Account",
+      "es": "Cuenta",
+      "usedOn": [],
+      "notes": ""
+    },
+    "account.change_password": {
+      "en": "Change Password",
+      "es": "Cambiar Contraseña",
+      "usedOn": [],
+      "notes": ""
+    },
+    "company.title": {
+      "en": "Company",
+      "es": "Empresa",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "company.name": {
+      "en": "Company Name",
+      "es": "Nombre de la Empresa",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "company.email": {
+      "en": "Contact Email",
+      "es": "Correo de Contacto",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "company.contactInfo": {
+      "en": "Contact Information",
+      "es": "Información de Contacto",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "company.notifications": {
+      "en": "Notification Preferences",
+      "es": "Preferencias de Notificación",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "company.save": {
+      "en": "Save Changes",
+      "es": "Guardar Cambios",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "company.support": {
+      "en": "Contact Support",
+      "es": "Contactar Soporte",
+      "usedOn": [
+        "features/dashboard/pages/SettingsPage.tsx"
+      ],
+      "notes": ""
+    },
+    "language.title": {
+      "en": "Language",
+      "es": "Idioma",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/GeneralTab.tsx"
+      ],
+      "notes": ""
+    },
+    "language.description": {
+      "en": "Change the display language",
+      "es": "Cambiar el idioma de visualización",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/GeneralTab.tsx"
+      ],
+      "notes": ""
+    },
+    "theme.title": {
+      "en": "Theme",
+      "es": "Tema",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/GeneralTab.tsx"
+      ],
+      "notes": ""
+    },
+    "theme.description": {
+      "en": "Change the visual appearance",
+      "es": "Cambiar la apariencia visual",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/ThemeSwitcher.tsx",
+        "features/dashboard/pages/profile/sections/GeneralTab.tsx"
+      ],
+      "notes": ""
+    },
+    "theme.options.light": {
+      "en": "Light",
+      "es": "Claro",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/ThemeSwitcher.tsx"
+      ],
+      "notes": ""
+    },
+    "theme.options.dark": {
+      "en": "Dark",
+      "es": "Oscuro",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/ThemeSwitcher.tsx"
+      ],
+      "notes": ""
+    },
+    "theme.options.highContrastLight": {
+      "en": "High Contrast Light",
+      "es": "Alto Contraste Claro",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/ThemeSwitcher.tsx"
+      ],
+      "notes": ""
+    },
+    "theme.options.highContrastDark": {
+      "en": "High Contrast Dark",
+      "es": "Alto Contraste Oscuro",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/ThemeSwitcher.tsx"
+      ],
+      "notes": ""
+    },
+    "theme.options.lightSimple": {
+      "en": "Simple Light",
+      "es": "Claro Simple",
+      "usedOn": [
+        "features/dashboard/pages/profile/sections/ThemeSwitcher.tsx"
+      ],
+      "notes": ""
+    },
+    "usedOn": []
+  }
+}

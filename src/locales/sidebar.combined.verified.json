@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "namespace": "sidebar",
+    "description": "Sidebar navigation menu items and labels",
+    "lastUpdated": "2025-07-27"
+  },
+  "translations": {
+    "dashboard.title": {
+      "en": "Dashboard",
+      "es": "Panel de Control",
+      "notes": "Main dashboard section title in the sidebar",
+      "usedOn": []
+    },
+    "dashboard.home": {
+      "en": "Home",
+      "es": "Inicio",
+      "notes": "Link to the home/dashboard page",
+      "usedOn": []
+    },
+    "dashboard.settings": {
+      "en": "Settings",
+      "es": "Configuración",
+      "usedOn": []
+    },
+    "dashboard.team": {
+      "en": "Team",
+      "es": "Equipo",
+      "usedOn": []
+    },
+    "dashboard.billing": {
+      "en": "Billing",
+      "es": "Facturación",
+      "usedOn": []
+    },
+    "dashboard.infra": {
+      "en": "Infrastructure",
+      "es": "Infraestructura",
+      "usedOn": []
+    },
+    "dashboard.domains": {
+      "en": "Domains",
+      "es": "Dominios",
+      "usedOn": []
+    },
+    "dashboard.support": {
+      "en": "Support",
+      "es": "Soporte",
+      "usedOn": []
+    },
+    "dashboard.profile": {
+      "en": "Profile",
+      "es": "Perfil",
+      "usedOn": []
+    },
+    "admin.title": {
+      "en": "Admin Panel",
+      "es": "Panel de Administración",
+      "notes": "Admin section title in the sidebar",
+      "usedOn": []
+    },
+    "admin.articles": {
+      "en": "Knowledge Base Articles",
+      "es": "Artículos de la Base de Conocimiento",
+      "usedOn": []
+    },
+    "admin.home": {
+      "en": "Admin Home",
+      "es": "Inicio de Admin",
+      "usedOn": []
+    },
+    "admin.settings": {
+      "en": "Admin Settings",
+      "es": "Configuración de Admin",
+      "usedOn": []
+    },
+    "admin.users": {
+      "en": "Users",
+      "es": "Usuarios",
+      "usedOn": []
+    },
+    "admin.companies": {
+      "en": "Companies",
+      "es": "Compañías",
+      "usedOn": []
+    },
+    "admin.infra": {
+      "en": "Admin Infrastructure",
+      "es": "Infraestructura de Admin",
+      "usedOn": []
+    },
+    "admin.tickets": {
+      "en": "Tickets",
+      "es": "Tickets",
+      "usedOn": []
+    },
+    "admin.config": {
+      "en": "Configurations",
+      "es": "Configuraciones",
+      "usedOn": []
+    },
+    "admin.faqs": {
+      "en": "FAQs",
+      "es": "FAQs",
+      "usedOn": []
+    },
+    "user.profile": {
+      "en": "Profile",
+      "es": "Perfil",
+      "usedOn": []
+    },
+    "user.settings": {
+      "en": "Settings",
+      "es": "Configuración",
+      "usedOn": []
+    },
+    "status.title": {
+      "en": "System Status",
+      "es": "Estado del Sistema",
+      "usedOn": []
+    },
+    "status.allSystemsOperational": {
+      "en": "All systems operational",
+      "es": "Todos los sistemas operativos",
+      "usedOn": []
+    }
+  }
+}

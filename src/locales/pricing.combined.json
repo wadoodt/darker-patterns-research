@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "namespace": "pricing",
+    "description": "Translations for the pricing page",
+    "lastUpdated": "2025-07-28"
+  },
+  "translations": {
+    "hero.title": {
+      "en": "Choose Your Plan",
+      "es": "Elige Tu Plan"
+    },
+    "hero.description": {
+      "en": "Simple, transparent pricing for businesses of all sizes. Start warming up your domains and sending campaigns today.",
+      "es": "Precios simples y transparentes para negocios de todos los tamaños. Comienza a calentar tus dominios y enviar campañas hoy."
+    },
+    "plans.business.title": {
+      "en": "Business",
+      "es": "Negocios"
+    },
+    "plans.business.description": {
+      "en": "Ideal for growing businesses starting with email outreach.",
+      "es": "Ideal para negocios en crecimiento que comienzan con outreach por email."
+    },
+    "plans.business.price": {
+      "en": "$49",
+      "es": "$49"
+    },
+    "plans.business.interval": {
+      "en": "/ month",
+      "es": "/ mes"
+    },
+    "plans.business.features": {
+      "en": [
+        "Up to 5 email accounts",
+        "AI-powered warmup",
+        "Real-time analytics",
+        "Standard support"
+      ],
+      "es": [
+        "Hasta 5 cuentas de correo",
+        "Calentamiento con IA",
+        "Análisis en tiempo real",
+        "Soporte estándar"
+      ]
+    },
+    "plans.business.ctaText": {
+      "en": "Choose Business",
+      "es": "Elegir Business"
+    },
+    "plans.premium.title": {
+      "en": "Premium",
+      "es": "Premium"
+    },
+    "plans.premium.description": {
+      "en": "For established businesses scaling their outreach efforts.",
+      "es": "Para negocios establecidos que escalan sus esfuerzos de outreach."
+    },
+    "plans.premium.price": {
+      "en": "$99",
+      "es": "$99"
+    },
+    "plans.premium.interval": {
+      "en": "/ month",
+      "es": "/ mes"
+    },
+    "plans.premium.features": {
+      "en": [
+        "Unlimited email accounts",
+        "Advanced AI warmup",
+        "A/B testing features",
+        "Priority support"
+      ],
+      "es": [
+        "Cuentas de correo ilimitadas",
+        "Calentamiento avanzado con IA",
+        "Pruebas A/B",
+        "Soporte prioritario"
+      ]
+    },
+    "plans.premium.ctaText": {
+      "en": "Choose Premium",
+      "es": "Elegir Premium"
+    },
+    "plans.custom.title": {
+      "en": "Custom",
+      "es": "Personalizado"
+    },
+    "plans.custom.description": {
+      "en": "Tailored solutions for large enterprises or specific needs.",
+      "es": "Soluciones a medida para grandes empresas o necesidades específicas."
+    },
+    "plans.custom.price": {
+      "en": "Let's talk",
+      "es": "Hablemos"
+    },
+    "plans.custom.features": {
+      "en": [
+        "Volume discounts",
+        "Custom integrations",
+        "Dedicated account manager",
+        "24/7 enterprise support"
+      ],
+      "es": [
+        "Descuentos por volumen",
+        "Integraciones personalizadas",
+        "Gestor de cuenta dedicado",
+        "Soporte empresarial 24/7"
+      ]
+    },
+    "plans.custom.ctaText": {
+      "en": "Contact Sales",
+      "es": "Contactar Ventas"
+    },
+    "faq.title": {
+      "en": "Frequently Asked Questions",
+      "es": "Preguntas frecuentes"
+    },
+    "faq.loading": {
+      "en": "Loading FAQs...",
+      "es": "Cargando preguntas frecuentes..."
+    },
+    "faq.empty": {
+      "en": "No FAQ items found",
+      "es": "No se encontraron preguntas frecuentes"
+    }
+  }
+}

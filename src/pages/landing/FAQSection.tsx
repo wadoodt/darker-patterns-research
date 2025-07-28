@@ -32,7 +32,7 @@ const FAQSection: React.FC = () => {
     return (
       <section className="faq-section" id="faq">
         <h2>{t("pricing.faq.title")}</h2>
-        <Text>{t("loading")}</Text>
+        <Text>{t("common.loading")}</Text>
       </section>
     );
   }

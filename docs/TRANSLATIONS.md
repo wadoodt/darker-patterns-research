@@ -235,64 +235,7 @@ grep -r "t('\.*')" src/
 - Keep related keys grouped logically
 - Add comments explaining context
 - Review console warnings regularly
-
----
-
-## Translation Architecture
-
-### New Structure
-```
-locales/
-  en/
-    shared.json       # Common terms
-    ui.json           # UI components
-    api.json          # API messages
-    pages/            # Page-specific
-      auth.json
-      pricing.json
-      team.json
-      support.json
-  es/
-    (same structure)
-```
-
-### Key Principles
-1. **Separation of Concerns**:
-   - Shared: Terms used everywhere
-   - UI: Labels, buttons, form elements
-   - API: Error/success messages
-   - Pages: Content specific to routes
-
-2. **Benefits**:
-   - Easier maintenance
-   - Better team collaboration
-   - Type safety
-   - Dynamic loading support
-
-### Implementation
-```typescript
-// Example usage:
-const t = useTranslations('pages.auth');
-t('login.title')
-```
-
-### Migration Guide
-1. Move existing keys to appropriate files
-2. Update imports to use new structure
-3. Verify all translations work as expected
-
-### Spanish Translations Info
-
-For Spanish translations, follow the same structure as English translations. Make sure to add the same keys to the Spanish translation files, even if using English as a placeholder. Translate the values as soon as possible.
-
-```json
-// src/locales/es/translation.json
-"error": {
-  "validation": {
-    "password_too_weak": "La contraseña no es lo suficientemente segura. Por favor, elija una contraseña más fuerte."
-  }
-}
-```
+- **Shared translations**: Currently unused keys in `shared` namespace should be reviewed and potentially moved to appropriate namespaces in the future
 
 By following these guidelines, we can ensure that our application is fully translatable and provides a great user experience for users of all languages.
 
@@ -304,3 +247,5 @@ By following these guidelines, we can ensure that our application is fully trans
 - Test all language switches
 
 By following these best practices, we can ensure that our translation architecture is maintainable, scalable, and easy to use.
+
+```

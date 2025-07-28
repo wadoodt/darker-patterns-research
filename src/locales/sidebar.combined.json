@@ -1,0 +1,104 @@
+{
+  "metadata": {
+    "namespace": "sidebar",
+    "description": "Sidebar navigation menu items and labels",
+    "lastUpdated": "2025-07-27"
+  },
+  "translations": {
+    "dashboard.title": {
+      "en": "Dashboard",
+      "es": "Panel de Control",
+      "notes": "Main dashboard section title in the sidebar"
+    },
+    "dashboard.home": {
+      "en": "Home",
+      "es": "Inicio",
+      "notes": "Link to the home/dashboard page"
+    },
+    "dashboard.settings": {
+      "en": "Settings",
+      "es": "Configuración"
+    },
+    "dashboard.team": {
+      "en": "Team",
+      "es": "Equipo"
+    },
+    "dashboard.billing": {
+      "en": "Billing",
+      "es": "Facturación"
+    },
+    "dashboard.infra": {
+      "en": "Infrastructure",
+      "es": "Infraestructura"
+    },
+    "dashboard.domains": {
+      "en": "Domains",
+      "es": "Dominios"
+    },
+    "dashboard.support": {
+      "en": "Support",
+      "es": "Soporte"
+    },
+    "dashboard.profile": {
+      "en": "Profile",
+      "es": "Perfil"
+    },
+    "admin.title": {
+      "en": "Admin Panel",
+      "es": "Panel de Administración",
+      "notes": "Admin section title in the sidebar"
+    },
+    "admin.articles": {
+      "en": "Knowledge Base Articles",
+      "es": "Artículos de la Base de Conocimiento"
+    },
+    "admin.home": {
+      "en": "Admin Home",
+      "es": "Inicio de Admin"
+    },
+    "admin.settings": {
+      "en": "Admin Settings",
+      "es": "Configuración de Admin"
+    },
+    "admin.users": {
+      "en": "Users",
+      "es": "Usuarios"
+    },
+    "admin.companies": {
+      "en": "Companies",
+      "es": "Compañías"
+    },
+    "admin.infra": {
+      "en": "Admin Infrastructure",
+      "es": "Infraestructura de Admin"
+    },
+    "admin.tickets": {
+      "en": "Tickets",
+      "es": "Tickets"
+    },
+    "admin.config": {
+      "en": "Configurations",
+      "es": "Configuraciones"
+    },
+    "admin.faqs": {
+      "en": "FAQs",
+      "es": "FAQs"
+    },
+    "user.profile": {
+      "en": "Profile",
+      "es": "Perfil"
+    },
+    "user.settings": {
+      "en": "Settings",
+      "es": "Configuración"
+    },
+    "status.title": {
+      "en": "System Status",
+      "es": "Estado del Sistema"
+    },
+    "status.allSystemsOperational": {
+      "en": "All systems operational",
+      "es": "Todos los sistemas operativos"
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "metadata": {
+    "namespace": "support",
+    "description": "Support page translations including contact form, FAQ, and knowledge base",
+    "lastUpdated": "2025-07-27"
+  },
+  "translations": {
+    "contact_form.title": {
+      "en": "Contact Support",
+      "es": "Contactar al Soporte",
+      "notes": "Main heading for the contact support form"
+    },
+    "contact_form.subtitle": {
+      "en": "Can't find what you're looking for? Our team is here to help.",
+      "es": "¿No encuentras lo que buscas? Nuestro equipo está aquí para ayudarte."
+    },
+    "contact_form.fields.name": {
+      "en": "Your Name",
+      "es": "Tu Nombre"
+    },
+    "contact_form.fields.email": {
+      "en": "Email Address",
+      "es": "Correo Electrónico"
+    },
+    "contact_form.fields.subject": {
+      "en": "Subject",
+      "es": "Asunto"
+    },
+    "contact_form.fields.message": {
+      "en": "Your Message",
+      "es": "Tu Mensaje"
+    },
+    "faq.title": {
+      "en": "Frequently Asked Questions",
+      "es": "Preguntas Frecuentes"
+    },
+    "knowledge_base.title": {
+      "en": "Knowledge Library",
+      "es": "Biblioteca de Conocimiento"
+    },
+    "knowledge_base.loading": {
+      "en": "Loading articles...",
+      "es": "Cargando artículos..."
+    },
+    "general_advice.title": {
+      "en": "General Advice",
+      "es": "Consejos Generales"
+    },
+    "general_advice.articles.campaigns.title": {
+      "en": "Campaigns",
+      "es": "Campañas"
+    },
+    "general_advice.articles.campaigns.description": {
+      "en": "Guides for setting up and managing your email campaigns",
+      "es": "Guías para configurar y administrar tus campañas de email"
+    },
+    "general_advice.articles.campaigns.category": {
+      "en": "Marketing",
+      "es": "Marketing"
+    },
+    "general_advice.articles.domain_setup.title": {
+      "en": "Domain Setup",
+      "es": "Configuración de Dominio"
+    },
+    "general_advice.articles.domain_setup.description": {
+      "en": "How to properly configure your domain for emails",
+      "es": "Cómo configurar correctamente tu dominio para emails"
+    },
+    "general_advice.articles.domain_setup.category": {
+      "en": "Setup",
+      "es": "Configuración"
+    },
+    "general_advice.articles.email_warmup.title": {
+      "en": "Email Warmup",
+      "es": "Calentamiento de Email"
+    },
+    "general_advice.articles.email_warmup.description": {
+      "en": "Improve deliverability with our warmup process",
+      "es": "Mejora la entregabilidad con nuestro proceso de calentamiento"
+    },
+    "general_advice.articles.email_warmup.category": {
+      "en": "Deliverability",
+      "es": "Entregabilidad"
+    },
+    "general_advice.articles.deliverability.title": {
+      "en": "Deliverability",
+      "es": "Entregabilidad"
+    },
+    "general_advice.articles.deliverability.description": {
+      "en": "Tips to improve your email delivery rates",
+      "es": "Consejos para mejorar la tasa de entrega de tus emails"
+    },
+    "general_advice.articles.deliverability.category": {
+      "en": "Optimization",
+      "es": "Optimización"
+    },
+    "general_advice.articles.templates.title": {
+      "en": "Templates",
+      "es": "Plantillas"
+    },
+    "general_advice.articles.templates.description": {
+      "en": "How to create and use effective templates",
+      "es": "Cómo crear y usar plantillas efectivas"
+    },
+    "general_advice.articles.templates.category": {
+      "en": "Productivity",
+      "es": "Productividad"
+    },
+    "general_advice.articles.lead_management.title": {
+      "en": "Lead Management",
+      "es": "Gestión de Leads"
+    },
+    "general_advice.articles.lead_management.description": {
+      "en": "How to organize and track your leads",
+      "es": "Cómo organizar y seguir tus leads"
+    },
+    "general_advice.articles.lead_management.category": {
+      "en": "Sales",
+      "es": "Ventas"
+    },
+    "video_tutorials.title": {
+      "en": "Video Tutorials",
+      "es": "Tutoriales en Video"
+    },
+    "videos.complete_campaign_setup.title": {
+      "en": "Complete Campaign Setup",
+      "es": "Configuración Completa de Campaña"
+    },
+    "videos.complete_campaign_setup.description": {
+      "en": "Step-by-step guide to setting up a new campaign",
+      "es": "Guía paso a paso para configurar una nueva campaña"
+    },
+    "videos.domain_config.title": {
+      "en": "Domain Configuration",
+      "es": "Configuración de Dominio"
+    },
+    "videos.domain_config.description": {
+      "en": "How to configure DNS and authentication for your domain",
+      "es": "Cómo configurar DNS y autenticación para tu dominio"
+    },
+    "videos.warmup_process.title": {
+      "en": "Warmup Process",
+      "es": "Proceso de Calentamiento"
+    },
+    "videos.warmup_process.description": {
+      "en": "How our email warmup system works",
+      "es": "Cómo funciona nuestro sistema de calentamiento de emails"
+    },
+    "header.title": {
+      "en": "Help Center",
+      "es": "Centro de Ayuda"
+    },
+    "header.subtitle": {
+      "en": "Find answers and resources to get the most out of our platform",
+      "es": "Encuentra respuestas y recursos para sacar el máximo provecho"
+    },
+    "search_placeholder": {
+      "en": "Search help articles...",
+      "es": "Buscar artículos de ayuda..."
+    }
+  }
+}

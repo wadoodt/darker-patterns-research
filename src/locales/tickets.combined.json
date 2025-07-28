@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "namespace": "tickets",
+    "description": "Support tickets management translations",
+    "lastUpdated": "2025-07-27"
+  },
+  "translations": {
+    "header": {
+      "en": "Support Tickets",
+      "es": "Tickets de Soporte",
+      "notes": "Main header for the tickets page"
+    },
+    "subject": {
+      "en": "Subject",
+      "es": "Asunto",
+      "notes": "Label for ticket subject field"
+    },
+    "email": {
+      "en": "Email",
+      "es": "Correo Electrónico",
+      "notes": "Label for user email in tickets list"
+    },
+    "statusLabel": {
+      "en": "Status",
+      "es": "Estado",
+      "notes": "Label for ticket status field"
+    },
+    "actions": {
+      "en": "Actions",
+      "es": "Acciones",
+      "notes": "Column header for actions in tickets list"
+    },
+    "createdLabel": {
+      "en": "Created",
+      "es": "Creado",
+      "notes": "Label for creation date in tickets list"
+    },
+    "loading": {
+      "en": "Loading tickets...",
+      "es": "Cargando tickets...",
+      "notes": "Loading state message"
+    },
+    "noTickets": {
+      "en": "No tickets found.",
+      "es": "No se encontraron tickets.",
+      "notes": "Empty state message"
+    },
+    "viewDetails": {
+      "en": "View Details",
+      "es": "Ver Detalles",
+      "notes": "Button text to view ticket details"
+    },
+    "status": {
+      "en": {
+        "open": "Open",
+        "in_progress": "In Progress",
+        "closed": "Closed",
+        "update": "Update Status",
+        "updating": "Updating...",
+        "inProgress": "In Progress"
+      },
+      "es": {
+        "open": "Abierto",
+        "in_progress": "En Progreso",
+        "closed": "Cerrado",
+        "update": "Actualizar Estado",
+        "updating": "Actualizando...",
+        "inProgress": "En Progreso"
+      },
+      "notes": "Status values for tickets"
+    },
+    "user": {
+      "en": "User",
+      "es": "Usuario",
+      "notes": "Label for ticket creator"
+    },
+    "ticket": {
+      "en": "Ticket",
+      "es": "Ticket",
+      "notes": "Label for ticket number/ID"
+    },
+    "userLabel": {
+      "en": "User:",
+      "es": "Usuario:",
+      "notes": "Label for ticket creator"
+    },
+    "submittedLabel": {
+      "en": "Submitted:",
+      "es": "Enviado:",
+      "notes": "Label for submission date"
+    },
+    "conversation": {
+      "en": "Conversation",
+      "es": "Conversación",
+      "notes": "Header for ticket conversation section"
+    },
+    "you": {
+      "en": "You",
+      "es": "Tú",
+      "notes": "Label for current user in conversation"
+    },
+    "supportTeam": {
+      "en": "Support Team",
+      "es": "Equipo de Soporte",
+      "notes": "Label for support team responses"
+    },
+    "postReply": {
+      "en": "Post a Reply",
+      "es": "Publicar una Respuesta",
+      "notes": "Header for reply form"
+    },
+    "replyPlaceholder": {
+      "en": "Type your reply here...",
+      "es": "Escribe tu respuesta aquí...",
+      "notes": "Placeholder text for reply textarea"
+    },
+    "submitReply": {
+      "en": "Submit Reply",
+      "es": "Enviar Respuesta",
+      "notes": "Button to submit a reply"
+    },
+    "errorLoading": {
+      "en": "Error loading ticket details.",
+      "es": "Error al cargar los detalles del ticket.",
+      "notes": "Error message when ticket details fail to load"
+    },
+    "notFound": {
+      "en": "Ticket not found.",
+      "es": "Ticket no encontrado.",
+      "notes": "Error message when ticket doesn't exist"
+    },
+    "previous": {
+      "en": "Previous",
+      "es": "Anterior",
+      "notes": "Previous page button"
+    },
+    "next": {
+      "en": "Next",
+      "es": "Siguiente",
+      "notes": "Next page button"
+    },
+    "pageInfo": {
+      "en": "Page {{currentPage}} of {{totalPages}}",
+      "es": "Página {{currentPage}} de {{totalPages}}",
+      "notes": "Pagination info showing current and total pages"
+    },
+    "markAsOpen": {
+      "en": "Mark as Open",
+      "es": "Marcar como Abierto",
+      "notes": "Menu option to change status to Open"
+    },
+    "markAsInProgress": {
+      "en": "Mark as In Progress",
+      "es": "Marcar como En Progreso",
+      "notes": "Menu option to change status to In Progress"
+    },
+    "markAsClosed": {
+      "en": "Mark as Closed",
+      "es": "Marcar como Cerrado",
+      "notes": "Menu option to change status to Closed"
+    }
+  }
+}

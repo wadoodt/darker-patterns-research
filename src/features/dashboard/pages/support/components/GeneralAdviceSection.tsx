@@ -18,9 +18,7 @@ const useGeneralAdviceArticles = (): KnowledgeBaseArticle[] => {
     {
       id: "ga-2",
       title: t("support.general_advice.articles.domain_setup.title"),
-      description: t(
-        "support.general_advice.articles.domain_setup.description",
-      ),
+      description: t("support.general_advice.articles.domain_setup.description"),
       category: t("support.general_advice.articles.domain_setup.category"),
       url: "#",
       translations: {},
@@ -28,9 +26,7 @@ const useGeneralAdviceArticles = (): KnowledgeBaseArticle[] => {
     {
       id: "ga-3",
       title: t("support.general_advice.articles.email_warmup.title"),
-      description: t(
-        "support.general_advice.articles.email_warmup.description",
-      ),
+      description: t("support.general_advice.articles.email_warmup.description"),
       category: t("support.general_advice.articles.email_warmup.category"),
       url: "#",
       translations: {},
@@ -38,9 +34,7 @@ const useGeneralAdviceArticles = (): KnowledgeBaseArticle[] => {
     {
       id: "ga-4",
       title: t("support.general_advice.articles.deliverability.title"),
-      description: t(
-        "support.general_advice.articles.deliverability.description",
-      ),
+      description: t("support.general_advice.articles.deliverability.description"),
       category: t("support.general_advice.articles.deliverability.category"),
       url: "#",
       translations: {},
@@ -56,9 +50,7 @@ const useGeneralAdviceArticles = (): KnowledgeBaseArticle[] => {
     {
       id: "ga-6",
       title: t("support.general_advice.articles.lead_management.title"),
-      description: t(
-        "support.general_advice.articles.lead_management.description",
-      ),
+      description: t("support.general_advice.articles.lead_management.description"),
       category: t("support.general_advice.articles.lead_management.category"),
       url: "#",
       translations: {},

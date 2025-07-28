@@ -43,7 +43,7 @@ const TicketStatusUpdater = ({
         <Select.Content>
           <Select.Item value="open">{t("tickets.status.open")}</Select.Item>
           <Select.Item value="in_progress">
-            {t("tickets.status.inProgress")}
+            {t("tickets.status.in_progress")}
           </Select.Item>
           <Select.Item value="closed">{t("tickets.status.closed")}</Select.Item>
         </Select.Content>

@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "namespace": "ui",
+    "description": "UI component translations for the application",
+    "lastUpdated": "2025-07-27"
+  },
+  "translations": {
+    "sidebar.dashboard.title": {
+      "en": "Dashboard",
+      "es": "Panel",
+      "notes": "Main dashboard navigation label"
+    },
+    "sidebar.dashboard.home": {
+      "en": "Home",
+      "es": "Inicio",
+      "notes": "Home page link in dashboard"
+    },
+    "sidebar.dashboard.settings": {
+      "en": "Settings",
+      "es": "Configuración",
+      "notes": "Settings link in dashboard"
+    },
+    "sidebar.user.profile": {
+      "en": "Profile",
+      "es": "Perfil",
+      "notes": "User profile link"
+    },
+    "sidebar.user.settings": {
+      "en": "Settings",
+      "es": "Configuración",
+      "notes": "User settings link"
+    },
+    "sidebar.status.title": {
+      "en": "System Status",
+      "es": "Estado del Sistema",
+      "notes": "System status section title"
+    },
+    "sidebar.status.allSystemsOperational": {
+      "en": "All systems operational",
+      "es": "Todos los sistemas operativos",
+      "notes": "Status message when all systems are working"
+    },
+    "form.labels.email": {
+      "en": "Email Address",
+      "es": "Correo Electrónico",
+      "notes": "Label for email input fields"
+    },
+    "form.labels.password": {
+      "en": "Password",
+      "es": "Contraseña",
+      "notes": "Label for password input fields"
+    },
+    "form.placeholders.email": {
+      "en": "name@example.com",
+      "es": "nombre@ejemplo.com",
+      "notes": "Placeholder text for email inputs"
+    },
+    "form.placeholders.password": {
+      "en": "Your password",
+      "es": "Tu contraseña",
+      "notes": "Placeholder text for password inputs"
+    }
+  }
+}

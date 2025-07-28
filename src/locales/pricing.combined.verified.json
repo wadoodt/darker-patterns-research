@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "namespace": "pricing",
+    "description": "Translations for the pricing page",
+    "lastUpdated": "2025-07-28"
+  },
+  "translations": {
+    "hero.title": {
+      "en": "Choose Your Plan",
+      "es": "Elige Tu Plan",
+      "usedOn": []
+    },
+    "hero.description": {
+      "en": "Simple, transparent pricing for businesses of all sizes. Start warming up your domains and sending campaigns today.",
+      "es": "Precios simples y transparentes para negocios de todos los tamaños. Comienza a calentar tus dominios y enviar campañas hoy.",
+      "usedOn": []
+    },
+    "plans.business.title": {
+      "en": "Business",
+      "es": "Negocios",
+      "usedOn": []
+    },
+    "plans.business.description": {
+      "en": "Ideal for growing businesses starting with email outreach.",
+      "es": "Ideal para negocios en crecimiento que comienzan con outreach por email.",
+      "usedOn": []
+    },
+    "plans.business.price": {
+      "en": "$49",
+      "es": "$49",
+      "usedOn": []
+    },
+    "plans.business.interval": {
+      "en": "/ month",
+      "es": "/ mes",
+      "usedOn": []
+    },
+    "plans.business.features": {
+      "en": [
+        "Up to 5 email accounts",
+        "AI-powered warmup",
+        "Real-time analytics",
+        "Standard support"
+      ],
+      "es": [
+        "Hasta 5 cuentas de correo",
+        "Calentamiento con IA",
+        "Análisis en tiempo real",
+        "Soporte estándar"
+      ],
+      "usedOn": []
+    },
+    "plans.business.ctaText": {
+      "en": "Choose Business",
+      "es": "Elegir Business",
+      "usedOn": []
+    },
+    "plans.premium.title": {
+      "en": "Premium",
+      "es": "Premium",
+      "usedOn": []
+    },
+    "plans.premium.description": {
+      "en": "For established businesses scaling their outreach efforts.",
+      "es": "Para negocios establecidos que escalan sus esfuerzos de outreach.",
+      "usedOn": []
+    },
+    "plans.premium.price": {
+      "en": "$99",
+      "es": "$99",
+      "usedOn": []
+    },
+    "plans.premium.interval": {
+      "en": "/ month",
+      "es": "/ mes",
+      "usedOn": []
+    },
+    "plans.premium.features": {
+      "en": [
+        "Unlimited email accounts",
+        "Advanced AI warmup",
+        "A/B testing features",
+        "Priority support"
+      ],
+      "es": [
+        "Cuentas de correo ilimitadas",
+        "Calentamiento avanzado con IA",
+        "Pruebas A/B",
+        "Soporte prioritario"
+      ],
+      "usedOn": []
+    },
+    "plans.premium.ctaText": {
+      "en": "Choose Premium",
+      "es": "Elegir Premium",
+      "usedOn": []
+    },
+    "plans.custom.title": {
+      "en": "Custom",
+      "es": "Personalizado",
+      "usedOn": []
+    },
+    "plans.custom.description": {
+      "en": "Tailored solutions for large enterprises or specific needs.",
+      "es": "Soluciones a medida para grandes empresas o necesidades específicas.",
+      "usedOn": []
+    },
+    "plans.custom.price": {
+      "en": "Let's talk",
+      "es": "Hablemos",
+      "usedOn": []
+    },
+    "plans.custom.features": {
+      "en": [
+        "Volume discounts",
+        "Custom integrations",
+        "Dedicated account manager",
+        "24/7 enterprise support"
+      ],
+      "es": [
+        "Descuentos por volumen",
+        "Integraciones personalizadas",
+        "Gestor de cuenta dedicado",
+        "Soporte empresarial 24/7"
+      ],
+      "usedOn": []
+    },
+    "plans.custom.ctaText": {
+      "en": "Contact Sales",
+      "es": "Contactar Ventas",
+      "usedOn": []
+    },
+    "faq.title": {
+      "en": "Frequently Asked Questions",
+      "es": "Preguntas frecuentes",
+      "usedOn": []
+    },
+    "faq.loading": {
+      "en": "Loading FAQs...",
+      "es": "Cargando preguntas frecuentes...",
+      "usedOn": []
+    },
+    "faq.empty": {
+      "en": "No FAQ items found",
+      "es": "No se encontraron preguntas frecuentes",
+      "usedOn": []
+    }
+  }
+}
