@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import LoginTemplate from "./LoginTemplate";
 import { useAuth } from "@hooks/useAuth";
@@ -7,8 +7,14 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (user) {
+      window.location.href = "/dashboard";
+    }
+  }, [user]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

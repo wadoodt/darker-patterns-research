@@ -1,5 +1,5 @@
 import React from "react";
-import { Theme } from "@radix-ui/themes";
+import { Container, Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import "../styles/global.css";
 import Navbar from "./public/Navbar";
@@ -11,10 +11,17 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Theme appearance="light">
       <div
-        style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          width: "100vw",
+        }}
       >
         <Navbar />
-        <main style={{ flex: 1 }}>{children}</main>
+        <main style={{ flex: 1 }}>
+          <Container>{children}</Container>
+        </main>
         <Footer />
         <GoToTopButton />
       </div>
