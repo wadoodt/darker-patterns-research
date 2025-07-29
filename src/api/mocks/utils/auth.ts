@@ -14,7 +14,6 @@ export const authorize = async (
   request: Request,
 ): Promise<[User | null, Response | null]> => {
   const authHeader = request.headers.get("Authorization");
-
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     const errorResponse = createErrorResponse("UNAUTHORIZED");
     return [null, new Response(JSON.stringify(errorResponse), { status: 401 })];

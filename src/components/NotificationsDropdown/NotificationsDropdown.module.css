@@ -35,6 +35,7 @@
   max-height: 80vh;
   border: 1px solid var(--gray-6);
   overflow: hidden;
+  z-index: 1;
 }
 
 .header {

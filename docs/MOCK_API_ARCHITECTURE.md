@@ -140,19 +140,30 @@ The final step is to hook the resolver into our `axios` client.
 ```typescript
 apiClient.interceptors.request.use(async (config) => {
   if (import.meta.env.VITE_USE_MOCKS === "true") {
+    // Create a new Request object from the axios config
+    const request = new Request(config.url, {
+      method: config.method.toUpperCase(),
+      body: config.data ? JSON.stringify(config.data) : null,
+      headers: config.headers,
+    });
+
     // The resolver will handle the request and return a Response object.
-    const response = await resolve(config);
+    const response = await resolve(request);
 
     // We adapt the Response to an axios-compatible format.
-    config.adapter = async () =>
-      Promise.resolve({
-        data: await response.json(),
+    config.adapter = async () => {
+      const responseBody = await response.text();
+      const data = responseBody ? JSON.parse(responseBody) : null;
+
+      return Promise.resolve({
+        data,
         status: response.status,
         statusText: response.statusText,
         headers: Object.fromEntries(response.headers.entries()),
         config: config,
         request: {},
       });
+    };
   }
   return config;
 });
@@ -187,11 +198,48 @@ it("should reject a user with the wrong password", () => {
 
 ## 5. Interaction with Client-Side Caching
 
-The mock API and the client-side caching system are designed to work together seamlessly. The caching layer is completely independent of the data source, meaning it will cache responses from the mock API just as it would from a real backend.
+The mock API and the client-side caching system are designed to work together seamlessly. The caching layer is independent of the data source, meaning it will cache responses from the mock API just as it would from a real backend.
 
-- **No Special Configuration Needed**: When mocks are enabled (`VITE_USE_MOCKS=true`), the `useAsyncCache` hook will automatically fetch data from the mock API via the `axios` interceptor. The response is then cached as usual.
-- **Realistic Development**: This allows developers to build and test features with realistic loading states and data persistence, all without needing a live backend.
-- **Debugging**: The **Cache Management Panel** on the profile page can be used to inspect data provided by the mock API, making it easy to verify that your mock handlers are returning the correct data structures.
+### How It Works
+
+When mocks are enabled (`VITE_USE_MOCKS=true`), the `axios` interceptor (configured in `src/api/client.ts`) redirects all API requests to the mock resolver. The `useAsyncCache` hook, which uses `axios` under the hood, will therefore automatically fetch from the mock API. The response is then cached as usual.
+
+### Example: Fetching Mock Data with `useAsyncCache`
+
+To fetch and cache data from a mock endpoint, use the `useAsyncCache` hook exactly as you would for a real API. No special configuration is needed.
+
+```typescript
+// src/features/dashboard/components/UsersList.tsx
+import { useAsyncCache } from "@hooks/useAsyncCache";
+import { api } from "@api/client";
+
+// The fetcher function points to a standard API endpoint.
+// The mock resolver will intercept this call if mocks are enabled.
+const fetchUsers = async () => {
+  const response = await api.get("/api/users");
+  return response.data;
+};
+
+export function UsersList() {
+  const { data: users, loading } = useAsyncCache(
+    "users-list",
+    fetchUsers,
+    { level: "PERSISTENT" }
+  );
+
+  if (loading) return <p>Loading users...</p>;
+
+  return (
+    <ul>
+      {users?.map((user) => <li key={user.id}>{user.name}</li>)}
+    </ul>
+  );
+}
+```
+
+### Debugging
+
+The **Cache Management Panel** on the profile page can be used to inspect data provided by the mock API, making it easy to verify that your mock handlers are returning the correct data structures.
 
 ## 6. Related Documentation
 

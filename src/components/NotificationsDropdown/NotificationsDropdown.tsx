@@ -1,16 +1,18 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { 
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuGroup
+  DropdownMenuGroup,
 } from '@radix-ui/react-dropdown-menu';
+
 import { Bell, X, Clock, Send, BarChart3, AlertTriangle, Check, Info, CreditCard, User } from 'lucide-react';
 import { useNotifications } from '@contexts/NotificationsContext';
 import type { Notification } from 'types/api/notifications';
 import styles from './NotificationsDropdown.module.css';
+import { Button } from '@radix-ui/themes';
 
 const NotificationIcon = ({ type }: { type: Notification['type'] }) => {
   const icons = {
@@ -56,51 +58,6 @@ const NotificationItem = ({
   </DropdownMenuItem>
 );
 
-const NotificationList = ({ 
-  notifications,
-  loading,
-  hasMore,
-  onItemClick,
-  onFetchMore
-}: { 
-  notifications: Notification[];
-  loading: boolean;
-  hasMore: boolean;
-  onItemClick: (n: Notification) => void;
-  onFetchMore: () => void;
-}) => (
-  <DropdownMenuGroup className={styles.notificationsList}>
-    {notifications.length === 0 && !loading ? (
-      <div className={styles.emptyState}>
-        <Bell size={24} className={styles.emptyIcon} />
-        <p className={styles.emptyTitle}>No notifications</p>
-        <p className={styles.emptyMessage}>You're all caught up!</p>
-      </div>
-    ) : (
-      notifications.map((notification) => (
-        <NotificationItem key={notification.id} notification={notification} onClick={onItemClick} />
-      ))
-    )}
-    
-    {loading && (
-      <div className={styles.loadingState}>
-        <div className={styles.loadingSpinner} />
-        <span>Loading notifications...</span>
-      </div>
-    )}
-    
-    {hasMore && !loading && notifications.length > 0 && (
-      <button 
-        className={styles.loadMoreButton}
-        onClick={onFetchMore}
-        disabled={loading}
-      >
-        Load more
-      </button>
-    )}
-  </DropdownMenuGroup>
-);
-
 export default function NotificationsDropdown() {
   const { 
     notifications, 
@@ -108,10 +65,21 @@ export default function NotificationsDropdown() {
     hasMore,
     unreadCount,
     markAsRead,
-    fetchMore
+    markAllAsRead,
+    fetchMore,
+    error,
+    enable
   } = useNotifications();
   
   const [isOpen, setIsOpen] = useState(false);
+  const [hasEnabled, setHasEnabled] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && !hasEnabled) {
+      enable();
+      setHasEnabled(true);
+    }
+  }, [isOpen, enable, hasEnabled]);
 
   const handleNotificationClick = useCallback(async (notification: Notification) => {
     await markAsRead(notification.id);
@@ -123,8 +91,8 @@ export default function NotificationsDropdown() {
   }, [fetchMore]);
 
   const handleMarkAllAsRead = useCallback(async () => {
-    // Implement mark all as read logic
-  }, []);
+    await markAllAsRead();
+  }, [markAllAsRead]);
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -142,31 +110,56 @@ export default function NotificationsDropdown() {
           <DropdownMenuLabel className={styles.title}>Notifications</DropdownMenuLabel>
           <div className={styles.actions}>
             {unreadCount > 0 && (
-              <button 
-                className={styles.markAllButton} 
-                onClick={handleMarkAllAsRead}
-                disabled={loading}
-              >
+              <Button className={styles.markAllButton} onClick={handleMarkAllAsRead} disabled={loading}>
                 Mark all as read
-              </button>
+              </Button>
             )}
-            <button 
+            <Button 
               className={styles.closeButton} 
               onClick={() => setIsOpen(false)}
               aria-label="Close notifications"
             >
               <X size={16} />
-            </button>
+            </Button>
           </div>
         </div>
 
-        <NotificationList 
-          notifications={notifications}
-          loading={loading}
-          hasMore={hasMore}
-          onItemClick={handleNotificationClick}
-          onFetchMore={handleFetchMore}
-        />
+        <DropdownMenuGroup>
+          {error && (
+            <div className={styles.error}>Error: {error}</div>
+          )}
+          {
+            loading && <div className={styles.loading}>Loading...</div>
+          }
+          {
+            !loading && !Array.isArray(notifications) && (
+              <div className={styles.error}>Error: {error}</div>
+            )
+          }
+          {
+            !loading && Array.isArray(notifications) && notifications.length === 0 && (
+              <div className={styles.empty}>No notifications</div>
+            )
+          }
+          {
+            !loading && Array.isArray(notifications) && notifications.length > 0 && (
+              <>
+                {notifications.map((notification) => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
+                    onClick={handleNotificationClick}
+                  />
+                ))}
+                {hasMore && (
+                <Button className={styles.loadMoreButton} onClick={handleFetchMore}>
+                  Load more
+                </Button>
+              )}
+              </>
+            )
+          }
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

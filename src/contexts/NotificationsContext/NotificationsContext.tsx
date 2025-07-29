@@ -1,115 +1,113 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type { Notification } from 'types/api/notifications';
 import { useCache } from '@contexts/CacheContext';
-import { api } from '@lib/api';
+import { useAsyncCache } from '@hooks/useAsyncCache';
+import apiClient from "@api/client";
+import { CacheLevel } from '@lib/cache/types';
+import { AxiosError } from 'axios';
 import { NotificationsContext } from './context';
 
+// Fetches a single page of notifications.
+const fetchNotificationsPage = async (page: number) => {
+  const { data: response } = await apiClient.get<{ data: { data: Notification[] } }>(
+    `/notifications?page=${page}&limit=10`
+  );
+  return response.data.data;
+};
+
 export const NotificationsProvider = ({ children }: { children: React.ReactNode }) => {
-  const { set: setCache, get: getCache } = useCache();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+  const { invalidateByPattern } = useCache();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isEnabled, setIsEnabled] = useState(false);
 
-  // Load from cache on mount
-  useEffect(() => {
-    const loadFromCache = async () => {
-      const cachedNotifications = await getCache<Notification[]>('notifications');
-      const cachedUnreadCount = await getCache<number>('unreadCount');
-      
-      if (cachedNotifications) {
-        setNotifications(cachedNotifications);
+  const enable = useCallback(() => {
+    setIsEnabled(true);
+  }, []);
+
+  const {
+    data: notifications,
+    loading,
+    error,
+    refresh,
+  } = useAsyncCache(
+    ['notifications', currentPage],
+    () => fetchNotificationsPage(currentPage),
+    CacheLevel.DEBUG,
+    { enabled: isEnabled }
+  );
+
+  const unreadCount = useMemo(() => {
+    if (!notifications) return 0;
+    return notifications.filter(notification => !notification.read).length;
+  }, [notifications]);
+
+  // Note: This provider is now paginated, following the pattern in useTeamPage.
+  // The previous infinite scroll implementation was not compatible with useAsyncCache.
+  // UI components consuming this context may need to be updated to handle pagination.
+  const hasMore = notifications ? notifications.length >= 10 : false;
+
+  const markAsRead = useCallback(
+    async (id: string) => {
+      try {
+        await apiClient.patch(`/notifications/${id}/read`);
+        // Refresh data by invalidating cache
+        await invalidateByPattern('^notifications');
+      } catch (err) {
+        console.error('Failed to mark notification as read', err);
+        // Propagate error to the UI if needed
       }
-      if (cachedUnreadCount !== null) {
-        setUnreadCount(cachedUnreadCount);
-      }
-    };
-    
-    loadFromCache();
-  }, [getCache]);
-
-  const fetchNotifications = useCallback(async (pageNum = 1) => {
-    setLoading(true);
-    try {
-      const response = await api.get(`/notifications?page=${pageNum}&limit=10`);
-      const newNotifications = pageNum === 1 
-        ? response.data
-        : [...notifications, ...response.data];
-      
-      setNotifications(newNotifications);
-      const newUnreadCount = newNotifications.filter((n: Notification) => !n.read).length;
-      setUnreadCount(newUnreadCount);
-      setHasMore(response.data.length === 10);
-      
-      // Update cache
-      await setCache('notifications', newNotifications);
-      await setCache('unreadCount', newUnreadCount);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch notifications');
-    } finally {
-      setLoading(false);
-    }
-  }, [notifications, setCache]);
-
-  const markAsRead = useCallback(async (id: string) => {
-    try {
-      await api.patch(`/notifications/${id}/read`);
-      const updated = notifications.map(n => 
-        n.id === id ? { ...n, read: true } : n
-      );
-      setNotifications(updated);
-      const newUnreadCount = updated.filter((n: Notification) => !n.read).length;
-      setUnreadCount(newUnreadCount);
-      
-      // Update cache
-      await setCache('notifications', updated);
-      await setCache('unreadCount', newUnreadCount);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to mark notification as read');
-    }
-  }, [notifications, setCache]);
+    },
+    [invalidateByPattern]
+  );
 
   const markAllAsRead = useCallback(async () => {
     try {
-      await api.patch('/notifications/read-all');
-      const updated = notifications.map(n => ({ ...n, read: true }));
-      setNotifications(updated);
-      setUnreadCount(0);
-      
-      // Update cache
-      await setCache('notifications', updated);
-      await setCache('unreadCount', 0);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to mark all notifications as read');
+      await apiClient.patch('/notifications/read-all');
+      // Refresh data by invalidating cache
+      await invalidateByPattern('^notifications');
+    } catch (err) {
+      console.error('Failed to mark all notifications as read', err);
     }
-  }, [notifications, setCache]);
+  }, [invalidateByPattern]);
 
-  const fetchMore = useCallback(() => {
-    if (hasMore && !loading) {
-      setPage(p => p + 1);
-      fetchNotifications(page + 1);
+  const errorMessage = useMemo(() => {
+    if (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.data?.message) {
+        return axiosError.response.data.message;
+      }
+      return 'Failed to fetch notifications';
     }
-  }, [hasMore, loading, page, fetchNotifications]);
+    return null;
+  }, [error]);
 
-  const refresh = useCallback(() => {
-    setPage(1);
-    fetchNotifications(1);
-  }, [fetchNotifications]);
+  // Combines refresh of list and stats
+  const fullRefresh = useCallback(() => {
+    if (currentPage !== 1) {
+        setCurrentPage(1);
+    }
+    refresh();
+  }, [currentPage, refresh]);
+
+  const fetchMore = useCallback(async () => {
+    setCurrentPage(prev => prev + 1);
+  }, []);
 
   return (
-    <NotificationsContext.Provider 
+    <NotificationsContext.Provider
       value={{
-        notifications,
+        notifications: notifications ?? [],
         unreadCount,
         loading,
-        error,
+        error: errorMessage,
         markAsRead,
         markAllAsRead,
-        fetchMore,
+        currentPage,
+        setCurrentPage,
         hasMore,
-        refresh
+        refresh: fullRefresh,
+        fetchMore,
+        enable
       }}
     >
       {children}

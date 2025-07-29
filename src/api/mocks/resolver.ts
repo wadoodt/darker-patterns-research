@@ -6,13 +6,36 @@ import * as paymentsHandlers from "./handlers/payments-handler";
 import * as supportTicketsHandlers from "./handlers/support-tickets-handler";
 import * as knowledgeBaseHandlers from "./handlers/knowledge-base-handler";
 import * as teamHandlers from "./handlers/team";
+import * as notificationsHandlers from "./handlers/notifications-handler";
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Array<[string, RegExp, unknown]> = [
   // Auth
   ["POST /api/auth/login", /^\/api\/auth\/login$/, authHandlers.login],
+  [
+    "POST /api/auth/refresh-token",
+    /^\/api\/auth\/refresh-token$/,
+    authHandlers.refreshToken,
+  ],
   ["POST /api/auth/logout", /^\/api\/auth\/logout$/, authHandlers.logout],
   ["POST /api/auth/signup", /^\/api\/auth\/signup$/, authHandlers.signup],
+
+  // Notifications
+  [
+    "GET /api/notifications",
+    /^\/api\/notifications$/,
+    notificationsHandlers.getNotifications,
+  ],
+  [
+    "PATCH /api/notifications/:id/read",
+    /^\/api\/notifications\/([^/]+)\/read$/,
+    notificationsHandlers.markAsRead,
+  ],
+  [
+    "PATCH /api/notifications/read-all",
+    /^\/api\/notifications\/read-all$/,
+    notificationsHandlers.markAllAsRead,
+  ],
 
   // App Data
   ["GET /api/companies", /^\/api\/companies$/, companyHandlers.getCompanies],

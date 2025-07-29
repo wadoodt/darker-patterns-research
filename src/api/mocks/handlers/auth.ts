@@ -2,6 +2,8 @@ import { db } from "../db";
 import { createErrorResponse, createSuccessResponse } from "../../response";
 import { ERROR_CODES, RESPONSE_CODES } from "../../codes";
 import type { User, Company } from "types/api";
+import type { Notification } from "types/api/notifications";
+import { mockNotifications } from "../_data/notifications-data";
 import {
   validateCreatePayload,
   validateJoinPayload,
@@ -45,18 +47,35 @@ export const login = async (request: Request): Promise<Response> => {
       });
     }
 
+    // Get user's notifications
+    const allNotifications: Notification[] = mockNotifications.filter(
+      (n) => n.userId === user.id
+    );
+    const unreadNotifications = allNotifications
+      .filter((n) => !n.read)
+      .slice(0, 10);
+    const unreadCount = unreadNotifications.length;
+    const totalNotifications = allNotifications.length;
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _password, ...userResponse } = {
       ...user,
       plan: company.plan,
     };
     const token = `mock-token-for-id-${user.id}`;
+    const refreshToken = `mock-refresh-token-for-id-${user.id}`;
 
     const successResponse = createSuccessResponse(
       {
         user: userResponse,
         token,
+        refreshToken,
         expiresIn: 86400,
+        notifications: {
+          unread: unreadNotifications,
+          unreadCount,
+          total: totalNotifications,
+        },
       },
       "LOGIN_SUCCESS",
     );
@@ -68,6 +87,57 @@ export const login = async (request: Request): Promise<Response> => {
     const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR");
     return new Response(JSON.stringify(errorResponse), {
       status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
+    });
+  }
+};
+
+export const refreshToken = async (request: Request): Promise<Response> => {
+  try {
+    const { refreshToken } = (await request.json()) as { refreshToken: string };
+
+    if (
+      !refreshToken ||
+      !refreshToken.startsWith("mock-refresh-token-for-id-")
+    ) {
+      const errorResponse = createErrorResponse("UNAUTHORIZED", {
+        detail: "Invalid refresh token",
+      });
+      return new Response(JSON.stringify(errorResponse), {
+        status: 401,
+      });
+    }
+
+    const userId = refreshToken.replace("mock-refresh-token-for-id-", "");
+    const user = db.users.findFirst({ where: { id: userId } });
+
+    if (!user) {
+      const errorResponse = createErrorResponse("NOT_FOUND", {
+        detail: "User for refresh token not found",
+      });
+      return new Response(JSON.stringify(errorResponse), {
+        status: 404,
+      });
+    }
+
+    const newAccessToken = `mock-token-for-id-${user.id}`;
+    const newRefreshToken = `mock-refresh-token-for-id-${user.id}`;
+
+    const successResponse = createSuccessResponse(
+      {
+        token: newAccessToken,
+        refreshToken: newRefreshToken,
+        expiresIn: 86400,
+      },
+      "OPERATION_SUCCESS",
+    );
+
+    return new Response(JSON.stringify(successResponse), {
+      status: 200,
+    });
+  } catch {
+    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR");
+    return new Response(JSON.stringify(errorResponse), {
+      status: 500,
     });
   }
 };

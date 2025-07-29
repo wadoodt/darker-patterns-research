@@ -42,5 +42,19 @@ export const mockNotifications: Notification[] = [
       route: '/billing',
       label: 'View billing'
     }
+  },
+  {
+    id: '4',
+    userId: '4',
+    type: 'system',
+    title: 'System notification',
+    message: 'This is a system notification',
+    read: false,
+    createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
+    action: {
+      route: '/notifications',
+      label: 'View notifications'
+    }
   }
 ];

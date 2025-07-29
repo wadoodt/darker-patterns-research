@@ -10,6 +10,7 @@ const CacheAdminPanelButtons = ({
   invalidateCompanies,
   invalidateProfile,
   invalidateTeam,
+  invalidateNotifications,
   clearAllExpired,
   isLoading,
   isReady,
@@ -17,6 +18,7 @@ const CacheAdminPanelButtons = ({
   invalidateCompanies: () => void;
   invalidateProfile: () => void;
   invalidateTeam: () => void;
+  invalidateNotifications: () => void;
   clearAllExpired: () => void;
   isLoading: boolean;
   isReady: boolean;
@@ -42,6 +44,13 @@ const CacheAdminPanelButtons = ({
       color="green"
     >
       Invalidate Team Cache
+    </Button>
+    <Button
+      onClick={invalidateNotifications}
+      disabled={isLoading || !isReady}
+      color="blue"
+    >
+      Invalidate Notifications Cache
     </Button>
     <Button
       onClick={clearAllExpired}
@@ -96,6 +105,12 @@ export function CacheAdminPanel() {
       "Team members cache cleared.",
     );
 
+  const invalidateNotifications = () =>
+    handleAction(
+      () => invalidateByPattern("notifications:*"),
+      "Notifications cache invalidated.",
+    );
+
   const clearAllExpired = () =>
     handleAction(
       () => cleanupExpired(),
@@ -112,6 +127,7 @@ export function CacheAdminPanel() {
           invalidateCompanies={invalidateCompanies}
           invalidateProfile={invalidateProfile}
           invalidateTeam={invalidateTeam}
+          invalidateNotifications={invalidateNotifications}
           clearAllExpired={clearAllExpired}
           isLoading={isLoading}
           isReady={isReady}

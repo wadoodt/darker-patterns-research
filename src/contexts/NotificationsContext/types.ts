@@ -24,7 +24,10 @@ export interface NotificationsContextType {
   error: string | null;
   markAsRead: (id: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
-  fetchMore: () => void;
   hasMore: boolean;
   refresh: () => void;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  fetchMore: () => Promise<void>;
+  enable: () => void;
 }

@@ -43,6 +43,10 @@
     "viewer": {
       "en": "Viewer",
       "es": "Espectador"
+    },
+    "employee": {
+      "en": "Employee",
+      "es": "Empleado"
     }
   },
   "actions": {
@@ -119,14 +123,28 @@
   },
   "metadata": {
     "usedOn": {
-      "member": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
-      "role": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
-      "loading": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
-      "actions.table_header": ["src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"],
+      "member": [
+        "src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"
+      ],
+      "role": [
+        "src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"
+      ],
+      "loading": [
+        "src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"
+      ],
+      "actions.table_header": [
+        "src/features/dashboard/pages/team/sections/TeamMembersTableSection.tsx"
+      ],
       "edit": ["src/features/dashboard/pages/team/sections/TeamMemberRow.tsx"],
-      "delete": ["src/features/dashboard/pages/team/sections/TeamMemberRow.tsx"],
-      "create_member.title": ["src/features/dashboard/pages/team/new/CreateTeamMemberPage.tsx"],
-      "create_member.submit_button": ["src/features/dashboard/pages/team/new/CreateTeamMemberPage.tsx"]
+      "delete": [
+        "src/features/dashboard/pages/team/sections/TeamMemberRow.tsx"
+      ],
+      "create_member.title": [
+        "src/features/dashboard/pages/team/new/CreateTeamMemberPage.tsx"
+      ],
+      "create_member.submit_button": [
+        "src/features/dashboard/pages/team/new/CreateTeamMemberPage.tsx"
+      ]
     },
     "notes": {
       "member": "Table column header for team members",

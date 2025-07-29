@@ -149,3 +149,5 @@ export function createTable<T extends Entity>(initialData: T[]) {
     },
   };
 }
+
+export type Table<T extends Entity> = ReturnType<typeof createTable<T>>;

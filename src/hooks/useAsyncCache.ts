@@ -60,8 +60,7 @@ export function useAsyncCache<T>(
       const canUseCache = isReady && !cacheError;
 
       try {
-  
-        // Try fetching from cache first if possible and not forced
+          // Try fetching from cache first if possible and not forced
         if (canUseCache && !forceRefresh) {
           const cachedData = await get<T>(cacheKey);
           if (cachedData !== null && cachedData !== undefined) {
