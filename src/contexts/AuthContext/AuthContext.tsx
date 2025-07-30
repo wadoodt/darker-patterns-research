@@ -19,7 +19,11 @@ async function checkUserSession(
     try {
       const { data: response } = await apiClient.get("/users/me");
       if (response.data) {
-        setUser(response.data.user);
+        const { user: userData, unreadNotifications } = response.data;
+        setUser({
+          ...userData,
+          notifications: unreadNotifications,
+        });
         setToken(storedToken);
         setTokenExpiresAt(expiresAt);
       } else {
@@ -63,10 +67,18 @@ const useAuthProvider = (): AuthContextType => {
         throw new Error(response.error.message);
       }
       if (response.data) {
-        const { user: userData, token: userToken, expiresIn } = response.data;
+        const {
+          user: userData,
+          token: userToken,
+          expiresIn,
+          notifications,
+        } = response.data;
         const expirationTime = Date.now() + expiresIn * 1000;
 
-        setUser(userData);
+        setUser({
+          ...userData,
+          notifications: notifications.unread,
+        });
         setToken(userToken);
         setTokenExpiresAt(expirationTime);
         localStorage.setItem("authToken", userToken);

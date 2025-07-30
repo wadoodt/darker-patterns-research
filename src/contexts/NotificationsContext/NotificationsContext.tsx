@@ -15,17 +15,22 @@ const fetchNotificationsPage = async (page: number) => {
   return response.data.data;
 };
 
+import { useAuth } from '@hooks/useAuth';
+
 export const NotificationsProvider = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
   const { invalidateByPattern } = useCache();
   const [currentPage, setCurrentPage] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [manualNotifications, setManualNotifications] = useState<Notification[]>(user?.notifications ?? []);
+
 
   const enable = useCallback(() => {
     setIsEnabled(true);
   }, []);
 
   const {
-    data: notifications,
+    data: fetchedNotifications,
     loading,
     error,
     refresh,
@@ -36,15 +41,21 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     { enabled: isEnabled }
   );
 
+  const allNotifications = useMemo(() => {
+    const notificationsMap = new Map<string, Notification>();
+    [...manualNotifications, ...(fetchedNotifications ?? [])].forEach(n => notificationsMap.set(n.id, n));
+    return Array.from(notificationsMap.values());
+  }, [manualNotifications, fetchedNotifications]);
+
   const unreadCount = useMemo(() => {
-    if (!notifications) return 0;
-    return notifications.filter(notification => !notification.read).length;
-  }, [notifications]);
+    if (!allNotifications) return 0;
+    return allNotifications.filter(notification => !notification.read).length;
+  }, [allNotifications]);
 
   // Note: This provider is now paginated, following the pattern in useTeamPage.
   // The previous infinite scroll implementation was not compatible with useAsyncCache.
   // UI components consuming this context may need to be updated to handle pagination.
-  const hasMore = notifications ? notifications.length >= 10 : false;
+  const hasMore = fetchedNotifications ? fetchedNotifications.length >= 10 : false;
 
   const markAsRead = useCallback(
     async (id: string) => {
@@ -96,7 +107,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   return (
     <NotificationsContext.Provider
       value={{
-        notifications: notifications ?? [],
+        notifications: allNotifications,
         unreadCount,
         loading,
         error: errorMessage,

@@ -34,9 +34,22 @@ export const getUserMe = async (request: Request): Promise<Response> => {
       plan: company?.plan,
     };
 
+    // Fetch first 10 unread notifications
+    const unreadNotifications = db.notifications.findMany({
+      where: { 
+        userId: user.id,
+        read: false 
+      },
+      limit: 10,
+      orderBy: { createdAt: "desc" },
+    });
+
     return new Response(
       JSON.stringify(
-        createSuccessResponse({ user: userResponse }, "OPERATION_SUCCESS"),
+        createSuccessResponse({ 
+          user: userResponse, 
+          unreadNotifications 
+        }, "OPERATION_SUCCESS"),
       ),
       {
         status: RESPONSE_CODES.OPERATION_SUCCESS.status,
@@ -107,9 +120,22 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
       plan: company?.plan,
     };
 
+    // Fetch first 10 unread notifications
+    const unreadNotifications = db.notifications.findMany({
+      where: { 
+        userId: updatedUser.id,
+        read: false 
+      },
+      limit: 10,
+      orderBy: { createdAt: "desc" },
+    });
+
     return new Response(
       JSON.stringify(
-        createSuccessResponse({ user: userResponse }, "OPERATION_SUCCESS"),
+        createSuccessResponse({ 
+          user: userResponse, 
+          unreadNotifications 
+        }, "OPERATION_SUCCESS"),
       ),
       {
         status: RESPONSE_CODES.OPERATION_SUCCESS.status,

@@ -2,6 +2,7 @@
  * Represents the user object as it exists in the application state after authentication.
  */
 import type { PlatformRole, CompanyRole, UserStatus } from "./api/user";
+import type { Notification } from "./api/notifications";
 
 /**
  * Represents the user object as it exists in the application state after authentication.
@@ -18,4 +19,10 @@ export interface AuthenticatedUser {
   plan: "Enterprise" | "Pro" | "Free";
   createdAt: string;
   updatedAt: string;
+  /**
+   * Initial notifications from user/me endpoint
+   * These are used to show the bell indicator immediately on login
+   * and are merged with paginated notifications when dropdown is opened
+   */
+  notifications?: Notification[];
 }
