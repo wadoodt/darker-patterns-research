@@ -8,14 +8,14 @@ import {
   DropdownMenuGroup,
 } from '@radix-ui/react-dropdown-menu';
 
-import { Bell, X, Clock, Send, BarChart3, AlertTriangle, Check, Info, CreditCard, User } from 'lucide-react';
+import { Bell, X, Clock, Send, BarChart3, AlertTriangle, Check, Info, CreditCard, User, type LucideIcon } from 'lucide-react';
 import { useNotifications } from '@contexts/NotificationsContext';
-import type { Notification } from 'types/api/notifications';
+import type { Notification } from '@api/domains/notifications/types';
 import styles from './NotificationsDropdown.module.css';
 import { Button } from '@radix-ui/themes';
 
 const NotificationIcon = ({ type }: { type: Notification['type'] }) => {
-  const icons = {
+  const icons: Record<Notification['type'], LucideIcon> = {
     reply: Send,
     system: Bell,
     user: User,

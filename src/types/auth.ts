@@ -3,7 +3,7 @@
  */
 import type { User } from "./api/user";
 import type { CompanyRole } from "@api/types";
-import type { Notification } from "./api/notifications";
+import type { Notification } from "@api/domains/notifications/types";
 
 /**
  * Represents the credentials used for a login request.

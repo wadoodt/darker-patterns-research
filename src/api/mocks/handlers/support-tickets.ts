@@ -1,4 +1,7 @@
 import { db } from "../db";
+import { createSuccessResponse, createErrorResponse } from "../../response";
+import { createPagedResponse } from "../utils/paged-response";
+import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
 
 export const createContactSubmission = async (request: Request) => {
   const body = await request.json();
@@ -9,12 +12,31 @@ export const createContactSubmission = async (request: Request) => {
   });
 };
 
-export const getMyTickets = async () => {
-  const tickets = db.supportTickets.findMany({});
-  return new Response(JSON.stringify(tickets), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+export const getMyTickets = async (request: Request) => {
+  try {
+    const user = getAuthenticatedUser(request);
+    if (!user) return handleUnauthorized();
+
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+
+    const pagedResponse = createPagedResponse({
+      table: "supportTickets",
+      page,
+      limit,
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const response = createSuccessResponse(pagedResponse, "OPERATION_SUCCESS");
+    return new Response(JSON.stringify(response), { status: 200 });
+  } catch {
+    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
+      message: "Failed to fetch tickets",
+    });
+    return new Response(JSON.stringify(errorResponse), { status: 500 });
+  }
 };
 
 export const getTicketById = async (

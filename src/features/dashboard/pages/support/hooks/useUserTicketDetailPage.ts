@@ -25,7 +25,6 @@ export function useUserTicketDetailPage() {
     [`ticket-${ticketId}`],
     async () => (await api.get(`/support/tickets/${ticketId}`)).data,
     CacheLevel.DEBUG,
-    { enabled: !!ticketId },
   );
 
   const {

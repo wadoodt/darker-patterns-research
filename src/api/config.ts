@@ -9,4 +9,4 @@
  *
  * @default false - Should be false in production environments.
  */
-export const API_DEBUG_MODE = true;
+export const API_DEBUG_MODE = import.meta.env.VITE_API_DEBUG_MODE === 'true';

@@ -9,10 +9,17 @@
  * const members = await api.team.getMembers();
  */
 import { team } from "./domains/team";
+import { notifications } from "./domains/notifications";
+import * as notificationHooks from "./domains/notifications/hooks";
+import { support } from "./domains/support";
 
 const api = {
   team,
-  // Other domains like 'users', 'auth', etc., will be added here.
+  notifications: {
+    ...notifications,
+    ...notificationHooks,
+  },
+  support,
 };
 
 export default api;

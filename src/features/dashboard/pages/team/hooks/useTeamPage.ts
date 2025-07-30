@@ -22,7 +22,7 @@ export const useTeamPage = () => {
   const { data, loading, error, refresh } = useAsyncCache(
     ["team-members", currentPage],
     fetchTeamMembers,
-    CacheLevel.DEBUG,
+    CacheLevel.STABLE,
   );
 
   const setCurrentPage = (page: number) => {

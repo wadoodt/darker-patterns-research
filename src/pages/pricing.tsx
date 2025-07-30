@@ -5,13 +5,16 @@ import PublicLayout from "@layouts/PublicLayout";
 import "@styles/landing.css";
 import { AppProvider } from "@contexts/AppContext/AppContext.tsx";
 import "@locales/i18n.ts";
+import { AuthProvider } from "@contexts/AuthContext/AuthContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AppProvider>
-      <PublicLayout>
-        <PricingPage />
-      </PublicLayout>
-    </AppProvider>
-  </React.StrictMode>,
+    <AuthProvider>
+      <AppProvider>
+        <PublicLayout>
+          <PricingPage />
+        </PublicLayout>
+      </AppProvider>
+    </AuthProvider>
+  </React.StrictMode>
 );

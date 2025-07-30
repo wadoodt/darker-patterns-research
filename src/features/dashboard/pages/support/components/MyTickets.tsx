@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Heading, Table, Badge, Flex, Button } from "@radix-ui/themes";
 import { useAsyncCache } from "@hooks/useAsyncCache";
-import api from "@api/client";
+import api from "@api/index";
 import type { SupportTicket } from "types/support-ticket";
+import { CacheLevel } from "@lib/cache/types";
+import { ApiError } from "@api/lib/ApiError";
 
 const fetchMyTickets = async (page: number) => {
-  const response = await api.get(`/support/my-tickets?page=${page}&limit=5`);
-  return response.data;
+  return api.support.myTickets(page, 5);
 };
 
 const MyTickets: React.FC = () => {
@@ -16,12 +17,19 @@ const MyTickets: React.FC = () => {
   const { data, loading, error } = useAsyncCache(
     ["my-tickets", currentPage],
     () => fetchMyTickets(currentPage),
-    "PERSISTENT",
+    CacheLevel.STABLE,
   );
+  
+  const errorMessage = useMemo(() => {
+    if (error instanceof ApiError) return error.message; // i18n key
+    return error ? 'UNEXPECTED_ERROR' : null;
+  }, [error]);
 
-  const tickets: SupportTicket[] = data?.data?.tickets || [];
-  const pagination = data?.data?.pagination;
-  const errorMessage = error ? "Failed to load your tickets" : null;
+  const tickets = data?.data || [];
+
+  if (tickets.length === 0) {
+    return <p>You have not submitted any support tickets yet.</p>;
+  }
 
   return (
     <Box mt="8">
@@ -79,17 +87,17 @@ const MyTickets: React.FC = () => {
           <Flex justify="between" mt="4">
             <Button
               onClick={() => setCurrentPage((p) => p - 1)}
-              disabled={!pagination || pagination.currentPage === 1}
+              disabled={data?.currentPage === 1}
             >
               Previous
             </Button>
             <span>
-              Page {pagination?.currentPage} of {pagination?.totalPages}
+              Page {data?.currentPage} of {data?.totalPages}
             </span>
             <Button
               onClick={() => setCurrentPage((p) => p + 1)}
               disabled={
-                !pagination || pagination.currentPage === pagination.totalPages
+                !data?.currentPage || data?.currentPage === data?.totalPages
               }
             >
               Next

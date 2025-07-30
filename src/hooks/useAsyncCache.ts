@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useCache } from "@contexts/CacheContext";
 import { createCacheKey } from "@lib/cache/utils";
 import { CacheLevel } from "@lib/cache/types";
+import { API_DEBUG_MODE } from "@api/config";
 
 interface UseAsyncCacheOptions {
   refetchOnMount?: boolean;
@@ -64,6 +65,9 @@ export function useAsyncCache<T>(
         if (canUseCache && !forceRefresh) {
           const cachedData = await get<T>(cacheKey);
           if (cachedData !== null && cachedData !== undefined) {
+            if (API_DEBUG_MODE) {
+              console.log(`[Cache Hit] < ${cacheKey}`, { data: cachedData });
+            }
             if (mounted.current) {
               setData(cachedData);
             }

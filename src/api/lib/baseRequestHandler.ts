@@ -2,26 +2,32 @@
  * @file Provides a central, robust wrapper for all API client requests.
  */
 import { AxiosError } from "axios";
-import { API_DEBUG_MODE } from "@api/config";
-import { createErrorResponse } from "@api/response";
+import { createErrorResponse } from "../response";
 import type { ApiResponse } from "types/api";
 
 /**
- * A centralized request handler that wraps all axios calls.
+ * A centralized, base request handler that wraps all axios calls.
  * It standardizes error handling and provides a single point for logging.
+ * It is the foundation for both `handleQuery` and `handleMutation`.
  *
  * @param apiCall A function that returns a promise from the `apiClient`.
  * @returns A promise that always resolves to an `ApiResponse` object.
  */
-export const handleRequest = async <T>(
-  apiCall: () => Promise<{ data: ApiResponse<T> }>,
+
+export const baseRequestHandler = async <T>(
+  apiCall: () => Promise<{ data: ApiResponse<T>, status?: number, error?: string }>,
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await apiCall();
+    console.log("response", response);
     const apiResponse = response.data;
 
-    if (API_DEBUG_MODE) {
-      console.warn("[API Response]", apiResponse);
+    if (!apiResponse && response.error) {
+      // This can happen if a real API
+      // returns a 200 OK with non-JSON or empty content.
+      return createErrorResponse<T>("INTERNAL_SERVER_ERROR", {
+        detail: "The API response body was empty or invalid.",
+      });
     }
 
     // Future enhancement: If a global notification library like `sonner` is added,
@@ -43,10 +49,6 @@ export const handleRequest = async <T>(
       // Case 2: A network error or an unexpected server error occurred.
       // We create a standardized error response.
       errorResponse = createErrorResponse<T>("INTERNAL_SERVER_ERROR");
-    }
-
-    if (API_DEBUG_MODE) {
-      console.error("[API Error]", errorResponse);
     }
     
     // Future enhancement: This is the ideal place to trigger global error toasts.

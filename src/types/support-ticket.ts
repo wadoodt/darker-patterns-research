@@ -17,3 +17,10 @@ export interface SupportTicket {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- allow index signature for dynamic properties
   [key: string]: any;
 }
+
+export interface PaginatedTicketsResponse {
+  data?: SupportTicket[];
+  total?: number;
+  currentPage?: number;
+  totalPages?: number;
+}
