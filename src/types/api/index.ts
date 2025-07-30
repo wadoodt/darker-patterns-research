@@ -41,13 +41,6 @@ export type {
   UserProfile,
   UserSettings,
   CreateUserPayload,
-  // Team-related types (aliased for clarity)
-  User as TeamMember,
-  TeamMembersResponse,
-  NewTeamMember,
-  CompanyRole,
-  PlatformRole,
-  UserStatus,
 } from "./user";
 
 

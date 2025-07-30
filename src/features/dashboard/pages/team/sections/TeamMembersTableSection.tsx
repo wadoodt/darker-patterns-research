@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { Table } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import type { User } from "types/api/user";
+import type { TeamMember } from "@api/types";
 import { useAuth } from "contexts/AuthContext";
 import { TeamMemberRow } from "./TeamMemberRow";
 import EditMemberModal from "../modals/EditMemberModal";
 import DeleteMemberModal from "../modals/DeleteMemberModal";
 
 interface TeamMembersTableSectionProps {
-  members: User[];
+  members: TeamMember[];
   loading: boolean;
   error: boolean;
   errorMessage: string | null;
-  onUpdateMember: (member: User) => void;
+  onUpdateMember: (member: TeamMember) => void;
   onDeleteMember: (memberId: string) => void;
   onUpdatePlatformRole: (memberId: string, platformRole: "admin" | "user") => void;
 }
@@ -30,18 +30,18 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
   const { user: authUser } = useAuth();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<User | null>(null);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   const canManageRoles = authUser?.companyRole === 'owner' || authUser?.platformRole === 'admin';
   const canEdit = authUser?.companyRole !== 'employee';
   const canDelete = authUser?.companyRole !== 'manager';
 
-  const handleEditClick = (member: User) => {
+  const handleEditClick = (member: TeamMember) => {
     setSelectedMember(member);
     setEditModalOpen(true);
   };
 
-  const handleDeleteClick = (member: User) => {
+  const handleDeleteClick = (member: TeamMember) => {
     setSelectedMember(member);
     setDeleteModalOpen(true);
   };
@@ -103,11 +103,11 @@ export const TeamMembersTableSection: React.FC<TeamMembersTableSectionProps> = (
         member={selectedMember}
         onSave={onUpdateMember}
       />
-      <DeleteMemberModal 
-        isOpen={isDeleteModalOpen} 
-        onClose={handleModalClose} 
-        onConfirm={handleDeleteConfirm} 
-        memberName={selectedMember?.name || ''} 
+      <DeleteMemberModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleModalClose}
+        onConfirm={handleDeleteConfirm}
+        memberName={selectedMember?.name || ''}
       />
     </>
   );

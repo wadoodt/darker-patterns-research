@@ -1,20 +1,21 @@
 /**
  * Represents the user object as it exists in the application state after authentication.
  */
-import type { PlatformRole, CompanyRole, UserStatus } from "./api/user";
+import type { User } from "./api/user";
+import type { CompanyRole } from "@api/types";
 import type { Notification } from "./api/notifications";
+
+/**
+ * Represents the credentials used for a login request.
+ */
+export type LoginCredentials = Pick<User, "username" | "password">;
+
 
 /**
  * Represents the user object as it exists in the application state after authentication.
  * This should be kept in sync with the `User` type from the API.
  */
-export interface AuthenticatedUser {
-  id: string;
-  name: string;
-  email: string;
-  platformRole: PlatformRole;
-  companyId: string;
-  status: UserStatus;
+export interface AuthenticatedUser extends User {
   companyRole?: CompanyRole;
   plan: "Enterprise" | "Pro" | "Free";
   createdAt: string;

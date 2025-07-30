@@ -3,7 +3,7 @@ import { createErrorResponse, createSuccessResponse } from "../../response";
 import { ERROR_CODES, RESPONSE_CODES } from "../../codes";
 import type { User, Company } from "types/api";
 import type { Notification } from "types/api/notifications";
-import { mockNotifications } from "../_data/notifications-data";
+import { mockNotifications } from "../data/notifications";
 import {
   validateCreatePayload,
   validateJoinPayload,
@@ -49,7 +49,7 @@ export const login = async (request: Request): Promise<Response> => {
 
     // Get user's notifications
     const allNotifications: Notification[] = mockNotifications.filter(
-      (n) => n.userId === user.id
+      (n: Notification) => n.userId === user.id
     );
     const unreadNotifications = allNotifications
       .filter((n) => !n.read)

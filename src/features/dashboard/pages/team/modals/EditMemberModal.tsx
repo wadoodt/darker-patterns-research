@@ -1,18 +1,18 @@
 import { Dialog, Button, Flex, Text, Select } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import type { User, CompanyRole } from "types/api/user";
+import type { TeamMember, CompanyRole } from "@api/types";
 
 interface EditMemberModalProps {
-  member: User | null;
+  member: TeamMember | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (member: User) => void;
+  onSave: (member: TeamMember) => void;
 }
 
 const EditMemberModal: React.FC<EditMemberModalProps> = ({ member, isOpen, onClose, onSave }) => {
   const { t } = useTranslation();
-  const [editedMember, setEditedMember] = useState<User | null>(member);
+  const [editedMember, setEditedMember] = useState<TeamMember | null>(member);
 
   useEffect(() => {
     setEditedMember(member);

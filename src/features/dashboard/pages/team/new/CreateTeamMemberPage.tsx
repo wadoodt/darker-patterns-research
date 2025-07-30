@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTeamPage } from "../hooks/useTeamPage";
 import { useTranslation } from "react-i18next";
-import type { NewTeamMember, CompanyRole } from "types/api/user";
+import type { NewTeamMember, CompanyRole } from "@api/types";
 import {
   Flex,
   Heading,

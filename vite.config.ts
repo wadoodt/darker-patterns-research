@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { mockApiPlugin } from "./src/api/mocks/vite-plugin";
+import { mockApiPlugin } from "./src/api/mocks";
 import path from "path";
 import { glob } from "glob";
 

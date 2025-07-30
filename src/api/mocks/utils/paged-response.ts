@@ -1,5 +1,5 @@
 import { db } from "../db";
-import type { Table } from "../lib/createTable";
+import type { Table } from "../drizzle/createMockTable";
 
 type AnyTable = Table<Record<string, unknown> & { id: string | number }>;
 

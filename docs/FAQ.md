@@ -357,7 +357,7 @@ const response = await api.get("/api/admin/tickets");
 **How to avoid this in the future:**
 
 - Remember that all API calls are relative to the `/api` base.
-- Review the **[Endpoint Integration Guide](./ENDPOINT_INTEGRATION.md)** for more details on making API calls.
+- Review the **[Endpoint Integration Guide](./ENDPOINT_INTEGRATION.md)** and the **[API Layer Architecture Guide](./API_LAYER.md)** for more details.
 
 ---
 

@@ -1,9 +1,9 @@
 // src/api/mocks/_data/user-data.ts
 
-import type { User } from "types";
+import type { TeamMember } from "@api/types";
 
 // Seed data for the users table. In a real app, passwords would be hashed.
-export const mockUsers: User[] = [
+export const mockUsers: TeamMember[] = [
   {
     id: "1",
     name: "Admin User",

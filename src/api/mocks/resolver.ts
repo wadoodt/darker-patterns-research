@@ -1,12 +1,12 @@
 import * as authHandlers from "./handlers/auth";
-import * as userHandlers from "./handlers/user-handler";
-import * as companyHandlers from "./handlers/companies-handler";
-import * as adminHandlers from "./handlers/admin-handler";
-import * as paymentsHandlers from "./handlers/payments-handler";
-import * as supportTicketsHandlers from "./handlers/support-tickets-handler";
-import * as knowledgeBaseHandlers from "./handlers/knowledge-base-handler";
+import * as userHandlers from "./handlers/users";
+import * as companyHandlers from "./handlers/companies";
+import * as adminHandlers from "./handlers/admin";
+import * as paymentsHandlers from "./handlers/payments";
+import * as supportTicketsHandlers from "./handlers/support-tickets";
+import * as knowledgeBaseHandlers from "./handlers/knowledge-base";
 import * as teamHandlers from "./handlers/team";
-import * as notificationsHandlers from "./handlers/notifications-handler";
+import * as notificationsHandlers from "./handlers/notifications";
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Array<[string, RegExp, unknown]> = [

@@ -1,15 +1,15 @@
 import { Table, Badge, Button, Flex, Switch, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import type { User } from "types/api/user";
+import type { TeamMember } from "@api/types";
 import { useAuth } from "contexts/AuthContext";
 
 interface TeamMemberRowProps {
-  member: User;
+  member: TeamMember;
   canEdit: boolean;
   canDelete: boolean;
   canManageRoles: boolean;
-  onEdit: (member: User) => void;
-  onDelete: (member: User) => void;
+  onEdit: (member: TeamMember) => void;
+  onDelete: (member: TeamMember) => void;
   onUpdatePlatformRole: (memberId: string, platformRole: "admin" | "user") => void;
 }
 

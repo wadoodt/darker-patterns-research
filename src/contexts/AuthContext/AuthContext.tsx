@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import apiClient from "@api/client";
 import type { ApiResponse } from "types";
-import type { AuthenticatedUser } from "types/auth";
+import type { AuthenticatedUser, LoginCredentials } from "types/auth";
 import type { AuthContextType } from "./types";
 import { AuthContext } from "./context";
 
@@ -29,8 +29,6 @@ async function checkUserSession(
       } else {
         throw new Error(response.data.error?.message || "Invalid session");
       }
-      setToken(storedToken);
-      setTokenExpiresAt(expiresAt);
     } catch {
       setUser(null);
       setToken(null);
@@ -40,6 +38,18 @@ async function checkUserSession(
     }
   }
   setIsLoading(false);
+}
+
+async function performLogin(credentials: LoginCredentials) {
+  const { data: response } = await apiClient.post("/auth/login", credentials);
+
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+  if (!response.data) {
+    throw new Error("Login response did not contain data.");
+  }
+  return response.data;
 }
 
 const useAuthProvider = (): AuthContextType => {
@@ -54,36 +64,23 @@ const useAuthProvider = (): AuthContextType => {
 
   useEffect(() => {
     checkUserSession(setUser, setToken, setTokenExpiresAt, setIsLoading);
-  }, [token]);
+  }, []);
 
-  const login = useCallback(async (username: string, password: string) => {
+  const login = useCallback(async (username: string, password: string): Promise<void> => {
     try {
-      const { data: response } = await apiClient.post("/auth/login", {
-        username,
-        password,
-      });
-
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-      if (response.data) {
-        const {
-          user: userData,
-          token: userToken,
-          expiresIn,
-          notifications,
-        } = response.data;
-        const expirationTime = Date.now() + expiresIn * 1000;
-
-        setUser({
-          ...userData,
-          notifications: notifications.unread,
-        });
-        setToken(userToken);
-        setTokenExpiresAt(expirationTime);
-        localStorage.setItem("authToken", userToken);
-        localStorage.setItem("tokenExpiresAt", expirationTime.toString());
-      }
+      const {
+        user: userData,
+        token: userToken,
+        expiresIn,
+        notifications,
+      } = await performLogin({ username, password });
+      
+      const expirationTime = Date.now() + expiresIn * 1000;
+      setUser({ ...userData, notifications: notifications.unread });
+      setToken(userToken);
+      setTokenExpiresAt(expirationTime);
+      localStorage.setItem("authToken", userToken);
+      localStorage.setItem("tokenExpiresAt", expirationTime.toString());
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -99,33 +96,23 @@ const useAuthProvider = (): AuthContextType => {
 
     try {
       const response = await apiClient.post<ApiResponse<null>>("/auth/logout");
-
       if (response.data.error) {
-        console.error(
-          "Server-side logout failed:",
-          response.data.error.message,
-        );
+        console.error("Server-side logout failed:", response.data.error.message);
       }
     } catch (error) {
       console.error("Logout request failed:", error);
     }
   }, []);
 
-  const hasRole = useCallback(
-    (roles: string[]): boolean => {
-      if (!user) return false;
-      return roles.includes(user.platformRole);
-    },
-    [user],
-  );
+  const hasRole = useCallback((roles: string[]) => {
+    if (!user) return false;
+    return roles.includes(user.platformRole);
+  }, [user]);
 
-  const hasPlan = useCallback(
-    (plans: string[]): boolean => {
-      if (!user || !user.plan) return false;
-      return plans.includes(user.plan);
-    },
-    [user],
-  );
+  const hasPlan = useCallback((plans: string[]) => {
+    if (!user || !user.plan) return false;
+    return plans.includes(user.plan);
+  }, [user]);
 
   const isAuthenticated = useCallback((): boolean => {
     return !!token && !!tokenExpiresAt && Date.now() < tokenExpiresAt;
@@ -143,17 +130,7 @@ const useAuthProvider = (): AuthContextType => {
       hasPlan,
       isAuthenticated,
     }),
-    [
-      user,
-      token,
-      tokenExpiresAt,
-      isLoading,
-      login,
-      logout,
-      hasRole,
-      hasPlan,
-      isAuthenticated,
-    ],
+    [user, token, tokenExpiresAt, isLoading, login, logout, hasRole, hasPlan, isAuthenticated],
   );
 };
 

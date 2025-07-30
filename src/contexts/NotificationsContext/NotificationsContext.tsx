@@ -22,7 +22,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const { invalidateByPattern } = useCache();
   const [currentPage, setCurrentPage] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
-  const [manualNotifications, setManualNotifications] = useState<Notification[]>(user?.notifications ?? []);
+  const [manualNotifications] = useState<Notification[]>(user?.notifications ?? []);
 
 
   const enable = useCallback(() => {

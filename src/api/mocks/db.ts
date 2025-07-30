@@ -1,14 +1,14 @@
-import { createTable } from "./lib/createTable";
+import { createTable } from "./drizzle/createMockTable";
 import type { Company, AdminSettings } from "types";
 import type { ContactSubmission } from "types/support";
-import { mockCompanies } from "./_data/companies-data.ts";
-import { mockUsers } from "./_data/user-data.ts";
-import { mockAdminSettings } from "./_data/admin-settings-data";
-import { mockPayments } from "./_data/payments-data";
-import { mockKnowledgeBaseArticles, mockSupportTickets } from "./_data/support";
+import { mockCompanies } from "./data/companies";
+import { mockUsers } from "./data/users";
+import { mockAdminSettings } from "./data/admin-settings";
+import { mockPayments } from "./data/payments";
+import { mockKnowledgeBaseArticles, mockSupportTickets } from "./data/support";
 import type { KnowledgeBaseArticle } from "types/knowledge-base";
-import { mockFaqs } from "./_data/faqs-data";
-import { mockNotifications } from "./_data/notifications-data";
+import { mockFaqs } from "./data/faqs";
+import { mockNotifications } from "./data/notifications";
 
 // The global mock database instance.
 export const db = {

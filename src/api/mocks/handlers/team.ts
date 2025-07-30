@@ -1,19 +1,21 @@
 import { db } from "../db";
 import { createSuccessResponse, createErrorResponse } from "../../response";
 import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
-import type { User, NewTeamMember } from "types/api/user";
-import { mockUsers } from "../_data/user-data";
-import { mockCompanies } from "../_data/companies-data";
+import type { TeamMember, NewTeamMember } from "@api/types";
+import { mockUsers } from "../data/users";
+import { mockCompanies } from "../data/companies";
+import type { Company } from "types/api";
+import type { AuthenticatedUser } from "types/auth";
 
 // Helper function to get team members
-const fetchTeamMembers = (companyId: string, userCanReadAll: boolean = false): User[] => {
-  const company = mockCompanies.find((c) => c.id === companyId);
+const fetchTeamMembers = (companyId: string, userCanReadAll: boolean = false): TeamMember[] => {
+  const company = mockCompanies.find((c: Company) => c.id === companyId);
   if (!company) return [];
 
   const filterUsers = userCanReadAll
     ? mockUsers
     : mockUsers.filter(
-        (user) =>
+        (user: TeamMember) =>
           user.companyId === companyId && user.status !== "inactive"
       );
   return filterUsers;
@@ -34,7 +36,7 @@ export const createTeamMember = async (request: Request): Promise<Response> => {
       return new Response(JSON.stringify(errorResponse), { status: 400 });
     }
 
-    const newMember: User = {
+    const newMember: TeamMember = {
       id: crypto.randomUUID(),
       name,
       email,
@@ -62,7 +64,7 @@ export const createTeamMember = async (request: Request): Promise<Response> => {
 };
 
 export const getTeamMembers = (request: Request): Response => {
-  const user = getAuthenticatedUser(request);
+  const user = getAuthenticatedUser(request) as AuthenticatedUser;
   if (!user) return handleUnauthorized();
 
   const url = new URL(request.url);
@@ -113,7 +115,7 @@ export const deleteTeamMember = async (
   params: { id: string }
 ): Promise<Response> => {
   try {
-    const authUser = getAuthenticatedUser(request);
+    const authUser = getAuthenticatedUser(request) as AuthenticatedUser;
     if (!authUser) return handleUnauthorized();
 
     // New check: Managers cannot delete members
@@ -165,7 +167,7 @@ export const updatePlatformRole = async (
   params: { id: string }
 ): Promise<Response> => {
   try {
-    const authUser = getAuthenticatedUser(request);
+    const authUser = getAuthenticatedUser(request) as AuthenticatedUser;
     if (!authUser) return handleUnauthorized();
 
     // Authorization: Only owners or admins can change platform roles
@@ -179,7 +181,7 @@ export const updatePlatformRole = async (
 
     const memberToUpdate = db.users.findFirst({
       where: { id: params.id },
-    });
+    }) as TeamMember;
 
     if (!memberToUpdate) {
       const errorResponse = createErrorResponse("NOT_FOUND", {
@@ -241,7 +243,7 @@ export const updateTeamMember = async (
   params: { id: string }
 ): Promise<Response> => {
   try {
-    const authUser = getAuthenticatedUser(request);
+    const authUser = getAuthenticatedUser(request) as AuthenticatedUser;
     if (!authUser) return handleUnauthorized();
 
     // New check: Employees cannot edit members
@@ -253,7 +255,7 @@ export const updateTeamMember = async (
       });
     }
 
-    const body = (await request.json()) as Partial<User>;
+    const body = (await request.json()) as Partial<TeamMember>;
 
     const memberToUpdate = db.users.findFirst({
       where: { id: params.id },

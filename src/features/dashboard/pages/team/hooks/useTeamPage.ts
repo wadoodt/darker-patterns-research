@@ -1,39 +1,35 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { useCache } from "@contexts/CacheContext";
-import api from "@api/client";
-import type {
-  User,
-  TeamMembersResponse,
-  NewTeamMember,
-} from "types/api/user";
-import { AxiosError } from "axios";
+import api from "@api/index";
+import type { TeamMember, NewTeamMember } from "@api/types";
 import { CacheLevel } from "@lib/cache/types";
+import { ApiError } from "@api/lib/ApiError";
 
-const fetchTeamMembers = async (page: number) => {
-  const { data: response } = await api.get<{ data: TeamMembersResponse }>(
-    `/team?page=${page}&limit=10`
-  );
-  return response.data;
+// The data fetching function is now incredibly clean.
+// The `api.team.query` method handles the request, error handling, and data unwrapping.
+const fetchTeamMembers = async () => {
+  return api.team.query();
 };
 
 export const useTeamPage = () => {
   const { invalidateByPattern: invalidate } = useCache();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
   const { data, loading, error, refresh } = useAsyncCache(
     ["team-members", currentPage],
-    () => fetchTeamMembers(currentPage),
-    CacheLevel.DEBUG
+    fetchTeamMembers,
+    CacheLevel.DEBUG,
   );
 
   const setCurrentPage = (page: number) => {
     setSearchParams({ page: page.toString() });
   };
 
-  const teamMembers: User[] = data?.members || [];
+  const teamMembers: TeamMember[] = data?.members || [];
   const pagination = data
     ? {
         currentPage: data.currentPage,
@@ -43,55 +39,60 @@ export const useTeamPage = () => {
     : null;
 
   const errorMessage = useMemo(() => {
+    if (error instanceof ApiError) {
+      return error.message; // This is now the i18n key
+    }
     if (error) {
-      const axiosError = error as AxiosError<{ message: string }>;
-      if (axiosError.response?.data?.message) {
-        return axiosError.response.data.message;
-      }
       return "UNEXPECTED_ERROR";
     }
     return null;
   }, [error]);
 
-    const handleCreateMember = async (newMember: NewTeamMember) => {
-    try {
-      await api.post("/team", newMember);
-      // Invalidate all cache entries starting with 'team-members'
-      // to ensure the list is fresh on any page.
+  const handleCreateMember = async (newMember: NewTeamMember) => {
+    setFormErrors(null);
+    const response = await api.team.create(newMember);
+
+    if (response.error) {
+      console.error("Failed to create team member", response.error);
+      setFormErrors(response.error.validations || { general: response.error.message });
+    } else {
       await invalidate("^team-members");
-    } catch (error) {
-      console.error("Failed to create team member", error);
-      // Optionally, set an error message to display in the UI
+      // Optionally, close a modal or redirect here on success
     }
   };
 
-    const handleDeleteMember = async (memberId: string) => {
-    try {
-      await api.delete(`/team/${memberId}`);
+  const handleDeleteMember = async (memberId: string) => {
+    const response = await api.team.remove(memberId);
+    if (response.error) {
+      console.error("Failed to delete team member", response.error);
+      setFormErrors({ general: response.error.message });
+    } else {
       await invalidate("^team-members");
-    } catch (error) {
-      console.error("Failed to delete team member", error);
-      // Optionally, set an error message to display in the UI
     }
   };
 
-    const handleUpdateMember = async (member: User) => {
-    try {
-      await api.patch(`/team/${member.id}`, member);
+  const handleUpdateMember = async (member: TeamMember) => {
+    setFormErrors(null);
+    const response = await api.team.update(member);
+
+    if (response.error) {
+      console.error("Failed to update team member", response.error);
+      setFormErrors(response.error.validations || { general: response.error.message });
+    } else {
       await invalidate("^team-members");
-    } catch (error) {
-      console.error("Failed to update team member", error);
-      // Optionally, set an error message to display in the UI
     }
   };
 
-  const handleUpdatePlatformRole = async (memberId: string, platformRole: 'admin' | 'user') => {
-    try {
-      await api.patch(`/team/${memberId}/platform-role`, { platformRole });
+  const handleUpdatePlatformRole = async (
+    memberId: string,
+    platformRole: "admin" | "user",
+  ) => {
+    const response = await api.team.update({ id: memberId, platformRole });
+    if (response.error) {
+      console.error("Failed to update platform role", response.error);
+      setFormErrors({ general: response.error.message });
+    } else {
       await invalidate("^team-members");
-    } catch (error) {
-      console.error("Failed to update platform role", error);
-      // Optionally, set an error message to display in the UI
     }
   };
 
@@ -99,6 +100,7 @@ export const useTeamPage = () => {
     loading,
     error: !!error,
     errorMessage,
+    formErrors,
     teamMembers,
     pagination,
     setCurrentPage,
