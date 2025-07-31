@@ -20,7 +20,6 @@ const FAQSection: React.FC<FAQSectionProps> = ({ t }) => {
       const { data } = await api.get<{ data: FAQItem[] }>(
         "/faqs?category=pricing",
       );
-      console.log({ data });
       return data.data;
     },
     { ttl: CACHE_TTL.LONG_1_DAY },

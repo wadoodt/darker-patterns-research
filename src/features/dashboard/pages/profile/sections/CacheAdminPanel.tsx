@@ -6,6 +6,20 @@ import { useCache } from "@contexts/CacheContext";
 import { Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import styles from "./CacheAdminPanel.module.css";
 
+type CacheAdminPanelButtonsProps = {
+  invalidateCompanies: () => void;
+  invalidateProfile: () => void;
+  invalidateTeam: () => void;
+  invalidateNotifications: () => void;
+  invalidateMyTickets: () => void;
+  invalidateAllFaqs: () => void;
+  invalidateHomeFaqs: () => void;
+  invalidatePricingFaqs: () => void;
+  clearAllExpired: () => void;
+  isLoading: boolean;
+  isReady: boolean;
+};
+
 const CacheAdminPanelButtons = ({
   invalidateCompanies,
   invalidateProfile,
@@ -18,19 +32,7 @@ const CacheAdminPanelButtons = ({
   clearAllExpired,
   isLoading,
   isReady,
-}: {
-  invalidateCompanies: () => void;
-  invalidateProfile: () => void;
-  invalidateTeam: () => void;
-  invalidateNotifications: () => void;
-  invalidateMyTickets: () => void;
-  invalidateAllFaqs: () => void;
-  invalidateHomeFaqs: () => void;
-  invalidatePricingFaqs: () => void;
-  clearAllExpired: () => void;
-  isLoading: boolean;
-  isReady: boolean;
-}) => (
+}: CacheAdminPanelButtonsProps) => (
   <Flex wrap="wrap" gap="2">
     <Button
       onClick={invalidateCompanies}
@@ -98,6 +100,35 @@ const CacheAdminPanelButtons = ({
   </Flex>
 );
 
+type CacheAdminPanelViewProps = CacheAdminPanelButtonsProps & {
+  statusMessage: string;
+};
+
+const CacheAdminPanelView = ({
+  statusMessage,
+  isReady,
+  ...buttonProps
+}: CacheAdminPanelViewProps) => (
+  <Card>
+    <Box>
+      <Heading as="h3" size="3" mb="3">
+        Cache Management
+      </Heading>
+      <CacheAdminPanelButtons {...buttonProps} isReady={isReady} />
+      {statusMessage && (
+        <Text as="p" className={styles.statusMessage}>
+          {statusMessage}
+        </Text>
+      )}
+      {!isReady && (
+        <Text as="p" className={styles.notReadyMessage}>
+          Cache system is not ready.
+        </Text>
+      )}
+    </Box>
+  </Card>
+);
+
 export function CacheAdminPanel() {
   const { invalidateByPattern, cleanupExpired, isReady } = useCache();
   const [statusMessage, setStatusMessage] = useState("");
@@ -153,7 +184,7 @@ export function CacheAdminPanel() {
       "My tickets cache invalidated.",
     );
 
-    const invalidateAllFaqs = () =>
+  const invalidateAllFaqs = () =>
     handleAction(
       () => invalidateByPattern("async-data:faqs*"),
       "All FAQs cache invalidated.",
@@ -178,35 +209,19 @@ export function CacheAdminPanel() {
     );
 
   return (
-    <Card>
-      <Box>
-        <Heading as="h3" size="3" mb="3">
-          Cache Management
-        </Heading>
-        <CacheAdminPanelButtons
-          invalidateCompanies={invalidateCompanies}
-          invalidateProfile={invalidateProfile}
-          invalidateTeam={invalidateTeam}
-          invalidateNotifications={invalidateNotifications}
-          invalidateMyTickets={invalidateMyTickets}
-          invalidateAllFaqs={invalidateAllFaqs}
-          invalidateHomeFaqs={invalidateHomeFaqs}
-          invalidatePricingFaqs={invalidatePricingFaqs}
-          clearAllExpired={clearAllExpired}
-          isLoading={isLoading}
-          isReady={isReady}
-        />
-        {statusMessage && (
-          <Text as="p" className={styles.statusMessage}>
-            {statusMessage}
-          </Text>
-        )}
-        {!isReady && (
-          <Text as="p" className={styles.notReadyMessage}>
-            Cache system is not ready.
-          </Text>
-        )}
-      </Box>
-    </Card>
+    <CacheAdminPanelView
+      invalidateCompanies={invalidateCompanies}
+      invalidateProfile={invalidateProfile}
+      invalidateTeam={invalidateTeam}
+      invalidateNotifications={invalidateNotifications}
+      invalidateMyTickets={invalidateMyTickets}
+      invalidateAllFaqs={invalidateAllFaqs}
+      invalidateHomeFaqs={invalidateHomeFaqs}
+      invalidatePricingFaqs={invalidatePricingFaqs}
+      clearAllExpired={clearAllExpired}
+      isLoading={isLoading}
+      isReady={isReady}
+      statusMessage={statusMessage}
+    />
   );
 }

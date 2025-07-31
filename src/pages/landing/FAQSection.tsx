@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import * as Accordion from "@radix-ui/react-accordion";
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { useAsyncCache } from "@hooks/useAsyncCache";
@@ -6,10 +7,10 @@ import api from "@api/client";
 import type { FAQItem } from "types/faq";
 import { getLanguage } from "@locales/i18n";
 import { CACHE_TTL } from "@lib/cache/constants";
-import { Text, useTranslations } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 
 const FAQSection: React.FC = () => {
-  const t = useTranslations();
+  const { t } = useTranslation();
   const {
     data: faqs,
     loading,
