@@ -4,8 +4,8 @@ import { Box, Heading, Table, Badge, Flex, Button } from "@radix-ui/themes";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/index";
 import type { SupportTicket } from "types/support-ticket";
-import { CacheLevel } from "@lib/cache/types";
 import { ApiError } from "@api/lib/ApiError";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 const fetchMyTickets = async (page: number) => {
   const response = await api.support.myTickets(page, 5);
@@ -28,12 +28,12 @@ const MyTickets: React.FC = () => {
   const { data, loading, error } = useAsyncCache(
     ["my-tickets", currentPage],
     () => fetchMyTickets(currentPage),
-    CacheLevel.DEBUG,
+    { ttl: CACHE_TTL.STANDARD_5_MIN },
   );
-  
+
   const errorMessage = useMemo(() => {
     if (error instanceof ApiError) return error.message; // i18n key
-    return error ? 'UNEXPECTED_ERROR' : null;
+    return error ? "UNEXPECTED_ERROR" : null;
   }, [error]);
 
   const tickets = Array.isArray(data?.data) ? data.data : [];

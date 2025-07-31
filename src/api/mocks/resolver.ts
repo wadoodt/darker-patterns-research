@@ -7,6 +7,7 @@ import * as supportTicketsHandlers from "./handlers/support-tickets";
 import * as knowledgeBaseHandlers from "./handlers/knowledge-base";
 import * as teamHandlers from "./handlers/team";
 import * as notificationsHandlers from "./handlers/notifications";
+import * as faqHandlers from "./handlers/faq";
 
 // Maps a route key (e.g., 'POST /api/auth/login') to a handler function.
 const routes: Array<[string, RegExp, unknown]> = [
@@ -104,6 +105,9 @@ const routes: Array<[string, RegExp, unknown]> = [
     /^\/api\/articles\/([^/]+)$/,
     knowledgeBaseHandlers.deleteArticle,
   ],
+
+  // FAQs
+  ["GET /api/faqs", /^\/api\/faqs$/, faqHandlers.getFaqs],
 
   // Team
   ["POST /api/team", /^\/api\/team$/, teamHandlers.createTeamMember],

@@ -1,32 +1,29 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { Text } from "@radix-ui/themes";
 import * as Accordion from "@radix-ui/react-accordion";
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
 import type { FAQItem } from "types/faq";
+import { getLanguage } from "@locales/i18n";
+import { CACHE_TTL } from "@lib/cache/constants";
+import { Text, useTranslations } from "@radix-ui/themes";
 
 const FAQSection: React.FC = () => {
-  const { t, i18n } = useTranslation();
-  const [faqs, setFaqs] = useState<FAQItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchFAQs = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get<FAQItem[]>("/faqs?category=pricing");
-        setFaqs(response.data);
-      } catch (error) {
-        console.error("Failed to fetch FAQs", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFAQs();
-  }, []);
+  const t = useTranslations();
+  const {
+    data: faqs,
+    loading,
+    error,
+  } = useAsyncCache<FAQItem[]>(
+    ["faqs", "home"],
+    async () => {
+      const { data } = await api.get<{ data: FAQItem[] }>(
+        "/faqs?category=home",
+      );
+      return data.data;
+    },
+    { ttl: CACHE_TTL.LONG_1_DAY },
+  );
 
   if (loading) {
     return (
@@ -37,18 +34,19 @@ const FAQSection: React.FC = () => {
     );
   }
 
-  if (!faqs || faqs.length === 0) {
+  if (error || !faqs || faqs.length === 0) {
     return null;
   }
 
-  const currentLanguage = i18n.language as 'en' | 'es';
+  const currentLanguage = getLanguage() as "en" | "es";
 
   return (
     <section className="faq-section" id="faq">
       <h2>{t("pricing.faq.title")}</h2>
       <Accordion.Root type="single" collapsible className="faq-accordion">
         {faqs.map((faq) => {
-          const translation = faq.translations[currentLanguage] || faq.translations.en;
+          const translation =
+            faq.translations[currentLanguage] || faq.translations.en;
           return (
             <Accordion.Item value={faq.id} key={faq.id} className="faq-item">
               <Accordion.Header>

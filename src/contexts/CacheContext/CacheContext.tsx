@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { CacheLevel, type CacheEntry, CACHE_TTL_MAP } from "@lib/cache/types";
+import { type CacheEntry } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 import { CacheContext } from "./context";
 import type { CacheContextValue, CacheProviderProps } from "./types";
 import { normalizeKeys, cleanupExpiredEntries, matchPattern } from "./utils";
@@ -22,18 +23,16 @@ export function CacheProvider({
       set: async <T,>(
         key: string,
         data: T,
-        level: CacheLevel = CacheLevel.STANDARD,
-        customTtlMs?: number,
+        ttl: number = CACHE_TTL.DEFAULT_15_MIN,
       ) => {
         if (!kvRef.current) return;
         const now = Date.now();
-        const ttl = customTtlMs ?? CACHE_TTL_MAP[level];
+        const expiresIn = ttl * 1000; // Convert seconds to milliseconds
         const entry: CacheEntry<T> = {
           key,
           data,
           createdAt: now,
-          expiresAt: now + ttl,
-          level,
+          expiresAt: now + expiresIn,
         };
         await kvRef.current.put(key, entry);
       },
@@ -74,10 +73,6 @@ export function CacheProvider({
       cleanupExpired: async () => {
         if (!kvRef.current) return;
         await cleanupExpiredEntries({ kv: kvRef.current });
-      },
-      cleanupByLevel: async (level: CacheLevel) => {
-        if (!kvRef.current) return;
-        await cleanupExpiredEntries({ kv: kvRef.current, level });
       },
     }),
     [isReady, error, kvRef],

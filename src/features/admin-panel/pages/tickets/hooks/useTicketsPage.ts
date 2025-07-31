@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
 import type { SupportTicket } from "types/support-ticket";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 const fetchAdminTickets = async (page: number) => {
   const response = await api.get(`/admin/tickets?page=${page}&limit=10`);
@@ -15,7 +16,9 @@ export function useTicketsPage() {
   const { data, loading, error, refresh } = useAsyncCache(
     ["admin-tickets", currentPage],
     () => fetchAdminTickets(currentPage),
-    "PERSISTENT",
+    {
+      ttl: CACHE_TTL.STANDARD_5_MIN,
+    },
   );
 
   const handleStatusChange = async (

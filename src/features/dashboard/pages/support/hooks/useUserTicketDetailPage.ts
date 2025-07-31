@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
 import type { SupportTicket } from "types/support-ticket";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +24,7 @@ export function useUserTicketDetailPage() {
   } = useAsyncCache<{ ticket: SupportTicket }>(
     [`ticket-${ticketId}`],
     async () => (await api.get(`/support/tickets/${ticketId}`)).data,
-    CacheLevel.DEBUG,
+    { ttl: CACHE_TTL.STANDARD_5_MIN },
   );
 
   const {

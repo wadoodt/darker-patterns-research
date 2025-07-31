@@ -12,6 +12,9 @@ const CacheAdminPanelButtons = ({
   invalidateTeam,
   invalidateNotifications,
   invalidateMyTickets,
+  invalidateAllFaqs,
+  invalidateHomeFaqs,
+  invalidatePricingFaqs,
   clearAllExpired,
   isLoading,
   isReady,
@@ -21,6 +24,9 @@ const CacheAdminPanelButtons = ({
   invalidateTeam: () => void;
   invalidateNotifications: () => void;
   invalidateMyTickets: () => void;
+  invalidateAllFaqs: () => void;
+  invalidateHomeFaqs: () => void;
+  invalidatePricingFaqs: () => void;
   clearAllExpired: () => void;
   isLoading: boolean;
   isReady: boolean;
@@ -60,6 +66,27 @@ const CacheAdminPanelButtons = ({
       color="orange"
     >
       Invalidate My Tickets Cache
+    </Button>
+    <Button
+      onClick={invalidateAllFaqs}
+      disabled={isLoading || !isReady}
+      color="red"
+    >
+      Invalidate All FAQs
+    </Button>
+    <Button
+      onClick={invalidateHomeFaqs}
+      disabled={isLoading || !isReady}
+      color="teal"
+    >
+      Invalidate Home FAQs
+    </Button>
+    <Button
+      onClick={invalidatePricingFaqs}
+      disabled={isLoading || !isReady}
+      color="cyan"
+    >
+      Invalidate Pricing FAQs
     </Button>
     <Button
       onClick={clearAllExpired}
@@ -126,6 +153,24 @@ export function CacheAdminPanel() {
       "My tickets cache invalidated.",
     );
 
+    const invalidateAllFaqs = () =>
+    handleAction(
+      () => invalidateByPattern("async-data:faqs*"),
+      "All FAQs cache invalidated.",
+    );
+
+  const invalidateHomeFaqs = () =>
+    handleAction(
+      () => invalidateByPattern("async-data:faqs:home"),
+      "Home FAQs cache invalidated.",
+    );
+
+  const invalidatePricingFaqs = () =>
+    handleAction(
+      () => invalidateByPattern("async-data:faqs:pricing"),
+      "Pricing FAQs cache invalidated.",
+    );
+
   const clearAllExpired = () =>
     handleAction(
       () => cleanupExpired(),
@@ -144,6 +189,9 @@ export function CacheAdminPanel() {
           invalidateTeam={invalidateTeam}
           invalidateNotifications={invalidateNotifications}
           invalidateMyTickets={invalidateMyTickets}
+          invalidateAllFaqs={invalidateAllFaqs}
+          invalidateHomeFaqs={invalidateHomeFaqs}
+          invalidatePricingFaqs={invalidatePricingFaqs}
           clearAllExpired={clearAllExpired}
           isLoading={isLoading}
           isReady={isReady}

@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@radix-ui/react-accordion";
+import * as Accordion from "@radix-ui/react-accordion";
 import { HelpCircle } from "lucide-react";
 import type { TFunction } from "i18next";
 
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
 import type { FAQItem } from "types/faq";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 import { getLanguage } from "@locales/i18n";
 
 type FAQSectionProps = {
@@ -20,12 +15,15 @@ type FAQSectionProps = {
 
 const FAQSection: React.FC<FAQSectionProps> = ({ t }) => {
   const { data: faqItems, loading } = useAsyncCache<FAQItem[]>(
-    ['pricing-faqs'],
+    ["faqs", "pricing"],
     async () => {
-      const response = await api.get<FAQItem[]>('/faqs?category=pricing');
-      return response.data;
+      const { data } = await api.get<{ data: FAQItem[] }>(
+        "/faqs?category=pricing",
+      );
+      console.log({ data });
+      return data.data;
     },
-    CacheLevel.PERSISTENT
+    { ttl: CACHE_TTL.LONG_1_DAY },
   );
 
   const currentLanguage = getLanguage();
@@ -39,21 +37,24 @@ const FAQSection: React.FC<FAQSectionProps> = ({ t }) => {
         {loading ? (
           <div className="flex justify-center">{t("pricing.faq.loading")}</div>
         ) : faqItems && faqItems.length > 0 ? (
-          <Accordion type="single" collapsible>
+          <Accordion.Root type="single" collapsible>
             {faqItems.map((item: FAQItem, idx: number) => {
-              const translation = item.translations[currentLanguage] || item.translations.en;
+              const translation =
+                item.translations[currentLanguage] || item.translations.en;
               return (
-                <AccordionItem key={idx} value={`item-${idx}`}>
-                  <AccordionTrigger className="flex items-center gap-2 font-medium">
-                    <HelpCircle size={18} /> {translation.question}
-                  </AccordionTrigger>
-                  <AccordionContent>
+                <Accordion.Item key={idx} value={`item-${idx}`}>
+                  <Accordion.Header>
+                    <Accordion.Trigger className="flex items-center gap-2 font-medium">
+                      <HelpCircle size={18} /> {translation.question}
+                    </Accordion.Trigger>
+                  </Accordion.Header>
+                  <Accordion.Content>
                     <div className="py-4">{translation.answer}</div>
-                  </AccordionContent>
-                </AccordionItem>
+                  </Accordion.Content>
+                </Accordion.Item>
               );
             })}
-          </Accordion>
+          </Accordion.Root>
         ) : (
           <div>{t("pricing.faq.empty")}</div>
         )}

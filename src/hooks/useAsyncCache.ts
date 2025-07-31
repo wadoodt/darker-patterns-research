@@ -2,26 +2,38 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useCache } from "@contexts/CacheContext";
 import { createCacheKey } from "@lib/cache/utils";
-import { CacheLevel } from "@lib/cache/types";
 import { API_DEBUG_MODE } from "@api/config";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 interface UseAsyncCacheOptions {
   refetchOnMount?: boolean;
   enabled?: boolean;
-  customTtl?: number;
+  /**
+   * Time To Live for the cache entry, in seconds.
+   * Use a value from `CACHE_TTL` for common durations, or provide a custom number.
+   * @default CACHE_TTL.DEFAULT_15_MIN
+   */
+  ttl?: number;
 }
 
 /**
  * A hook to fetch data, transparently using a client-side cache.
  * Manages loading, error, and data states for you.
+ *
+ * @param keyParts A list of strings or numbers to create a unique cache key.
+ * @param fetcher An async function that returns the data to be cached.
+ * @param options Configuration options for the hook.
  */
 export function useAsyncCache<T>(
   keyParts: (string | number)[],
   fetcher: () => Promise<T>,
-  level: CacheLevel = CacheLevel.STANDARD,
   options: UseAsyncCacheOptions = {},
 ) {
-  const { refetchOnMount = false, enabled = true, customTtl } = options;
+  const {
+    refetchOnMount = false,
+    enabled = true,
+    ttl = CACHE_TTL.DEFAULT_15_MIN,
+  } = options;
   const { get, set, isReady, error: cacheError } = useCache();
 
   useEffect(() => {
@@ -33,7 +45,6 @@ export function useAsyncCache<T>(
     }
   }, [cacheError, keyParts]);
 
-  // Generate a stable cache key
   const cacheKey = createCacheKey("async-data", ...keyParts);
 
   const [data, setData] = useState<T | null>(null);
@@ -61,7 +72,6 @@ export function useAsyncCache<T>(
       const canUseCache = isReady && !cacheError;
 
       try {
-          // Try fetching from cache first if possible and not forced
         if (canUseCache && !forceRefresh) {
           const cachedData = await get<T>(cacheKey);
           if (cachedData !== null && cachedData !== undefined) {
@@ -71,17 +81,15 @@ export function useAsyncCache<T>(
             if (mounted.current) {
               setData(cachedData);
             }
-            return; // Exit early
+            return;
           }
         }
 
-        // If not in cache, refresh is forced, or cache is unavailable, call the fetcher
         const freshData = await fetcher();
 
         if (mounted.current) {
-          // Only try to set cache if it's available
           if (canUseCache) {
-            await set(cacheKey, freshData, level, customTtl);
+            await set(cacheKey, freshData, ttl);
           }
           setData(freshData);
         }
@@ -91,23 +99,14 @@ export function useAsyncCache<T>(
         setError(error);
         console.error(`[useAsyncCache Error: ${cacheKey}]`, error);
       } finally {
-        setLoading(false);
+        if (mounted.current) {
+          setLoading(false);
+        }
       }
     },
-    [
-      cacheKey,
-      get,
-      set,
-      fetcher,
-      level,
-      customTtl,
-      isReady,
-      enabled,
-      cacheError,
-    ],
+    [cacheKey, get, set, fetcher, ttl, isReady, enabled, cacheError],
   );
 
-  // Effect to trigger the initial data load
   useEffect(() => {
     if (enabled && (data === null || refetchOnMount)) {
       loadData();
@@ -115,7 +114,6 @@ export function useAsyncCache<T>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadData, enabled, refetchOnMount]);
 
-  // Public refresh function
   const refresh = useCallback(() => loadData(true), [loadData]);
 
   return { data, loading, error, refresh, isReady };

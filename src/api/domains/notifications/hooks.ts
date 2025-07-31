@@ -3,7 +3,7 @@
  */
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { notifications } from "./";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 // Note: The key for the cache is an array that includes the page number.
 // `useAsyncCache` will automatically re-fetch when this key changes.
@@ -11,7 +11,9 @@ export const useNotificationsQuery = (page: number, options?: { enabled?: boolea
   return useAsyncCache(
     ["notifications", page],
     () => notifications.query(page),
-    CacheLevel.SESSION,
-    options,
+    {
+      ttl: CACHE_TTL.SESSION,
+      ...options,
+    },
   );
 };

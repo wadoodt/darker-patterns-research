@@ -1,59 +1,28 @@
-import { db } from "../db";
+import { mockFaqs } from "../data/faqs";
 
-export const getFAQs = async (): Promise<Response> => {
-  const faqs = db.faqs.findMany({});
-  return new Response(JSON.stringify(faqs), {
+export const getFaqs = (request: Request) => {
+  const url = new URL(request.url);
+  const category = url.searchParams.get("category");
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+
+  let faqs = mockFaqs;
+
+  if (category) {
+    faqs = faqs.filter((faq) => faq.category === category);
+  }
+
+  const response = {
+    data: faqs,
+    currentPage: page,
+    totalPages: Math.ceil(faqs.length / limit),
+    total: faqs.length,
+  };
+
+  return new Response(JSON.stringify(response), {
     status: 200,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
-};
-
-export const createFAQ = async (request: Request): Promise<Response> => {
-  try {
-    const body = await request.json();
-    if (!body || !body.question || !body.answer) {
-      return new Response("Invalid request body", { status: 400 });
-    }
-    const newFAQ = db.faqs.create({
-      ...body,
-      category: body.category || "pricing",
-    });
-    return new Response(JSON.stringify(newFAQ), {
-      status: 201,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error(error);
-    return new Response("Failed to create FAQ", { status: 500 });
-  }
-};
-
-export const updateFAQ = async (
-  request: Request,
-  { id }: { id: string }
-): Promise<Response> => {
-  const body = await request.json();
-  const updatedFAQ = db.faqs.update({
-    where: { id },
-    data: body,
-  });
-
-  if (!updatedFAQ) {
-    return new Response("FAQ not found", { status: 404 });
-  }
-
-  return new Response(JSON.stringify(updatedFAQ), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
-};
-
-export const deleteFAQ = async ({ id }: { id: string }): Promise<Response> => {
-  const deletedFAQ = db.faqs.delete({ where: { id } });
-  
-  if (!deletedFAQ) {
-    return new Response("FAQ not found", { status: 404 });
-  }
-
-  return new Response(null, { status: 204 });
 };

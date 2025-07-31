@@ -4,7 +4,7 @@ import { useAsyncCache } from "@hooks/useAsyncCache";
 import { useCache } from "@contexts/CacheContext";
 import api from "@api/index";
 import type { TeamMember, NewTeamMember } from "@api/types";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 import { ApiError } from "@api/lib/ApiError";
 
 // The data fetching function is now incredibly clean.
@@ -22,7 +22,7 @@ export const useTeamPage = () => {
   const { data, loading, error, refresh } = useAsyncCache(
     ["team-members", currentPage],
     fetchTeamMembers,
-    CacheLevel.STABLE,
+    { ttl: CACHE_TTL.IMPORTANT_1_HOUR },
   );
 
   const setCurrentPage = (page: number) => {

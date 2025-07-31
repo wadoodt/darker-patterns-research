@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
 import type { SupportTicket } from "types/support-ticket";
-import { CacheLevel } from "@lib/cache/types";
 import { Box, Spinner, Callout, Heading, Text } from "@radix-ui/themes";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -12,6 +11,7 @@ import TicketMessagesList from "./tickets/sections/TicketMessagesList";
 import TicketReplyForm from "./tickets/sections/TicketReplyForm";
 import TicketStatusUpdater from "./tickets/sections/TicketStatusUpdater";
 import { useTranslation } from "react-i18next";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 const replySchema = z.object({
   content: z.string().min(1, "Reply content cannot be empty."),
@@ -37,8 +37,7 @@ const TicketDetailPage = () => {
       }
       return data;
     },
-    CacheLevel.STANDARD,
-    { enabled: !!ticketId },
+    { enabled: !!ticketId, ttl: CACHE_TTL.STANDARD_5_MIN },
   );
 
   const {

@@ -11,7 +11,7 @@ import {
 import { Search, X } from "lucide-react";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 import { SupportHeader } from "./support/components/SupportHeader";
 import { KnowledgeBaseSection } from "./support/components/KnowledgeBaseSection";
 import { VideoTutorialsSection } from "./support/components/VideoTutorialsSection";
@@ -76,7 +76,7 @@ export default function SupportPage() {
   const { data: knowledgeLibrary, loading: isLoading } = useAsyncCache(
     ["support-articles"],
     fetchKnowledgeArticles,
-    CacheLevel.PERSISTENT,
+    { ttl: CACHE_TTL.LONG_1_DAY },
   );
 
   const filteredKnowledgeLibrary = (knowledgeLibrary || []).filter(

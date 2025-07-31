@@ -1,6 +1,6 @@
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 import type { FAQItem } from "types/faq";
 
 export const useFAQManagement = () => {
@@ -15,7 +15,7 @@ export const useFAQManagement = () => {
       const response = await api.get<FAQItem[]>("/faqs");
       return response.data;
     },
-    CacheLevel.SESSION,
+    { ttl: CACHE_TTL.SESSION },
   );
 
   const handleCreate = async (data: { category: string; translations: { [key: string]: { question: string; answer: string } } }) => {

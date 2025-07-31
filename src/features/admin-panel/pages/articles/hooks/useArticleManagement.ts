@@ -2,7 +2,7 @@ import { useAsyncCache } from "@hooks/useAsyncCache";
 import type { KnowledgeBaseArticle, Translation } from "types/knowledge-base";
 import { useTranslation } from "react-i18next";
 import api from "@api/client";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 export const useArticleManagement = () => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ export const useArticleManagement = () => {
       const response = await api.get<KnowledgeBaseArticle[]>("/articles");
       return response.data;
     },
-    CacheLevel.SESSION,
+    { ttl: CACHE_TTL.SESSION },
   );
 
   const handleCreate = async (translations: { [key: string]: Translation }) => {

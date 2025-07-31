@@ -1,7 +1,5 @@
 // src/lib/cache/utils.ts
 
-import { CacheLevel } from "./types";
-
 /**
  * Creates a standardized cache key from a prefix and parts.
  * Example: createCacheKey('user', '123', 'profile') => "user:123:profile"
@@ -26,21 +24,19 @@ export async function batchCacheSet<T>(
   cacheSet: (
     key: string,
     data: T,
-    level?: CacheLevel,
-    customTtl?: number,
+    ttl?: number,
   ) => Promise<void>,
   items: Array<{
     keyParts: (string | number)[];
     data: T;
-    level?: CacheLevel;
-    customTtl?: number;
+    ttl?: number;
   }>,
 ): Promise<void> {
   await Promise.all(
     items.map((item) => {
       // Re-use the key creation logic for consistency
       const key = createCacheKey("async-data", ...item.keyParts);
-      return cacheSet(key, item.data, item.level, item.customTtl);
+      return cacheSet(key, item.data, item.ttl);
     }),
   );
 }

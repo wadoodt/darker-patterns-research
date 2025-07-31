@@ -2,7 +2,7 @@
 
 import apiClient from "@api/client";
 import { useAsyncCache } from "@hooks/useAsyncCache";
-import { CacheLevel } from "@lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 import * as api from "types/api";
 
 // This is the new data fetching function that uses the standard fetch API.
@@ -24,7 +24,7 @@ export function CompaniesList() {
   } = useAsyncCache<api.Company[]>(
     ["companies"], // Cache key
     fetchCompanies, // Use the new fetcher function
-    CacheLevel.PERSISTENT,
+    { ttl: CACHE_TTL.LONG_1_DAY },
   );
 
   if (loading && !companies) return <div>Loading companies...</div>;
