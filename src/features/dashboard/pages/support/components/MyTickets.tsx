@@ -8,7 +8,18 @@ import { CacheLevel } from "@lib/cache/types";
 import { ApiError } from "@api/lib/ApiError";
 
 const fetchMyTickets = async (page: number) => {
-  return api.support.myTickets(page, 5);
+  const response = await api.support.myTickets(page, 5);
+  if (!response.data || response.data.length === 0) {
+    console.log("no tickets");
+    return {
+      data: [],
+      currentPage: 1,
+      totalPages: 1,
+      totalItems: 0,
+      pageSize: 5,
+    };
+  }
+  return response;
 };
 
 const MyTickets: React.FC = () => {
@@ -17,7 +28,7 @@ const MyTickets: React.FC = () => {
   const { data, loading, error } = useAsyncCache(
     ["my-tickets", currentPage],
     () => fetchMyTickets(currentPage),
-    CacheLevel.STABLE,
+    CacheLevel.DEBUG,
   );
   
   const errorMessage = useMemo(() => {
@@ -25,9 +36,9 @@ const MyTickets: React.FC = () => {
     return error ? 'UNEXPECTED_ERROR' : null;
   }, [error]);
 
-  const tickets = data?.data || [];
+  const tickets = Array.isArray(data?.data) ? data.data : [];
 
-  if (tickets.length === 0) {
+  if (!tickets || tickets.length === 0) {
     return <p>You have not submitted any support tickets yet.</p>;
   }
 

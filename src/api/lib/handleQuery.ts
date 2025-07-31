@@ -17,15 +17,16 @@ import type { ApiResponse } from "types/api";
 export const handleQuery = async <T>(
   apiCall: () => Promise<{ data: ApiResponse<T>, status?: number, error?: string }>,
 ): Promise<T> => {
-  const response = await baseRequestHandler(apiCall);
+  try {
+    const response = await baseRequestHandler(apiCall);
 
-  if (response.error) {
-    throw new ApiError(response.error);
+    if (response.error) {
+      throw new ApiError(response.error);
+    }
+
+    return response.data as T;
+  } catch (error) {
+    // Optionally, you could add more sophisticated error handling/logging here
+    throw error instanceof ApiError ? error : new ApiError({ message: 'error.general.internal_server_error'});
   }
-
-  // On success, the `data` property of ApiResponse is actually an ApiSuccess object.
-  // We need to unwrap the core data from it.
-  // const { message, ...data } = response.data;
-
-  return response.data as T;
 };

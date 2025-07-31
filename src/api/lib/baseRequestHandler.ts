@@ -19,8 +19,12 @@ export const baseRequestHandler = async <T>(
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await apiCall();
-    console.log("response", response);
+    console.log("baseRequestHandler response", response);
     const apiResponse = response.data;
+
+    if (response.status === 404) {
+      return createErrorResponse<T>("NOT_FOUND");
+    }
 
     if (!apiResponse && response.error) {
       // This can happen if a real API

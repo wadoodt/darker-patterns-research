@@ -17,7 +17,7 @@ import type { PaginatedTicketsResponse } from "types/support-ticket";
  * @returns A promise that resolves to the paginated ticket response.
  */
 const myTickets = (page: number, limit: number): Promise<PaginatedTicketsResponse> => {
-  return handleQuery(() => apiClient.get(`/support/my-tickets?page=${page}&limit=${limit}`));
+  return handleQuery(() => apiClient.get(`/support/tickets?page=${page}&limit=${limit}`));
 };
 
 export const support = {

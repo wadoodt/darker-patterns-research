@@ -15,8 +15,6 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
 
   const enable = useCallback(() => setIsEnabled(true), []);
 
-  // The context now uses our clean, self-contained API hook.
-  // All the caching logic is encapsulated within the SDK.
   const {
     data: queryResult,
     loading,

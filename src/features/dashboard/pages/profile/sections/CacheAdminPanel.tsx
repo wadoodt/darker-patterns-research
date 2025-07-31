@@ -11,6 +11,7 @@ const CacheAdminPanelButtons = ({
   invalidateProfile,
   invalidateTeam,
   invalidateNotifications,
+  invalidateMyTickets,
   clearAllExpired,
   isLoading,
   isReady,
@@ -19,6 +20,7 @@ const CacheAdminPanelButtons = ({
   invalidateProfile: () => void;
   invalidateTeam: () => void;
   invalidateNotifications: () => void;
+  invalidateMyTickets: () => void;
   clearAllExpired: () => void;
   isLoading: boolean;
   isReady: boolean;
@@ -51,6 +53,13 @@ const CacheAdminPanelButtons = ({
       color="blue"
     >
       Invalidate Notifications Cache
+    </Button>
+    <Button
+      onClick={invalidateMyTickets}
+      disabled={isLoading || !isReady}
+      color="orange"
+    >
+      Invalidate My Tickets Cache
     </Button>
     <Button
       onClick={clearAllExpired}
@@ -111,6 +120,12 @@ export function CacheAdminPanel() {
       "Notifications cache invalidated.",
     );
 
+  const invalidateMyTickets = () =>
+    handleAction(
+      () => invalidateByPattern("my-tickets:*"),
+      "My tickets cache invalidated.",
+    );
+
   const clearAllExpired = () =>
     handleAction(
       () => cleanupExpired(),
@@ -128,6 +143,7 @@ export function CacheAdminPanel() {
           invalidateProfile={invalidateProfile}
           invalidateTeam={invalidateTeam}
           invalidateNotifications={invalidateNotifications}
+          invalidateMyTickets={invalidateMyTickets}
           clearAllExpired={clearAllExpired}
           isLoading={isLoading}
           isReady={isReady}

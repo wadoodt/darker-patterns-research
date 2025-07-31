@@ -25,9 +25,15 @@ export const getMyTickets = async (request: Request) => {
       table: "supportTickets",
       page,
       limit,
-      where: { userId: user.id },
       orderBy: { createdAt: "desc" },
     });
+
+    console.log("pagedResponse", pagedResponse);
+
+    if (pagedResponse.data?.length === 0) {
+      const emptyResponse = createSuccessResponse(pagedResponse, "NO_DATA");
+      return new Response(JSON.stringify(emptyResponse), { status: 200 });
+    }
 
     const response = createSuccessResponse(pagedResponse, "OPERATION_SUCCESS");
     return new Response(JSON.stringify(response), { status: 200 });

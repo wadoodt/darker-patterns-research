@@ -11,7 +11,7 @@ export const useNotificationsQuery = (page: number, options?: { enabled?: boolea
   return useAsyncCache(
     ["notifications", page],
     () => notifications.query(page),
-    CacheLevel.DEBUG,
+    CacheLevel.SESSION,
     options,
   );
 };
