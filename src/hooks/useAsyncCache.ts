@@ -138,11 +138,11 @@ export function useAsyncCache<T>(
   );
 
   useEffect(() => {
-    if (enabled && (data === null || refetchOnMount)) {
+    // Only attempt to load data if the cache is ready.
+    if (isReady && enabled && (data === null || refetchOnMount)) {
       loadData();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadData, enabled, refetchOnMount]);
+  }, [isReady, loadData, enabled, refetchOnMount, data]);
 
   const refresh = useCallback(() => loadData(true), [loadData]);
 
