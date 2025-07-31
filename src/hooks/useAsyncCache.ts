@@ -5,6 +5,9 @@ import { createCacheKey } from "@lib/cache/utils";
 import { API_DEBUG_MODE } from "@api/config";
 import { CACHE_TTL } from "@lib/cache/constants";
 
+// Module-level store for in-flight requests to prevent duplicate fetches.
+const inFlightRequests = new Map<string, Promise<unknown>>();
+
 interface UseAsyncCacheOptions {
   refetchOnMount?: boolean;
   enabled?: boolean;
@@ -51,6 +54,11 @@ export function useAsyncCache<T>(
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
   const mounted = useRef(true);
+  const fetcherRef = useRef(fetcher);
+
+  useEffect(() => {
+    fetcherRef.current = fetcher;
+  }, [fetcher]);
 
   useEffect(() => {
     mounted.current = true;
@@ -90,7 +98,20 @@ export function useAsyncCache<T>(
           }
         }
 
-        const freshData = await fetcher();
+        let fetchPromise = inFlightRequests.get(cacheKey) as
+          | Promise<T>
+          | undefined;
+
+        if (fetchPromise) {
+          if (API_DEBUG_MODE) {
+            console.log(`[Cache In-Flight] < ${cacheKey}`);
+          }
+        } else {
+          fetchPromise = fetcherRef.current();
+          inFlightRequests.set(cacheKey, fetchPromise);
+        }
+
+        const freshData = await fetchPromise;
 
         if (mounted.current) {
           if (canUseCache) {
@@ -106,12 +127,14 @@ export function useAsyncCache<T>(
         }
         console.error(`[useAsyncCache Error: ${cacheKey}]`, error);
       } finally {
+        // Once settled, remove the request from the in-flight map.
+        inFlightRequests.delete(cacheKey);
         if (mounted.current) {
           setLoading(false);
         }
       }
     },
-    [cacheKey, get, set, fetcher, ttl, isReady, enabled, cacheError],
+    [cacheKey, get, set, ttl, isReady, enabled, cacheError],
   );
 
   useEffect(() => {

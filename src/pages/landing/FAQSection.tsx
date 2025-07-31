@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import * as Accordion from "@radix-ui/react-accordion";
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
@@ -11,18 +11,21 @@ import { Text } from "@radix-ui/themes";
 
 const FAQSection: React.FC = () => {
   const { t } = useTranslation();
+
+  const fetchFaqs = useCallback(async () => {
+    const { data } = await api.get<{ data: FAQItem[] }>(
+      "/faqs?category=home",
+    );
+    return data.data;
+  }, []);
+
   const {
     data: faqs,
     loading,
     error,
   } = useAsyncCache<FAQItem[]>(
     ["faqs", "home"],
-    async () => {
-      const { data } = await api.get<{ data: FAQItem[] }>(
-        "/faqs?category=home",
-      );
-      return data.data;
-    },
+    fetchFaqs,
     { ttl: CACHE_TTL.LONG_1_DAY },
   );
 
