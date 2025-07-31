@@ -76,9 +76,9 @@ export function CompaniesList() {
 
 We have made significant improvements to make the cache system more robust.
 
-### Automatic Fallback
+### Automatic Waiting for Cache Readiness
 
-If the cache is not ready (e.g., IndexedDB is initializing) or a cache read fails, `useAsyncCache` will **automatically bypass the cache** and execute the `fetcher` function directly. This ensures that the user can still see data even if the caching system encounters an issue.
+If the cache is not ready (e.g., IndexedDB is initializing), `useAsyncCache` will **automatically wait** for the `isReady` signal before attempting to retrieve data. It will remain in a `loading` state during this time. This ensures that on navigation, it always consults the persistent cache first, preventing unnecessary API calls if the data is already available.
 
 ### Automatic Database Recovery
 

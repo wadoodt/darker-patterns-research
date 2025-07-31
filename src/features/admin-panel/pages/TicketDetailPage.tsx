@@ -12,6 +12,7 @@ import TicketReplyForm from "./tickets/sections/TicketReplyForm";
 import TicketStatusUpdater from "./tickets/sections/TicketStatusUpdater";
 import { useTranslation } from "react-i18next";
 import { CACHE_TTL } from "@lib/cache/constants";
+import { useCallback } from "react";
 
 const replySchema = z.object({
   content: z.string().min(1, "Reply content cannot be empty."),
@@ -23,6 +24,14 @@ const TicketDetailPage = () => {
   const { t } = useTranslation();
   const { ticketId = null } = useParams<{ ticketId: string }>();
 
+  const fetchTicket = useCallback(async () => {
+    const { data, status } = await api.get(`/support/tickets/${ticketId}`);
+    if (status !== 200) {
+      throw new Error(data.message);
+    }
+    return data;
+  }, [ticketId]);
+
   const {
     data,
     loading: isLoading,
@@ -30,13 +39,7 @@ const TicketDetailPage = () => {
     refresh,
   } = useAsyncCache<SupportTicket>(
     [`ticket-${ticketId}`],
-    async () => {
-      const { data, status } = await api.get(`/support/tickets/${ticketId}`);
-      if (status !== 200) {
-        throw new Error(data.message);
-      }
-      return data;
-    },
+    fetchTicket,
     { enabled: !!ticketId, ttl: CACHE_TTL.STANDARD_5_MIN },
   );
 

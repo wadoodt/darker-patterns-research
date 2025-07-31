@@ -87,9 +87,7 @@ export function useAsyncCache<T>(
         if (canUseCache && !forceRefresh) {
           const cachedData = await get<T>(cacheKey);
           if (cachedData !== null && cachedData !== undefined) {
-            if (API_DEBUG_MODE) {
-              console.log(`[Cache Hit] < ${cacheKey}`, { data: cachedData });
-            }
+            debugLog(`[Cache Hit] < ${cacheKey}`, { data: cachedData });
             if (mounted.current) {
               setData(cachedData);
               setLoading(false);
@@ -103,9 +101,7 @@ export function useAsyncCache<T>(
           | undefined;
 
         if (fetchPromise) {
-          if (API_DEBUG_MODE) {
-            console.log(`[Cache In-Flight] < ${cacheKey}`);
-          }
+          debugLog(`[Cache In-Flight] < ${cacheKey}`);
         } else {
           fetchPromise = fetcherRef.current();
           inFlightRequests.set(cacheKey, fetchPromise);
@@ -148,3 +144,9 @@ export function useAsyncCache<T>(
 
   return { data, loading, error, refresh, isReady };
 }
+
+const debugLog = (message: string, ...args: unknown[]) => {
+  if (API_DEBUG_MODE) {
+    console.log(message, ...args);
+  }
+};
