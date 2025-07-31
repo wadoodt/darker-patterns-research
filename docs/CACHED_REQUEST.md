@@ -28,6 +28,7 @@ Import the hook and provide a unique `cacheKey` and an async `fetcher` function.
 // src/components/CompaniesList.tsx
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { api } from "@api/client";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 const fetchCompanies = async () => {
   const response = await api.get("/companies");
@@ -43,7 +44,7 @@ export function CompaniesList() {
   } = useAsyncCache(
     "companies-list",
     fetchCompanies,
-    { level: "PERSISTENT" }, // Cache level
+    { ttl: CACHE_TTL.STANDARD_5_MIN }, // Set a 5-minute cache TTL
   );
 
   if (loading) return <p>Loading companies...</p>;
@@ -64,12 +65,12 @@ export function CompaniesList() {
 
 ### Hook Parameters
 
-- `cacheKey` (string): A unique identifier for this piece of data.
+- `cacheKey` (string | (string | number)[]): A unique identifier for this piece of data.
 - `fetcher` (function): An async function that returns the data to be cached.
 - `options` (object, optional):
-  - `level`: `'SESSION'` (cleared on tab close) or `'PERSISTENT'` (persists across sessions).
-  - `ttl`: Custom time-to-live in milliseconds.
+  - `ttl`: Time-to-live in **seconds**. Use constants from `CACHE_TTL` for clarity (e.g., `CACHE_TTL.STANDARD_5_MIN`).
   - `enabled`: If `false`, the hook will not execute.
+  - `refetchOnMount`: If `true`, forces a refetch every time the component mounts.
 
 ## 3. Advanced Features & Resilience
 
@@ -98,10 +99,14 @@ To help with development and debugging, we've created a central cache management
 
 This tool is invaluable for observing cache behavior and ensuring your data is being stored and refreshed correctly.
 
+## 5. Manually Interacting with the Cache
+
+While `useAsyncCache` should be your primary tool, you can directly interact with the cache using the `useCache` hook.
+
 ```tsx
 import { useEffect, useState } from "react";
 import { useCache } from "../contexts/CacheContext";
-import { CacheLevel } from "../lib/cache/types";
+import { CACHE_TTL } from "@lib/cache/constants";
 
 function MyComponent() {
   const { get, set, isReady } = useCache();
@@ -121,7 +126,7 @@ function MyComponent() {
       const response = await fetch("/api/some-endpoint");
       const result = await response.json();
       setData(result);
-      await set(cacheKey, result, CacheLevel.STANDARD); // or another level
+      await set(cacheKey, result, CACHE_TTL.STANDARD_5_MIN); // Set a 5-minute TTL
     })();
   }, [isReady]);
 
@@ -130,16 +135,23 @@ function MyComponent() {
 }
 ```
 
-## 4. Invalidate or Refresh Cache
+## 6. Invalidate or Refresh Cache
 
-To force a refresh (e.g., after a mutation), use `invalidateByPattern`:
+To force a refresh (e.g., after a mutation), use `invalidateByPattern` from `useCache`.
 
 ```tsx
 const { invalidateByPattern } = useCache();
 await invalidateByPattern("my-api-request");
 ```
 
-## 5. Advanced: Pattern-based Invalidation
+If you are using `useAsyncCache`, you can call the returned `refresh` function.
+
+```tsx
+const { refresh } = useAsyncCache(...);
+refresh();
+```
+
+### Pattern-based Invalidation
 
 If you use hierarchical keys (e.g., `user:123:profile`), you can invalidate all related cache entries:
 
@@ -147,51 +159,18 @@ If you use hierarchical keys (e.g., `user:123:profile`), you can invalidate all 
 await invalidateByPattern("user:123*");
 ```
 
-## 6. TTL and Cache Levels
+## 7. Understanding TTL (Time To Live)
 
-Choose a `CacheLevel` for each request:
+The `ttl` parameter specifies how long a cache entry should be considered valid, in **seconds**. We provide a set of constants in `src/lib/cache/constants.ts` for common durations:
 
-- `STANDARD`: 1 hour
-- `PERSISTENT`: 30 days
-- `SESSION`: 30 minutes
+- `CACHE_TTL.STANDARD_5_MIN`: 5 minutes
+- `CACHE_TTL.DEFAULT_15_MIN`: 15 minutes
+- `CACHE_TTL.IMPORTANT_1_HOUR`: 1 hour
+- `CACHE_TTL.LONG_1_DAY`: 1 day
+- `CACHE_TTL.SESSION`: A very long duration, effectively caching for the user's session.
 
-You can also pass a custom TTL in milliseconds to `set`.
-
-## 7. Example: Cached API Hook
-
-You can abstract the pattern above into a custom hook:
-
-```tsx
-import { useEffect, useState } from "react";
-import { useCache } from "../contexts/CacheContext";
-import { CacheLevel } from "../lib/cache/types";
-
-export function useCachedApi(key, fetcher, level = CacheLevel.STANDARD) {
-  const { get, set, isReady } = useCache();
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!isReady) return;
-    (async () => {
-      setLoading(true);
-      const cached = await get(key);
-      if (cached) {
-        setData(cached);
-        setLoading(false);
-        return;
-      }
-      const result = await fetcher();
-      setData(result);
-      await set(key, result, level);
-      setLoading(false);
-    })();
-  }, [isReady, key]);
-
-  return { data, loading };
-}
-```
+Using these constants improves readability and maintainability. You can also provide a custom `ttl` in seconds for specific needs.
 
 ---
 
-For more advanced cache management, see the `CacheContext.tsx` and `types.ts` for available methods and cache levels.
+For more advanced cache management, see the `CacheContext.tsx` and related source files.

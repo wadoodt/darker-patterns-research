@@ -62,12 +62,16 @@ export function useAsyncCache<T>(
   const loadData = useCallback(
     async (forceRefresh = false) => {
       if (!enabled) {
-        setLoading(false);
+        if (mounted.current) {
+          setLoading(false);
+        }
         return;
       }
 
-      setLoading(true);
-      setError(null);
+      if (mounted.current) {
+        setLoading(true);
+        setError(null);
+      }
 
       const canUseCache = isReady && !cacheError;
 
@@ -80,6 +84,7 @@ export function useAsyncCache<T>(
             }
             if (mounted.current) {
               setData(cachedData);
+              setLoading(false);
             }
             return;
           }
@@ -96,7 +101,9 @@ export function useAsyncCache<T>(
       } catch (err) {
         const error =
           err instanceof Error ? err : new Error("Failed to fetch data");
-        setError(error);
+        if (mounted.current) {
+          setError(error);
+        }
         console.error(`[useAsyncCache Error: ${cacheKey}]`, error);
       } finally {
         if (mounted.current) {
@@ -111,7 +118,7 @@ export function useAsyncCache<T>(
     if (enabled && (data === null || refetchOnMount)) {
       loadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadData, enabled, refetchOnMount]);
 
   const refresh = useCallback(() => loadData(true), [loadData]);
