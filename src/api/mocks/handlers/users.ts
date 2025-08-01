@@ -27,40 +27,43 @@ export const getUserMe = async (request: Request): Promise<Response> => {
 
     const company = db.companies.findFirst({ where: { id: user.companyId } });
 
-    // The user object in the auth context needs the plan
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userResponse } = {
-      ...user,
-      plan: company?.plan,
-    };
-
     // Fetch first 10 unread notifications
     const unreadNotifications = db.notifications.findMany({
-      where: { 
+      where: {
         userId: user.id,
-        read: false 
+        read: false,
       },
       limit: 10,
       orderBy: { createdAt: "desc" },
     });
 
+    // The user object in the auth context needs the plan
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userResponse } = {
+      ...user,
+      plan: company?.plan,
+      unreadNotifications,
+    };
+
     return new Response(
       JSON.stringify(
-        createSuccessResponse({ 
-          user: userResponse, 
-          unreadNotifications 
-        }, "OPERATION_SUCCESS"),
+        createSuccessResponse(
+          {
+            user: userResponse,
+          },
+          "OPERATION_SUCCESS"
+        )
       ),
       {
         status: RESPONSE_CODES.OPERATION_SUCCESS.status,
-      },
+      }
     );
   } catch {
     return new Response(
       JSON.stringify(createErrorResponse("INTERNAL_SERVER_ERROR")),
       {
         status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
-      },
+      }
     );
   }
 };
@@ -91,11 +94,11 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
     if (!name) {
       return new Response(
         JSON.stringify(
-          createErrorResponse("VALIDATION_ERROR", { name: "Name is required" }),
+          createErrorResponse("VALIDATION_ERROR", { name: "Name is required" })
         ),
         {
           status: ERROR_CODES.VALIDATION_ERROR.status,
-        },
+        }
       );
     }
 
@@ -122,9 +125,9 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
 
     // Fetch first 10 unread notifications
     const unreadNotifications = db.notifications.findMany({
-      where: { 
+      where: {
         userId: updatedUser.id,
-        read: false 
+        read: false,
       },
       limit: 10,
       orderBy: { createdAt: "desc" },
@@ -132,21 +135,24 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
 
     return new Response(
       JSON.stringify(
-        createSuccessResponse({ 
-          user: userResponse, 
-          unreadNotifications 
-        }, "OPERATION_SUCCESS"),
+        createSuccessResponse(
+          {
+            user: userResponse,
+            unreadNotifications,
+          },
+          "OPERATION_SUCCESS"
+        )
       ),
       {
         status: RESPONSE_CODES.OPERATION_SUCCESS.status,
-      },
+      }
     );
   } catch {
     return new Response(
       JSON.stringify(createErrorResponse("INTERNAL_SERVER_ERROR")),
       {
         status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
-      },
+      }
     );
   }
 };

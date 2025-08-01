@@ -19,5 +19,5 @@ export interface AuthenticatedUser extends User {
    * These are used to show the bell indicator immediately on login
    * and are merged with paginated notifications when dropdown is opened
    */
-  notifications?: Notification[];
+  unreadNotifications?: Notification[];
 }

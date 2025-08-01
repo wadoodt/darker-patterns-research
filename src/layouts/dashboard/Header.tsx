@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, LogOut, User } from "lucide-react";
+import { /*Search, */LogOut, User } from "lucide-react";
 import { useAuth } from "@hooks/useAuth";
 import styles from "./Header.module.css";
 import { Link } from "react-router-dom";
@@ -37,14 +37,14 @@ const HeaderContent: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </div>
 
         <div className={styles.actionsContainer}>
-          <div className={styles.searchContainer}>
+          {/* <div className={styles.searchContainer}>
             <Search className={styles.searchIcon} />
             <input
               type="text"
               placeholder="Search users, campaigns..."
               className={styles.searchInput}
             />
-          </div>
+          </div> */}
 
           <div className={styles.actions}>
             <NotificationsDropdown />

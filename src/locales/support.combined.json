@@ -38,6 +38,10 @@
       "en": "Knowledge Library",
       "es": "Biblioteca de Conocimiento"
     },
+    "knowledge_base.subtitle": {
+      "en": "Find answers and resources to get the most out of our platform",
+      "es": "Encuentra respuestas y recursos para sacar el máximo provecho"
+    },
     "knowledge_base.loading": {
       "en": "Loading articles...",
       "es": "Cargando artículos..."
@@ -45,6 +49,10 @@
     "general_advice.title": {
       "en": "General Advice",
       "es": "Consejos Generales"
+    },
+    "general_advice.subtitle": {
+      "en": "Find answers and resources to get the most out of our platform",
+      "es": "Encuentra respuestas y recursos para sacar el máximo provecho"
     },
     "general_advice.articles.campaigns.title": {
       "en": "Campaigns",

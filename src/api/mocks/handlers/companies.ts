@@ -1,5 +1,7 @@
 // src/api/mocks/companies-handler.ts
+import { createSuccessResponse } from "../../response";
 import { db } from "../db";
+import { RESPONSE_CODES } from "../../codes";
 
 /**
  * Handles the GET /api/companies request.
@@ -7,8 +9,10 @@ import { db } from "../db";
  */
 export async function getCompanies() {
   const companies = db.companies.findMany({});
-  return new Response(JSON.stringify(companies), {
-    headers: { "Content-Type": "application/json" },
-    status: 200,
-  });
+  return new Response(
+    JSON.stringify(createSuccessResponse({ companies }, "OPERATION_SUCCESS")),
+    {
+      status: RESPONSE_CODES.OPERATION_SUCCESS.status,
+    }
+  );
 }

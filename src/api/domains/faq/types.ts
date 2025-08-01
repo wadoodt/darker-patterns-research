@@ -1,5 +1,5 @@
 
-export type FaqCategory = "home" | "pricing" | "general";
+export type FaqCategory = "home" | "pricing" | "general" | "all";
 
 export interface FaqItem {
   id: string;

@@ -15,16 +15,16 @@ export function GeneralAdviceSection({
   const { t } = useTranslation();
   const lang = getLanguage();
   const generalArticles = articles.filter(
-    (article) => article.category === "general",
+    (article) => article.category === "General",
   );
 
   return (
     <div className="support-section">
-      <h3 className="support-section-title">{t("support.generalAdvice")}</h3>
+      <h3 className="support-section-title">{t("support.general_advice.title")}</h3>
       <Text as="p" size="2" color="gray" className="support-section-subtitle">
         <Trans
           t={t}
-          i18nKey="support.generalAdvice.subtitle"
+          i18nKey="support.general_advice.subtitle"
           components={{
             strong: <strong />,
           }}

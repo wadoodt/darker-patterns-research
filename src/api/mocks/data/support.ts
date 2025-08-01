@@ -91,6 +91,69 @@ export const mockKnowledgeBaseArticles = [
       },
     },
   },
+  {
+    id: "kl-5",
+    title: "General Advice",
+    description: "General advice for using the platform.",
+    category: "General",
+    url: "#",
+    translations: {
+      en: {
+        title: "General Advice",
+        description: "General advice for using the platform.",
+        category: "General",
+        body: "General advice for using the platform."
+      },
+      es: {
+        title: "Consejos Generales",
+        description: "Consejos generales para usar la plataforma.",
+        category: "General",
+        body: "Consejos generales para usar la plataforma."
+      },
+    },
+  },
+  {
+    id: "kl-6",
+    title: "General Advice",
+    description: "General advice for using the platform.",
+    category: "General",
+    url: "#",
+    translations: {
+      en: {
+        title: "General Advice",
+        description: "General advice for using the platform.",
+        category: "General",
+        body: "General advice for using the platform."
+      },
+      es: {
+        title: "Consejos Generales",
+        description: "Consejos generales para usar la plataforma.",
+        category: "General",
+        body: "Consejos generales para usar la plataforma."
+      },
+    },
+  },
+  {
+    id: "kl-7",
+    title: "General Advice",
+    description: "General advice for using the platform.",
+    category: "General",
+    url: "#",
+    translations: {
+      en: {
+        title: "General Advice",
+        description: "General advice for using the platform.",
+        category: "General",
+        body: "General advice for using the platform."
+      },
+      es: {
+        title: "Consejos Generales",
+        description: "Consejos generales para usar la plataforma.",
+        category: "General",
+        body: "Consejos generales para usar la plataforma."
+      },
+    },
+  },
 ];
 
 export const mockSupportTickets: SupportTicket[] = [

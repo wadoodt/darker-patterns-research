@@ -13,6 +13,7 @@ import {
   validateToken, 
   willExpireWithin 
 } from "@lib/tokenService";
+import { useCache } from "@contexts/CacheContext";
 
 // eslint-disable-next-line max-lines-per-function
 const useAuthProvider = (): AuthContextType => {
@@ -24,6 +25,7 @@ const useAuthProvider = (): AuthContextType => {
   const { mutateAsync: loginUser } = useLogin();
   const { mutateAsync: logoutUser } = useLogout();
   const { data: userData } = useUser();
+  const { invalidateByPattern } = useCache();
 
   const clearAuthState = useCallback(() => {
     setToken(null);
@@ -66,8 +68,7 @@ const useAuthProvider = (): AuthContextType => {
           refreshToken,
           expiresAt: expirationTime
         });
-
-        setUser(userData);
+        console.log('Login successful:', userData);
         setToken(userToken);
         setTokenExpiresAt(expirationTime);
         setIsAuthenticated(true);
@@ -80,6 +81,8 @@ const useAuthProvider = (): AuthContextType => {
   );
 
   const logout = useCallback(async () => {
+    // Invalidate user cache before clearing auth state
+    await invalidateByPattern("^async-data:user:me$");
     setUser(null);
     clearAuthState();
     removeTokens();
@@ -89,7 +92,7 @@ const useAuthProvider = (): AuthContextType => {
     } catch (error) {
       console.error("Logout request failed:", error);
     }
-  }, [clearAuthState, logoutUser]);
+  }, [clearAuthState, logoutUser, invalidateByPattern]);
 
   // Listen for token changes from TokenService
   useEffect(() => {
@@ -124,7 +127,7 @@ const useAuthProvider = (): AuthContextType => {
   // Update user state when userData changes
   useEffect(() => {
     if (userData && token) {
-      setUser(userData);
+      setUser(userData.user);
       setIsLoading(false);
     }
   }, [userData, token]);

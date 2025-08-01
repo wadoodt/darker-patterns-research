@@ -16,7 +16,7 @@ export const getNotifications = async (request: Request) => {
       table: "notifications",
       page,
       limit,
-      where: { userId: user.id },
+      where: { userId: user.id, read: false },
       orderBy: { createdAt: "desc" },
     });
 

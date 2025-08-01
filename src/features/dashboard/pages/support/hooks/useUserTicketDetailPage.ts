@@ -1,8 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useAsyncCache } from "@hooks/useAsyncCache";
-import api from "@api/client";
-import type { SupportTicket } from "@api/domains/support/types";
-import { CACHE_TTL } from "@lib/cache/constants";
+import { useTicket, useReplyToTicket } from "@api/domains/support/hooks";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,16 +14,14 @@ export function useUserTicketDetailPage() {
   const { ticketId } = useParams<{ ticketId: string }>();
 
   const {
-    data,
+    data: ticket,
     loading: isLoading,
     error,
     refresh,
-  } = useAsyncCache<{ ticket: SupportTicket }>(
-    [`ticket-${ticketId}`],
-    async () => (await api.get(`/support/tickets/${ticketId}`)).data,
-    { ttl: CACHE_TTL.STANDARD_5_MIN },
-  );
+  } = useTicket(ticketId!);
 
+  const { mutate: replyToTicket } = useReplyToTicket();
+  
   const {
     register,
     handleSubmit,
@@ -38,7 +33,7 @@ export function useUserTicketDetailPage() {
 
   const onSubmit = async (formData: ReplyFormData) => {
     try {
-      await api.post(`/api/support/tickets/${ticketId}/reply`, formData);
+      await replyToTicket(ticketId!, { content: formData.message });
       reset();
       refresh();
     } catch {
@@ -47,7 +42,7 @@ export function useUserTicketDetailPage() {
   };
 
   return {
-    data,
+    data: ticket ? { ticket } : null,
     isLoading,
     error,
     refresh,

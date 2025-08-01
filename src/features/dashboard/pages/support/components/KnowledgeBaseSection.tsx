@@ -34,13 +34,13 @@ export function KnowledgeBaseSection({
   return (
     <div className="support-section">
       <h3 className="support-section-title">
-        {t("support.knowledgeBase.title")}
+        {t("support.knowledge_base.title")}
       </h3>
       <Text as="p" size="2" color="gray" className="support-section-subtitle">
-        {t("support.knowledgeBase.subtitle")}
+        {t("support.knowledge_base.subtitle")}
       </Text>
       <TextField.Root
-        placeholder={t("support.knowledgeBase.search.placeholder")}
+        placeholder={t("support.search_placeholder")}
         value={searchTerm}
         onChange={handleSearchChange}
         mb="4"

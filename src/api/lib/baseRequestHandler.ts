@@ -19,7 +19,6 @@ export const baseRequestHandler = async <T>(
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await apiCall();
-    console.log("baseRequestHandler response", response);
     const apiResponse = response.data;
 
     if (response.status === 404) {
