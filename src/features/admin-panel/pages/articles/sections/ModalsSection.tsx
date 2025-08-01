@@ -1,19 +1,19 @@
-import React from "react";
+
 import { CreateArticleModal } from "../CreateArticleModal";
 import { EditArticleModal } from "../EditArticleModal";
-import type { KnowledgeBaseArticle, Translation } from "types/knowledge-base";
+import type { KnowledgeBaseArticle, ArticleTranslation } from "@api/domains/knowledge-base/types";
 
-interface ModalsSectionProps {
+type ModalsSectionProps = {
   isCreateModalOpen: boolean;
-  setCreateModalOpen: (open: boolean) => void;
+  setCreateModalOpen: (isOpen: boolean) => void;
   isEditModalOpen: boolean;
-  setEditModalOpen: (open: boolean) => void;
+  setEditModalOpen: (isOpen: boolean) => void;
   editingArticle: KnowledgeBaseArticle | null;
-  handleCreate: (translations: { [key: string]: Translation }) => Promise<void>;
-  handleUpdate: (article: KnowledgeBaseArticle) => Promise<void>;
-}
+  handleCreate: (translations: { [key: string]: ArticleTranslation }) => void;
+  handleUpdate: (article: KnowledgeBaseArticle) => void;
+};
 
-export const ModalsSection: React.FC<ModalsSectionProps> = ({
+export function ModalsSection({
   isCreateModalOpen,
   setCreateModalOpen,
   isEditModalOpen,
@@ -21,20 +21,20 @@ export const ModalsSection: React.FC<ModalsSectionProps> = ({
   editingArticle,
   handleCreate,
   handleUpdate,
-}) => (
-  <>
-    <CreateArticleModal
-      isOpen={isCreateModalOpen}
-      onClose={() => setCreateModalOpen(false)}
-      onSave={handleCreate}
-    />
-    {editingArticle && (
+}: ModalsSectionProps) {
+  return (
+    <>
+      <CreateArticleModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onSave={handleCreate}
+      />
       <EditArticleModal
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
-        article={editingArticle}
         onSave={handleUpdate}
+        article={editingArticle}
       />
-    )}
-  </>
-);
+    </>
+  );
+}

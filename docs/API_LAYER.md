@@ -8,51 +8,70 @@ This document outlines the architecture of the application's API layer. The goal
 
 The API layer is divided into three main parts:
 
-1.  **The API Functions (`src/api/domains/.../index.ts`):** Raw, async functions that perform the actual `axios` calls. These are the pure communication layer and should be considered an internal implementation detail.
-2.  **The API Utilities (`src/api/lib/`):** A set of shared utilities (`handleQuery`, `handleMutation`) that standardize error handling, logging, and request processing.
-3.  **The API Hooks (`src/api/domains/.../hooks.ts`):** A set of custom React hooks that serve as the **public interface** for the API layer. The rest of the application should **only** interact with the API through these hooks.
+1.  **The API Functions (`src/api/domains/.../index.ts`):** Raw, async functions that perform the actual `apiClient` calls. These are the pure communication layer and should be considered an internal implementation detail. They use the `handleQuery` and `handleMutation` utilities to standardize error handling.
+2.  **The API Hooks (`src/api/domains/.../hooks.ts`):** A set of custom React Query hooks that serve as the **public interface** for the API layer. The rest of the application should **only** interact with the API through these hooks.
+3.  **The API Types (`src/api/domains/.../types.ts`):** TypeScript definitions for the data structures used by the domain.
 
 ---
 
 ## 2. Using the API SDK
 
-All interactions with the API should go through the hooks exported from the main `api` object.
+All interactions with the API should go through the hooks exported from each domain.
 
 ### Fetching Data with Query Hooks
 
-Query hooks (e.g., `api.notifications.useNotificationsQuery()`) are built on top of our custom `useAsyncCache` hook. They handle fetching, caching, loading states, and errors automatically.
+Query hooks (e.g., `useFaqs`) are built on top of React Query's `useQuery`. They handle fetching, caching, loading states, and errors automatically.
 
 ```tsx
-import api from "@api";
+import { useFaqs } from "@api/domains/faq/hooks";
 import { useTranslation } from "react-i18next";
 
-function NotificationsBell() {
+function FaqSection() {
   const { t } = useTranslation();
-  // The component just needs to call the hook. Caching is handled inside.
-  const { data, error, loading } = api.notifications.useNotificationsQuery(1, { enabled: true });
+  const { data, error, isLoading } = useFaqs("home");
 
-  if (loading) return <span>Loading...</span>;
+  if (isLoading) return <span>Loading...</span>;
   if (error) return <span>{t(error.message)}</span>;
 
-  return <span>{data.total} Notifications</span>;
+  return (
+    <div>
+      {data.map((faq) => (
+        <div key={faq.id}>{faq.translations.en.question}</div>
+      ))}
+    </div>
+  );
 }
 ```
 
-### Updating Data with Mutation Functions
+### Updating Data with Mutation Hooks
 
-Mutation functions (e.g., `api.notifications.markAsRead()`) are simple async functions that should be called from event handlers. They return the full `ApiResponse` object, giving you access to validation errors for form handling.
+Mutation hooks (e.g., `useCreateFaq`) are built on top of React Query's `useMutation`. They provide a simple way to create, update, and delete data, while also handling loading and error states.
 
 ```tsx
-const handleMarkAsRead = async (id: string) => {
-  const response = await api.notifications.markAsRead(id);
+import { useCreateFaq } from "@api/domains/faq/hooks";
 
-  if (response.error) {
-    // Show a toast notification on failure
-    // sonner.error(t(response.error.message));
-  } else {
-    // Invalidate the query cache to refresh the UI
-    // await invalidateByPattern('^notifications');
-  }
+const AddFaqForm = () => {
+  const { mutate: createFaq, isLoading } = useCreateFaq();
+
+  const handleSubmit = (faqData) => {
+    createFaq(faqData, {
+      onSuccess: () => {
+        // Invalidate the query cache to refresh the UI
+      },
+      onError: (error) => {
+        // Show a toast notification on failure
+      },
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Form fields */}
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? "Saving..." : "Save"}
+      </button>
+    </form>
+  );
 };
 ```
 
@@ -78,32 +97,21 @@ Create the async functions that make the `apiClient` calls. Use `handleQuery` fo
 
 **4. Create the Custom Hooks (`domains/billing/hooks.ts`):**
 
-For every query function, create a corresponding custom hook that wraps `useAsyncCache`. This is what the UI will consume.
+For every API function, create a corresponding custom hook that wraps `useQuery` or `useMutation`. This is what the UI will consume.
 
 ```ts
 // src/api/domains/billing/hooks.ts
+import { useQuery } from "@tanstack/react-query";
+import { billing } from ".";
+
 export const useBillingQuery = (invoiceId: string) => {
-  return useAsyncCache(["billing", invoiceId], () => billing.query(invoiceId));
+  return useQuery({
+    queryKey: ["billing", invoiceId],
+    queryFn: () => billing.query(invoiceId)
+  });
 };
 ```
 
-**5. Add the Domain to the Main API (`src/api/index.ts`):**
+**5. Add Mock Handlers**
 
-Import and export the new functions and hooks from the main `api` object.
-
-```ts
-// src/api/index.ts
-import { billing } from "./domains/billing";
-import * as billingHooks from "./domains/billing/hooks";
-
-// ...
-const api = {
-  // ...
-  billing: {
-    ...billing,
-    ...billingHooks,
-  },
-};
-```
-**6. Re-export the Types (`src/api/types.ts`)**
-**7. Add Mock Handlers**
+Create or update mock handlers in `src/api/mocks/handlers` to simulate the new API endpoints for development and testing.

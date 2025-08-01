@@ -1,5 +1,6 @@
 import { db } from "../db";
-import type { User, Company } from "types/api";
+import type { User } from "@api/domains/users/types";
+import type { Company } from "types";
 
 type SignupPayload = Partial<User> &
   Partial<Pick<Company, "name" | "plan">> & {

@@ -43,7 +43,7 @@ export default function PricingPage() {
       </section>
 
       {/* FAQ Section */}
-      <FAQSection t={t} />
+      <FAQSection />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { db } from "../db";
 import { createErrorResponse, createSuccessResponse } from "../../response";
 import { ERROR_CODES } from "../../codes";
-import type { User } from "types/api";
+import type { User } from "@api/domains/users/types";
 
 /**
  * Handles the request to get all users. 

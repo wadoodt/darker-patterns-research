@@ -1,102 +1,95 @@
-import React from "react";
-import { Tabs, Box, TextField, TextArea } from "@radix-ui/themes";
-import type { Translation, KnowledgeBaseArticle } from "types/knowledge-base";
 
-interface LanguageTabsSectionProps {
-  form?: { en: Translation; es: Translation };
-  editingArticle?: KnowledgeBaseArticle | null;
-  activeLang: "en" | "es";
-  setActiveLang: (lang: "en" | "es") => void;
-  handleFieldChange: (
-    lang: "en" | "es",
-    field: keyof Translation,
-    value: string,
+import {
+  Flex,
+  Tabs,
+  TextField,
+  TextArea,
+  Select,
+} from "@radix-ui/themes";
+import type { ArticleTranslation } from "@api/domains/knowledge-base/types";
+
+type LanguageTabsSectionProps = {
+  languages: { code: string; name: string }[];
+  activeLanguage: string;
+  setActiveLanguage: (language: string) => void;
+  translations: { [key: string]: ArticleTranslation };
+  setTranslations: (
+    translations:
+      | { [key: string]: ArticleTranslation }
+      | ((
+          prev: { [key: string]: ArticleTranslation },
+        ) => { [key: string]: ArticleTranslation }),
   ) => void;
-  t: (key: string) => string;
-}
+  articleCategory: string;
+  setArticleCategory: (category: string) => void;
+};
 
-export const LanguageTabsSection: React.FC<LanguageTabsSectionProps> = ({
-  form,
-  editingArticle,
-  activeLang,
-  setActiveLang,
-  handleFieldChange,
-  t,
-}) => {
-  const getValue = (lang: "en" | "es", field: keyof Translation) => {
-    if (editingArticle) return editingArticle.translations[lang][field];
-    if (form) return form[lang][field];
-    return "";
+export function LanguageTabsSection({
+  languages,
+  activeLanguage,
+  setActiveLanguage,
+  translations,
+  setTranslations,
+  articleCategory,
+  setArticleCategory,
+}: LanguageTabsSectionProps) {
+  const handleTranslationChange = (
+    field: keyof ArticleTranslation,
+    value: string,
+  ) => {
+    setTranslations((prev) => ({
+      ...prev,
+      [activeLanguage]: {
+        ...prev[activeLanguage],
+        [field]: value,
+      },
+    }));
   };
+
   return (
     <Tabs.Root
-      value={activeLang}
-      onValueChange={(v) => setActiveLang(v as "en" | "es")}
+      defaultValue={activeLanguage}
+      onValueChange={setActiveLanguage}
+      style={{ marginTop: 20 }}
     >
       <Tabs.List>
-        <Tabs.Trigger value="en">{t("articles.english")}</Tabs.Trigger>
-        <Tabs.Trigger value="es">{t("articles.spanish")}</Tabs.Trigger>
+        {languages.map(({ code, name }) => (
+          <Tabs.Trigger key={code} value={code}>
+            {name}
+          </Tabs.Trigger>
+        ))}
       </Tabs.List>
-      <Tabs.Content value="en">
-        <Box my="4">
-          <TextField.Root
-            placeholder={t("articles.title")}
-            value={getValue("en", "title")}
-            onChange={(e) => handleFieldChange("en", "title", e.target.value)}
-            mb="2"
-          />
-          <TextField.Root
-            placeholder={t("articles.category")}
-            value={getValue("en", "category")}
-            onChange={(e) =>
-              handleFieldChange("en", "category", e.target.value)
-            }
-            mb="2"
-          />
-          <TextField.Root
-            placeholder={t("articles.description")}
-            value={getValue("en", "description")}
-            onChange={(e) => handleFieldChange("en", "description", e.target.value)}
-            mb="2"
-          />
-          <TextArea
-            placeholder={t("articles.body")}
-            value={getValue("en", "body")}
-            onChange={(e) => handleFieldChange("en", "body", e.target.value)}
-            rows={6}
-          />
-        </Box>
-      </Tabs.Content>
-      <Tabs.Content value="es">
-        <Box my="4">
-          <TextField.Root
-            placeholder={t("articles.title")}
-            value={getValue("es", "title")}
-            onChange={(e) => handleFieldChange("es", "title", e.target.value)}
-            mb="2"
-          />
-          <TextField.Root
-            placeholder={t("articles.category")}
-            value={getValue("es", "category")}
-            onChange={(e) =>
-              handleFieldChange("es", "category", e.target.value)
-            }
-            mb="2"
-          />
-          <TextField.Root
-            placeholder={t("articles.description")}
-            value={getValue("es", "description")}
-            onChange={(e) => handleFieldChange("es", "description", e.target.value)}
-            mb="2"
-          />
-          <TextArea
-            placeholder={t("articles.body")}
-            value={getValue("es", "body")}
-            onChange={(e) => handleFieldChange("es", "body", e.target.value)}
-            rows={6}
-          />
-        </Box>
-      </Tabs.Content>
+      <Flex direction="column" gap="3" pt="3">
+        <TextField.Root
+          placeholder="Title"
+          value={translations[activeLanguage]?.title || ""}
+          onChange={(e) => handleTranslationChange("title", e.target.value)}
+        />
+        <TextArea
+          placeholder="Description"
+          value={translations[activeLanguage]?.description || ""}
+          onChange={(e) =>
+            handleTranslationChange("description", e.target.value)
+          }
+        />
+        <TextArea
+          placeholder="Body"
+          value={translations[activeLanguage]?.body || ""}
+          rows={10}
+          onChange={(e) => handleTranslationChange("body", e.target.value)}
+        />
+        <Select.Root
+          value={articleCategory}
+          onValueChange={setArticleCategory}
+        >
+          <Select.Trigger placeholder="Category" />
+          <Select.Content>
+            <Select.Item value="general">General</Select.Item>
+            <Select.Item value="billing">Billing</Select.Item>
+            <Select.Item value="technical">Technical</Select.Item>
+          </Select.Content>
+        </Select.Root>
+      </Flex>
     </Tabs.Root>
   );
-};
+}

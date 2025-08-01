@@ -1,59 +1,52 @@
-import { useAsyncCache } from "@hooks/useAsyncCache";
-import api from "@api/client";
-import { CACHE_TTL } from "@lib/cache/constants";
-import type { FAQItem } from "types/faq";
+import { useState } from "react";
+import { useFaqs, useCreateFaq, useUpdateFaq, useDeleteFaq } from "@api/domains/faq/hooks";
+import type { FaqItem } from "@api/domains/faq/types";
 
 export const useFAQManagement = () => {
-  const {
-    data: faqs,
-    loading: isLoading,
-    error,
-    refresh: mutate,
-  } = useAsyncCache<FAQItem[]>(
-    ["admin-faqs"],
-    async () => {
-      const response = await api.get<FAQItem[]>("/faqs");
-      return response.data;
-    },
-    { ttl: CACHE_TTL.SESSION },
-  );
+  const { data: faqs, loading: isLoadingFaqs, error } = useFaqs();
+  const { mutate: createFaq } = useCreateFaq();
+  const { mutate: updateFaq } = useUpdateFaq();
+  const { mutate: deleteFaq } = useDeleteFaq();
 
-  const handleCreate = async (data: { category: string; translations: { [key: string]: { question: string; answer: string } } }) => {
-    try {
-      await api.post("/faqs", data);
-      await mutate();
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingFaq, setEditingFaq] = useState<FaqItem | null>(null);
+
+  const handleOpenModal = (faq: FaqItem | null = null) => {
+    setEditingFaq(faq);
+    setIsModalOpen(true);
   };
 
-  const handleUpdate = async (faq: FAQItem) => {
-    try {
-      await api.put(`/faqs/${faq.id}`, faq);
-      await mutate();
-    } catch (err) {
-      console.error(err);
-      throw err;
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingFaq(null);
+  };
+
+  const handleSave = async (faq: FaqItem | Omit<FaqItem, "id">) => {
+    if ("id" in faq) {
+      updateFaq(faq as FaqItem);
+    } else {
+      createFaq(faq);
     }
+    handleCloseModal();
   };
 
   const handleDelete = async (id: string) => {
-    try {
-      await api.delete(`/faqs/${id}`);
-      await mutate();
-    } catch (err) {
-      console.error(err);
-      throw err;
+    if (window.confirm("Are you sure you want to delete this FAQ?")) {
+      deleteFaq(id);
     }
   };
 
   return {
-    faqs: faqs || [],
-    isLoading,
+    faqs,
+    isLoading: isLoadingFaqs,
     error,
-    handleCreate,
-    handleUpdate,
+    isModalOpen,
+    editingFaq,
+    handleOpenModal,
+    handleCloseModal,
+    handleSave,
     handleDelete,
+    handleCreate: handleSave,
+    handleUpdate: handleSave,
   };
 };

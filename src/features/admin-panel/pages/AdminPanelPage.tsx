@@ -1,48 +1,23 @@
-import { useState, useEffect } from "react";
+
 import { Table, Select, Badge, Flex, Heading } from "@radix-ui/themes";
-import api from "@api/client";
-import type { User } from "types/api";
+import { useAdminUsers, useUpdateAdminUser } from "@api/domains/admin/hooks";
+import type { User } from "@api/domains/users/types";
+import type { PlatformRole } from "@api/domains/users/types";
 
 const AdminPanelPage = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: usersData, loading: isLoading, error } = useAdminUsers();
+  const { mutate: updateUser } = useUpdateAdminUser();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get<{ data: { users: User[] } }>("/admin/users");
-        setUsers(response.data.data.users);
-      } catch {
-        setError("Failed to fetch users. You may not have super-admin privileges.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  const handleRoleChange = async (userId: string, newRole: User['platformRole']) => {
-    // Optimistically update the UI
-    setUsers(users.map(u => u.id === userId ? { ...u, platformRole: newRole } : u));
-
-    try {
-      await api.patch(`/admin/users/${userId}`, { platformRole: newRole });
-    } catch {
-      setError(`Failed to update role for user ${userId}.`);
-      // Revert the change in the UI if the API call fails
-      // For simplicity, we're not doing this in the mock, but in a real app you would.
-    }
+  const handleRoleChange = async (userId: string, newRole: PlatformRole) => {
+    updateUser(userId, { platformRole: newRole });
   };
 
-  if (loading) {
+  if (isLoading) {
     return <p>Loading users...</p>;
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
+    return <p style={{ color: 'red' }}>{error.message}</p>;
   }
 
   return (
@@ -58,14 +33,14 @@ const AdminPanelPage = () => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {users.map((user) => (
+                {usersData?.users.map((user: User) => (
                     <Table.Row key={user.id}>
                         <Table.Cell>{user.name}</Table.Cell>
                         <Table.Cell>{user.email}</Table.Cell>
                         <Table.Cell>
-                            <Select.Root 
-                                value={user.platformRole} 
-                                onValueChange={(newRole: User['platformRole']) => handleRoleChange(user.id, newRole)}>
+                            <Select.Root
+                                value={user.platformRole}
+                                onValueChange={(newRole: PlatformRole) => handleRoleChange(user.id, newRole)}>
                                 <Select.Trigger />
                                 <Select.Content>
                                     <Select.Item value="user">User</Select.Item>
@@ -86,4 +61,3 @@ const AdminPanelPage = () => {
 };
 
 export default AdminPanelPage;
-

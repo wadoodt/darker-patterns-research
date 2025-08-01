@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@hooks/useAuth";
 
@@ -10,24 +10,18 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
   const { isAuthenticated, hasRole, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated()) {
-      // If not authenticated, force a full page reload to the login page.
-      window.location.href = "/login";
-    }
-  }, [isLoading, isAuthenticated]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  if (isLoading || !isAuthenticated()) {
-    // While loading or before the redirect happens, render a loading indicator.
-    return <div>Loading...</div>; // Or a spinner component
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
 
   if (roles && !hasRole(roles)) {
-    // Authenticated but not authorized, redirect to the main dashboard page.
     return <Navigate to="/dashboard" replace />;
   }
 
-  // If authenticated and authorized, render the child components.
   return children ? (
     <React.Fragment>{children}</React.Fragment>
   ) : (

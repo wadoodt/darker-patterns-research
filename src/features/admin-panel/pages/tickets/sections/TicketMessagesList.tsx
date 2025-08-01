@@ -1,6 +1,6 @@
 import { Card, Box, Text, Flex, Heading } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import type { TicketMessage } from "types/support-ticket";
+import type { TicketMessage } from "@api/domains/support/types";
 
 interface TicketMessagesListProps {
   messages: TicketMessage[];

@@ -1,5 +1,5 @@
 import { Box, Table, Text, Flex, Button } from "@radix-ui/themes";
-import type { FAQItem } from "types/faq";
+import type { FaqItem } from "@api/domains/faq/types";
 
 export const FAQTableSection = ({
   faqs,
@@ -7,9 +7,9 @@ export const FAQTableSection = ({
   onUpdate,
   onDelete,
 }: {
-  faqs: FAQItem[];
+  faqs: FaqItem[];
   isLoading: boolean;
-  onUpdate: (faq: FAQItem) => Promise<void>;
+  onUpdate: (faq: FaqItem) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }) => {
   if (isLoading) return <Text>Loading FAQs...</Text>;

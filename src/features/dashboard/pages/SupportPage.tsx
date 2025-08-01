@@ -18,7 +18,7 @@ import { VideoTutorialsSection } from "./support/components/VideoTutorialsSectio
 import { ContactFormSection } from "./support/components/ContactFormSection";
 import MyTickets from "./support/components/MyTickets";
 import { GeneralAdviceSection } from "./support/components/GeneralAdviceSection";
-import type { KnowledgeBaseArticle } from "types/knowledge-base";
+import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
 
 export interface VideoTutorial {
   id: string;
@@ -73,7 +73,7 @@ export default function SupportPage() {
   );
   const videoTutorials = useVideoTutorials();
 
-  const { data: knowledgeLibrary, loading: isLoading } = useAsyncCache(
+  const { data: knowledgeLibrary } = useAsyncCache(
     ["support-articles"],
     fetchKnowledgeArticles,
     { ttl: CACHE_TTL.LONG_1_DAY },
@@ -107,13 +107,12 @@ export default function SupportPage() {
         </TextField.Root>
       </Box>
 
-      <GeneralAdviceSection />
+      <GeneralAdviceSection articles={filteredKnowledgeLibrary} />
 
       <Separator my="6" size="4" />
 
       <KnowledgeBaseSection
         articles={filteredKnowledgeLibrary}
-        isLoading={isLoading}
       />
 
       <Separator my="6" size="4" />

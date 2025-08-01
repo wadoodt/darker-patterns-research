@@ -1,6 +1,9 @@
-export interface FAQItem {
+
+export type FaqCategory = "home" | "pricing" | "general";
+
+export interface FaqItem {
   id: string;
-  category: string;
+  category: FaqCategory;
   translations: {
     [key: string]: {
       question: string;
@@ -8,4 +11,4 @@ export interface FAQItem {
     };
   };
   [key: string]: unknown;
-}
+} 

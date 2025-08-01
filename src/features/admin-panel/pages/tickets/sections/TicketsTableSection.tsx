@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Badge, DropdownMenu, IconButton } from "@radix-ui/themes";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "react-i18next";
-import type { SupportTicket } from "types/support-ticket";
+import type { SupportTicket } from "@api/domains/support/types";
 
 interface TicketsTableSectionProps {
   tickets: SupportTicket[];

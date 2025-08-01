@@ -6,7 +6,7 @@ import { mockUsers } from "./data/users";
 import { mockAdminSettings } from "./data/admin-settings";
 import { mockPayments } from "./data/payments";
 import { mockKnowledgeBaseArticles, mockSupportTickets } from "./data/support";
-import type { KnowledgeBaseArticle } from "types/knowledge-base";
+import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
 import { mockFaqs } from "./data/faqs";
 import { mockNotifications } from "./data/notifications";
 

@@ -1,8 +1,9 @@
+
 import { useState } from "react";
 import { Select, Button, Flex } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import api from "@api/client";
-import type { SupportTicket } from "types/support-ticket";
+import { useUpdateAdminTicket } from "@api/domains/admin/hooks";
+import type { SupportTicket } from "@api/domains/support/types";
 
 interface TicketStatusUpdaterProps {
   ticket: SupportTicket;
@@ -17,17 +18,14 @@ const TicketStatusUpdater = ({
   const [newStatus, setNewStatus] = useState<"open" | "in_progress" | "closed">(
     ticket.status,
   );
-  const [isUpdating, setIsUpdating] = useState(false);
+  const { mutate: updateTicket, isLoading: isUpdating } = useUpdateAdminTicket();
 
   const handleUpdateStatus = async () => {
-    setIsUpdating(true);
     try {
-      await api.patch(`/api/admin/tickets/${ticket.id}`, { status: newStatus });
+      await updateTicket(ticket.id, { status: newStatus });
       onStatusChange();
     } catch (error) {
       console.error("Failed to update ticket status:", error);
-    } finally {
-      setIsUpdating(false);
     }
   };
 

@@ -1,4 +1,5 @@
-export interface Translation {
+
+export interface ArticleTranslation {
   title: string;
   description: string;
   category: string;
@@ -12,7 +13,7 @@ export interface KnowledgeBaseArticle {
   category: string;
   url?: string;
   translations: {
-    [key: string]: Translation;
+    [key: string]: ArticleTranslation;
   };
   [key: string]: unknown;
 }

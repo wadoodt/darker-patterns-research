@@ -48,7 +48,7 @@ export const baseRequestHandler = async <T>(
 
     if (axiosError.response?.data?.error) {
       // Case 1: The server responded with a structured API error.
-      errorResponse = { data: null, error: axiosError.response.data.error };
+      errorResponse = { data: null, error: axiosError.response.data.error, success: false };
     } else {
       // Case 2: A network error or an unexpected server error occurred.
       // We create a standardized error response.

@@ -1,5 +1,6 @@
+
 import React from "react";
-import type { KnowledgeBaseArticle } from "types/knowledge-base";
+import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
 import { useTranslation } from "react-i18next";
 import { useArticleManagement } from "./useArticleManagement";
 import { getLanguage, fallbackLanguage } from "@locales/i18n";

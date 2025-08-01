@@ -1,7 +1,6 @@
+
 import { useParams } from "react-router-dom";
-import { useAsyncCache } from "@hooks/useAsyncCache";
-import api from "@api/client";
-import type { SupportTicket } from "types/support-ticket";
+import { useTicket, useReplyToTicket } from "@api/domains/support/hooks";
 import { Box, Spinner, Callout, Heading, Text } from "@radix-ui/themes";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -11,8 +10,6 @@ import TicketMessagesList from "./tickets/sections/TicketMessagesList";
 import TicketReplyForm from "./tickets/sections/TicketReplyForm";
 import TicketStatusUpdater from "./tickets/sections/TicketStatusUpdater";
 import { useTranslation } from "react-i18next";
-import { CACHE_TTL } from "@lib/cache/constants";
-import { useCallback } from "react";
 
 const replySchema = z.object({
   content: z.string().min(1, "Reply content cannot be empty."),
@@ -22,31 +19,14 @@ type ReplyFormData = z.infer<typeof replySchema>;
 
 const TicketDetailPage = () => {
   const { t } = useTranslation();
-  const { ticketId = null } = useParams<{ ticketId: string }>();
-
-  const fetchTicket = useCallback(async () => {
-    const { data, status } = await api.get(`/support/tickets/${ticketId}`);
-    if (status !== 200) {
-      throw new Error(data.message);
-    }
-    return data;
-  }, [ticketId]);
-
-  const {
-    data,
-    loading: isLoading,
-    error,
-    refresh,
-  } = useAsyncCache<SupportTicket>(
-    [`ticket-${ticketId}`],
-    fetchTicket,
-    { enabled: !!ticketId, ttl: CACHE_TTL.STANDARD_5_MIN },
-  );
+  const { ticketId = "" } = useParams<{ ticketId: string }>();
+  const { data: ticket, loading: isLoading, error, refresh: refetch } = useTicket(ticketId);
+  const { mutate: replyToTicket, isLoading: isReplying } = useReplyToTicket();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<ReplyFormData>({
     resolver: zodResolver(replySchema),
@@ -54,12 +34,10 @@ const TicketDetailPage = () => {
 
   const onSubmit = async (formData: ReplyFormData) => {
     try {
-      await api.post(`/support/tickets/${ticketId}/reply`, formData);
-      refresh(); // Refresh ticket data to show the new reply
-      reset(); // Clear the form
+      await replyToTicket(ticketId, formData);
+      reset();
     } catch (err) {
       console.error("Failed to submit reply:", err);
-      // Optionally, show an error message to the user
     }
   };
 
@@ -67,28 +45,28 @@ const TicketDetailPage = () => {
   if (error)
     return (
       <Callout.Root color="red">
-        {t("tickets.errorLoading")}: {t(error.message)}
+        {t("tickets.errorLoading")}: {error.message}
       </Callout.Root>
     );
-  if (!data) return <Text>{t("tickets.notFound")}</Text>;
+  if (!ticket) return <Text>{t("tickets.notFound")}</Text>;
 
   return (
     <Box>
       <Heading as="h1" size="6" mb="4">
-        {t("tickets.ticket")}: {data.subject}
+        {t("tickets.ticket")}: {ticket.subject}
       </Heading>
 
-      <TicketInfoCard ticket={data} />
+      <TicketInfoCard ticket={ticket} />
 
       <Box my="4">
-        <TicketStatusUpdater ticket={data} onStatusChange={refresh} />
+        <TicketStatusUpdater ticket={ticket} onStatusChange={refetch} />
       </Box>
 
-      <TicketMessagesList messages={data.messages} />
+      <TicketMessagesList messages={ticket.messages} />
 
       <TicketReplyForm
         onSubmit={handleSubmit(onSubmit)}
-        isSubmitting={isSubmitting}
+        isSubmitting={isReplying}
         errors={errors}
         register={register}
       />

@@ -4,7 +4,7 @@
 import apiClient from "@api/client";
 import { handleQuery } from "@api/lib/handleQuery";
 import { handleMutation } from "@api/lib/handleMutation";
-import type { ApiResponse } from "types";
+import type { ApiResponse } from "types/api";
 import type { TeamMember, TeamMembersResponse, NewTeamMember, ApiSuccess } from "./types";
 
 /**

@@ -1,15 +1,9 @@
 /**
  * Represents the user object as it exists in the application state after authentication.
  */
-import type { User } from "./api/user";
+import type { User } from "@api/domains/users/types";
 import type { CompanyRole } from "@api/types";
 import type { Notification } from "@api/domains/notifications/types";
-
-/**
- * Represents the credentials used for a login request.
- */
-export type LoginCredentials = Pick<User, "username" | "password">;
-
 
 /**
  * Represents the user object as it exists in the application state after authentication.

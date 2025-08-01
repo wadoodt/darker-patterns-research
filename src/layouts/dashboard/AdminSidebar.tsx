@@ -10,7 +10,7 @@ import type { NavigationItem } from "@pages/dashboard/navigation";
 import type { AuthenticatedUser } from "types/auth";
 
 interface AdminSidebarProps {
-  user: AuthenticatedUser;
+  user?: AuthenticatedUser;
   path: string;
   isOpen: boolean;
 }
@@ -22,7 +22,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ path, user, isOpen }) => {
   const navigation = [...adminNavigation, ...dashboardNavigation].filter(
     (item) => {
       if (!item.roles) return true; // Show items that don't require a specific role
-      return item.roles.includes(user.platformRole);
+      return item.roles.includes(user?.platformRole || "");
     },
   );
 

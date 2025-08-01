@@ -5,11 +5,11 @@ export interface AuthContextType {
   token: string | null;
   tokenExpiresAt: number | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   hasRole: (roles: string[]) => boolean;
   hasPlan: (plans: string[]) => boolean;
-  isAuthenticated: () => boolean;
 }
 
 export interface AuthProviderProps {

@@ -1,9 +1,9 @@
+
 export interface TicketMessage {
   author: "user" | "support";
   content: string;
   createdAt: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- allow index signature for dynamic properties
-  [key: string]: any;
+  [key: string]: string | number | boolean;
 }
 
 export interface SupportTicket {
@@ -14,8 +14,7 @@ export interface SupportTicket {
   createdAt: string;
   updatedAt: string;
   messages: TicketMessage[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- allow index signature for dynamic properties
-  [key: string]: any;
+  [key: string]: string | number | boolean | TicketMessage[];
 }
 
 export interface PaginatedTicketsResponse {
@@ -23,4 +22,4 @@ export interface PaginatedTicketsResponse {
   total?: number;
   currentPage?: number;
   totalPages?: number;
-}
+} 

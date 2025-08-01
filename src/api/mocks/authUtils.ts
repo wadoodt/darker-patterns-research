@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { createErrorResponse } from "../response";
-import type { User } from "../../types/api/user";
+import type { User } from "@api/domains/users/types";
 
 export const getAuthenticatedUser = (request: Request): User | null => {
   const token = request.headers.get("Authorization")?.replace("Bearer ", "");

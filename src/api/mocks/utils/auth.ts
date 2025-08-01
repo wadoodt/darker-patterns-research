@@ -1,5 +1,5 @@
 import { db } from "../db";
-import type { User } from "types";
+import type { User } from "@api/domains/users/types";
 import { createErrorResponse } from "../../response";
 
 /**

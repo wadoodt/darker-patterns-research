@@ -448,3 +448,49 @@ const response = await api.get("/api/admin/tickets");
 - Translation keys should be organized by feature area
 
 ---
+
+## **Problem:** Duplicate API requests are being sent on page navigation or component re-renders.
+
+### Symptoms:
+
+- In the browser's developer tools, you see the same API request being fired multiple times when you navigate to a page or when a component re-renders.
+- The UI might flicker or show a loading state longer than expected.
+
+### Root Cause & Solution:
+
+This issue has two primary causes, both related to the `useAsyncCache` hook:
+
+**1. The `fetcher` function is not memoized.**
+
+If you pass an anonymous async function directly to `useAsyncCache`, a new function instance is created on every render. The hook sees this as a changed dependency and re-triggers the data fetching logic.
+
+**Solution:** Always wrap your `fetcher` function in `React.useCallback` to ensure it has a stable reference across re-renders.
+
+_Example:_
+
+```tsx
+import React, { useCallback } from "react";
+import { useAsyncCache } from "@hooks/useAsyncCache";
+
+// Correct: The fetcher is memoized with useCallback
+const fetchFaqs = useCallback(async () => {
+  const { data } = await api.get("/faqs");
+  return data.data;
+}, []); // Empty dependency array ensures it's created only once
+
+const { data: faqs } = useAsyncCache(["faqs"], fetchFaqs);
+
+// Incorrect: A new function is passed on every render
+const { data: faqs } = useAsyncCache(["faqs"], async () => {
+  const { data } = await api.get("/faqs");
+  return data.data;
+});
+```
+
+**2. The hook fires before the cache is ready (Fixed in recent versions).**
+
+Previously, when navigating to a page, the hook might run before the IndexedDB cache had finished initializing. It would incorrectly assume the cache was empty and fire a network request.
+
+**Solution:** This has been fixed in the hook itself. `useAsyncCache` now automatically waits for the cache to report that it is `isReady` before it attempts to fetch data. No action is required from you for this part, but it's important to understand the behavior.
+
+---

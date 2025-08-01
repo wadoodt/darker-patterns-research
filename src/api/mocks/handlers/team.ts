@@ -4,7 +4,7 @@ import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
 import type { TeamMember, NewTeamMember } from "@api/types";
 import { mockUsers } from "../data/users";
 import { mockCompanies } from "../data/companies";
-import type { Company } from "types/api";
+import type { Company } from "types";
 import type { AuthenticatedUser } from "types/auth";
 
 // Helper function to get team members

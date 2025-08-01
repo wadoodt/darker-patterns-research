@@ -1,7 +1,8 @@
 import { db } from "../db";
 import { createErrorResponse, createSuccessResponse } from "../../response";
 import { ERROR_CODES, RESPONSE_CODES } from "../../codes";
-import type { User, Company } from "types/api";
+import type { User } from "@api/domains/users/types";
+import type { Company } from "types";
 import type { Notification } from "@api/domains/notifications/types";
 import { mockNotifications } from "../data/notifications";
 import {

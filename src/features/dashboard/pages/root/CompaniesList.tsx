@@ -1,33 +1,11 @@
 "use client";
 
-import apiClient from "@api/client";
-import { useAsyncCache } from "@hooks/useAsyncCache";
-import { CACHE_TTL } from "@lib/cache/constants";
-import * as api from "types/api";
-
-// This is the new data fetching function that uses the standard fetch API.
-// Our mock resolver will intercept this call.
-async function fetchCompanies() {
-  const response = await apiClient.get("/companies");
-  if (response.status !== 200) {
-    throw new Error("Failed to fetch companies");
-  }
-  return response.data;
-}
+import { useCompanies } from "@api/domains/companies/hooks";
 
 export function CompaniesList() {
-  const {
-    data: companies,
-    loading,
-    error,
-    refresh,
-  } = useAsyncCache<api.Company[]>(
-    ["companies"], // Cache key
-    fetchCompanies, // Use the new fetcher function
-    { ttl: CACHE_TTL.LONG_1_DAY },
-  );
+  const { data: companiesData, loading: isLoading, error, refresh: refetch } = useCompanies();
 
-  if (loading && !companies) return <div>Loading companies...</div>;
+  if (isLoading && !companiesData) return <div>Loading companies...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -44,7 +22,7 @@ export function CompaniesList() {
         Registered Companies
       </h3>
       <button
-        onClick={refresh}
+        onClick={() => refetch()}
         style={{
           marginBottom: "1rem",
           padding: "4px 8px",
@@ -54,7 +32,7 @@ export function CompaniesList() {
         Refresh List
       </button>
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {companies?.map((company) => (
+        {companiesData?.companies.map((company) => (
           <li
             key={company.id}
             style={{ padding: "8px 0", borderBottom: "1px solid #eee" }}

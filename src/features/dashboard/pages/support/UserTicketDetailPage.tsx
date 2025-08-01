@@ -12,7 +12,7 @@ import {
   Callout,
   Badge,
 } from "@radix-ui/themes";
-import type { SupportTicket, TicketMessage } from "types/support-ticket";
+import type { SupportTicket, TicketMessage } from "@api/domains/support/types";
 import type { ReplyFormData } from "./hooks/useUserTicketDetailPage";
 import type {
   UseFormRegister,

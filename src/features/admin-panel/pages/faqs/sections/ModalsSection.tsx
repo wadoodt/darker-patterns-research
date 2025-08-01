@@ -1,15 +1,15 @@
 import { Dialog, Button, Flex, TextField, TextArea, Tabs } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
-import type { FAQItem } from "types/faq";
+import type { FaqItem, FaqCategory } from "@api/domains/faq/types";
 
 interface ModalsSectionProps {
   isCreateModalOpen: boolean;
   setCreateModalOpen: (open: boolean) => void;
   isEditModalOpen: boolean;
   setEditModalOpen: (open: boolean) => void;
-  editingFAQ: FAQItem | null;
+  editingFAQ: FaqItem | null;
   handleCreate: (data: { category: string; translations: { [key: string]: { question: string; answer: string; }; }; }) => Promise<void>;
-  handleUpdate: (faq: FAQItem) => Promise<void>;
+  handleUpdate: (faq: FaqItem) => Promise<void>;
 }
 
 type FAQFormState = {
@@ -138,7 +138,7 @@ export const ModalsSection = ({
           en: { question: form.en.question, answer: form.en.answer },
           es: { question: form.es.question, answer: form.es.answer },
         },
-        category: form.category,
+        category: form.category as FaqCategory,
       });
       setEditModalOpen(false);
     } else {

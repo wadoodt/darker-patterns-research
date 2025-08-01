@@ -16,14 +16,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AppProvider>
-        <AuthProvider>
-          <CacheProvider>
+        <CacheProvider>
+          <AuthProvider>
             <ErrorBoundary>
               <DashboardPage />
             </ErrorBoundary>
-          </CacheProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </CacheProvider>
       </AppProvider>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

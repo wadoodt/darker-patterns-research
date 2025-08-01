@@ -21,7 +21,7 @@ export const handleQuery = async <T>(
     const response = await baseRequestHandler(apiCall);
 
     if (response.error) {
-      throw new ApiError(response.error);
+      throw new ApiError({ message: response.error });
     }
 
     return response.data as T;

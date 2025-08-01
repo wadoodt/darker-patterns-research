@@ -1,55 +1,34 @@
-import { useAsyncCache } from "@hooks/useAsyncCache";
-import type { KnowledgeBaseArticle, Translation } from "types/knowledge-base";
+
 import { useTranslation } from "react-i18next";
-import api from "@api/client";
-import { CACHE_TTL } from "@lib/cache/constants";
+import {
+  useArticles,
+  useCreateArticle,
+  useUpdateArticle,
+  useDeleteArticle,
+} from "@api/domains/knowledge-base/hooks";
+import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
 
 export const useArticleManagement = () => {
   const { t } = useTranslation();
-  const {
-    data: articles,
-    loading: isLoading,
-    error,
-    refresh: mutate,
-  } = useAsyncCache<KnowledgeBaseArticle[]>(
-    ["admin-articles"],
-    async () => {
-      const response = await api.get<KnowledgeBaseArticle[]>("/articles");
-      return response.data;
-    },
-    { ttl: CACHE_TTL.SESSION },
-  );
+  const { data: articles, loading: isLoading, error } = useArticles();
+  const { mutate: createArticle } = useCreateArticle();
+  const { mutate: updateArticle } = useUpdateArticle();
+  const { mutate: deleteArticle } = useDeleteArticle();
 
-  const handleCreate = async (translations: { [key: string]: Translation }) => {
-    try {
-      await api.post("/articles", { translations });
-      await mutate();
-    } catch (err) {
-      console.error(err);
-      throw err; // Re-throw to allow modal to handle error state
-    }
+  const handleCreate = async (article: Omit<KnowledgeBaseArticle, "id">) => {
+    createArticle(article);
   };
 
   const handleUpdate = async (article: KnowledgeBaseArticle) => {
-    try {
-      await api.put(`/articles/${article.id}`, article);
-      await mutate();
-    } catch (err) {
-      console.error(err);
-      throw err; // Re-throw to allow modal to handle error state
-    }
+    updateArticle(article);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm(t("articles.deleteConfirmation"))) return;
-
-    try {
-      await api.delete(`/articles/${id}`);
-      await mutate();
-    } catch (err) {
-      console.error(err);
-      // TODO: show error to user
+  const handleDelete = async (id: string): Promise<null> => {
+    if (window.confirm(t("articles.deleteConfirmation"))) {
+      await deleteArticle(id);
+      return null;
     }
+    return null;
   };
 
   return {

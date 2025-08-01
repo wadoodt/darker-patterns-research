@@ -3,7 +3,7 @@
  * This file should be used for runtime logic, not for type definitions.
  */
 
-import type { ApiResponse } from "types";
+import type { ApiResponse } from "types/api";
 import { RESPONSE_CODES, ERROR_CODES } from "./codes";
 
 // ------------------------------------------------------------------
@@ -29,6 +29,7 @@ export function createSuccessResponse<T>(
       message: RESPONSE_CODES[messageCode].message,
     },
     error: null,
+    success: true,
   };
 }
 
@@ -43,13 +44,12 @@ export function createSuccessResponse<T>(
  */
 export function createErrorResponse<T = never>(
   messageCode: keyof typeof ERROR_CODES,
-  validations?: Record<string, string>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _validations?: Record<string, string>,
 ): ApiResponse<T> {
   return {
     data: null,
-    error: {
-      message: ERROR_CODES[messageCode].message,
-      validations,
-    },
+    error: ERROR_CODES[messageCode].message,
+    success: false,
   };
 }

@@ -1,62 +1,61 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import * as Accordion from "@radix-ui/react-accordion";
-import { HelpCircle } from "lucide-react";
-import type { TFunction } from "i18next";
-
-import { useAsyncCache } from "@hooks/useAsyncCache";
-import api from "@api/client";
-import type { FAQItem } from "types/faq";
-import { CACHE_TTL } from "@lib/cache/constants";
+import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import { useFaqs } from "@api/domains/faq/hooks";
+import type { FaqItem } from "@api/domains/faq/types";
 import { getLanguage } from "@locales/i18n";
+import { Text } from "@radix-ui/themes";
 
-type FAQSectionProps = {
-  t: TFunction;
-};
+const FAQSection: React.FC = () => {
+  const { t } = useTranslation();
+  const {
+    data: faqs,
+    loading: isLoading,
+    error,
+  } = useFaqs("pricing");
 
-const FAQSection: React.FC<FAQSectionProps> = ({ t }) => {
-  const { data: faqItems, loading } = useAsyncCache<FAQItem[]>(
-    ["faqs", "pricing"],
-    async () => {
-      const { data } = await api.get<{ data: FAQItem[] }>(
-        "/faqs?category=pricing",
-      );
-      return data.data;
-    },
-    { ttl: CACHE_TTL.LONG_1_DAY },
-  );
+  if (isLoading) {
+    return (
+      <section className="py-12 bg-gray-50">
+        <h2>{t("pricing.faq.title")}</h2>
+        <Text>{t("common.loading")}</Text>
+      </section>
+    );
+  }
 
-  const currentLanguage = getLanguage();
+  if (error || !faqs || faqs.length === 0) {
+    return null;
+  }
+
+  const currentLanguage = getLanguage() as "en" | "es";
 
   return (
     <section className="py-12 bg-gray-50">
-      <h2 className="text-center mb-8 text-2xl font-bold">
-        {t("pricing.faq.title")}
-      </h2>
-      <div className="max-w-xl mx-auto">
-        {loading ? (
-          <div className="flex justify-center">{t("pricing.faq.loading")}</div>
-        ) : faqItems && faqItems.length > 0 ? (
-          <Accordion.Root type="single" collapsible>
-            {faqItems.map((item: FAQItem, idx: number) => {
+      <div className="max-w-4xl mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center mb-8">
+          {t("pricing.faq.title")}
+        </h2>
+        <div className="max-w-xl mx-auto">
+          <Accordion.Root type="single" collapsible className="faq-accordion">
+            {faqs.map((faq: FaqItem) => {
               const translation =
-                item.translations[currentLanguage] || item.translations.en;
+                faq.translations[currentLanguage] || faq.translations.en;
               return (
-                <Accordion.Item key={idx} value={`item-${idx}`}>
-                  <Accordion.Header>
+                <Accordion.Item value={faq.id} key={faq.id} className="faq-item">
+                  <Accordion.Header className="faq-header">
                     <Accordion.Trigger className="flex items-center gap-2 font-medium">
-                      <HelpCircle size={18} /> {translation.question}
+                      <QuestionMarkCircledIcon width={18} height={18} /> {translation.question}
                     </Accordion.Trigger>
                   </Accordion.Header>
-                  <Accordion.Content>
-                    <div className="py-4">{translation.answer}</div>
+                  <Accordion.Content className="faq-content">
+                    {translation.answer}
                   </Accordion.Content>
                 </Accordion.Item>
               );
             })}
           </Accordion.Root>
-        ) : (
-          <div>{t("pricing.faq.empty")}</div>
-        )}
+        </div>
       </div>
     </section>
   );

@@ -14,25 +14,25 @@ import UserTicketDetailPage from "@features/dashboard/pages/support/UserTicketDe
 import CreateTeamMemberPage from "@features/dashboard/pages/team/new/CreateTeamMemberPage";
 
 const DashboardPage: React.FC = () => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthenticated } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
     return <div>Loading...</div>; // Or a proper loading spinner
   }
 
-  if (!user) {
+  if (!isLoading && !isAuthenticated) {
     window.location.href = "/login";
     return null;
   }
 
   const allNavigation = [...dashboardNavigation, ...adminNavigation];
   const filteredNav = allNavigation.filter((item) =>
-    item.roles?.includes(user.platformRole),
+    item.roles?.includes(user?.platformRole || ""),
   );
 
   return (
-    <DashboardLayout path={location.pathname} user={user}>
+    <DashboardLayout path={location.pathname} user={user || undefined}>
       <Routes>
         {filteredNav.map((item) => (
           <Route

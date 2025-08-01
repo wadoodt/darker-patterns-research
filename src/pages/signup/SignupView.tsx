@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import SignupTemplate from "./SignupTemplate";
+import { useSignup } from "@api/domains/signup/hooks";
 
 type SignupType = "new" | "existing";
 
@@ -23,7 +25,7 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
   const [lastName, setLastName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: signup, isLoading } = useSignup();
 
   useEffect(() => {
     if (signupType === "new" && !selectedPlan) {
@@ -48,44 +50,31 @@ const SignupView: React.FC<SignupViewProps> = ({ selectedPlanParams }) => {
 
     const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
-    setIsLoading(true);
     setError(null);
 
     if (password !== confirmPassword) {
       setError(t("auth.signup.alerts.error.passwordMismatch"));
-      setIsLoading(false);
       return;
     }
 
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "create",
-          companyName: businessName,
-          name: `${firstName} ${lastName}`,
-          email,
-          password,
-          plan: selectedPlan,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error?.message || t("auth.signup.alerts.error.generic"));
-      }
-
-      // On successful signup, the API returns a token which should be stored.
-      // For this mock, we'll just redirect to the dashboard.
-      window.location.href = "/dashboard";
-
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
+    signup(
+      {
+        action: "create",
+        companyName: businessName,
+        name: `${firstName} ${lastName}`,
+        email,
+        password,
+        plan: selectedPlan,
+      },
+      {
+        onSuccess: () => {
+          window.location.href = "/dashboard";
+        },
+        onError: (err) => {
+          setError((err as Error).message);
+        },
+      },
+    );
   };
 
   return (

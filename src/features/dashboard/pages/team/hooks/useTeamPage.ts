@@ -16,20 +16,21 @@ const fetchTeamMembers = async () => {
 export const useTeamPage = () => {
   const { invalidateByPattern: invalidate } = useCache();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [formErrors, setFormErrors] = useState<Record<string, string> | null>(null);
+  const [formErrors, setFormErrors] = useState<Record<string, string> | null>(
+    null
+  );
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
   const { data, loading, error, refresh } = useAsyncCache(
     ["team-members", currentPage],
     fetchTeamMembers,
-    { ttl: CACHE_TTL.IMPORTANT_1_HOUR },
+    { ttl: CACHE_TTL.IMPORTANT_1_HOUR }
   );
 
   const setCurrentPage = (page: number) => {
     setSearchParams({ page: page.toString() });
   };
 
-  const teamMembers: TeamMember[] = data?.members || [];
   const pagination = data
     ? {
         currentPage: data.currentPage,
@@ -42,57 +43,68 @@ export const useTeamPage = () => {
     if (error instanceof ApiError) {
       return error.message; // This is now the i18n key
     }
-    if (error) {
-      return "UNEXPECTED_ERROR";
-    }
-    return null;
+    return error ? "UNEXPECTED_ERROR" : null;
   }, [error]);
 
   const handleCreateMember = async (newMember: NewTeamMember) => {
     setFormErrors(null);
-    const response = await api.team.create(newMember);
-
-    if (response.error) {
-      console.error("Failed to create team member", response.error);
-      setFormErrors(response.error.validations || { general: response.error.message });
-    } else {
+    try {
+      await api.team.create(newMember);
       await invalidate("^team-members");
       // Optionally, close a modal or redirect here on success
+    } catch (error) {
+      console.error("Failed to create team member", error);
+      if (error instanceof ApiError) {
+        setFormErrors({ general: error.message });
+      } else {
+        setFormErrors({ general: "error.general.internal_server_error" });
+      }
     }
   };
 
   const handleDeleteMember = async (memberId: string) => {
-    const response = await api.team.remove(memberId);
-    if (response.error) {
-      console.error("Failed to delete team member", response.error);
-      setFormErrors({ general: response.error.message });
-    } else {
+    try {
+      await api.team.remove(memberId);
       await invalidate("^team-members");
+    } catch (error) {
+      console.error("Failed to delete team member", error);
+      if (error instanceof ApiError) {
+        setFormErrors({ general: error.message });
+      } else {
+        setFormErrors({ general: "error.general.internal_server_error" });
+      }
     }
   };
 
   const handleUpdateMember = async (member: TeamMember) => {
     setFormErrors(null);
-    const response = await api.team.update(member);
-
-    if (response.error) {
-      console.error("Failed to update team member", response.error);
-      setFormErrors(response.error.validations || { general: response.error.message });
-    } else {
+    try {
+      await api.team.update(member);
       await invalidate("^team-members");
+    } catch (error) {
+      console.error("Failed to update team member", error);
+      if (error instanceof ApiError) {
+        setFormErrors({ general: error.message });
+      } else {
+        setFormErrors({ general: "error.general.internal_server_error" });
+      }
     }
   };
 
   const handleUpdatePlatformRole = async (
     memberId: string,
-    platformRole: "admin" | "user",
+    platformRole: "admin" | "user"
   ) => {
-    const response = await api.team.update({ id: memberId, platformRole });
-    if (response.error) {
-      console.error("Failed to update platform role", response.error);
-      setFormErrors({ general: response.error.message });
-    } else {
+    try {
+      await api.team.update({ id: memberId, platformRole });
       await invalidate("^team-members");
+    } catch (error) {
+      console.error("Failed to update platform role", error);
+      if (error instanceof ApiError) {
+        setFormErrors({ general: error.message });
+      } else {
+        setFormErrors({ general: "error.general.internal_server_error" });
+      }
     }
   };
 
@@ -101,7 +113,7 @@ export const useTeamPage = () => {
     error: !!error,
     errorMessage,
     formErrors,
-    teamMembers,
+    teamMembers: data?.members || [],
     pagination,
     setCurrentPage,
     handleCreateMember,

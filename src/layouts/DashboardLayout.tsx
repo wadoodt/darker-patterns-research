@@ -10,7 +10,7 @@ import type { AuthenticatedUser } from "types/auth";
 
 interface DashboardLayoutProps {
   path: string;
-  user: AuthenticatedUser;
+  user?: AuthenticatedUser;
   children: React.ReactNode;
 }
 

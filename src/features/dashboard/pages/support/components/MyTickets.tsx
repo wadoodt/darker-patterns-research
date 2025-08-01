@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Heading, Table, Badge, Flex, Button } from "@radix-ui/themes";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/index";
-import type { SupportTicket } from "types/support-ticket";
+import type { SupportTicket } from "@api/domains/support/types";
 import { ApiError } from "@api/lib/ApiError";
 import { CACHE_TTL } from "@lib/cache/constants";
 

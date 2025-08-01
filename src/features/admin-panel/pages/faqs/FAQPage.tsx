@@ -4,16 +4,16 @@ import { FAQTableSection } from "@features/admin-panel/pages/faqs/sections/FAQTa
 import { ModalsSection } from "@features/admin-panel/pages/faqs/sections/ModalsSection";
 import { useFAQManagement } from "@features/admin-panel/pages/faqs/hooks/useFAQManagement";
 import { useState } from "react";
-import type { FAQItem } from "types/faq";
+import type { FaqItem } from "@api/domains/faq/types";
 
 export default function FAQPage() {
   const { faqs = [], isLoading, error, handleCreate, handleUpdate, handleDelete } = useFAQManagement();
 
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [editingFAQ, setEditingFAQ] = useState<FAQItem | null>(null);
+  const [editingFAQ, setEditingFAQ] = useState<FaqItem | null>(null);
 
-  const handleEdit = async (faq: FAQItem) => {
+const handleEdit = async (faq: FaqItem) => {
     setEditingFAQ(faq);
     setEditModalOpen(true);
   };
@@ -24,7 +24,7 @@ export default function FAQPage() {
     <Box>
       <HeaderSection onCreate={() => setCreateModalOpen(true)} />
       <FAQTableSection 
-        faqs={faqs} 
+        faqs={faqs || []} 
         isLoading={isLoading}
         onUpdate={handleEdit}
         onDelete={handleDelete} 

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import api from "@api/client";
-import type { SupportTicket } from "types/support-ticket";
+import type { SupportTicket } from "@api/domains/support/types";
 import { CACHE_TTL } from "@lib/cache/constants";
 import { z } from "zod";
 import { useForm } from "react-hook-form";

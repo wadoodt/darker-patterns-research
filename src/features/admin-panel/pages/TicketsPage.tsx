@@ -8,11 +8,11 @@ const TicketsPage: React.FC = () => {
   const {
     navigate,
     setCurrentPage,
-    loading,
+    isLoading: loading,
     error,
     handleStatusChange,
     tickets,
-    pagination,
+    totalPages,
     errorMessage,
   } = useTicketsPage();
 
@@ -28,7 +28,7 @@ const TicketsPage: React.FC = () => {
         navigate={navigate}
       />
       <PaginationSection
-        pagination={pagination}
+        pagination={{ currentPage: 1, totalPages }}
         setCurrentPage={setCurrentPage}
       />
     </Box>

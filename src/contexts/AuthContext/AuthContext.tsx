@@ -1,122 +1,117 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import apiClient from "@api/client";
-import type { ApiResponse } from "types";
-import type { AuthenticatedUser, LoginCredentials } from "types/auth";
+import type { AuthenticatedUser } from "types/auth";
 import type { AuthContextType } from "./types";
 import { AuthContext } from "./context";
-
-async function checkUserSession(
-  setUser: React.Dispatch<React.SetStateAction<AuthenticatedUser | null>>,
-  setToken: React.Dispatch<React.SetStateAction<string | null>>,
-  setTokenExpiresAt: React.Dispatch<React.SetStateAction<number | null>>,
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
-) {
-  const storedToken = localStorage.getItem("authToken");
-  const storedExpiration = localStorage.getItem("tokenExpiresAt");
-  const expiresAt = storedExpiration ? JSON.parse(storedExpiration) : null;
-
-  if (storedToken && expiresAt && Date.now() < expiresAt) {
-    try {
-      const { data: response } = await apiClient.get("/users/me");
-      if (response.data) {
-        const { user: userData, unreadNotifications } = response.data;
-        setUser({
-          ...userData,
-          notifications: unreadNotifications,
-        });
-        setToken(storedToken);
-        setTokenExpiresAt(expiresAt);
-      } else {
-        throw new Error(response.data.error?.message || "Invalid session");
-      }
-    } catch {
-      setUser(null);
-      setToken(null);
-      setTokenExpiresAt(null);
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("tokenExpiresAt");
-    }
-  }
-  setIsLoading(false);
-}
-
-async function performLogin(credentials: LoginCredentials) {
-  const { data: response } = await apiClient.post("/auth/login", credentials);
-
-  if (response.error) {
-    throw new Error(response.error.message);
-  }
-  if (!response.data) {
-    throw new Error("Login response did not contain data.");
-  }
-  return response.data;
-}
+import { useLogin } from "@api/domains/auth/hooks";
+import { useUser } from "@api/domains/users/hooks";
+import type { UserMeResponse } from "@api/domains/users/index";
 
 const useAuthProvider = (): AuthContextType => {
   const [user, setUser] = useState<AuthenticatedUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem("authToken"),
+    localStorage.getItem("authToken")
   );
   const [tokenExpiresAt, setTokenExpiresAt] = useState<number | null>(
-    JSON.parse(localStorage.getItem("tokenExpiresAt") || "null"),
+    JSON.parse(localStorage.getItem("tokenExpiresAt") || Date.now().toString())
   );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const { mutateAsync: loginUser } = useLogin();
+  const { data: userData } = useUser();
 
   useEffect(() => {
-    checkUserSession(setUser, setToken, setTokenExpiresAt, setIsLoading);
-  }, []);
+    if (token && tokenExpiresAt) {
+      const isValid = Date.now() < tokenExpiresAt;
 
-  const login = useCallback(async (username: string, password: string): Promise<void> => {
-    try {
-      const {
-        user: userData,
-        token: userToken,
-        expiresIn,
-        notifications,
-      } = await performLogin({ username, password });
-      
-      const expirationTime = Date.now() + expiresIn * 1000;
-      setUser({ ...userData, notifications: notifications.unread });
-      setToken(userToken);
-      setTokenExpiresAt(expirationTime);
-      localStorage.setItem("authToken", userToken);
-      localStorage.setItem("tokenExpiresAt", expirationTime.toString());
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
+      if (!isValid) {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("tokenExpiresAt");
+        setTokenExpiresAt(null);
+        setToken(null);
+      }
+      setIsAuthenticated(isValid);
+    } else {
+      setIsAuthenticated(false);
     }
-  }, []);
+  }, [token, tokenExpiresAt]);
+
+  useEffect(() => {
+    if (userData && token) {
+      const { user: fetchedUser, unreadNotifications } = userData;
+      const userWithPlan = fetchedUser as UserMeResponse;
+      setUser({
+        ...fetchedUser,
+        plan: (userWithPlan.plan as "Enterprise" | "Pro" | "Free") || "Free",
+        createdAt: userWithPlan.createdAt || new Date().toISOString(),
+        updatedAt: userWithPlan.updatedAt || new Date().toISOString(),
+        notifications: unreadNotifications,
+      });
+      setIsLoading(false);
+    }
+  }, [userData, token]);
+
+  const login = useCallback(
+    async (username: string, password: string): Promise<void> => {
+      try {
+        const {
+          user: userData,
+          token: userToken,
+          expiresIn,
+          notifications,
+        } = await loginUser({ username, password });
+
+        const expirationTime = Date.now() + expiresIn * 1000;
+        setUser({ ...userData, notifications: notifications.unread });
+        setToken(userToken);
+        setTokenExpiresAt(expirationTime);
+        setIsAuthenticated(true);
+        localStorage.setItem("authToken", userToken);
+        localStorage.setItem("tokenExpiresAt", expirationTime.toString());
+      } catch (error) {
+        console.error("Login failed:", error);
+        throw error;
+      }
+    },
+    [loginUser]
+  );
 
   const logout = useCallback(async () => {
     setUser(null);
     setToken(null);
     setTokenExpiresAt(null);
+    setIsAuthenticated(false);
     localStorage.removeItem("authToken");
     localStorage.removeItem("tokenExpiresAt");
 
     try {
-      const response = await apiClient.post<ApiResponse<null>>("/auth/logout");
+      const response = await apiClient.post("/auth/logout");
       if (response.data.error) {
-        console.error("Server-side logout failed:", response.data.error.message);
+        console.error(
+          "Server-side logout failed:",
+          response.data.error.message
+        );
       }
     } catch (error) {
       console.error("Logout request failed:", error);
     }
   }, []);
 
-  const hasRole = useCallback((roles: string[]) => {
-    if (!user) return false;
-    return roles.includes(user.platformRole);
-  }, [user]);
+  const hasRole = useCallback(
+    (roles: string[]) => {
+      if (!user) return false;
+      return roles.includes(user.platformRole);
+    },
+    [user]
+  );
 
-  const hasPlan = useCallback((plans: string[]) => {
-    if (!user || !user.plan) return false;
-    return plans.includes(user.plan);
-  }, [user]);
-
-  const isAuthenticated = useCallback((): boolean => {
-    return !!token && !!tokenExpiresAt && Date.now() < tokenExpiresAt;
-  }, [token, tokenExpiresAt]);
+  const hasPlan = useCallback(
+    (plans: string[]) => {
+      if (!user || !user.plan) return false;
+      return plans.includes(user.plan);
+    },
+    [user]
+  );
 
   return useMemo(
     () => ({
@@ -124,13 +119,23 @@ const useAuthProvider = (): AuthContextType => {
       token,
       tokenExpiresAt,
       isLoading,
+      isAuthenticated,
       login,
       logout,
       hasRole,
       hasPlan,
-      isAuthenticated,
     }),
-    [user, token, tokenExpiresAt, isLoading, login, logout, hasRole, hasPlan, isAuthenticated],
+    [
+      user,
+      token,
+      tokenExpiresAt,
+      isLoading,
+      isAuthenticated,
+      login,
+      logout,
+      hasRole,
+      hasPlan,
+    ]
   );
 };
 

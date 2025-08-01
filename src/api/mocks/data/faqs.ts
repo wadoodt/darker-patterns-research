@@ -1,6 +1,6 @@
-import type { FAQItem } from "types/faq";
+import type { FaqItem } from "@api/domains/faq/types";
 
-const mockPricingFaqs: FAQItem[] = [
+const mockPricingFaqs: FaqItem[] = [
   {
     id: "pricing-1",
     category: "pricing",
@@ -47,7 +47,7 @@ const mockPricingFaqs: FAQItem[] = [
   },
 ];
 
-const mockHomeFaqs: FAQItem[] = [
+const mockHomeFaqs: FaqItem[] = [
     {
         id: "home-1",
         category: "home",
@@ -90,4 +90,4 @@ const mockHomeFaqs: FAQItem[] = [
     }
 ];
 
-export const mockFaqs: FAQItem[] = [...mockPricingFaqs, ...mockHomeFaqs];
+export const mockFaqs: FaqItem[] = [...mockPricingFaqs, ...mockHomeFaqs];
