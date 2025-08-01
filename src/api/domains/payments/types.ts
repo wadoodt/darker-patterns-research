@@ -6,7 +6,10 @@ export type Payment = {
   status: PaymentStatus;
   amount: number;
   currency: string;
-  created: string;
+  createdAt: string;
+  companyId: string;
+  userId: string;
+  stripeSessionId: string;
 };
 
 export type CreatePaymentPayload = {
