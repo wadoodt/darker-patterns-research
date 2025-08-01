@@ -3,15 +3,9 @@ import apiClient from "@api/client";
 import { handleQuery } from "@api/lib/handleQuery";
 import { handleMutation } from "@api/lib/handleMutation";
 import type { User, UpdateUserPayload } from "./types";
-import type { Notification } from "@api/domains/notifications/types";
+import type { AuthenticatedUser } from "types/auth";
 
-export type UserMeResponse = User & {
-  plan?: string;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-const getMe = async (): Promise<{ user: UserMeResponse; unreadNotifications: Notification[] }> => {
+const getMe = async (): Promise<AuthenticatedUser> => {
   return handleQuery(() => apiClient.get("/users/me"));
 };
 

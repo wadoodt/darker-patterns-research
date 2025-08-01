@@ -9,4 +9,13 @@ export const useLogin = () => {
     },
     isLoading: false,
   };
+};
+
+export const useLogout = () => {
+  return {
+    mutateAsync: async () => {
+      return await auth.logout();
+    },
+    isLoading: false,
+  };
 }; 
