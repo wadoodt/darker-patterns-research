@@ -66,8 +66,8 @@ This file serves as the central database instance.
 
 This module handles authentication and role-based access control for mock endpoints.
 
-- **Purpose**: To centralize authorization logic.
-- **Exports**: An `authorize` function.
+- **Purpose**: To centralize authorization logic and validate JWT tokens.
+- **Exports**: An `authorize` function that validates tokens and user permissions.
 
 **`authorize(request, allowedRoles: string[])`**
 
@@ -76,6 +76,24 @@ This module handles authentication and role-based access control for mock endpoi
 3.  If no user is found, throws a `401 Unauthorized` error.
 4.  If the user's role is not included in `allowedRoles`, throws a `403 Forbidden` error.
 5.  If authorized, returns the full user object.
+
+```typescript
+import { authorize } from "../utils/auth";
+
+export const protectedEndpoint = async (request: Request) => {
+  try {
+    // Validate authentication and role
+    const user = await authorize(request, ["user", "admin"]);
+    
+    // Your endpoint logic here
+    return new Response(JSON.stringify({ data: "protected data" }));
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { 
+      status: 401 
+    });
+  }
+};
+```
 
 ### 3.3. API Handlers (`handlers/`)
 
@@ -90,7 +108,7 @@ Handlers contain the business logic for each API endpoint.
 import { db } from "../db";
 
 // Corresponds to POST /api/auth/login
-export const login = async (request) => {
+export const login = async (request: Request) => {
   const { username, password } = await request.json();
   const user = db.users.findFirst({ where: { username } });
 
@@ -98,9 +116,59 @@ export const login = async (request) => {
     return new Response("Invalid credentials", { status: 401 });
   }
 
-  // Exclude password from the response
+  // Generate tokens
+  const token = `mock-token-for-id-${user.id}`;
+  const refreshToken = `mock-refresh-token-for-id-${user.id}`;
+  const expiresIn = 86400; // 24 hours
+
+  // Update user with tokens
+  db.users.update({
+    where: { id: user.id },
+    data: { token, refreshToken }
+  });
+
+  // Return login response
   const { password: _, ...userResponse } = user;
-  return new Response(JSON.stringify(userResponse), { status: 200 });
+  return new Response(JSON.stringify({
+    user: userResponse,
+    token,
+    refreshToken,
+    expiresIn,
+    notifications: { unread: [] }
+  }));
+};
+
+// Corresponds to POST /api/auth/refresh-token
+export const refreshToken = async (request: Request) => {
+  const { refreshToken } = await request.json();
+  
+  // Find user by refresh token
+  const user = db.users.findFirst({ 
+    where: { refreshToken } 
+  });
+
+  if (!user) {
+    return new Response(JSON.stringify({ error: "Invalid refresh token" }), { 
+      status: 401 
+    });
+  }
+
+  // Generate new tokens
+  const newToken = `mock-token-for-id-${user.id}`;
+  const newRefreshToken = `mock-refresh-token-for-id-${user.id}`;
+  const expiresIn = 86400;
+
+  // Update user with new tokens
+  db.users.update({
+    where: { id: user.id },
+    data: { token: newToken, refreshToken: newRefreshToken }
+  });
+
+  return new Response(JSON.stringify({
+    accessToken: newToken,
+    refreshToken: newRefreshToken,
+    expiresIn
+  }));
 };
 ```
 
@@ -120,6 +188,8 @@ import * as authHandlers from "./handlers/auth";
 
 const routes = {
   "POST /api/auth/login": authHandlers.login,
+  "POST /api/auth/refresh-token": authHandlers.refreshToken,
+  "POST /api/auth/logout": authHandlers.logout,
   // 'GET /api/users': userHandlers.getUsers,
 };
 ```
@@ -169,7 +239,44 @@ apiClient.interceptors.request.use(async (config) => {
 });
 ```
 
-## 4. Usage in Tests (Vitest)
+## 4. Authentication Flow in Mock Environment
+
+The mock environment fully supports the complete authentication flow:
+
+### 4.1. Login Flow
+
+1. **User submits credentials** → `POST /api/auth/login`
+2. **Mock handler validates credentials** → Checks against mock database
+3. **Tokens generated** → Access token, refresh token, and expiration
+4. **Tokens stored** → Updated in mock database and returned to client
+5. **Client stores tokens** → Using `TokenService.setTokens()`
+
+### 4.2. Token Refresh Flow
+
+1. **API call fails with 401** → API client interceptor catches this
+2. **Refresh token sent** → `POST /api/auth/refresh-token`
+3. **Mock handler validates refresh token** → Checks against mock database
+4. **New tokens generated** → Token rotation (new refresh token)
+5. **Client updates tokens** → Using `TokenService.updateAccessToken()`
+6. **Original request retried** → With new access token
+
+### 4.3. Token Validation
+
+Mock handlers can validate tokens using the `authorize` utility:
+
+```typescript
+import { authorize } from "../utils/auth";
+
+export const protectedEndpoint = async (request: Request) => {
+  // This will validate the token and check user role
+  const user = await authorize(request, ["user", "admin"]);
+  
+  // If we get here, the user is authenticated and authorized
+  return new Response(JSON.stringify({ data: "protected data" }));
+};
+```
+
+## 5. Usage in Tests (Vitest)
 
 This architecture is highly conducive to testing.
 
@@ -194,9 +301,14 @@ it("should allow a valid user to log in", () => {
 it("should reject a user with the wrong password", () => {
   // ... test login logic with bad credentials
 });
+
+it("should refresh tokens successfully", () => {
+  // Test the complete refresh token flow
+  // ... test refresh logic
+});
 ```
 
-## 5. Interaction with Client-Side Caching
+## 6. Interaction with Client-Side Caching
 
 The mock API and the client-side caching system are designed to work together seamlessly. The caching layer is independent of the data source, meaning it will cache responses from the mock API just as it would from a real backend.
 
@@ -237,12 +349,41 @@ export function UsersList() {
 }
 ```
 
+### Authentication-Aware Caching
+
+The caching system works seamlessly with authentication:
+
+```typescript
+import { getAccessToken } from "@lib/tokenService";
+
+export function ProtectedData() {
+  const token = getAccessToken();
+  
+  const { data, loading } = useAsyncCache(
+    ["protected-data"],
+    () => api.get("/protected-endpoint").then(res => res.data),
+    { 
+      enabled: !!token, // Only fetch if authenticated
+      ttl: CACHE_TTL.STANDARD_5_MIN 
+    }
+  );
+
+  if (!token) {
+    return <div>Please log in to view this data</div>;
+  }
+
+  if (loading) return <div>Loading...</div>;
+  return <div>{data}</div>;
+}
+```
+
 ### Debugging
 
 The **Cache Management Panel** on the profile page can be used to inspect data provided by the mock API, making it easy to verify that your mock handlers are returning the correct data structures.
 
-## 6. Related Documentation
+## 7. Related Documentation
 
 - **[Client-Side Caching: A Developer's Guide](./CACHED_REQUEST.md)**: For a deep dive into the caching system.
 - **[Endpoint Integration Guide](./ENDPOINT_INTEGRATION.md)**: For a step-by-step guide on how to use this mock architecture to add new API endpoints.
 - **[API Response & Error Handling](./ERROR_HANDLING.md)**: To understand how mock handlers should structure their success and error responses.
+- **[Authentication Troubleshooting](./FAQ.md)**: For common authentication issues and solutions.

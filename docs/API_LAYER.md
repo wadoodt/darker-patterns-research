@@ -14,7 +14,107 @@ The API layer is divided into three main parts:
 
 ---
 
-## 2. Using the API SDK
+## 2. Authentication & Token Management
+
+The application uses a robust JWT-based authentication system with automatic token refresh and centralized token management.
+
+### 2.1. TokenService (`src/lib/tokenService.ts`)
+
+The `TokenService` provides centralized token management with the following key features:
+
+- **Functional Design**: Pure functions for better tree-shaking and performance
+- **Event-Driven**: Custom events for token change notifications
+- **Type Safety**: Proper TypeScript types for all operations
+- **Automatic Cleanup**: Proper token removal and state synchronization
+
+```typescript
+import { 
+  getAccessToken, 
+  setTokens, 
+  removeTokens, 
+  validateToken,
+  onTokenChange 
+} from "@lib/tokenService";
+
+// Get current access token
+const token = getAccessToken();
+
+// Set tokens (login)
+setTokens({
+  accessToken: "jwt_token",
+  refreshToken: "refresh_token", 
+  expiresAt: Date.now() + 3600000
+});
+
+// Remove tokens (logout)
+removeTokens();
+
+// Validate token
+const validation = validateToken();
+if (validation.isExpired) {
+  // Handle expired token
+}
+
+// Listen for token changes
+const cleanup = onTokenChange((event) => {
+  console.log('Token changed:', event.detail);
+});
+```
+
+### 2.2. API Client Authentication (`src/api/client.ts`)
+
+The API client automatically handles authentication through interceptors:
+
+**Request Interceptor:**
+- Automatically adds `Authorization: Bearer <token>` header
+- Uses `TokenService.getAccessToken()` for token retrieval
+
+**Response Interceptor:**
+- Catches 401 Unauthorized errors
+- Automatically attempts token refresh
+- Queues concurrent requests during refresh
+- Supports token rotation (new refresh tokens)
+
+```typescript
+// Automatic token refresh example
+apiClient.get('/protected-endpoint')
+  .then(response => {
+    // Request succeeded
+  })
+  .catch(error => {
+    if (error.response?.status === 401) {
+      // Token refresh was attempted automatically
+      // If refresh failed, user will be redirected to login
+    }
+  });
+```
+
+### 2.3. AuthContext Integration
+
+The `AuthContext` integrates with `TokenService` for seamless authentication state management:
+
+- **Continuous Validation**: Checks token validity every minute
+- **Proactive Refresh**: Refreshes tokens 5 minutes before expiry
+- **Event Synchronization**: Listens for token changes from TokenService
+- **Automatic Cleanup**: Handles token expiration gracefully
+
+```typescript
+import { useAuth } from "@hooks/useAuth";
+
+function MyComponent() {
+  const { isAuthenticated, user, login, logout } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <LoginForm />;
+  }
+  
+  return <Dashboard user={user} />;
+}
+```
+
+---
+
+## 3. Using the API SDK
 
 All interactions with the API should go through the hooks exported from each domain.
 
@@ -75,11 +175,30 @@ const AddFaqForm = () => {
 };
 ```
 
+### Authentication-Aware Data Fetching
+
+For endpoints that require authentication, the API client automatically handles token management:
+
+```tsx
+import { useUser } from "@api/domains/users/hooks";
+
+function UserProfile() {
+  // This hook automatically handles authentication
+  // It will only fetch data if a valid token exists
+  const { data: user, loading, error } = useUser();
+
+  if (loading) return <span>Loading user...</span>;
+  if (error) return <span>Error loading user</span>;
+
+  return <div>Welcome, {user.name}!</div>;
+}
+```
+
 This architecture provides a clean, powerful, and consistent pattern for all data fetching and state management across the application.
 
 ---
 
-## 3. How to Add a New API Domain
+## 4. How to Add a New API Domain
 
 Adding a new domain (e.g., "billing") is straightforward:
 
@@ -115,3 +234,52 @@ export const useBillingQuery = (invoiceId: string) => {
 **5. Add Mock Handlers**
 
 Create or update mock handlers in `src/api/mocks/handlers` to simulate the new API endpoints for development and testing.
+
+**6. Consider Authentication Requirements**
+
+If your new domain requires authentication:
+
+- The API client will automatically add authentication headers
+- Mock handlers should validate tokens using the auth utilities
+- Consider token expiration in your mock responses
+
+```typescript
+// Example: Protected endpoint in mock handler
+import { authorize } from "../utils/auth";
+
+export const getBillingData = async (request: Request) => {
+  // Validate authentication
+  const user = await authorize(request, ["user", "admin"]);
+  
+  // Your endpoint logic here
+  return new Response(JSON.stringify(billingData));
+};
+```
+
+---
+
+## 5. Authentication Best Practices
+
+### 5.1. Token Storage
+
+- **Access Tokens**: Stored in localStorage for persistence
+- **Refresh Tokens**: Stored in localStorage (consider httpOnly cookies for production)
+- **Expiration**: Stored as timestamp for validation
+
+### 5.2. Error Handling
+
+- **401 Errors**: Automatically handled by API client
+- **Token Expiration**: Proactive refresh prevents user disruption
+- **Network Errors**: Graceful degradation with retry logic
+
+### 5.3. Security Considerations
+
+- **Token Rotation**: Refresh tokens are rotated on each refresh
+- **Automatic Cleanup**: Tokens are removed on logout/expiration
+- **Concurrent Requests**: Queuing prevents duplicate refresh attempts
+
+### 5.4. Development Workflow
+
+- **Mock Environment**: Full authentication flow supported in mocks
+- **Token Validation**: Mock handlers validate tokens like real backend
+- **Testing**: Easy to test authentication scenarios with mock data

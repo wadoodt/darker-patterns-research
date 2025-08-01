@@ -6,35 +6,89 @@ import { AuthContext } from "./context";
 import { useLogin } from "@api/domains/auth/hooks";
 import { useUser } from "@api/domains/users/hooks";
 import type { UserMeResponse } from "@api/domains/users/index";
+import { 
+  getAccessToken, 
+  getExpiresAt, 
+  setTokens, 
+  removeTokens, 
+  onTokenChange, 
+  validateToken, 
+  willExpireWithin 
+} from "@lib/tokenService";
 
 const useAuthProvider = (): AuthContextType => {
   const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("authToken")
-  );
-  const [tokenExpiresAt, setTokenExpiresAt] = useState<number | null>(
-    JSON.parse(localStorage.getItem("tokenExpiresAt") || Date.now().toString())
-  );
+  const [token, setToken] = useState<string | null>(getAccessToken());
+  const [tokenExpiresAt, setTokenExpiresAt] = useState<number | null>(getExpiresAt());
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { mutateAsync: loginUser } = useLogin();
   const { data: userData } = useUser();
 
+  // Listen for token changes from TokenService
   useEffect(() => {
-    if (token && tokenExpiresAt) {
-      const isValid = Date.now() < tokenExpiresAt;
-
-      if (!isValid) {
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("tokenExpiresAt");
-        setTokenExpiresAt(null);
-        setToken(null);
+    const cleanup = onTokenChange((event) => {
+      const { type, tokenData, accessToken, expiresAt } = event.detail;
+      
+      switch (type) {
+        case 'set':
+          setToken(tokenData!.accessToken);
+          setTokenExpiresAt(tokenData!.expiresAt);
+          break;
+        case 'update':
+          setToken(accessToken!);
+          setTokenExpiresAt(expiresAt!);
+          break;
+        case 'remove':
+          setToken(null);
+          setTokenExpiresAt(null);
+          break;
       }
-      setIsAuthenticated(isValid);
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, [token, tokenExpiresAt]);
+    });
+
+    return cleanup;
+  }, []);
+
+  // Continuous token validation
+  useEffect(() => {
+    const validateTokenState = () => {
+      const validation = validateToken();
+      
+      if (!validation.isValid) {
+        // Token is invalid, clear state
+        setToken(null);
+        setTokenExpiresAt(null);
+        setIsAuthenticated(false);
+        return;
+      }
+
+      if (validation.isExpired) {
+        // Token is expired, clear state
+        removeTokens();
+        setToken(null);
+        setTokenExpiresAt(null);
+        setIsAuthenticated(false);
+        return;
+      }
+
+      // Token is valid
+      setIsAuthenticated(true);
+      
+      // Proactive refresh: if token expires within 5 minutes, trigger refresh
+      if (willExpireWithin(5 * 60 * 1000)) {
+        console.log('Token expires soon, triggering proactive refresh...');
+        // The API client will handle the refresh automatically on next request
+      }
+    };
+
+    // Initial validation
+    validateTokenState();
+
+    // Set up periodic validation (every minute)
+    const interval = setInterval(validateTokenState, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (userData && token) {
@@ -57,17 +111,24 @@ const useAuthProvider = (): AuthContextType => {
         const {
           user: userData,
           token: userToken,
+          refreshToken,
           expiresIn,
           notifications,
         } = await loginUser({ username, password });
 
         const expirationTime = Date.now() + expiresIn * 1000;
+        
+        // Use TokenService to set tokens
+        setTokens({
+          accessToken: userToken,
+          refreshToken,
+          expiresAt: expirationTime
+        });
+
         setUser({ ...userData, notifications: notifications.unread });
         setToken(userToken);
         setTokenExpiresAt(expirationTime);
         setIsAuthenticated(true);
-        localStorage.setItem("authToken", userToken);
-        localStorage.setItem("tokenExpiresAt", expirationTime.toString());
       } catch (error) {
         console.error("Login failed:", error);
         throw error;
@@ -81,8 +142,9 @@ const useAuthProvider = (): AuthContextType => {
     setToken(null);
     setTokenExpiresAt(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("tokenExpiresAt");
+    
+    // Use TokenService to remove tokens
+    removeTokens();
 
     try {
       const response = await apiClient.post("/auth/logout");

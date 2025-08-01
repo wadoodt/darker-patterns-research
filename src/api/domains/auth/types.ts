@@ -11,6 +11,7 @@ export interface AuthenticatedUser extends Omit<User, "notifications"> {
 export type LoginResponse = {
   user: AuthenticatedUser;
   token: string;
+  refreshToken: string;
   expiresIn: number;
   notifications: {
     unread: Notification[];

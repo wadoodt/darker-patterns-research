@@ -72,7 +72,75 @@ export function CompaniesList() {
   - `enabled`: If `false`, the hook will not execute.
   - `refetchOnMount`: If `true`, forces a refetch every time the component mounts.
 
-## 3. Advanced Features & Resilience
+## 3. Authentication-Aware Caching
+
+The caching system is designed to work seamlessly with the authentication system. When authentication is required, the cache automatically adjusts its behavior.
+
+### Token-Based TTL Calculation
+
+For authenticated endpoints, you can calculate TTL based on token expiration to ensure cache doesn't outlive the user's session:
+
+```tsx
+import { useMemo } from "react";
+import { useAsyncCache } from "@hooks/useAsyncCache";
+import { getExpiresAt } from "@lib/tokenService";
+
+export function UserProfile() {
+  const tokenExpiresAt = getExpiresAt();
+  
+  // Calculate TTL based on token expiration
+  const ttl = useMemo(() => {
+    if (!tokenExpiresAt) {
+      return CACHE_TTL.STANDARD_5_MIN; // Default fallback
+    }
+    
+    const timeUntilExpiry = tokenExpiresAt - Date.now();
+    // Set TTL to 90% of time until expiry, with a minimum of 1 minute
+    return Math.max(timeUntilExpiry * 0.9, 60);
+  }, [tokenExpiresAt]);
+
+  const { data: user } = useAsyncCache(
+    ["user", "me"],
+    () => api.get("/users/me").then(res => res.data),
+    { 
+      ttl,
+      enabled: !!tokenExpiresAt // Only fetch if user is authenticated
+    }
+  );
+
+  return <div>Welcome, {user?.name}!</div>;
+}
+```
+
+### Authentication-Dependent Caching
+
+The `enabled` option is particularly useful for authentication-dependent data:
+
+```tsx
+import { getAccessToken } from "@lib/tokenService";
+
+export function ProtectedData() {
+  const token = getAccessToken();
+  
+  const { data, loading } = useAsyncCache(
+    ["protected-data"],
+    () => api.get("/protected-endpoint").then(res => res.data),
+    { 
+      enabled: !!token, // Only fetch if authenticated
+      ttl: CACHE_TTL.STANDARD_5_MIN 
+    }
+  );
+
+  if (!token) {
+    return <div>Please log in to view this data</div>;
+  }
+
+  if (loading) return <div>Loading...</div>;
+  return <div>{data}</div>;
+}
+```
+
+## 4. Advanced Features & Resilience
 
 We have made significant improvements to make the cache system more robust.
 
@@ -84,7 +152,7 @@ If the cache is not ready (e.g., IndexedDB is initializing), `useAsyncCache` wil
 
 If the `CacheProvider` detects an IndexedDB versioning error during initialization, it will **automatically delete and recreate the database**. This self-healing mechanism prevents the app from getting stuck in a broken state due to schema mismatches.
 
-## 4. Cache Management & Debugging
+## 5. Cache Management & Debugging
 
 To help with development and debugging, we've created a central cache management panel.
 
@@ -99,7 +167,7 @@ To help with development and debugging, we've created a central cache management
 
 This tool is invaluable for observing cache behavior and ensuring your data is being stored and refreshed correctly.
 
-## 5. Manually Interacting with the Cache
+## 6. Manually Interacting with the Cache
 
 While `useAsyncCache` should be your primary tool, you can directly interact with the cache using the `useCache` hook.
 
@@ -135,7 +203,7 @@ function MyComponent() {
 }
 ```
 
-## 6. Invalidate or Refresh Cache
+## 7. Invalidate or Refresh Cache
 
 To force a refresh (e.g., after a mutation), use `invalidateByPattern` from `useCache`.
 
@@ -159,7 +227,7 @@ If you use hierarchical keys (e.g., `user:123:profile`), you can invalidate all 
 await invalidateByPattern("user:123*");
 ```
 
-## 7. Understanding TTL (Time To Live)
+## 8. Understanding TTL (Time To Live)
 
 The `ttl` parameter specifies how long a cache entry should be considered valid, in **seconds**. We provide a set of constants in `src/lib/cache/constants.ts` for common durations:
 
@@ -170,6 +238,21 @@ The `ttl` parameter specifies how long a cache entry should be considered valid,
 - `CACHE_TTL.SESSION`: A very long duration, effectively caching for the user's session.
 
 Using these constants improves readability and maintainability. You can also provide a custom `ttl` in seconds for specific needs.
+
+### Authentication-Aware TTL
+
+For authenticated data, consider using token expiration to set TTL:
+
+```tsx
+import { getExpiresAt } from "@lib/tokenService";
+
+const tokenExpiresAt = getExpiresAt();
+const ttl = tokenExpiresAt 
+  ? Math.max((tokenExpiresAt - Date.now()) * 0.9, 60) // 90% of token life, min 1 min
+  : CACHE_TTL.STANDARD_5_MIN; // Fallback for unauthenticated requests
+```
+
+This ensures that cached data doesn't outlive the user's authentication session.
 
 ---
 

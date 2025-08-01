@@ -13,7 +13,7 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
     return <div>Loading...</div>; // Or a spinner component
   }
 
-  if (isAuthenticated()) {
+  if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
 

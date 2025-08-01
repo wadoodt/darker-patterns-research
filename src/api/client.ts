@@ -1,19 +1,43 @@
 /// <reference types="vite/client" />
 
-import axios from "axios";
+import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse } from "axios";
 import { API_DEBUG_MODE } from "./config";
-
-const apiClient = axios.create({
-  baseURL: "/api",
-});
-
+import { getAccessToken, getRefreshToken, setTokens, updateAccessToken, removeTokens } from "@lib/tokenService";
 import { resolve } from "./mocks/resolver";
 
+const apiClient: AxiosInstance = axios.create({
+  baseURL: "/api",
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+});
+
+// Module-level store for in-flight refresh requests to prevent duplicate fetches
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value?: string | null) => void;
+  reject: (error?: unknown) => void;
+}> = [];
+
+const processQueue = (error: unknown, token: string | null = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
+  
+  failedQueue = [];
+};
+
 apiClient.interceptors.request.use(
-  async (config) => {
+  async (config: InternalAxiosRequestConfig) => {
     // 1. Add the authentication token to the headers.
-    const token = localStorage.getItem("authToken");
+    const token = getAccessToken();
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -69,7 +93,7 @@ apiClient.interceptors.request.use(
 );
 
 apiClient.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse) => {
     if (API_DEBUG_MODE) {
       console.log(
         `[API Response] < ${response.status} ${response.config.method?.toUpperCase()} ${response.config.url}`,
@@ -80,7 +104,9 @@ apiClient.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+    
     if (API_DEBUG_MODE) {
       if (error.response) {
         console.error(
@@ -96,10 +122,73 @@ apiClient.interceptors.response.use(
       }
     }
 
-    if (error.response?.status === 401) {
-      // Handle unauthorized errors, e.g., redirect to login
-      console.log("Unauthorized access, redirecting to login...");
+    // Handle 401 Unauthorized errors with token refresh
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // If already refreshing, queue this request
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return apiClient(originalRequest);
+        }).catch((err) => {
+          return Promise.reject(err);
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refreshToken = getRefreshToken();
+      
+      if (!refreshToken) {
+        // No refresh token available, redirect to login
+        removeTokens();
+        window.location.href = '/login';
+        return Promise.reject(error);
+      }
+
+      try {
+        // Make refresh token request
+        const response = await axios.post('/api/auth/refresh-token', {
+          refreshToken
+        });
+        
+        const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data;
+        
+        // Update tokens in storage
+        if (newRefreshToken) {
+          // Token rotation - update both tokens
+          setTokens({
+            accessToken,
+            refreshToken: newRefreshToken,
+            expiresAt: Date.now() + expiresIn * 1000
+          });
+        } else {
+          // No token rotation - just update access token
+          updateAccessToken(accessToken, expiresIn);
+        }
+        
+        // Process queued requests
+        processQueue(null, accessToken);
+        
+        // Retry the original request
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return apiClient(originalRequest);
+        
+      } catch (refreshError) {
+        // Refresh token failed, clear tokens and redirect to login
+        removeTokens();
+        processQueue(refreshError, null);
+        
+        console.error('Refresh token failed:', refreshError);
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
+    
     return Promise.reject(error);
   },
 );

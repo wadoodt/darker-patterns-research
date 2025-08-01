@@ -40,6 +40,226 @@ This document covers common issues and their solutions that may arise during dev
 
 ---
 
+## **Problem:** Authentication issues - tokens not working or users getting logged out unexpectedly.
+
+**Symptoms:**
+- Users are redirected to login even when they have valid tokens
+- API calls return 401 errors despite having authentication
+- Token refresh is not working properly
+- Users get logged out immediately after login
+
+**Root Cause & Solutions:**
+
+### **Token Storage Issues**
+- **Root Cause:** Inconsistent token storage keys or corrupted localStorage
+- **Solution:** 
+  ```javascript
+  // Check if tokens exist
+  console.log('authToken:', localStorage.getItem('authToken'));
+  console.log('refreshToken:', localStorage.getItem('refreshToken'));
+  console.log('tokenExpiresAt:', localStorage.getItem('tokenExpiresAt'));
+  ```
+
+### **Token Expiration Issues**
+- **Root Cause:** Tokens are expired or expiration time is incorrect
+- **Solution:** 
+  ```javascript
+  // Check token expiration
+  const expiresAt = localStorage.getItem('tokenExpiresAt');
+  if (expiresAt && Date.now() > parseInt(expiresAt)) {
+    console.log('Token is expired');
+  }
+  ```
+
+### **Refresh Token Issues**
+- **Root Cause:** Refresh token is invalid or missing
+- **Solution:** Clear all tokens and re-login:
+  ```javascript
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('tokenExpiresAt');
+  ```
+
+### **API Client Issues**
+- **Root Cause:** API client not properly configured or interceptors not working
+- **Solution:** Check browser network tab for:
+  - Missing `Authorization` headers
+  - 401 responses not triggering refresh
+  - Refresh token requests failing
+
+### **Mock Environment Issues**
+- **Root Cause:** Mock handlers not properly validating tokens
+- **Solution:** Ensure mock handlers use proper authentication:
+  ```typescript
+  import { authorize } from "../utils/auth";
+  
+  export const protectedEndpoint = async (request: Request) => {
+    const user = await authorize(request, ["user", "admin"]);
+    // Your endpoint logic here
+  };
+  ```
+
+---
+
+## **Problem:** Token refresh is not working or causing infinite loops.
+
+**Symptoms:**
+- Multiple refresh requests being sent simultaneously
+- Infinite refresh loops
+- Refresh requests failing with 500 errors
+
+**Root Cause & Solutions:**
+
+### **Concurrent Refresh Requests**
+- **Root Cause:** Multiple API calls failing at the same time, each triggering refresh
+- **Solution:** The API client now queues requests during refresh. Check if you're using the latest version.
+
+### **Refresh Token Invalid**
+- **Root Cause:** Refresh token is expired or invalid
+- **Solution:** Clear tokens and redirect to login:
+  ```javascript
+  // In your error handler
+  if (error.response?.status === 401) {
+    // Clear all tokens
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenExpiresAt');
+    window.location.href = '/login';
+  }
+  ```
+
+### **Mock Refresh Token Issues**
+- **Root Cause:** Mock refresh endpoint not working correctly
+- **Solution:** Check mock handler implementation:
+  ```typescript
+  // Ensure mock refresh returns proper format
+  return new Response(JSON.stringify({
+    accessToken: "new_token",
+    refreshToken: "new_refresh_token", 
+    expiresIn: 3600
+  }));
+  ```
+
+---
+
+## **Problem:** Authentication state not syncing across components.
+
+**Symptoms:**
+- Some components show logged in, others show logged out
+- User data not updating after login/logout
+- AuthContext state inconsistent
+
+**Root Cause & Solutions:**
+
+### **Event System Issues**
+- **Root Cause:** Token change events not being dispatched or listened to
+- **Solution:** Ensure TokenService is being used consistently:
+  ```typescript
+  // Use TokenService instead of direct localStorage access
+  import { setTokens, removeTokens } from "@lib/tokenService";
+  
+  // Login
+  setTokens({ accessToken, refreshToken, expiresAt });
+  
+  // Logout  
+  removeTokens();
+  ```
+
+### **AuthContext Not Updated**
+- **Root Cause:** AuthContext not listening to token changes
+- **Solution:** Check AuthContext implementation:
+  ```typescript
+  // Should be listening to token changes
+  useEffect(() => {
+    const cleanup = onTokenChange((event) => {
+      // Update state based on event
+    });
+    return cleanup;
+  }, []);
+  ```
+
+---
+
+## **Problem:** Protected routes not working correctly.
+
+**Symptoms:**
+- Users can access protected routes without authentication
+- Authenticated users can't access protected routes
+- Loading states not working properly
+
+**Root Cause & Solutions:**
+
+### **Route Protection Logic**
+- **Root Cause:** Incorrect authentication checks in route components
+- **Solution:** Use the `useAuth` hook properly:
+  ```typescript
+  import { useAuth } from "@hooks/useAuth";
+  
+  const ProtectedRoute = ({ children }) => {
+    const { isAuthenticated, isLoading } = useAuth();
+    
+    if (isLoading) return <div>Loading...</div>;
+    if (!isAuthenticated) return <Navigate to="/login" />;
+    
+    return children;
+  };
+  ```
+
+### **Role-Based Access**
+- **Root Cause:** Role checking not implemented correctly
+- **Solution:** Use the `hasRole` function:
+  ```typescript
+  const { hasRole } = useAuth();
+  
+  if (!hasRole(["admin", "super-admin"])) {
+    return <Navigate to="/dashboard" />;
+  }
+  ```
+
+---
+
+## **Problem:** API calls failing with authentication errors in development.
+
+**Symptoms:**
+- 401 errors in development environment
+- Mock API not recognizing authentication
+- Token validation failing in mocks
+
+**Root Cause & Solutions:**
+
+### **Mock Authentication Setup**
+- **Root Cause:** Mock handlers not properly configured for authentication
+- **Solution:** Ensure mock handlers validate tokens:
+  ```typescript
+  import { authorize } from "../utils/auth";
+  
+  export const protectedEndpoint = async (request: Request) => {
+    try {
+      const user = await authorize(request, ["user", "admin"]);
+      // Your endpoint logic here
+    } catch (error) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { 
+        status: 401 
+      });
+    }
+  };
+  ```
+
+### **Mock Token Data**
+- **Root Cause:** Mock database doesn't have proper token data
+- **Solution:** Check mock user data includes tokens:
+  ```typescript
+  // In mock database
+  {
+    id: 1,
+    username: "testuser",
+    token: "mock-token-for-id-1", // Should match Authorization header
+    refreshToken: "mock-refresh-token-for-id-1"
+  }
+  ```
+
+---
+
 ## **New: How do I style public pages and use the new theming system?**
 
 **Q: How is theming handled for public pages?**
@@ -285,7 +505,12 @@ The `Headers` object is not a plain JavaScript object. If you need to convert it
 
 _Example (`api/client.ts`):_
 
-````
+```ts
+const headers = {};
+response.headers.forEach((value, key) => {
+  headers[key] = value;
+});
+```
 
 ---
 
@@ -310,7 +535,7 @@ export interface SupportTicket {
   [key: string]: unknown;
   // ...fields
 }
-````
+```
 
 - This satisfies the linter and works for most mock DB/dev cases. If you need to access a dynamic property, cast it as needed:
 
