@@ -15,18 +15,28 @@ import type { ApiResponse } from "types/api";
  * @returns A promise that resolves to the unwrapped data of type T.
  */
 export const handleMutation = async <T>(
-  apiCall: () => Promise<{ data: ApiResponse<T>, status?: number, error?: string }>,
+  apiCall: () => Promise<{
+    data: ApiResponse<T>;
+    error?: string;
+  }>
 ): Promise<T> => {
   try {
     const response = await baseRequestHandler(apiCall);
 
+    console.log("handleMutation response", response);
+
     if (response.error) {
-      throw new ApiError({ message: response.error });
+      throw new ApiError({
+        message:
+          response.error?.message || "error.general.internal_server_error",
+      });
     }
 
-    return response.data as T;
+    return response as T;
   } catch (error) {
     // Optionally, you could add more sophisticated error handling/logging here
-    throw error instanceof ApiError ? error : new ApiError({ message: 'error.general.internal_server_error'});
+    throw error instanceof ApiError
+      ? error
+      : new ApiError({ message: "error.general.internal_server_error" });
   }
 };

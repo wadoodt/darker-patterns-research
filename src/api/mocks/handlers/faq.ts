@@ -1,4 +1,5 @@
 import { mockFaqs } from "../data/faqs";
+import { createPaginatedResponse } from "../../response";
 
 export const getFaqs = (request: Request) => {
   const url = new URL(request.url);
@@ -12,17 +13,16 @@ export const getFaqs = (request: Request) => {
     faqs = faqs.filter((faq) => faq.category === category);
   }
 
-  const response = {
-    data: faqs,
-    currentPage: page,
-    totalPages: Math.ceil(faqs.length / limit),
-    total: faqs.length,
-  };
+  const total = faqs.length;
+  const totalPages = Math.ceil(total / limit);
+  const pagedFaqs = faqs.slice((page - 1) * limit, page * limit);
 
-  return new Response(JSON.stringify(response), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return createPaginatedResponse(
+    "OPERATION_SUCCESS",
+    "faqs",
+    pagedFaqs,
+    page,
+    totalPages,
+    total
+  );
 };

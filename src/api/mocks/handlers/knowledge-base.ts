@@ -1,12 +1,10 @@
 import { db } from "../db";
+import { createSuccessResponse, createErrorResponse } from "../../response";
 
 export const getArticles = async () => {
   const articles = db.knowledgeBaseArticle.findMany({});
-
-  return new Response(JSON.stringify(articles), {
-    headers: { "Content-Type": "application/json" },
-    status: 200,
-  });
+  console.log('getArticles', { articles });
+  return createSuccessResponse("OPERATION_SUCCESS", "articles", articles);
 };
 
 export const createArticle = async (request: Request): Promise<Response> => {
@@ -19,11 +17,7 @@ export const createArticle = async (request: Request): Promise<Response> => {
     category: body.translations.en.category,
     url: "",
   });
-
-  return new Response(JSON.stringify(newArticle), {
-    status: 201,
-    headers: { "Content-Type": "application/json" },
-  });
+  return createSuccessResponse("OPERATION_SUCCESS", "article", newArticle);
 };
 
 export const updateArticle = async (
@@ -44,13 +38,10 @@ export const updateArticle = async (
   });
 
   if (!updatedArticle) {
-    return new Response("Article not found", { status: 404 });
+    return createErrorResponse("NOT_FOUND", "Article not found");
   }
 
-  return new Response(JSON.stringify(updatedArticle), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return createSuccessResponse("OPERATION_SUCCESS", "article", updatedArticle);
 };
 
 export const deleteArticle = async ({
@@ -65,8 +56,8 @@ export const deleteArticle = async ({
   });
 
   if (!deletedArticle) {
-    return new Response("Article not found", { status: 404 });
+    return createErrorResponse("NOT_FOUND", "Article not found");
   }
 
-  return new Response(null, { status: 204 });
+  return createSuccessResponse("OPERATION_SUCCESS", "article", null);
 };

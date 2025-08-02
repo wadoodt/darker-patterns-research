@@ -1,7 +1,6 @@
 // src/api/mocks/handlers/user-handler.ts
 import { db } from "../db";
 import { createErrorResponse, createSuccessResponse } from "../../response";
-import { ERROR_CODES, RESPONSE_CODES } from "../../codes";
 import type { User } from "@api/domains/users/types";
 
 /**
@@ -11,18 +10,14 @@ export const getUserMe = async (request: Request): Promise<Response> => {
   try {
     const token = request.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
-      return new Response(JSON.stringify(createErrorResponse("UNAUTHORIZED")), {
-        status: ERROR_CODES.UNAUTHORIZED.status,
-      });
+      return createErrorResponse("UNAUTHORIZED", "No token provided");
     }
 
     const userId = token.replace("mock-token-for-id-", "");
     const user = db.users.findFirst({ where: { id: userId } });
 
     if (!user) {
-      return new Response(JSON.stringify(createErrorResponse("UNAUTHORIZED")), {
-        status: ERROR_CODES.UNAUTHORIZED.status,
-      });
+      return createErrorResponse("UNAUTHORIZED", "User not found");
     }
 
     const company = db.companies.findFirst({ where: { id: user.companyId } });
@@ -45,26 +40,9 @@ export const getUserMe = async (request: Request): Promise<Response> => {
       unreadNotifications,
     };
 
-    return new Response(
-      JSON.stringify(
-        createSuccessResponse(
-          {
-            user: userResponse,
-          },
-          "OPERATION_SUCCESS"
-        )
-      ),
-      {
-        status: RESPONSE_CODES.OPERATION_SUCCESS.status,
-      }
-    );
+    return createSuccessResponse("OPERATION_SUCCESS", "user", userResponse);
   } catch {
-    return new Response(
-      JSON.stringify(createErrorResponse("INTERNAL_SERVER_ERROR")),
-      {
-        status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
-      }
-    );
+    return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to fetch user");
   }
 };
 
@@ -75,31 +53,20 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
   try {
     const token = request.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
-      return new Response(JSON.stringify(createErrorResponse("UNAUTHORIZED")), {
-        status: ERROR_CODES.UNAUTHORIZED.status,
-      });
+      return createErrorResponse("UNAUTHORIZED", "No token provided");
     }
 
     const userId = token.replace("mock-token-for-id-", "");
     const user = db.users.findFirst({ where: { id: userId } });
 
     if (!user) {
-      return new Response(JSON.stringify(createErrorResponse("NOT_FOUND")), {
-        status: ERROR_CODES.NOT_FOUND.status,
-      });
+      return createErrorResponse("NOT_FOUND", "User not found");
     }
 
     const { name } = (await request.json()) as Pick<User, "name">;
 
     if (!name) {
-      return new Response(
-        JSON.stringify(
-          createErrorResponse("VALIDATION_ERROR", { name: "Name is required" })
-        ),
-        {
-          status: ERROR_CODES.VALIDATION_ERROR.status,
-        }
-      );
+      return createErrorResponse("VALIDATION_ERROR", "Name is required", { name: "Name is required" });
     }
 
     const updatedUser = db.users.update({
@@ -108,9 +75,7 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
     });
 
     if (!updatedUser) {
-      return new Response(JSON.stringify(createErrorResponse("NOT_FOUND")), {
-        status: ERROR_CODES.NOT_FOUND.status,
-      });
+      return createErrorResponse("NOT_FOUND", "User not found");
     }
 
     const company = db.companies.findFirst({
@@ -133,26 +98,8 @@ export const updateUserMe = async (request: Request): Promise<Response> => {
       orderBy: { createdAt: "desc" },
     });
 
-    return new Response(
-      JSON.stringify(
-        createSuccessResponse(
-          {
-            user: userResponse,
-            unreadNotifications,
-          },
-          "OPERATION_SUCCESS"
-        )
-      ),
-      {
-        status: RESPONSE_CODES.OPERATION_SUCCESS.status,
-      }
-    );
+    return createSuccessResponse("OPERATION_SUCCESS", "user", { ...userResponse, unreadNotifications });
   } catch {
-    return new Response(
-      JSON.stringify(createErrorResponse("INTERNAL_SERVER_ERROR")),
-      {
-        status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
-      }
-    );
+    return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to update user");
   }
 };

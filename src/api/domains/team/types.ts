@@ -26,7 +26,7 @@ export type NewTeamMember = Pick<TeamMember, "name" | "email"> & {
 }
 
 export type TeamMembersResponse = {
-  members: TeamMember[];
+  teamMembers: TeamMember[];
   totalPages: number;
   currentPage: number;
   totalMembers: number;

@@ -10,7 +10,7 @@ import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
 
 export const useArticleManagement = () => {
   const { t } = useTranslation();
-  const { data: articles, loading: isLoading, error } = useArticles();
+  const { data, loading: isLoading, error } = useArticles();
   const { mutate: createArticle } = useCreateArticle();
   const { mutate: updateArticle } = useUpdateArticle();
   const { mutate: deleteArticle } = useDeleteArticle();
@@ -32,7 +32,7 @@ export const useArticleManagement = () => {
   };
 
   return {
-    articles,
+    articles: data?.articles || [],
     isLoading,
     error,
     handleCreate,

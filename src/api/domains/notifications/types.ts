@@ -16,8 +16,8 @@ export type Notification = {
 };
 
 export interface NotificationsQueryResponse {
-  data: Notification[];
-  total: number;
-  page: number;
-  limit: number;
+  notifications: Notification[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
 }

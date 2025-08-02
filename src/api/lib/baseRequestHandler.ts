@@ -2,8 +2,29 @@
  * @file Provides a central, robust wrapper for all API client requests.
  */
 import { AxiosError } from "axios";
-import { createErrorResponse } from "../response";
 import type { ApiResponse } from "types/api";
+
+/**
+ * Creates a client-side error response that matches the ApiResponse<T> interface.
+ * @param code The error code
+ * @param message Optional error message
+ * @param details Optional error details
+ */
+function createClientErrorResponse<T>(
+  code: string,
+  message?: string,
+  details?: unknown
+): ApiResponse<T> {
+  return {
+    data: null,
+    error: {
+      code,
+      message: message || code,
+      ...(details ? { details } : {})
+    },
+    success: false
+  };
+}
 
 /**
  * A centralized, base request handler that wraps all axios calls.
@@ -19,23 +40,26 @@ export const baseRequestHandler = async <T>(
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await apiCall();
+    console.log('baseRequestHandler response', response);
     const apiResponse = response.data;
 
     if (response.status === 404) {
-      return createErrorResponse<T>("NOT_FOUND");
+      return createClientErrorResponse<T>("NOT_FOUND");
     }
 
     if (!apiResponse && response.error) {
       // This can happen if a real API
       // returns a 200 OK with non-JSON or empty content.
-      return createErrorResponse<T>("INTERNAL_SERVER_ERROR", {
-        detail: "The API response body was empty or invalid.",
-      });
+      return createClientErrorResponse<T>(
+        "INTERNAL_SERVER_ERROR",
+        "The API response body was empty or invalid.",
+        { detail: "The API response body was empty or invalid." }
+      );
     }
 
     // Future enhancement: If a global notification library like `sonner` is added,
     // success toasts can be triggered here based on the response message.
-    // Example: if (apiResponse.data?.message) { toast.success(t(apiResponse.data.message)); }
+    // Example: if (apiResponse.statusText) { toast.success(t(apiResponse.statusText)); }
 
     return apiResponse;
   } catch (error) {
@@ -51,7 +75,7 @@ export const baseRequestHandler = async <T>(
     } else {
       // Case 2: A network error or an unexpected server error occurred.
       // We create a standardized error response.
-      errorResponse = createErrorResponse<T>("INTERNAL_SERVER_ERROR");
+      errorResponse = createClientErrorResponse<T>("INTERNAL_SERVER_ERROR");
     }
     
     // Future enhancement: This is the ideal place to trigger global error toasts.

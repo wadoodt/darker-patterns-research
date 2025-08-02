@@ -31,6 +31,6 @@ export const createPagedResponse = <T extends keyof typeof db>({
     data: paginatedData,
     currentPage: page,
     totalPages,
-    total: totalItems,
+    totalItems,
   };
 };

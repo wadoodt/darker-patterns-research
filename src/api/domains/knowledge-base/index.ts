@@ -4,7 +4,7 @@ import { handleQuery } from "@api/lib/handleQuery";
 import { handleMutation } from "@api/lib/handleMutation";
 import type { KnowledgeBaseArticle } from "./types";
 
-const getArticles = async (): Promise<KnowledgeBaseArticle[]> => {
+const getArticles = async (): Promise<{ articles: KnowledgeBaseArticle[]}> => {
   return handleQuery(() => apiClient.get("/knowledge-base/articles"));
 };
 

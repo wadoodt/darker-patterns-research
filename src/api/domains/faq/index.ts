@@ -4,7 +4,7 @@ import { handleQuery } from "@api/lib/handleQuery";
 import { handleMutation } from "@api/lib/handleMutation";
 import type { FaqItem, FaqCategory } from "./types";
 
-const getFaqs = async (category: FaqCategory = 'all'): Promise<FaqItem[]> => {
+const getFaqs = async (category: FaqCategory = 'all'): Promise<{ faqs: FaqItem[]}> => {
   const url = `/faqs?category=${category}`;
   return handleQuery(() => apiClient.get(url));
 };

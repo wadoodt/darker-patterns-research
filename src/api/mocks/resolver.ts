@@ -89,19 +89,19 @@ const routes: Array<[string, RegExp, unknown]> = [
   ],
 
   // Knowledge Base Articles
-  ["GET /api/articles", /^\/api\/articles$/, knowledgeBaseHandlers.getArticles],
+  ["GET /api/knowledge-base/articles", /^\/api\/knowledge-base\/articles$/, knowledgeBaseHandlers.getArticles],
   [
-    "POST /api/articles",
-    /^\/api\/articles$/,
+    "POST /api/knowledge-base/articles",
+    /^\/api\/knowledge-base\/articles$/,
     knowledgeBaseHandlers.createArticle,
   ],
   [
-    "PUT /api/articles/:id",
-    /^\/api\/articles\/([^/]+)$/,
+    "PUT /api/knowledge-base/articles/:id",
+    /^\/api\/knowledge-base\/articles\/([^/]+)$/,
     knowledgeBaseHandlers.updateArticle,
   ],
   [
-    "DELETE /api/articles/:id",
+    "DELETE /api/knowledge-base/articles/:id",
     /^\/api\/articles\/([^/]+)$/,
     knowledgeBaseHandlers.deleteArticle,
   ],

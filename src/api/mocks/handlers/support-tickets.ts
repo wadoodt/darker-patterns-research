@@ -1,15 +1,11 @@
 import { db } from "../db";
-import { createSuccessResponse, createErrorResponse } from "../../response";
-import { createPagedResponse } from "../utils/paged-response";
+import { createSuccessResponse, createErrorResponse, createPaginatedResponse } from "../../response";
 import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
 
 export const createContactSubmission = async (request: Request) => {
   const body = await request.json();
   db.contactSubmissions.create(body);
-  return new Response(JSON.stringify({ message: "Submission received" }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return createSuccessResponse("OPERATION_SUCCESS", "support", { message: "Submission received" });
 };
 
 export const getMyTickets = async (request: Request) => {
@@ -21,27 +17,36 @@ export const getMyTickets = async (request: Request) => {
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-    const pagedResponse = createPagedResponse({
-      table: "supportTickets",
-      page,
-      limit,
+    // Get all tickets for the user
+    const allTickets = db.supportTickets.findMany({
+      where: { userId: user.id },
       orderBy: { createdAt: "desc" },
     });
+    const totalItems = allTickets.length;
+    const totalPages = Math.ceil(totalItems / limit);
+    const pagedTickets = allTickets.slice((page - 1) * limit, page * limit);
 
-    console.log("pagedResponse", pagedResponse);
-
-    if (pagedResponse.data?.length === 0) {
-      const emptyResponse = createSuccessResponse(pagedResponse, "NO_DATA");
-      return new Response(JSON.stringify(emptyResponse), { status: 200 });
+    if (!pagedTickets || pagedTickets.length === 0) {
+      return createPaginatedResponse(
+        "NO_DATA",
+        "supportTickets",
+        [],
+        page,
+        totalPages,
+        totalItems
+      );
     }
 
-    const response = createSuccessResponse(pagedResponse, "OPERATION_SUCCESS");
-    return new Response(JSON.stringify(response), { status: 200 });
+    return createPaginatedResponse(
+      "OPERATION_SUCCESS",
+      "supportTickets",
+      pagedTickets,
+      page,
+      totalPages,
+      totalItems
+    );
   } catch {
-    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
-      message: "Failed to fetch tickets",
-    });
-    return new Response(JSON.stringify(errorResponse), { status: 500 });
+    return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to fetch tickets");
   }
 };
 
@@ -51,12 +56,9 @@ export const getTicketById = async (
 ) => {
   const ticket = db.supportTickets.findFirst({ where: { id: ticketId } });
   if (!ticket) {
-    return new Response("Ticket not found", { status: 404 });
+    return createErrorResponse("NOT_FOUND", "Ticket not found");
   }
-  return new Response(JSON.stringify(ticket), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return createSuccessResponse("OPERATION_SUCCESS", "supportTicket", ticket);
 };
 
 export const createTicketReply = async (
@@ -67,7 +69,7 @@ export const createTicketReply = async (
   const ticket = db.supportTickets.findFirst({ where: { id: ticketId } });
 
   if (!ticket) {
-    return new Response("Ticket not found", { status: 404 });
+    return createErrorResponse("NOT_FOUND", "Ticket not found");
   }
 
   const updatedTicket = db.supportTickets.update({
@@ -81,8 +83,5 @@ export const createTicketReply = async (
     },
   });
 
-  return new Response(JSON.stringify(updatedTicket), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return createSuccessResponse("OPERATION_SUCCESS", "supportTicket", updatedTicket);
 };

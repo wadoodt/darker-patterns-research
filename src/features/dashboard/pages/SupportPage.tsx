@@ -9,9 +9,6 @@ import {
   IconButton,
 } from "@radix-ui/themes";
 import { Search, X } from "lucide-react";
-import { useAsyncCache } from "@hooks/useAsyncCache";
-import api from "@api/client";
-import { CACHE_TTL } from "@lib/cache/constants";
 import { SupportHeader } from "./support/components/SupportHeader";
 import { KnowledgeBaseSection } from "./support/components/KnowledgeBaseSection";
 import { VideoTutorialsSection } from "./support/components/VideoTutorialsSection";
@@ -19,6 +16,7 @@ import { ContactFormSection } from "./support/components/ContactFormSection";
 import MyTickets from "./support/components/MyTickets";
 import { GeneralAdviceSection } from "./support/components/GeneralAdviceSection";
 import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
+import { useArticleManagement } from "@features/admin-panel/pages/articles/hooks/useArticleManagement";
 
 export interface VideoTutorial {
   id: string;
@@ -58,12 +56,6 @@ const useVideoTutorials = () => {
 };
 
 // --- MAIN COMPONENT ---
-const fetchKnowledgeArticles = async () => {
-  const response = await api.get<KnowledgeBaseArticle[]>("/articles");
-  return response.data;
-};
-
-// --- MAIN COMPONENT ---
 export default function SupportPage() {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,13 +65,18 @@ export default function SupportPage() {
   );
   const videoTutorials = useVideoTutorials();
 
-  const { data: knowledgeLibrary } = useAsyncCache(
-    ["support-articles"],
-    fetchKnowledgeArticles,
-    { ttl: CACHE_TTL.LONG_1_DAY },
-  );
+  const {
+      articles,
+      isLoading,
+      error,
+    } = useArticleManagement();
+    
+    if (error) return <Box>{t("articles.errorLoading")}</Box>;
 
-  const filteredKnowledgeLibrary = (knowledgeLibrary || []).filter(
+    if (isLoading) return <Box>{t("articles.loading")}</Box>;
+
+
+  const filteredKnowledgeLibrary = (articles || []).filter(
     (article: KnowledgeBaseArticle) =>
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.description.toLowerCase().includes(searchTerm.toLowerCase()),

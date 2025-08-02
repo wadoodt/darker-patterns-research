@@ -24,7 +24,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
 
   // Combine initial notifications from login with fetched ones.
   const allNotifications = useMemo(() => {
-    const fetchedNotifications = queryResult?.data ?? [];
+    const fetchedNotifications = queryResult?.notifications ?? [];
     const notificationsMap = new Map<string, Notification>();
     [...manualNotifications, ...fetchedNotifications].forEach(n => notificationsMap.set(n.id, n));
     return Array.from(notificationsMap.values());
@@ -34,7 +34,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
     return allNotifications.filter(n => !n.read).length;
   }, [allNotifications]);
 
-  const hasMore = queryResult ? queryResult.data.length >= 10 : false;
+  const hasMore = queryResult ? queryResult.notifications.length >= 10 : false;
 
   const markAsRead = useCallback(
     async (id: string) => {

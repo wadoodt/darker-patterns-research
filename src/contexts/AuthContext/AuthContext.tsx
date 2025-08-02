@@ -4,14 +4,14 @@ import type { AuthContextType } from "./types";
 import { AuthContext } from "./context";
 import { useLogin, useLogout } from "@api/domains/auth/hooks";
 import { useUser } from "@api/domains/users/hooks";
-import { 
-  getAccessToken, 
-  getExpiresAt, 
-  setTokens, 
-  removeTokens, 
-  onTokenChange, 
-  validateToken, 
-  willExpireWithin 
+import {
+  getAccessToken,
+  getExpiresAt,
+  setTokens,
+  removeTokens,
+  onTokenChange,
+  validateToken,
+  willExpireWithin,
 } from "@lib/tokenService";
 import { useCache } from "@contexts/CacheContext";
 
@@ -20,7 +20,9 @@ const useAuthProvider = (): AuthContextType => {
   const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState<string | null>(getAccessToken());
-  const [tokenExpiresAt, setTokenExpiresAt] = useState<number | null>(getExpiresAt());
+  const [tokenExpiresAt, setTokenExpiresAt] = useState<number | null>(
+    getExpiresAt()
+  );
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { mutateAsync: loginUser } = useLogin();
   const { mutateAsync: logoutUser } = useLogout();
@@ -35,7 +37,7 @@ const useAuthProvider = (): AuthContextType => {
 
   const validateTokenState = useCallback(() => {
     const validation = validateToken();
-    
+
     if (!validation.isValid || validation.isExpired) {
       if (validation.isExpired) {
         removeTokens();
@@ -45,30 +47,26 @@ const useAuthProvider = (): AuthContextType => {
     }
 
     setIsAuthenticated(true);
-    
+
     if (willExpireWithin(5 * 60 * 1000)) {
-      console.log('Token expires soon, triggering proactive refresh...');
+      console.log("Token expires soon, triggering proactive refresh...");
     }
   }, [clearAuthState]);
 
   const login = useCallback(
     async (username: string, password: string): Promise<void> => {
       try {
-        const {
-          user: userData,
-          token: userToken,
-          refreshToken,
-          expiresIn,
-        } = await loginUser({ username, password });
+        const { auth } = await loginUser({ username, password });
+
+        const { token: userToken, refreshToken, expiresIn } = auth;
 
         const expirationTime = Date.now() + expiresIn * 1000;
-        
+
         setTokens({
           accessToken: userToken,
           refreshToken,
-          expiresAt: expirationTime
+          expiresAt: expirationTime,
         });
-        console.log('Login successful:', userData);
         setToken(userToken);
         setTokenExpiresAt(expirationTime);
         setIsAuthenticated(true);
@@ -98,17 +96,17 @@ const useAuthProvider = (): AuthContextType => {
   useEffect(() => {
     const cleanup = onTokenChange((event) => {
       const { type, tokenData, accessToken, expiresAt } = event.detail;
-      
+
       switch (type) {
-        case 'set':
+        case "set":
           setToken(tokenData!.accessToken);
           setTokenExpiresAt(tokenData!.expiresAt);
           break;
-        case 'update':
+        case "update":
           setToken(accessToken!);
           setTokenExpiresAt(expiresAt!);
           break;
-        case 'remove':
+        case "remove":
           clearAuthState();
           break;
       }
@@ -126,10 +124,17 @@ const useAuthProvider = (): AuthContextType => {
 
   // Update user state when userData changes
   useEffect(() => {
+    if (userData?.error) {
+      invalidateByPattern("^async-data:user:me$");
+      setIsLoading(false);
+      return;
+    }
+
     if (userData && token) {
       setUser(userData.user);
       setIsLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData, token]);
 
   const hasRole = useCallback(

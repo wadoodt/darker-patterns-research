@@ -1,7 +1,6 @@
 import { db } from "../db";
 import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
-import { createPagedResponse } from "../utils/paged-response";
-import { createSuccessResponse, createErrorResponse } from "../../response";
+import { createSuccessResponse, createErrorResponse, createPaginatedResponse } from "../../response";
 
 export const getNotifications = async (request: Request) => {
   try {
@@ -12,21 +11,25 @@ export const getNotifications = async (request: Request) => {
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-    const pagedResponse = createPagedResponse({
-      table: "notifications",
-      page,
-      limit,
+    // Simulate paged response
+    const allNotifications = db.notifications.findMany({
       where: { userId: user.id, read: false },
       orderBy: { createdAt: "desc" },
     });
+    const totalItems = allNotifications.length;
+    const totalPages = Math.ceil(totalItems / limit);
+    const pagedData = allNotifications.slice((page - 1) * limit, page * limit);
 
-    const response = createSuccessResponse(pagedResponse, "OPERATION_SUCCESS");
-    return new Response(JSON.stringify(response), { status: 200 });
+    return createPaginatedResponse(
+      "OPERATION_SUCCESS",
+      "notifications",
+      pagedData,
+      page,
+      totalPages,
+      totalItems
+    );
   } catch {
-    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
-      message: "Failed to fetch notifications",
-    });
-    return new Response(JSON.stringify(errorResponse), { status: 500 });
+    return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to fetch notifications");
   }
 };
 
@@ -43,10 +46,7 @@ export const markAsRead = async (
     });
 
     if (!notification) {
-      const errorResponse = createErrorResponse("NOT_FOUND", {
-        message: "Notification not found",
-      });
-      return new Response(JSON.stringify(errorResponse), { status: 404 });
+      return createErrorResponse("NOT_FOUND", "Notification not found");
     }
 
     const updated = db.notifications.update({
@@ -54,13 +54,9 @@ export const markAsRead = async (
       data: { read: true },
     });
 
-    const response = createSuccessResponse(updated, "OPERATION_SUCCESS");
-    return new Response(JSON.stringify(response), { status: 200 });
+    return createSuccessResponse("OPERATION_SUCCESS", "notification", updated);
   } catch {
-    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
-      message: "Failed to mark notification as read",
-    });
-    return new Response(JSON.stringify(errorResponse), { status: 500 });
+    return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to mark notification as read");
   }
 };
 
@@ -71,7 +67,6 @@ export const markAllAsRead = async (request: Request) => {
 
     const userNotifications = db.notifications.findMany({
       where: { userId: user.id },
-      limit: Infinity,
     });
 
     userNotifications.forEach((notification) => {
@@ -81,15 +76,12 @@ export const markAllAsRead = async (request: Request) => {
       });
     });
 
-    const response = createSuccessResponse(
-      { message: "All notifications marked as read" },
-      "OPERATION_SUCCESS"
+    return createSuccessResponse(
+      "OPERATION_SUCCESS",
+      "notifications",
+      { message: "All notifications marked as read" }
     );
-    return new Response(JSON.stringify(response), { status: 200 });
   } catch {
-    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
-      message: "Failed to mark all notifications as read",
-    });
-    return new Response(JSON.stringify(errorResponse), { status: 500 });
+    return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to mark all notifications as read");
   }
 };

@@ -5,7 +5,7 @@ import { handleMutation } from "@api/lib/handleMutation";
 import type { User, UpdateUserPayload } from "./types";
 import type { AuthenticatedUser } from "types/auth";
 
-const getMe = async (): Promise<{ user: AuthenticatedUser }> => {
+const getMe = async (): Promise<{ user: AuthenticatedUser, error?: string }> => {
   return handleQuery(() => apiClient.get("/users/me"));
 };
 

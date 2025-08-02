@@ -1,11 +1,9 @@
-
+import { useTranslation } from "react-i18next";
 import { Table, Button, Flex } from "@radix-ui/themes";
 import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
-import type { TFunction } from "i18next";
 
 type ArticlesTableSectionProps = {
   articles: KnowledgeBaseArticle[];
-  t: TFunction<"translation", undefined>;
   getLanguage: () => string;
   fallbackLanguage: string;
   handleEditClick: (article: KnowledgeBaseArticle) => void;
@@ -15,21 +13,27 @@ type ArticlesTableSectionProps = {
 
 export function ArticlesTableSection({
   articles,
-  t,
   getLanguage,
   fallbackLanguage,
   handleEditClick,
   handleDelete,
 }: ArticlesTableSectionProps) {
   const lang = getLanguage();
+  const { t } = useTranslation();
 
   return (
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeaderCell>{t("articles.table.title")}</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>{t("articles.table.category")}</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>{t("articles.table.actions")}</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            {t("articles.table.title")}
+          </Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            {t("articles.table.category")}
+          </Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>
+            {t("articles.table.actions")}
+          </Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>

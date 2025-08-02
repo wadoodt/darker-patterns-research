@@ -18,8 +18,8 @@ export interface SupportTicket {
 }
 
 export interface PaginatedTicketsResponse {
-  data?: SupportTicket[];
-  total?: number;
+  supportTickets?: SupportTicket[];
+  totalItems?: number;
   currentPage?: number;
   totalPages?: number;
 } 

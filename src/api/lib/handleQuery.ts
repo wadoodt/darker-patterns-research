@@ -15,16 +15,19 @@ import type { ApiResponse } from "types/api";
  * @returns A promise that resolves to the unwrapped data of type T.
  */
 export const handleQuery = async <T>(
-  apiCall: () => Promise<{ data: ApiResponse<T>, status?: number, error?: string }>,
+  apiCall: () => Promise<{ data: ApiResponse<T>}>,
 ): Promise<T> => {
   try {
     const response = await baseRequestHandler(apiCall);
 
+    console.log('handleQuery response', response);
+
     if (response.error) {
-      throw new ApiError({ message: response.error });
+      console.error('handleQuery error', response.error);
+      throw new ApiError({ message: response.error.message });
     }
 
-    return response.data as T;
+    return response as T;
   } catch (error) {
     // Optionally, you could add more sophisticated error handling/logging here
     throw error instanceof ApiError ? error : new ApiError({ message: 'error.general.internal_server_error'});

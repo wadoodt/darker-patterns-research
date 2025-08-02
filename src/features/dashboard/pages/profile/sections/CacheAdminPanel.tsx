@@ -15,6 +15,7 @@ type CacheAdminPanelButtonsProps = {
   invalidateAllFaqs: () => void;
   invalidateHomeFaqs: () => void;
   invalidatePricingFaqs: () => void;
+  invalidateKnowledgeBaseArticles: () => void;
   clearAllExpired: () => void;
   isLoading: boolean;
   isReady: boolean;
@@ -29,6 +30,7 @@ const CacheAdminPanelButtons = ({
   invalidateAllFaqs,
   invalidateHomeFaqs,
   invalidatePricingFaqs,
+  invalidateKnowledgeBaseArticles,
   clearAllExpired,
   isLoading,
   isReady,
@@ -89,6 +91,13 @@ const CacheAdminPanelButtons = ({
       color="cyan"
     >
       Invalidate Pricing FAQs
+    </Button>
+    <Button
+      onClick={invalidateKnowledgeBaseArticles}
+      disabled={isLoading || !isReady}
+      color="yellow"
+    >
+      Invalidate Knowledge Base Articles
     </Button>
     <Button
       onClick={clearAllExpired}
@@ -168,7 +177,7 @@ export function CacheAdminPanel() {
 
   const invalidateTeam = () =>
     handleAction(
-      () => invalidateByPattern("team-members"),
+      () => invalidateByPattern("async-data:team-members:*"),
       "Team members cache cleared.",
     );
 
@@ -202,6 +211,12 @@ export function CacheAdminPanel() {
       "Pricing FAQs cache invalidated.",
     );
 
+  const invalidateKnowledgeBaseArticles = () =>
+    handleAction(
+      () => invalidateByPattern("async-data:knowledge-base:articles"),
+      "Knowledge base articles cache invalidated.",
+    );
+
   const clearAllExpired = () =>
     handleAction(
       () => cleanupExpired(),
@@ -218,6 +233,7 @@ export function CacheAdminPanel() {
       invalidateAllFaqs={invalidateAllFaqs}
       invalidateHomeFaqs={invalidateHomeFaqs}
       invalidatePricingFaqs={invalidatePricingFaqs}
+      invalidateKnowledgeBaseArticles={invalidateKnowledgeBaseArticles}
       clearAllExpired={clearAllExpired}
       isLoading={isLoading}
       isReady={isReady}

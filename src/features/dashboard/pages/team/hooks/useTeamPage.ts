@@ -113,7 +113,7 @@ export const useTeamPage = () => {
     error: !!error,
     errorMessage,
     formErrors,
-    teamMembers: data?.members || [],
+    teamMembers: data?.teamMembers || [],
     pagination,
     setCurrentPage,
     handleCreateMember,

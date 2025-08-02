@@ -1,12 +1,10 @@
 
 import React from "react";
 import type { KnowledgeBaseArticle } from "@api/domains/knowledge-base/types";
-import { useTranslation } from "react-i18next";
 import { useArticleManagement } from "./useArticleManagement";
 import { getLanguage, fallbackLanguage } from "@locales/i18n";
 
 export function useArticlesPage() {
-  const { t } = useTranslation();
   const {
     articles,
     isLoading,
@@ -15,6 +13,10 @@ export function useArticlesPage() {
     handleUpdate,
     handleDelete,
   } = useArticleManagement();
+
+  React.useEffect(() => {
+    console.log({ articles });
+  }, [articles]);
 
   const [isCreateModalOpen, setCreateModalOpen] = React.useState(false);
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);
@@ -27,7 +29,6 @@ export function useArticlesPage() {
   };
 
   return {
-    t,
     articles,
     isLoading,
     error,

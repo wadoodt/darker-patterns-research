@@ -6,10 +6,12 @@ import type { FaqItem } from "@api/domains/faq/types";
 const FAQSection: React.FC = () => {
   const { t, i18n } = useTranslation();
   const {
-    data: faqs,
+    data ,
     loading: isLoading,
     error,
   } = useFaqs("home");
+
+  const faqs = React.useMemo(() => data?.faqs || [], [data]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching FAQs</div>;

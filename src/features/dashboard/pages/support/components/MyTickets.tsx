@@ -9,7 +9,7 @@ import { CACHE_TTL } from "@lib/cache/constants";
 
 const fetchMyTickets = async (page: number) => {
   const response = await api.support.myTickets(page, 5);
-  if (!response.data || response.data.length === 0) {
+  if (!response.supportTickets || response.supportTickets.length === 0) {
     console.log("no tickets");
     return {
       data: [],
@@ -36,7 +36,7 @@ const MyTickets: React.FC = () => {
     return error ? "UNEXPECTED_ERROR" : null;
   }, [error]);
 
-  const tickets = Array.isArray(data?.data) ? data.data : [];
+  const tickets = Array.isArray(data) ? data : [];
 
   if (!tickets || tickets.length === 0) {
     return <p>You have not submitted any support tickets yet.</p>;

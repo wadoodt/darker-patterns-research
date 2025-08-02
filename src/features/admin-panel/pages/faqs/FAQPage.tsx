@@ -7,7 +7,7 @@ import { useState } from "react";
 import type { FaqItem } from "@api/domains/faq/types";
 
 export default function FAQPage() {
-  const { faqs = [], isLoading, error, handleCreate, handleUpdate, handleDelete } = useFAQManagement();
+  const { isLoading, error, handleCreate, handleUpdate, handleDelete } = useFAQManagement();
 
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -24,7 +24,7 @@ const handleEdit = async (faq: FaqItem) => {
     <Box>
       <HeaderSection onCreate={() => setCreateModalOpen(true)} />
       <FAQTableSection 
-        faqs={faqs || []} 
+        faqs={[]} 
         isLoading={isLoading}
         onUpdate={handleEdit}
         onDelete={handleDelete} 

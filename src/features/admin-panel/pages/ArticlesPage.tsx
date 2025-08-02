@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Box } from "@radix-ui/themes";
 import { useArticlesPage } from "./articles/hooks/useArticlesPage";
 import { HeaderSection } from "./articles/sections/HeaderSection";
@@ -7,7 +8,6 @@ import { ModalsSection } from "./articles/sections/ModalsSection";
 
 const ArticlesPage: React.FC = () => {
   const {
-    t,
     articles,
     isLoading,
     error,
@@ -23,15 +23,19 @@ const ArticlesPage: React.FC = () => {
     getLanguage,
     fallbackLanguage,
   } = useArticlesPage();
+  const { t } = useTranslation();
 
   if (error) return <Box>{t("articles.errorLoading")}</Box>;
 
+  if (isLoading) return <Box>{t("articles.loading")}</Box>;
+
+  if (!articles) return <Box>{t("articles.noArticles")}</Box>;
+  
   return (
     <Box>
-      <HeaderSection t={t} onCreate={() => setCreateModalOpen(true)} />
+      <HeaderSection onCreate={() => setCreateModalOpen(true)} />
       <ArticlesTableSection
         articles={articles || []}
-        t={t}
         getLanguage={getLanguage}
         fallbackLanguage={fallbackLanguage}
         handleEditClick={handleEditClick}

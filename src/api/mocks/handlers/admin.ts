@@ -1,6 +1,5 @@
 import { db } from "../db";
-import { createErrorResponse, createSuccessResponse } from "../../response";
-import { ERROR_CODES } from "../../codes";
+import { createErrorResponse, createSuccessResponse, createPaginatedResponse } from "../../response";
 import type { User } from "@api/domains/users/types";
 
 /**
@@ -13,12 +12,7 @@ export const getUsers = async (): Promise<Response> => {
   const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
 
   if (!mockAdminUser) {
-    const errorResponse = createErrorResponse("UNAUTHORIZED", {
-      detail: "No admin user found in mock DB for this operation.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.UNAUTHORIZED.status,
-    });
+    return createErrorResponse("UNAUTHORIZED", "No admin user found in mock DB for this operation.");
   }
 
   let users;
@@ -39,11 +33,7 @@ export const getUsers = async (): Promise<Response> => {
     return rest;
   });
 
-  const response = createSuccessResponse(
-    { users: usersResponse },
-    "OPERATION_SUCCESS",
-  );
-  return new Response(JSON.stringify(response));
+  return createSuccessResponse("OPERATION_SUCCESS", "users", usersResponse);
 };
 
 /**
@@ -53,12 +43,7 @@ export const updateUser = async (request: Request): Promise<Response> => {
   // MOCK: For this operation, we need a super-admin.
   const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
   if (!mockAdminUser || mockAdminUser.platformRole !== 'super-admin') {
-    const errorResponse = createErrorResponse("FORBIDDEN", {
-      detail: "This operation requires super-admin privileges.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.FORBIDDEN.status,
-    });
+    return createErrorResponse("FORBIDDEN", "This operation requires super-admin privileges.");
   }
 
   const url = new URL(request.url);
@@ -68,23 +53,13 @@ export const updateUser = async (request: Request): Promise<Response> => {
   >;
 
   if (!userId) {
-    const errorResponse = createErrorResponse("VALIDATION_ERROR", {
-      error: "User ID is missing from the URL.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.VALIDATION_ERROR.status,
-    });
+    return createErrorResponse("VALIDATION_ERROR", "User ID is missing from the URL.");
   }
 
   const userToUpdate = db.users.findFirst({ where: { id: userId } });
 
   if (!userToUpdate) {
-    const errorResponse = createErrorResponse("NOT_FOUND", {
-      detail: "User to update was not found.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.NOT_FOUND.status,
-    });
+    return createErrorResponse("NOT_FOUND", "User to update was not found.");
   }
 
   const updatedUser = db.users.update({
@@ -96,20 +71,14 @@ export const updateUser = async (request: Request): Promise<Response> => {
   });
 
   if (!updatedUser) {
-    const errorResponse = createErrorResponse("INTERNAL_SERVER_ERROR", {
-      detail: "Failed to update the user.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.INTERNAL_SERVER_ERROR.status,
-    });
+    return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to update the user.");
   }
 
   // Exclude password from the response
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password, ...userResponse } = updatedUser;
 
-  const response = createSuccessResponse(userResponse, "OPERATION_SUCCESS");
-  return new Response(JSON.stringify(response));
+  return createSuccessResponse("OPERATION_SUCCESS", "user", userResponse);
 };
 
 /**
@@ -122,12 +91,7 @@ export const getSupportTickets = async (
   const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
 
   if (!mockAdminUser) {
-    const errorResponse = createErrorResponse("UNAUTHORIZED", {
-      detail: "No admin user found in mock DB.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.UNAUTHORIZED.status,
-    });
+    return createErrorResponse("UNAUTHORIZED", "No admin user found in mock DB.");
   }
 
   const url = new URL(request.url);
@@ -136,23 +100,19 @@ export const getSupportTickets = async (
 
   const allTickets = db.supportTickets.findMany({});
   const totalTickets = allTickets.length;
-
+  const totalPages = Math.ceil(totalTickets / limit);
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const tickets = allTickets.slice(startIndex, endIndex);
 
-  const response = createSuccessResponse(
-    {
-      tickets,
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(totalTickets / limit),
-        totalTickets,
-      },
-    },
+  return createPaginatedResponse(
     "OPERATION_SUCCESS",
+    "tickets",
+    tickets,
+    page,
+    totalPages,
+    totalTickets
   );
-  return new Response(JSON.stringify(response));
 };
 
 /**
@@ -164,12 +124,7 @@ export const updateTicketStatus = async (
 ): Promise<Response> => {
   const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
   if (!mockAdminUser) {
-    const errorResponse = createErrorResponse("UNAUTHORIZED", {
-      detail: "No admin user found in mock DB.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.UNAUTHORIZED.status,
-    });
+    return createErrorResponse("UNAUTHORIZED", "No admin user found in mock DB.");
   }
 
   const { ticketId } = params;
@@ -178,12 +133,7 @@ export const updateTicketStatus = async (
   };
 
   if (!ticketId) {
-    const errorResponse = createErrorResponse("VALIDATION_ERROR", {
-      error: "Ticket ID is missing from the URL.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.VALIDATION_ERROR.status,
-    });
+    return createErrorResponse("VALIDATION_ERROR", "Ticket ID is missing from the URL.");
   }
 
   const ticketToUpdate = db.supportTickets.findFirst({
@@ -191,12 +141,7 @@ export const updateTicketStatus = async (
   });
 
   if (!ticketToUpdate) {
-    const errorResponse = createErrorResponse("NOT_FOUND", {
-      detail: "Ticket to update was not found.",
-    });
-    return new Response(JSON.stringify(errorResponse), {
-      status: ERROR_CODES.NOT_FOUND.status,
-    });
+    return createErrorResponse("NOT_FOUND", "Ticket to update was not found.");
   }
 
   const updatedTicket = db.supportTickets.update({
@@ -204,9 +149,5 @@ export const updateTicketStatus = async (
     data: { status },
   });
 
-  const response = createSuccessResponse(
-    { ticket: updatedTicket },
-    "OPERATION_SUCCESS",
-  );
-  return new Response(JSON.stringify(response));
+  return createSuccessResponse("OPERATION_SUCCESS", "ticket", updatedTicket);
 };

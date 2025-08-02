@@ -10,10 +10,12 @@ import { Text } from "@radix-ui/themes";
 const FAQSection: React.FC = () => {
   const { t } = useTranslation();
   const {
-    data: faqs,
+    data,
     loading: isLoading,
     error,
   } = useFaqs("pricing");
+
+  const faqs = React.useMemo(() => data?.faqs || [], [data]);
 
   if (isLoading) {
     return (
