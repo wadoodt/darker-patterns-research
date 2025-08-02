@@ -88,7 +88,7 @@ const FAQForm = ({
         </Tabs.Content>
       </Tabs.Root>
       <Flex gap="3" justify="end">
-        <Button variant="soft" onClick={closeModal}>
+        <Button variant="soft" type="button" onClick={closeModal}>
           Cancel
         </Button>
         <Button type="submit">{isEditing ? 'Save' : 'Create'}</Button>
