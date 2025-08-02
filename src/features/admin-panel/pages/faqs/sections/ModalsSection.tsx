@@ -153,6 +153,9 @@ export const ModalsSection = ({
       <Dialog.Root open={isCreateModalOpen} onOpenChange={setCreateModalOpen}>
         <Dialog.Content>
           <Dialog.Title>Create FAQ</Dialog.Title>
+          <Dialog.Description>
+            Fill in the form below to create a new FAQ.
+          </Dialog.Description>
           <FAQForm
             form={form}
             setForm={setForm}
@@ -168,6 +171,9 @@ export const ModalsSection = ({
       <Dialog.Root open={isEditModalOpen} onOpenChange={setEditModalOpen}>
         <Dialog.Content>
           <Dialog.Title>Edit FAQ</Dialog.Title>
+          <Dialog.Description>
+            Fill in the form below to edit the FAQ.
+          </Dialog.Description>
           <FAQForm
             form={form}
             setForm={setForm}

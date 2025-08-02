@@ -108,6 +108,9 @@ const routes: Array<[string, RegExp, unknown]> = [
 
   // FAQs
   ["GET /api/faqs", /^\/api\/faqs$/, faqHandlers.getFaqs],
+  ["POST /api/faqs", /^\/api\/faqs$/, faqHandlers.createFaq],
+  ["PUT /api/faqs/:id", /^\/api\/faqs\/([^/]+)$/, faqHandlers.updateFaq],
+  ["DELETE /api/faqs/:id", /^\/api\/faqs\/([^/]+)$/, faqHandlers.deleteFaq],
 
   // Team
   ["POST /api/team", /^\/api\/team$/, teamHandlers.createTeamMember],

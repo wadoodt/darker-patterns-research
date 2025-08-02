@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFaqs, useCreateFaq, useUpdateFaq, useDeleteFaq } from "@api/domains/faq/hooks";
 import type { FaqItem } from "@api/domains/faq/types";
 
 export const useFAQManagement = () => {
-  const { data: faqs, loading: isLoadingFaqs, error } = useFaqs();
+  const { data, loading: isLoadingFaqs, error } = useFaqs();
   const { mutate: createFaq } = useCreateFaq();
   const { mutate: updateFaq } = useUpdateFaq();
   const { mutate: deleteFaq } = useDeleteFaq();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFaq, setEditingFaq] = useState<FaqItem | null>(null);
+
+  const faqs = useMemo(() => data?.faqs || [], [data]);
+
+  useEffect(() => {
+    if (faqs) {
+      console.log(faqs);
+    }
+  }, [faqs]);
 
   const handleOpenModal = (faq: FaqItem | null = null) => {
     setEditingFaq(faq);
