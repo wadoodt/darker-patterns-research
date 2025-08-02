@@ -29,6 +29,31 @@ This document covers common issues and their solutions that may arise during dev
 
 ---
 
+## **Problem:** A POST request is sent when a modal is closed without saving.
+
+**Symptoms:**
+- When you close a modal with a form inside (e.g., by clicking a "Cancel" button or outside the modal), a POST request is sent to the server.
+
+**Root Cause & Solution:**
+- **Root Cause:** In HTML, a `<button>` element inside a `<form>` defaults to `type="submit"`. If your "Cancel" button doesn't have `type="button"`, it will submit the form when clicked.
+- **Solution:** Always add `type="button"` to any button inside a form that is not intended to submit it.
+
+**Example:**
+
+```tsx
+// Correct
+<Button type="button" onClick={handleCancel}>
+  Cancel
+</Button>
+
+// Incorrect (will submit the form)
+<Button onClick={handleCancel}>
+  Cancel
+</Button>
+```
+
+---
+
 ## **Problem:** A new page or modal is created, but there is no way to access it from the UI.
 
 **Symptoms:**

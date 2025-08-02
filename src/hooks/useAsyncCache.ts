@@ -135,10 +135,11 @@ export function useAsyncCache<T>(
 
   useEffect(() => {
     // Only attempt to load data if the cache is ready.
-    if (isReady && enabled && (data === null || refetchOnMount)) {
+    // Only attempt to load data if the cache is ready and no error has occurred.
+    if (isReady && enabled && (data === null || refetchOnMount) && error === null) {
       loadData();
     }
-  }, [isReady, loadData, enabled, refetchOnMount, data]);
+  }, [isReady, loadData, enabled, refetchOnMount, data, error]);
 
   const refresh = useCallback(() => loadData(true), [loadData]);
 
