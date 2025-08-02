@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import type { ArticleTranslation } from "@api/domains/knowledge-base/types";
 import { useTranslation } from "react-i18next";
@@ -44,7 +43,10 @@ export function CreateArticleModal({
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Content style={{ maxWidth: 800 }}>
-        <Dialog.Title>{t("articles.create.title")}</Dialog.Title>
+        <Dialog.Title>{t("articles.createArticle")}</Dialog.Title>
+        <Dialog.Description>
+          {t("articles.createArticleDescription")}
+        </Dialog.Description>
         <LanguageTabsSection
           languages={languages}
           activeLanguage={activeLanguage}
@@ -60,7 +62,7 @@ export function CreateArticleModal({
               {t("common.cancel")}
             </Button>
           </Dialog.Close>
-          <Button onClick={handleSave}>{t("articles.create.save")}</Button>
+          <Button onClick={handleSave}>{t("common.save")}</Button>
         </Flex>
       </Dialog.Content>
     </Dialog.Root>

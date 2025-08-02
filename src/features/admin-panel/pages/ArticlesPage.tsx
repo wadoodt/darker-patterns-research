@@ -27,7 +27,7 @@ const ArticlesPage: React.FC = () => {
 
   if (error) return <Box>{t("articles.errorLoading")}</Box>;
 
-  if (isLoading) return <Box>{t("articles.loading")}</Box>;
+  if (isLoading) return <Box>{t("common.loading")}</Box>;
 
   if (!articles) return <Box>{t("articles.noArticles")}</Box>;
   

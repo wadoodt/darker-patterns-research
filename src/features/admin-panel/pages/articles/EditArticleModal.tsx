@@ -64,10 +64,11 @@ export function EditArticleModal({
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Content style={{ maxWidth: 800 }}>
         <Dialog.Title>
-          {t("articles.edit.title", {
-            title: article.translations.en?.title,
-          })}
+          {t("articles.editArticle")}
         </Dialog.Title>
+        <Dialog.Description>
+          {t("articles.editArticleDescription")}
+        </Dialog.Description>
         <LanguageTabsSection
           languages={languages}
           activeLanguage={activeLanguage}
@@ -83,7 +84,7 @@ export function EditArticleModal({
               {t("common.cancel")}
             </Button>
           </Dialog.Close>
-          <Button onClick={handleSave}>{t("articles.edit.save")}</Button>
+          <Button onClick={handleSave}>{t("common.save")}</Button>
         </Flex>
       </Dialog.Content>
     </Dialog.Root>

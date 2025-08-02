@@ -73,7 +73,7 @@ export default function SupportPage() {
     
     if (error) return <Box>{t("articles.errorLoading")}</Box>;
 
-    if (isLoading) return <Box>{t("articles.loading")}</Box>;
+    if (isLoading) return <Box>{t("common.loading")}</Box>;
 
 
   const filteredKnowledgeLibrary = (articles || []).filter(

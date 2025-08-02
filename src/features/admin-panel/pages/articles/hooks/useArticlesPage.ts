@@ -14,10 +14,6 @@ export function useArticlesPage() {
     handleDelete,
   } = useArticleManagement();
 
-  React.useEffect(() => {
-    console.log({ articles });
-  }, [articles]);
-
   const [isCreateModalOpen, setCreateModalOpen] = React.useState(false);
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);
   const [editingArticle, setEditingArticle] =

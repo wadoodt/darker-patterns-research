@@ -115,5 +115,13 @@
     "es": "Registrarse",
     "usedOn": [],
     "notes": ""
+  },
+  "actions": {
+    "en": "Actions",
+    "es": "Acciones",
+    "usedOn": [
+      "src/features/admin-panel/pages/articles/sections/ArticlesTableSection.tsx"
+    ],
+    "notes": ""
   }
 }

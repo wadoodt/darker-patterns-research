@@ -80,5 +80,9 @@
   "signup": {
     "en": "Sign Up",
     "es": "Registrarse"
+  },
+  "actions": {
+    "en": "Actions",
+    "es": "Acciones"
   }
 }

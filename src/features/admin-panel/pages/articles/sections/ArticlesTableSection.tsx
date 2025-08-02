@@ -26,13 +26,13 @@ export function ArticlesTableSection({
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeaderCell>
-            {t("articles.table.title")}
+            {t("articles.title")}
           </Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>
-            {t("articles.table.category")}
+            {t("articles.category")}
           </Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>
-            {t("articles.table.actions")}
+            {t("common.actions")}
           </Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
