@@ -4,83 +4,12 @@
 import { useState } from "react";
 import { useCache } from "@contexts/CacheContext";
 import { Button, Flex, Text, Heading } from "@radix-ui/themes";
+import { cacheKeys } from "@api/cacheKeys";
 
-type CacheAdminPanelButtonsProps = {
-  invalidateProfile: () => void;
-  invalidateMyTickets: () => void;
-  invalidateAllFaqs: () => void;
-  clearAllExpired: () => void;
-  isLoading: boolean;
-  isReady: boolean;
-};
-
-const CacheAdminPanelButtons = ({
-  invalidateProfile,
-  invalidateMyTickets,
-  invalidateAllFaqs,
-  clearAllExpired,
-  isLoading,
-  isReady,
-}: CacheAdminPanelButtonsProps) => (
-  <Flex wrap="wrap" gap="2">
-    <Button
-      onClick={invalidateProfile}
-      disabled={isLoading || !isReady}
-      color="violet"
-    >
-      Invalidate Profile Cache
-    </Button>
-    <Button
-      onClick={invalidateMyTickets}
-      disabled={isLoading || !isReady}
-      color="orange"
-    >
-      Invalidate My Tickets Cache
-    </Button>
-    <Button
-      onClick={invalidateAllFaqs}
-      disabled={isLoading || !isReady}
-      color="red"
-    >
-      Invalidate All FAQs
-    </Button>
-    <Button
-      onClick={clearAllExpired}
-      disabled={isLoading || !isReady}
-      color="red"
-    >
-      Clear All Expired
-    </Button>
-  </Flex>
-);
-
-type CacheAdminPanelViewProps = CacheAdminPanelButtonsProps & {
-  statusMessage: string;
-};
-
-const CacheAdminPanelView = ({
-  statusMessage,
-  isReady,
-  ...buttonProps
-}: CacheAdminPanelViewProps) => (
-  <Flex direction="column" align="center">
-    <Heading size="4" mb="4">Cache Administration</Heading>
-    <CacheAdminPanelButtons {...buttonProps} isReady={isReady} />
-    {statusMessage && (
-      <Text as="p">
-        {statusMessage}
-      </Text>
-    )}
-    {!isReady && (
-      <Text as="p">
-        Cache system is not ready.
-      </Text>
-    )}
-  </Flex>
-);
+const CACHE_DOMAINS = Object.keys(cacheKeys);
 
 export function CacheAdminPanel() {
-  const { cleanupExpired, isReady } = useCache();
+  const { invalidateCacheKeys, cleanupExpired, isReady } = useCache();
   const [statusMessage, setStatusMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -104,39 +33,43 @@ export function CacheAdminPanel() {
     }
   };
 
-  const invalidateProfile = () =>
+  const handleInvalidateDomain = (domain: string) => {
     handleAction(
-      () => cleanupExpired(),
-      "User profile cache cleared.",
+      () => invalidateCacheKeys([domain]),
+      `Successfully invalidated all '${domain}' cache entries.`,
     );
+  };
 
-  const invalidateMyTickets = () =>
+  const handleClearExpired = () => {
     handleAction(
-      () => cleanupExpired(),
-      "My tickets cache invalidated.",
-    );
-
-  const invalidateAllFaqs = () =>
-    handleAction(
-      () => cleanupExpired(),
-      "All FAQs cache invalidated.",
-    );
-
-  const clearAllExpired = () =>
-    handleAction(
-      () => cleanupExpired(),
+      cleanupExpired,
       "Successfully cleared all expired cache entries.",
     );
+  };
 
   return (
-    <CacheAdminPanelView
-      invalidateProfile={invalidateProfile}
-      invalidateMyTickets={invalidateMyTickets}
-      invalidateAllFaqs={invalidateAllFaqs}
-      clearAllExpired={clearAllExpired}
-      isLoading={isLoading}
-      isReady={isReady}
-      statusMessage={statusMessage}
-    />
+    <Flex direction="column" align="center" gap="4">
+      <Heading size="4">Cache Administration</Heading>
+      <Flex wrap="wrap" gap="2">
+        {CACHE_DOMAINS.map((domain) => (
+          <Button
+            key={domain}
+            onClick={() => handleInvalidateDomain(domain)}
+            disabled={isLoading || !isReady}
+          >
+            Invalidate {domain}
+          </Button>
+        ))}
+        <Button
+          onClick={handleClearExpired}
+          disabled={isLoading || !isReady}
+          color="red"
+        >
+          Clear All Expired
+        </Button>
+      </Flex>
+      {statusMessage && <Text as="p">{statusMessage}</Text>}
+      {!isReady && <Text as="p">Cache system is not ready.</Text>}
+    </Flex>
   );
 }

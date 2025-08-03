@@ -1,6 +1,7 @@
 import { Box, Flex, Heading, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { useUser } from "@api/domains/users/hooks";
 import { Profile } from "@features/dashboard/pages/profile/sections/Profile";
 import { CacheAdminPanel } from "@features/dashboard/pages/profile/sections/CacheAdminPanel";
 import LanguageSelector from "@features/dashboard/pages/profile/sections/LanguageSelector";
@@ -10,6 +11,10 @@ import styles from "./GeneralTab.module.css";
 
 export function GeneralTab() {
   const { t } = useTranslation();
+  const { data: userData } = useUser();
+  const canSeeAdminPanel =
+    userData?.user?.platformRole === "admin" ||
+    userData?.user?.platformRole === "super-admin";
 
   return (
     <Box className={styles.container}>
@@ -47,9 +52,11 @@ export function GeneralTab() {
         </Flex>
       </SettingSection>
 
-      <SettingSection title={t("profile.general.cacheManagement")}>
-        <CacheAdminPanel />
-      </SettingSection>
+      {canSeeAdminPanel && (
+        <SettingSection title={t("profile.general.cacheManagement")}>
+          <CacheAdminPanel />
+        </SettingSection>
+      )}
     </Box>
   );
 }
