@@ -2,13 +2,14 @@
 "use client";
 
 import { useState } from "react";
-import { useCache } from "@contexts/CacheContext";
+import { useCache } from "../../../../../contexts/CacheContext";
 import { Button, Flex, Text, Heading } from "@radix-ui/themes";
-import { cacheKeys } from "@api/cacheKeys";
+import { cacheKeys } from "../../../../../api/cacheKeys";
+import { CacheExplorer } from "./CacheExplorer";
 
 const CACHE_DOMAINS = Object.keys(cacheKeys);
 
-export function CacheAdminPanel() {
+function InvalidationPanel() {
   const { invalidateCacheKeys, cleanupExpired, isReady } = useCache();
   const [statusMessage, setStatusMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -49,8 +50,8 @@ export function CacheAdminPanel() {
 
   return (
     <Flex direction="column" align="center" gap="4">
-      <Heading size="4">Cache Administration</Heading>
-      <Flex wrap="wrap" gap="2">
+      <Heading size="3">Cache Invalidation</Heading>
+      <Flex wrap="wrap" gap="2" justify="center">
         {CACHE_DOMAINS.map((domain) => (
           <Button
             key={domain}
@@ -69,7 +70,31 @@ export function CacheAdminPanel() {
         </Button>
       </Flex>
       {statusMessage && <Text as="p">{statusMessage}</Text>}
-      {!isReady && <Text as="p">Cache system is not ready.</Text>}
+    </Flex>
+  );
+}
+
+export function CacheAdminPanel() {
+  const [view, setView] = useState<'invalidation' | 'explorer'>('invalidation');
+  const { isReady } = useCache();
+
+  return (
+    <Flex direction="column" gap="4">
+      <Heading size="4" align="center">Cache Administration</Heading>
+      
+      <Flex gap="3" justify="center">
+        <Button onClick={() => setView('invalidation')} variant={view === 'invalidation' ? 'solid' : 'soft'}>
+          Invalidation
+        </Button>
+        <Button onClick={() => setView('explorer')} variant={view === 'explorer' ? 'solid' : 'soft'}>
+          Explorer
+        </Button>
+      </Flex>
+
+      {!isReady && <Text as="p" align="center" color="orange">Cache system is not ready.</Text>}
+
+      {isReady && view === 'invalidation' && <InvalidationPanel />}
+      {isReady && view === 'explorer' && <CacheExplorer />}
     </Flex>
   );
 }
