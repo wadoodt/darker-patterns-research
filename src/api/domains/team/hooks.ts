@@ -2,49 +2,59 @@
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { team } from "./index";
 import type { TeamMember, NewTeamMember } from "./types";
+import { cacheKeys } from "@api/cacheKeys";
+import { useCache } from "@contexts/CacheContext";
 
-export const useTeamMembers = () => {
+const TEAM_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export const useTeamMembers = ({ page = 1, limit = 10 }) => {
   return useAsyncCache(
-    ["team", "members"],
-    () => team.query(),
-    { ttl: 5 * 60 * 1000 } // 5 minutes
+    cacheKeys.team.members(page, limit),
+    () => team.query({ page, limit }),
+    { ttl: TEAM_CACHE_TTL }
   );
 };
 
+export const useTeamMember = (id: string) => {
+  return useAsyncCache(cacheKeys.team.member(id), () => team.get(id), {
+    ttl: TEAM_CACHE_TTL,
+    enabled: !!id,
+  });
+};
+
 export const useCreateTeamMember = () => {
-  const { refresh } = useAsyncCache(["team", "members"], () => Promise.resolve({ members: [], totalPages: 0, currentPage: 1, totalMembers: 0 }));
-  
+  const { invalidateCacheKeys } = useCache();
+
   return {
     mutate: async (newMember: NewTeamMember) => {
       const result = await team.create(newMember);
-      await refresh();
+      await invalidateCacheKeys(cacheKeys.team.membersPrefix);
       return result;
     },
-    isLoading: false,
   };
 };
 
 export const useUpdateTeamMember = () => {
-  const { refresh } = useAsyncCache(["team", "members"], () => Promise.resolve({ members: [], totalPages: 0, currentPage: 1, totalMembers: 0 }));
-  
+  const { invalidateCacheKeys } = useCache();
+
   return {
     mutate: async (member: Partial<TeamMember> & { id: string }) => {
       const result = await team.update(member);
-      await refresh();
+      await invalidateCacheKeys(cacheKeys.team.membersPrefix);
+      await invalidateCacheKeys(cacheKeys.team.memberPrefix(member.id));
       return result;
     },
-    isLoading: false,
   };
 };
 
 export const useDeleteTeamMember = () => {
-  const { refresh } = useAsyncCache(["team", "members"], () => Promise.resolve({ members: [], totalPages: 0, currentPage: 1, totalMembers: 0 }));
-  
+  const { invalidateCacheKeys } = useCache();
+
   return {
     mutate: async (id: string) => {
       await team.remove(id);
-      await refresh();
+      await invalidateCacheKeys(cacheKeys.team.membersPrefix);
+      await invalidateCacheKeys(cacheKeys.team.memberPrefix(id));
     },
-    isLoading: false,
   };
 }; 

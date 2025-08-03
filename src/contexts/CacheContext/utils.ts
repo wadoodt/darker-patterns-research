@@ -1,33 +1,24 @@
-// Utility to normalize keys to string[]
-export const normalizeKeys = (
-  keys: (string | number | IDBValidKey)[],
-): string[] => keys.map((k) => (typeof k === "string" ? k : String(k)));
+import type { KviDb } from "@lib/cache/types";
 
 // Utility to clean up expired entries
 type CacheEntryLike = { expiresAt?: number };
-type CleanupExpiredOptions<T extends CacheEntryLike = CacheEntryLike> = {
-  kv: {
-    get: (key: string) => Promise<T | undefined>;
-    del: (key: string) => Promise<boolean>;
-    keys: () => Promise<(string | number | IDBValidKey)[]>;
-  };
+type CleanupExpiredOptions = {
+  kv: KviDb;
   now?: number;
 };
 export const cleanupExpiredEntries = async <
   T extends CacheEntryLike = CacheEntryLike,
->({
-  kv,
-  now = Date.now(),
-}: CleanupExpiredOptions<T>) => {
-  const keys = normalizeKeys(await kv.keys());
+>({ kv, now = Date.now() }: CleanupExpiredOptions) => {
+  const keys = await kv.keys();
   for (const key of keys) {
-    const entry = await kv.get(key);
+    const entry = await kv.get<T>(key);
     if (!entry) continue;
     if (entry.expiresAt && entry.expiresAt <= now) {
       await kv.del(key);
     }
   }
 };
+
 
 // Utility to match keys by pattern (supports * wildcard)
 export const matchPattern = (pattern: string) => {

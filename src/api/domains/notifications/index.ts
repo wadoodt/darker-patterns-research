@@ -10,10 +10,8 @@ import type { NotificationsQueryResponse } from "./types";
 /**
  * Fetches a paginated list of notifications.
  */
-const query = (page: number, limit = 10): Promise<NotificationsQueryResponse> => {
-  return handleQuery(() =>
-    apiClient.get(`/notifications?page=${page}&limit=${limit}`),
-  );
+const query = (params: { page: number; limit?: number }): Promise<NotificationsQueryResponse> => {
+  return handleQuery(() => apiClient.get('/notifications', { params }));
 };
 
 /**

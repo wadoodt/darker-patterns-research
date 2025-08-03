@@ -13,7 +13,7 @@ const FAQSection: React.FC = () => {
     data,
     loading: isLoading,
     error,
-  } = useFaqs("pricing");
+  } = useFaqs({ category: "pricing" });
 
   const faqs = React.useMemo(() => data?.faqs || [], [data]);
 

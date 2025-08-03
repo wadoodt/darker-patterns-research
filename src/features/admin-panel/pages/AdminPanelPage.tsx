@@ -5,7 +5,7 @@ import type { User } from "@api/domains/users/types";
 import type { PlatformRole } from "@api/domains/users/types";
 
 const AdminPanelPage = () => {
-  const { data: usersData, loading: isLoading, error } = useAdminUsers();
+  const { data: usersData, loading: isLoading, error } = useAdminUsers({});
   const { mutate: updateUser } = useUpdateAdminUser();
 
   const handleRoleChange = async (userId: string, newRole: PlatformRole) => {

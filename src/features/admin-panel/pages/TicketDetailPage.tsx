@@ -10,6 +10,7 @@ import TicketMessagesList from "./tickets/sections/TicketMessagesList";
 import TicketReplyForm from "./tickets/sections/TicketReplyForm";
 import TicketStatusUpdater from "./tickets/sections/TicketStatusUpdater";
 import { useTranslation } from "react-i18next";
+import type { SupportTicket } from "@api/domains/support/types";
 
 const replySchema = z.object({
   content: z.string().min(1, "Reply content cannot be empty."),
@@ -20,8 +21,9 @@ type ReplyFormData = z.infer<typeof replySchema>;
 const TicketDetailPage = () => {
   const { t } = useTranslation();
   const { ticketId = "" } = useParams<{ ticketId: string }>();
-  const { data: ticket, loading: isLoading, error, refresh: refetch } = useTicket(ticketId);
+  const { data, loading: isLoading, error, refresh: refetch } = useTicket(ticketId);
   const { mutate: replyToTicket, isLoading: isReplying } = useReplyToTicket();
+  const ticket = data?.supportTicket as SupportTicket | undefined;
 
   const {
     register,
@@ -42,6 +44,7 @@ const TicketDetailPage = () => {
   };
 
   if (isLoading) return <Spinner />;
+  if (!ticket) return <Text>{t("tickets.notFound")}</Text>;
   if (error)
     return (
       <Callout.Root color="red">

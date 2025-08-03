@@ -14,6 +14,7 @@ import {
   willExpireWithin,
 } from "@lib/tokenService";
 import { useCache } from "@contexts/CacheContext";
+import { cacheKeys } from "@api/cacheKeys";
 
 // eslint-disable-next-line max-lines-per-function
 const useAuthProvider = (): AuthContextType => {
@@ -27,7 +28,7 @@ const useAuthProvider = (): AuthContextType => {
   const { mutateAsync: loginUser } = useLogin();
   const { mutateAsync: logoutUser } = useLogout();
   const { data: userData } = useUser();
-  const { invalidateByPattern } = useCache();
+  const { invalidateCacheKeys } = useCache();
 
   const clearAuthState = useCallback(() => {
     setToken(null);
@@ -80,7 +81,7 @@ const useAuthProvider = (): AuthContextType => {
 
   const logout = useCallback(async () => {
     // Invalidate user cache before clearing auth state
-    await invalidateByPattern("^async-data:user:me$");
+    await invalidateCacheKeys([]); // Invalidate all cache
     setUser(null);
     clearAuthState();
     removeTokens();
@@ -88,9 +89,9 @@ const useAuthProvider = (): AuthContextType => {
     try {
       await logoutUser();
     } catch (error) {
-      console.error("Logout request failed:", error);
+      console.error("Error during logout API call:", error);
     }
-  }, [clearAuthState, logoutUser, invalidateByPattern]);
+  }, [clearAuthState, logoutUser, invalidateCacheKeys]);
 
   // Listen for token changes from TokenService
   useEffect(() => {
@@ -125,7 +126,7 @@ const useAuthProvider = (): AuthContextType => {
   // Update user state when userData changes
   useEffect(() => {
     if (userData?.error) {
-      invalidateByPattern("^async-data:user:me$");
+      invalidateCacheKeys(cacheKeys.users.mePrefix);
       setIsLoading(false);
       return;
     }
@@ -134,8 +135,7 @@ const useAuthProvider = (): AuthContextType => {
       setUser(userData.user);
       setIsLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData, token]);
+  }, [userData, token, invalidateCacheKeys]);
 
   const hasRole = useCallback(
     (roles: string[]) => {

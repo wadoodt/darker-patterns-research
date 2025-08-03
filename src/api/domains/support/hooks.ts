@@ -1,32 +1,43 @@
 
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { support } from "./index";
+import { cacheKeys } from "@api/cacheKeys";
+import { useCache } from "@contexts/CacheContext";
+import { useState } from "react";
 
-export const useMyTickets = (page: number = 1, limit: number = 10) => {
+const SUPPORT_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export const useMyTickets = ({ page = 1, limit = 10 }) => {
   return useAsyncCache(
-    ["support", "tickets", page, limit],
-    () => support.myTickets(page, limit),
-    { ttl: 5 * 60 * 1000 } // 5 minutes
+    cacheKeys.support.all(page, limit),
+    () => support.myTickets({ page, limit }),
+    { ttl: SUPPORT_CACHE_TTL }
   );
 };
 
 export const useTicket = (ticketId: string) => {
   return useAsyncCache(
-    ["support", "tickets", ticketId],
+    cacheKeys.support.one(ticketId),
     () => support.getTicket(ticketId),
-    { ttl: 5 * 60 * 1000 } // 5 minutes
+    { ttl: SUPPORT_CACHE_TTL }
   );
 };
 
 export const useReplyToTicket = () => {
-  const { refresh } = useAsyncCache(["support", "tickets"], () => Promise.resolve({ tickets: [], totalPages: 0, currentPage: 1 }));
-  
+  const { invalidateCacheKeys } = useCache();
+  const [isLoading, setIsLoading] = useState(false);
+
   return {
     mutate: async (ticketId: string, reply: { content: string }) => {
-      const result = await support.replyToTicket(ticketId, reply);
-      await refresh();
-      return result;
+      setIsLoading(true);
+      try {
+        const result = await support.replyToTicket(ticketId, reply);
+        await invalidateCacheKeys(cacheKeys.support.allPrefix);
+        return result;
+      } finally {
+        setIsLoading(false);
+      }
     },
-    isLoading: false,
+    isLoading,
   };
 };

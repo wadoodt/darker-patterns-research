@@ -7,13 +7,17 @@ import type { User } from "@api/domains/users/types";
  * If the requester is a super-admin, it returns all users.
  * Otherwise, it returns users from the requester's company.
  */
-export const getUsers = async (): Promise<Response> => {
+export const getUsers = async (request: Request): Promise<Response> => {
   // MOCK: Simulate an authenticated admin user for authorization.
   const mockAdminUser = db.users.findFirst({ where: { platformRole: "super-admin" } });
 
   if (!mockAdminUser) {
     return createErrorResponse("UNAUTHORIZED", "No admin user found in mock DB for this operation.");
   }
+
+  const url = new URL(request.url);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
   let users;
   if (mockAdminUser.platformRole === 'super-admin') {
@@ -33,7 +37,18 @@ export const getUsers = async (): Promise<Response> => {
     return rest;
   });
 
-  return createSuccessResponse("OPERATION_SUCCESS", "users", usersResponse);
+  const totalUsers = usersResponse.length;
+  const totalPages = Math.ceil(totalUsers / limit);
+  const data = usersResponse.slice((page - 1) * limit, page * limit);
+
+  return createPaginatedResponse(
+    "OPERATION_SUCCESS",
+    "users",
+    data,
+    page,
+    totalPages,
+    totalUsers
+  );
 };
 
 /**

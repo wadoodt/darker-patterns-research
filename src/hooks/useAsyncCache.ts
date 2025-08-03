@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useCache } from "@contexts/CacheContext";
 import { createCacheKey } from "@lib/cache/utils";
+import { invalidateCacheKeys } from "@lib/cache/invalidation";
 import { API_DEBUG_MODE } from "@api/config";
 import { CACHE_TTL } from "@lib/cache/constants";
 
@@ -13,9 +14,14 @@ interface UseAsyncCacheOptions {
   enabled?: boolean;
   /**
    * Time To Live for the cache entry, in seconds.
-   * Use a value from `CACHE_TTL` for common durations, or provide a custom number.
+   * This can be overridden by the TTL specified in the cache key config.
    * @default CACHE_TTL.DEFAULT_15_MIN
    */
+  ttl?: number;
+}
+
+interface CacheKeyConfig {
+  key: (string | number)[];
   ttl?: number;
 }
 
@@ -28,33 +34,26 @@ interface UseAsyncCacheOptions {
  * @param options Configuration options for the hook.
  */
 export function useAsyncCache<T>(
-  keyParts: (string | number)[],
+  cacheConfig: CacheKeyConfig,
   fetcher: () => Promise<T>,
   options: UseAsyncCacheOptions = {},
 ) {
   const {
     refetchOnMount = false,
     enabled = true,
-    ttl = CACHE_TTL.DEFAULT_15_MIN,
+    ttl: optionTtl = CACHE_TTL.DEFAULT_15_MIN,
   } = options;
-  const { get, set, isReady, error: cacheError } = useCache();
-
-  useEffect(() => {
-    if (cacheError) {
-      console.warn(
-        `[useAsyncCache] Cache error for key '${keyParts.join(":")}':`,
-        cacheError.message,
-      );
-    }
-  }, [cacheError, keyParts]);
-
-  const cacheKey = createCacheKey("async-data", ...keyParts);
-
+  const { key: keyParts, ttl: keyTtl } = cacheConfig;
+  const { get, set, isReady, error: cacheError, db } = useCache();
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
   const mounted = useRef(true);
   const fetcherRef = useRef(fetcher);
+
+  // The TTL from the key factory takes precedence, falling back to the option, then to the default.
+  const ttl = keyTtl ?? optionTtl;
+  const cacheKey = createCacheKey("async-data", ...keyParts);
 
   useEffect(() => {
     fetcherRef.current = fetcher;
@@ -133,17 +132,35 @@ export function useAsyncCache<T>(
     [cacheKey, get, set, ttl, isReady, enabled, cacheError],
   );
 
+  const refresh = useCallback(
+    async (invalidationKey?: (string | number)[]) => {
+      if (invalidationKey && db) {
+        const invalidationPrefix = createCacheKey("async-data", ...invalidationKey);
+        await invalidateCacheKeys(db, invalidationPrefix);
+      }
+      // Force a refresh of the current hook's data
+      await loadData(true);
+    },
+    [db, loadData],
+  );
+
   useEffect(() => {
-    // Only attempt to load data if the cache is ready.
+    if (cacheError) {
+      console.warn(
+        `[useAsyncCache] Cache error for key '${keyParts.join(":")}':`,
+        cacheError.message,
+      );
+    }
+  }, [cacheError, keyParts]);
+
+  useEffect(() => {
     // Only attempt to load data if the cache is ready and no error has occurred.
     if (isReady && enabled && (data === null || refetchOnMount) && error === null) {
       loadData();
     }
   }, [isReady, loadData, enabled, refetchOnMount, data, error]);
 
-  const refresh = useCallback(() => loadData(true), [loadData]);
-
-  return { data, loading, error, refresh, isReady };
+  return { data, loading, error, refresh };
 }
 
 const debugLog = (message: string, ...args: unknown[]) => {

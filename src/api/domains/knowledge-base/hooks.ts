@@ -2,49 +2,50 @@
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { knowledgeBase } from "./index";
 import type { KnowledgeBaseArticle } from "./types";
+import { cacheKeys } from "@api/cacheKeys";
+import { useCache } from "@contexts/CacheContext";
 
-export const useArticles = () => {
+const KB_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export const useArticles = ({ page = 1, limit = 10 }: { page?: number, limit?: number } = {}) => {
   return useAsyncCache(
-    ["knowledge-base", "articles"],
-    () => knowledgeBase.getArticles(),
-    { ttl: 5 * 60 * 1000 } // 5 minutes
+    cacheKeys.knowledgeBase.articles(page, limit),
+    () => knowledgeBase.getArticles({ page, limit }),
+    { ttl: KB_CACHE_TTL }
   );
 };
 
 export const useCreateArticle = () => {
-  const { refresh } = useAsyncCache(["knowledge-base", "articles"], () => Promise.resolve([]));
+  const { invalidateCacheKeys } = useCache();
   
   return {
     mutate: async (article: Omit<KnowledgeBaseArticle, "id">) => {
       const result = await knowledgeBase.createArticle(article);
-      await refresh();
+      await invalidateCacheKeys(cacheKeys.knowledgeBase.articlesPrefix);
       return result;
     },
-    isLoading: false,
   };
 };
 
 export const useUpdateArticle = () => {
-  const { refresh } = useAsyncCache(["knowledge-base", "articles"], () => Promise.resolve([]));
+  const { invalidateCacheKeys } = useCache();
   
   return {
     mutate: async (article: KnowledgeBaseArticle) => {
       const result = await knowledgeBase.updateArticle(article);
-      await refresh();
+      await invalidateCacheKeys(cacheKeys.knowledgeBase.articlesPrefix);
       return result;
     },
-    isLoading: false,
   };
 };
 
 export const useDeleteArticle = () => {
-  const { refresh } = useAsyncCache(["knowledge-base", "articles"], () => Promise.resolve([]));
+  const { invalidateCacheKeys } = useCache();
   
   return {
     mutate: async (id: string) => {
       await knowledgeBase.deleteArticle(id);
-      await refresh();
+      await invalidateCacheKeys(cacheKeys.knowledgeBase.articlesPrefix);
     },
-    isLoading: false,
   };
 };

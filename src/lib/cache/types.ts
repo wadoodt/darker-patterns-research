@@ -1,4 +1,5 @@
 // src/lib/cache/types.ts
+import type kvidb from "./kvidb";
 
 /**
  * Represents the structure of an entry in the IndexedDB cache.
@@ -9,3 +10,9 @@ export interface CacheEntry<T = unknown> {
   createdAt: number;
   expiresAt: number;
 }
+
+/**
+ * Represents the type of the key-value database instance.
+ * This is derived from the return type of the kvidb function.
+ */
+export type KviDb = Awaited<ReturnType<typeof kvidb>>;

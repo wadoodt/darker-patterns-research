@@ -2,6 +2,7 @@
 import { useMemo } from "react";
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { users } from "./index";
+import { cacheKeys } from "@api/cacheKeys";
 import type { UpdateUserPayload } from "./types";
 import { getAccessToken, getExpiresAt } from "@lib/tokenService";
 
@@ -24,18 +25,18 @@ export const useUser = () => {
     return defaultTtl;
   }, [tokenExpiresAt]);
   
-  return useAsyncCache(
-    ["user", "me"],
-    () => users.getMe(),
-    { 
-      ttl,
-      enabled: !!authToken
-    }
-  );
+  return useAsyncCache(cacheKeys.users.me(), () => users.getMe(), {
+    ttl,
+    enabled: !!authToken,
+  });
 };
 
 export const useUpdateUser = () => {
-  const { refresh } = useAsyncCache(["user", "me"], () => Promise.resolve(null));
+  const { refresh } = useAsyncCache(
+    cacheKeys.users.me(),
+    () => Promise.resolve(null),
+    { enabled: false },
+  );
   
   return {
     mutate: async (payload: UpdateUserPayload) => {

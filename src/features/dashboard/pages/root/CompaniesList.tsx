@@ -3,7 +3,7 @@
 import { useCompanies } from "@api/domains/companies/hooks";
 
 export function CompaniesList() {
-  const { data: companiesData, loading: isLoading, error, refresh: refetch } = useCompanies();
+  const { data: companiesData, loading: isLoading, error, refresh: refetch } = useCompanies({});
 
   if (isLoading && !companiesData) return <div>Loading companies...</div>;
   if (error) return <div>Error: {error.message}</div>;

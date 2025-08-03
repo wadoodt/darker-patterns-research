@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { type CacheEntry } from "@lib/cache/types";
 import { CACHE_TTL } from "@lib/cache/constants";
 import { CacheContext } from "./context";
 import type { CacheContextValue, CacheProviderProps } from "./types";
-import { normalizeKeys, cleanupExpiredEntries, matchPattern } from "./utils";
+import { cleanupExpiredEntries } from "./utils";
 import { useCacheInitialization } from "./useCacheInitialization";
 
 export function CacheProvider({
@@ -16,10 +16,28 @@ export function CacheProvider({
     cleanupIntervalMs,
   });
 
+
+
+  const invalidateCacheKeys = useCallback(async (keyPrefix: string[]) => {
+    if (!kvRef.current) return;
+
+    const allKeys = await kvRef.current.keys();
+    const keysToDelete = allKeys.filter((key) => {
+      if (typeof key !== "string") return false;
+      const keyParts = key.split(":");
+      return keyPrefix.every((part, i) => part === keyParts[i]);
+    });
+
+    if (keysToDelete.length > 0) {
+      await Promise.all(keysToDelete.map((key) => kvRef.current!.del(key)));
+    }
+  }, [kvRef]);
+
   const contextValue: CacheContextValue = useMemo(
     () => ({
       isReady,
       error,
+      db: kvRef.current,
       set: async <T,>(
         key: string,
         data: T,
@@ -60,22 +78,13 @@ export function CacheProvider({
           return null;
         }
       },
-      invalidateByPattern: async (pattern: string) => {
-        if (!kvRef.current) return;
-        const matcher = matchPattern(pattern);
-        const keys: string[] = normalizeKeys(await kvRef.current.keys());
-        for (const key of keys) {
-          if (matcher(key)) {
-            await kvRef.current.del(key);
-          }
-        }
-      },
+      invalidateCacheKeys,
       cleanupExpired: async () => {
         if (!kvRef.current) return;
         await cleanupExpiredEntries({ kv: kvRef.current });
       },
     }),
-    [isReady, error, kvRef],
+    [isReady, error, kvRef, invalidateCacheKeys],
   );
 
   return (

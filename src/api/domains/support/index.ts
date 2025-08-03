@@ -27,8 +27,8 @@ const getTicket = (id: string): Promise<SupportTicket> => {
  * @param limit The number of tickets per page.
  * @returns A promise that resolves to the paginated ticket response.
  */
-const myTickets = (page: number, limit: number): Promise<PaginatedTicketsResponse> => {
-  return handleQuery(() => apiClient.get(`/support/tickets?page=${page}&limit=${limit}`));
+const myTickets = (params: { page?: number; limit?: number } = {}): Promise<PaginatedTicketsResponse> => {
+  return handleQuery(() => apiClient.get('/support/tickets', { params }));
 };
 
 /**

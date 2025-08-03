@@ -6,16 +6,16 @@ import type { User } from "@api/domains/users/types";
 import type { SupportTicket } from "@api/domains/support/types";
 import type { PlatformRole } from "@api/domains/users/types";
 
-const getUsers = async (): Promise<{ users: User[] }> => {
-  return handleQuery(() => apiClient.get("/admin/users"));
+const getUsers = async (params: { page?: number; limit?: number } = {}): Promise<{ users: User[] }> => {
+  return handleQuery(() => apiClient.get("/admin/users", { params }));
 };
 
 const updateUser = async (userId: string, updates: { platformRole: PlatformRole }): Promise<User> => {
   return handleMutation(() => apiClient.patch(`/admin/users/${userId}`, updates));
 };
 
-const getTickets = async (page: number): Promise<{ tickets: SupportTicket[], totalPages: number }> => {
-  return handleQuery(() => apiClient.get(`/admin/tickets?page=${page}&limit=10`));
+const getTickets = async (params: { page?: number; limit?: number } = {}): Promise<{ tickets: SupportTicket[], totalPages: number }> => {
+  return handleQuery(() => apiClient.get("/admin/tickets", { params }));
 };
 
 const updateTicket = async (ticketId: string, updates: { status: string }): Promise<SupportTicket> => {

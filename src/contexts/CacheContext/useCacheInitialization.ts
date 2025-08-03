@@ -1,7 +1,7 @@
 // src/contexts/CacheContext/useCacheInitialization.ts
 import { useRef, useState, useEffect } from "react";
 import kvidb from "@lib/cache/kvidb";
-import type { KvDbType } from "./types";
+import type { KviDb } from "@lib/cache/types";
 import { deleteDatabase, cleanupExpiredEntries } from "./utils";
 
 interface UseCacheInitializationProps {
@@ -13,7 +13,7 @@ export function useCacheInitialization({
   dbName,
   cleanupIntervalMs,
 }: UseCacheInitializationProps) {
-  const kvRef = useRef<KvDbType | null>(null);
+  const kvRef = useRef<KviDb | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -24,15 +24,7 @@ export function useCacheInitialization({
       try {
         const kv = await kvidb(dbName, "cache");
         if (mounted) {
-          kvRef.current = {
-            get: kv.get,
-            put: kv.put,
-            del: kv.del,
-            keys: async () => {
-              const keys = await kv.keys();
-              return keys.map((k) => String(k));
-            },
-          };
+          kvRef.current = kv;
           setIsReady(true);
           console.log("Cache is ready");
         }

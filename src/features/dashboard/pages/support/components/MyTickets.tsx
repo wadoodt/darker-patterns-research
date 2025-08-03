@@ -2,34 +2,28 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Heading, Table, Badge, Flex, Button } from "@radix-ui/themes";
 import { useAsyncCache } from "@hooks/useAsyncCache";
-import api from "@api/index";
-import type { SupportTicket } from "@api/domains/support/types";
+import { cacheKeys } from "@api/cacheKeys";
+import { support } from "@api/domains/support";
+import type { PaginatedTicketsResponse, SupportTicket } from "@api/domains/support/types";
 import { ApiError } from "@api/lib/ApiError";
 import { CACHE_TTL } from "@lib/cache/constants";
-
-const fetchMyTickets = async (page: number) => {
-  const response = await api.support.myTickets(page, 5);
-  if (!response.supportTickets || response.supportTickets.length === 0) {
-    console.log("no tickets");
-    return {
-      data: [],
-      currentPage: 1,
-      totalPages: 1,
-      totalItems: 0,
-      pageSize: 5,
-    };
-  }
-  return response;
-};
 
 const MyTickets: React.FC = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, loading, error } = useAsyncCache(
-    ["my-tickets", currentPage],
-    () => fetchMyTickets(currentPage),
+  const { data, loading, error } = useAsyncCache<PaginatedTicketsResponse>(
+    cacheKeys.support.all(currentPage, 5),
+    () => support.myTickets({ page: currentPage, limit: 10 }),
     { ttl: CACHE_TTL.STANDARD_5_MIN },
   );
+
+  const pagination = data
+    ? {
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        total: data.totalItems,
+      }
+    : { currentPage: 1, totalPages: 1, total: 0 };
 
   const errorMessage = useMemo(() => {
     if (error instanceof ApiError) return error.message; // i18n key
@@ -103,13 +97,11 @@ const MyTickets: React.FC = () => {
               Previous
             </Button>
             <span>
-              Page {data?.currentPage} of {data?.totalPages}
+              Page {pagination.currentPage} of {pagination.totalPages}
             </span>
             <Button
               onClick={() => setCurrentPage((p) => p + 1)}
-              disabled={
-                !data?.currentPage || data?.currentPage === data?.totalPages
-              }
+              disabled={pagination.currentPage === pagination.totalPages}
             >
               Next
             </Button>

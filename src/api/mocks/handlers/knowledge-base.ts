@@ -1,10 +1,28 @@
 import { db } from "../db";
-import { createSuccessResponse, createErrorResponse } from "../../response";
+import {
+  createPaginatedResponse,
+  createSuccessResponse,
+  createErrorResponse,
+} from "../../response";
 
-export const getArticles = async () => {
-  const articles = db.knowledgeBaseArticle.findMany({});
-  console.log('getArticles', { articles });
-  return createSuccessResponse("OPERATION_SUCCESS", "articles", articles);
+export const getArticles = async (request: Request) => {
+  const url = new URL(request.url);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+
+  const allArticles = db.knowledgeBaseArticle.findMany({});
+  const total = allArticles.length;
+  const totalPages = Math.ceil(total / limit);
+  const pagedArticles = allArticles.slice((page - 1) * limit, page * limit);
+
+  return createPaginatedResponse(
+    "OPERATION_SUCCESS",
+    "articles",
+    pagedArticles,
+    page,
+    totalPages,
+    total
+  );
 };
 
 export const createArticle = async (request: Request): Promise<Response> => {

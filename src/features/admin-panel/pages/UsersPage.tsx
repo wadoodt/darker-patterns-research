@@ -55,7 +55,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({ user, onUpdate }) => (
 );
 
 const UsersPage: React.FC = () => {
-  const { data: usersData, loading: isLoading, error } = useAdminUsers();
+  const { data: usersData, loading: isLoading, error } = useAdminUsers({});
   const { mutate: updateUser } = useUpdateAdminUser();
 
   const handleUpdateUser = (

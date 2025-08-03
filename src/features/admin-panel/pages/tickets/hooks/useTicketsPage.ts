@@ -7,7 +7,7 @@ import type { SupportTicket } from "@api/domains/support/types";
 export function useTicketsPage() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: ticketsData, loading: isLoading, error, refresh: refetch } = useAdminTickets(currentPage);
+  const { data: ticketsData, loading: isLoading, error, refresh: refetch } = useAdminTickets({ page: currentPage });
   const { mutate: updateTicket } = useUpdateAdminTicket();
 
   const handleStatusChange = async (

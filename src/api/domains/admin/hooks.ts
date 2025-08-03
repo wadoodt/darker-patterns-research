@@ -2,45 +2,56 @@
 import { useAsyncCache } from "@hooks/useAsyncCache";
 import { admin } from "./index";
 import type { PlatformRole } from "@api/domains/users/types";
+import { cacheKeys } from "@api/cacheKeys";
+import { useCache } from "@contexts/CacheContext";
+import { useState } from "react";
 
-export const useAdminUsers = () => {
+const ADMIN_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export const useAdminUsers = ({ page = 1, limit = 10 }) => {
   return useAsyncCache(
-    ["admin", "users"],
-    () => admin.getUsers(),
-    { ttl: 5 * 60 * 1000 } // 5 minutes
+    cacheKeys.admin.users(page, limit),
+    () => admin.getUsers({ page, limit }),
+    { ttl: ADMIN_CACHE_TTL }
   );
 };
 
 export const useUpdateAdminUser = () => {
-  const { refresh } = useAsyncCache(["admin", "users"], () => Promise.resolve({ users: [] }));
-  
+  const { invalidateCacheKeys } = useCache();
+
   return {
     mutate: async (userId: string, updates: { platformRole: PlatformRole }) => {
       const result = await admin.updateUser(userId, updates);
-      await refresh();
+      await invalidateCacheKeys(cacheKeys.admin.usersPrefix);
+      await invalidateCacheKeys(cacheKeys.users.mePrefix);
       return result;
     },
-    isLoading: false,
   };
 };
 
-export const useAdminTickets = (page: number = 1) => {
+export const useAdminTickets = ({ page = 1, limit = 10 }) => {
   return useAsyncCache(
-    ["admin", "tickets", page],
-    () => admin.getTickets(page),
-    { ttl: 5 * 60 * 1000 } // 5 minutes
+    cacheKeys.admin.tickets(page, limit),
+    () => admin.getTickets({ page, limit }),
+    { ttl: ADMIN_CACHE_TTL }
   );
 };
 
 export const useUpdateAdminTicket = () => {
-  const { refresh } = useAsyncCache(["admin", "tickets"], () => Promise.resolve({ tickets: [], totalPages: 0 }));
-  
+  const { invalidateCacheKeys } = useCache();
+  const [isLoading, setIsLoading] = useState(false);
+
   return {
     mutate: async (ticketId: string, updates: { status: string }) => {
-      const result = await admin.updateTicket(ticketId, updates);
-      await refresh();
-      return result;
+      setIsLoading(true);
+      try {
+        const result = await admin.updateTicket(ticketId, updates);
+        await invalidateCacheKeys(cacheKeys.admin.ticketsPrefix);
+        return result;
+      } finally {
+        setIsLoading(false);
+      }
     },
-    isLoading: false,
+    isLoading,
   };
 };

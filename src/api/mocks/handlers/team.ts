@@ -86,6 +86,28 @@ export const getTeamMembers = (request: Request): Response => {
   );
 };
 
+export const getTeamMemberById = (
+  request: Request,
+  params: { id: string }
+): Response => {
+  const user = getAuthenticatedUser(request) as AuthenticatedUser;
+  if (!user) return handleUnauthorized();
+
+  const member = db.users.findFirst({
+    where: { id: params.id },
+  });
+
+  if (!member) {
+    return createErrorResponse("NOT_FOUND", `Team member with id ${params.id} not found`);
+  }
+
+  if (member.companyId !== user.companyId) {
+    return createErrorResponse("FORBIDDEN", "Forbidden");
+  }
+
+  return createSuccessResponse("OPERATION_SUCCESS", "teamMember", member);
+};
+
 export const deleteTeamMember = async (
   request: Request,
   params: { id: string }

@@ -11,8 +11,15 @@ import type { TeamMember, TeamMembersResponse, NewTeamMember, ApiSuccess } from 
  * Fetches a list of team members.
  * This is a QUERY method, so it uses the `handleQuery` utility.
  */
-const query = async (): Promise<TeamMembersResponse> => {
-  return handleQuery(() => apiClient.get("/team"));
+const query = async (params: { page?: number; limit?: number } = {}): Promise<TeamMembersResponse> => {
+  return handleQuery(() => apiClient.get("/team", { params }));
+};
+
+/**
+ * Fetches a single team member by their ID.
+ */
+const get = async (id: string): Promise<ApiResponse<ApiSuccess<TeamMember>>> => {
+  return handleQuery(() => apiClient.get(`/team/${id}`));
 };
 
 /**
@@ -43,6 +50,7 @@ const remove = async (id: string): Promise<ApiResponse<null>> => {
 
 export const team = {
   query,
+  get,
   create,
   update,
   remove,
