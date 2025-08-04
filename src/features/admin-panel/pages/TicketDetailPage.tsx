@@ -23,7 +23,7 @@ const TicketDetailPage = () => {
   const { ticketId = "" } = useParams<{ ticketId: string }>();
   const { data, loading: isLoading, error, refresh: refetch } = useTicket(ticketId);
   const { mutate: replyToTicket, isLoading: isReplying } = useReplyToTicket();
-  const ticket = data?.supportTicket as SupportTicket | undefined;
+  const ticket = data as SupportTicket | undefined;
 
   const {
     register,

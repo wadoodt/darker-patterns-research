@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { createPaginatedResponse } from "../../response";
+import { createPaginatedResponse, createSuccessResponse, createErrorResponse } from "../../response";
 import type { FaqCategory } from "@api/domains/faq/types";
 
 export const getFaqs = (request: Request) => {
@@ -33,10 +33,7 @@ export const getFaqs = (request: Request) => {
 export const createFaq = async (request: Request): Promise<Response> => {
   const newFaq = await request.json();
   const createdFaq = db.faqs.create(newFaq);
-  return new Response(JSON.stringify(createdFaq), {
-    status: 201,
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return createSuccessResponse("OPERATION_SUCCESS", "faq", createdFaq);
 };
 
 export const updateFaq = async (request: Request, params: Record<string, string>): Promise<Response> => {
@@ -48,22 +45,19 @@ export const updateFaq = async (request: Request, params: Record<string, string>
       where: { id },
       data: updatedFaq,
     });
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return createSuccessResponse("OPERATION_SUCCESS", "faq", result);
   } catch {
-    return new Response(JSON.stringify({ error: 'FAQ not found' }), { status: 404 });
+    return createErrorResponse("NOT_FOUND", "FAQ not found");
   }
 };
 
 export const deleteFaq = async (params: Record<string, string>): Promise<Response> => {
   const { id } = params;
-  
+
   try {
-    db.faqs.delete({ where: { id } });
-    return new Response(null, { status: 204 });
+    await db.faqs.delete({ where: { id } });
+    return createSuccessResponse("OPERATION_SUCCESS", "faq", { id });
   } catch {
-    return new Response(JSON.stringify({ error: 'FAQ not found' }), { status: 404 });
+    return createErrorResponse("NOT_FOUND", "FAQ not found");
   }
 };

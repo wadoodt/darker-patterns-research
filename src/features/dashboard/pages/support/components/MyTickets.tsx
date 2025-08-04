@@ -19,7 +19,7 @@ const MyTickets: React.FC = () => {
 
   const pagination = data
     ? {
-        currentPage: data.currentPage,
+        currentPage: data.page,
         totalPages: data.totalPages,
         total: data.totalItems,
       }
@@ -92,7 +92,7 @@ const MyTickets: React.FC = () => {
           <Flex justify="between" mt="4">
             <Button
               onClick={() => setCurrentPage((p) => p - 1)}
-              disabled={data?.currentPage === 1}
+              disabled={data?.page === 1}
             >
               Previous
             </Button>

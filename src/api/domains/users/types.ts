@@ -1,6 +1,8 @@
 export type PlatformRole = "user" | "admin" | "representative" | "super-admin" | "qa";
 export type UserStatus = "created" | "active" | "inactive" | "invited";
 
+import type { Notification } from "@api/domains/notifications/types";
+
 export type User = {
   id: string;
   name: string;
@@ -12,4 +14,9 @@ export type User = {
   password?: string;
 };
 
-export type UpdateUserPayload = Partial<Omit<User, "id" | "password" | "platformRole" | "companyId" | "status">>;
+export interface AuthenticatedUser extends User {
+  plan?: string;
+  unreadNotifications?: Notification[];
+}
+
+export type UpdateUserPayload = Pick<User, "name">;

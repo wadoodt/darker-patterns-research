@@ -203,6 +203,106 @@ function MyComponent() {
 }
 ```
 
+## 6. Cache Editing
+
+The cache system provides powerful tools for viewing and editing cached data, which is particularly useful during development and debugging.
+
+### Using the Cache Editor
+
+The `CacheEditor` component provides a user interface for viewing and modifying cached values:
+
+```tsx
+import { CacheEditor } from '@features/dashboard/pages/profile/sections/CacheEditor';
+
+function CacheManagement() {
+  return (
+    <div>
+      <h2>Cache Editor</h2>
+      <CacheEditor 
+        initialData={{ /* initial cache data */ }}
+        initialTtl={300} // 5 minutes
+        onSave={(data, ttl) => {
+          // Handle save logic
+          console.log('Saving cache with TTL:', ttl, 'seconds');
+          console.log('Cache data:', data);
+        }}
+        onCancel={() => {
+          // Handle cancel
+          console.log('Cache edit cancelled');
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### Programmatic Cache Updates
+
+You can also update cache entries programmatically using the `useCache` hook:
+
+```tsx
+import { useCache } from '@contexts/CacheContext';
+import { CACHE_TTL } from '@lib/cache/constants';
+
+function UpdateCacheExample() {
+  const { updateEntry, invalidateCacheKeys } = useCache();
+  
+  const handleUpdate = async (key: string, newValue: any) => {
+    try {
+      // Update a specific cache entry
+      await updateEntry(key, newValue, CACHE_TTL.STANDARD_5_MIN);
+      
+      // Or invalidate multiple keys using a pattern
+      await invalidateCacheKeys(/^user:profile:/);
+      
+      console.log('Cache updated successfully');
+    } catch (error) {
+      console.error('Failed to update cache:', error);
+    }
+  };
+  
+  return (
+    <button onClick={() => handleUpdate('test:key', { updated: true })}>
+      Update Test Cache
+    </button>
+  );
+}
+```
+
+### Cache Editor Features
+
+1. **JSON Editing**
+   - Syntax highlighting and validation
+   - Format preservation
+   - Error handling for invalid JSON
+
+2. **TTL Management**
+   - Set custom TTL in seconds
+   - Common presets (5 min, 1 hour, 1 day, etc.)
+   - Clear indication of when entries will expire
+
+3. **Security**
+   - Admin-only access controls
+   - Audit logging of all modifications
+   - Confirmation dialogs for destructive actions
+
+### Best Practices
+
+1. **Use with Caution**
+   - Only enable cache editing in development or for admin users
+   - Always validate data before saving to cache
+   - Be mindful of cache consistency when manually editing
+
+2. **Debugging**
+   - Use the cache management panel to inspect current cache state
+   - Check browser's developer tools for IndexedDB inspection
+   - Monitor network requests to verify cache behavior
+
+3. **Performance**
+   - Be mindful of cache size when storing large objects
+   - Set appropriate TTL values based on data volatility
+   - Use cache invalidation patterns to keep data fresh
+
 ## 7. Invalidate or Refresh Cache
 
 To force a refresh (e.g., after a mutation), use `invalidateByPattern` from `useCache`.

@@ -20,6 +20,16 @@ const handleEdit = async (faq: FaqItem) => {
 
   if (error) return <Box>Error loading FAQs</Box>;
 
+    // Wrap handleCreate to add createdAt/updatedAt
+  const handleCreateWithTimestamps = async (data: { category: string; translations: { [key: string]: { question: string; answer: string; }; }; }) => {
+    const now = new Date().toISOString();
+    await handleCreate({
+      ...data,
+      createdAt: now,
+      updatedAt: now,
+    });
+  };
+
   return (
     <Box>
       <HeaderSection onCreate={() => setCreateModalOpen(true)} />
@@ -35,7 +45,7 @@ const handleEdit = async (faq: FaqItem) => {
         isEditModalOpen={isEditModalOpen} 
         setEditModalOpen={setEditModalOpen} 
         editingFAQ={editingFAQ}
-        handleCreate={handleCreate} 
+        handleCreate={handleCreateWithTimestamps} 
         handleUpdate={handleUpdate}
       />
     </Box>

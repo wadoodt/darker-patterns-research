@@ -29,9 +29,9 @@ export const useTeamPage = () => {
 
   const pagination = data
     ? {
-        currentPage: data.currentPage,
+        currentPage: data.page,
         totalPages: data.totalPages,
-        total: data.totalMembers,
+        total: data.totalItems,
       }
     : null;
 

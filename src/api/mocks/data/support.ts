@@ -159,6 +159,7 @@ export const mockKnowledgeBaseArticles = [
 export const mockSupportTickets: SupportTicket[] = [
   {
     id: "tkt-1",
+    userId: "user-1",
     subject: "Cannot connect my Gmail account",
     email: "test.user@example.com",
     status: "open",
@@ -175,6 +176,7 @@ export const mockSupportTickets: SupportTicket[] = [
   },
   {
     id: "tkt-2",
+    userId: "user-2",
     subject: "Question about automation rules",
     email: "another.user@example.com",
     status: "in_progress",
@@ -197,8 +199,9 @@ export const mockSupportTickets: SupportTicket[] = [
   },
   {
     id: "tkt-3",
+    userId: "user-1",
     subject: "Billing issue",
-    email: "jane.doe@example.com",
+    email: "test.user@example.com",
     status: "closed",
     createdAt: "2023-10-24T09:00:00Z",
     updatedAt: "2023-10-25T17:45:00Z",
@@ -219,6 +222,7 @@ export const mockSupportTickets: SupportTicket[] = [
   },
   {
     id: "tkt-4",
+    userId: "user-3",
     subject: "Feature Request: Dark Mode",
     email: "feature.lover@example.com",
     status: "open",

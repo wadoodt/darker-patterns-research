@@ -1,6 +1,5 @@
 // Extracted from the original src/types/api/user.ts
 
-import { RESPONSE_CODES } from "@api/codes";
 import type { PlatformRole, UserStatus } from "@api/domains/users/types";
 
 // Re-export types for compatibility
@@ -16,7 +15,7 @@ export type TeamMember = {
   platformRole: PlatformRole;
   companyId: string;
   status: UserStatus;
-  companyRole?: CompanyRole;
+  companyRole: CompanyRole;
   lastActive?: string;
   password?: string;
 }
@@ -27,11 +26,11 @@ export type NewTeamMember = Pick<TeamMember, "name" | "email"> & {
 
 export type TeamMembersResponse = {
   teamMembers: TeamMember[];
+  page: number;
   totalPages: number;
-  currentPage: number;
-  totalMembers: number;
-}
+  totalItems: number;
+};
 
-export type ApiSuccess<T> = T & {
-  message: (typeof RESPONSE_CODES)[keyof typeof RESPONSE_CODES]["message"];
-}
+export type TeamMemberResponse = {
+  teamMember: TeamMember;
+};

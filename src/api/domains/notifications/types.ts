@@ -18,6 +18,16 @@ export type Notification = {
 export interface NotificationsQueryResponse {
   notifications: Notification[];
   totalItems: number;
-  currentPage: number;
+  page: number;
   totalPages: number;
 }
+
+export type MarkNotificationAsReadResponse = {
+  notification: Notification;
+};
+
+export type MarkAllNotificationsAsReadResponse = {
+  notifications: {
+    message: string;
+  };
+};

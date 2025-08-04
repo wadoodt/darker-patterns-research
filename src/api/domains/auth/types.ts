@@ -15,5 +15,13 @@ export type LoginResponse = {
   expiresIn: number;
   notifications: {
     unread: Notification[];
+    unreadCount: number;
+    total: number;
   };
+};
+
+export type RefreshTokenResponse = {
+  token: string;
+  refreshToken: string;
+  expiresIn: number;
 }; 

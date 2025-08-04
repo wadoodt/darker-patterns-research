@@ -5,7 +5,7 @@ import apiClient from "@api/client";
 import { handleQuery } from "@api/lib/handleQuery";
 import { handleMutation } from "@api/lib/handleMutation";
 import type { ApiResponse } from "types/api";
-import type { TeamMember, TeamMembersResponse, NewTeamMember, ApiSuccess } from "./types";
+import type { TeamMember, TeamMembersResponse, NewTeamMember, TeamMemberResponse } from "./types";
 
 /**
  * Fetches a list of team members.
@@ -18,7 +18,7 @@ const query = async (params: { page?: number; limit?: number } = {}): Promise<Te
 /**
  * Fetches a single team member by their ID.
  */
-const get = async (id: string): Promise<ApiResponse<ApiSuccess<TeamMember>>> => {
+const get = async (id: string): Promise<TeamMemberResponse> => {
   return handleQuery(() => apiClient.get(`/team/${id}`));
 };
 
@@ -26,7 +26,7 @@ const get = async (id: string): Promise<ApiResponse<ApiSuccess<TeamMember>>> => 
  * Creates a new team member.
  * This is a MUTATION method, so it uses the `handleMutation` utility.
  */
-const create = async (newMember: NewTeamMember): Promise<ApiResponse<ApiSuccess<TeamMember>>> => {
+const create = async (newMember: NewTeamMember): Promise<TeamMemberResponse> => {
   return handleMutation(() => apiClient.post("/team", newMember));
 };
 
@@ -36,7 +36,7 @@ const create = async (newMember: NewTeamMember): Promise<ApiResponse<ApiSuccess<
  */
 const update = async (
   member: Partial<TeamMember> & { id: string },
-): Promise<ApiResponse<ApiSuccess<TeamMember>>> => {
+): Promise<TeamMemberResponse> => {
   return handleMutation(() => apiClient.patch(`/team/${member.id}`, member));
 };
 

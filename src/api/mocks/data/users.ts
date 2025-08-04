@@ -12,6 +12,7 @@ export const mockUsers: TeamMember[] = [
     password: "password",
     platformRole: "admin",
     companyId: "comp-001",
+    companyRole: "manager",
     status: "active",
   },
   {
@@ -22,6 +23,7 @@ export const mockUsers: TeamMember[] = [
     password: "password",
     platformRole: "user",
     companyId: "comp-002",
+    companyRole: "employee",
     status: "active",
   },
   {
@@ -32,6 +34,7 @@ export const mockUsers: TeamMember[] = [
     password: "password",
     platformRole: "qa",
     companyId: "comp-004",
+    companyRole: "employee",
     status: "active",
   },
   {
@@ -42,6 +45,7 @@ export const mockUsers: TeamMember[] = [
     password: "password",
     platformRole: "super-admin",
     companyId: "comp-001",
+    companyRole: "owner",
     status: "active",
   },
   // Team members
