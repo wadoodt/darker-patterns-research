@@ -1,12 +1,16 @@
 
-import apiClient from "@api/client";
 import { handleMutation } from "@api/lib/handleMutation";
 import type { SignupPayload, SignupResponse } from "./types";
 
-const signup = async (payload: SignupPayload): Promise<SignupResponse> => {
-  return handleMutation(() => apiClient.post("/signup", payload));
+/**
+ * Signs up a new user.
+ * @param {SignupPayload} payload - The user's signup information.
+ * @returns {Promise<SignupResponse>} A promise that resolves with the new user's session information.
+ */
+const signup = (payload: SignupPayload): Promise<SignupResponse> => {
+  return handleMutation.post("/signup", payload);
 };
 
-export const auth = {
+export const signupDomain = {
   signup,
 };

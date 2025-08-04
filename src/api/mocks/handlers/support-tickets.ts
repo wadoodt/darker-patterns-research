@@ -1,6 +1,7 @@
 import { db } from "../db";
-import { createSuccessResponse, createErrorResponse, createPaginatedResponse } from "../../response";
+import { createSuccessResponse, createErrorResponse } from "../../response";
 import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
+import { createPagedResponse } from "../utils/paged-response";
 
 export const createContactSubmission = async (request: Request) => {
   const body = await request.json();
@@ -17,34 +18,14 @@ export const getMyTickets = async (request: Request) => {
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-    // Get all tickets for the user
-    const allTickets = db.supportTickets.findMany({
+    return createPagedResponse({
+      table: "supportTickets",
+      page,
+      limit,
+      domain: "supportTickets",
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
     });
-    const totalItems = allTickets.length;
-    const totalPages = Math.ceil(totalItems / limit);
-    const pagedTickets = allTickets.slice((page - 1) * limit, page * limit);
-
-    if (!pagedTickets || pagedTickets.length === 0) {
-      return createPaginatedResponse(
-        "NO_DATA",
-        "supportTickets",
-        [],
-        page,
-        totalPages,
-        totalItems
-      );
-    }
-
-    return createPaginatedResponse(
-      "OPERATION_SUCCESS",
-      "supportTickets",
-      pagedTickets,
-      page,
-      totalPages,
-      totalItems
-    );
   } catch {
     return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to fetch tickets");
   }

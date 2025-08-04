@@ -14,7 +14,7 @@ import {
   willExpireWithin,
 } from "@lib/tokenService";
 import { useCache } from "@contexts/CacheContext";
-import { cacheKeys } from "@api/cacheKeys";
+
 
 // eslint-disable-next-line max-lines-per-function
 const useAuthProvider = (): AuthContextType => {
@@ -27,7 +27,7 @@ const useAuthProvider = (): AuthContextType => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { mutateAsync: loginUser } = useLogin();
   const { mutateAsync: logoutUser } = useLogout();
-  const { data: userData } = useUser();
+  const { data: userData } = useUser({ enabled: isAuthenticated });
   const { invalidateCacheKeys } = useCache();
 
   const clearAuthState = useCallback(() => {
@@ -57,9 +57,7 @@ const useAuthProvider = (): AuthContextType => {
   const login = useCallback(
     async (username: string, password: string): Promise<void> => {
       try {
-        const { auth } = await loginUser({ username, password });
-
-        const { token: userToken, refreshToken, expiresIn } = auth;
+        const { token: userToken, refreshToken, expiresIn } = await loginUser({ username, password });
 
         const expirationTime = Date.now() + expiresIn * 1000;
 
@@ -125,14 +123,12 @@ const useAuthProvider = (): AuthContextType => {
 
   // Update user state when userData changes
   useEffect(() => {
-    if (userData?.error) {
-      invalidateCacheKeys(cacheKeys.users.mePrefix);
-      setIsLoading(false);
-      return;
-    }
-
     if (userData && token) {
       setUser(userData.user);
+      setIsLoading(false);
+    } else if (!userData && token) {
+      // Still loading or failed to fetch
+    } else {
       setIsLoading(false);
     }
   }, [userData, token, invalidateCacheKeys]);

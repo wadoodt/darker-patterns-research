@@ -1,35 +1,21 @@
-/**
- * @file Provides a specialized handler for query operations.
- */
+import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import apiClient from "../client";
 import { baseRequestHandler } from "./baseRequestHandler";
-import { ApiError } from "./ApiError";
-import type { ApiResponse } from "types/api";
 
 /**
- * A specialized request handler for QUERY operations.
- * It uses the `baseRequestHandler` and implements the standard
- * query pattern: throw an `ApiError` on failure, and return the
- * unwrapped data payload on success.
+ * A wrapper for making GET requests. It uses the `baseRequestHandler` to
+ * ensure consistent error handling and response unwrapping.
  *
- * @param apiCall A function that returns a promise from the `apiClient`.
- * @returns A promise that resolves to the unwrapped data of type T.
+ * @template T - The expected data type of the successful response.
+ * @param url - The URL endpoint for the GET request.
+ * @param config - Optional Axios request configuration.
+ * @returns A promise that resolves to the unwrapped data or rejects with an ApiError.
  */
-export const handleQuery = async <T>(
-  apiCall: () => Promise<{ data: ApiResponse<T>}>,
+export const handleQuery = <T>(
+  url: string,
+  config?: AxiosRequestConfig
 ): Promise<T> => {
-  try {
-    const response = await baseRequestHandler(apiCall);
-
-    console.log('handleQuery response', response);
-
-    if (response.error) {
-      console.error('handleQuery error', response.error);
-      throw new ApiError({ message: response.error.message });
-    }
-
-    return response as T;
-  } catch (error) {
-    // Optionally, you could add more sophisticated error handling/logging here
-    throw error instanceof ApiError ? error : new ApiError({ message: 'error.general.internal_server_error'});
-  }
+  const apiCall = (conf?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
+    apiClient.get<T>(url, conf);
+  return baseRequestHandler<T>(apiCall, config);
 };

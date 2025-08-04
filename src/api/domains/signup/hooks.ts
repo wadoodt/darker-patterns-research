@@ -1,12 +1,11 @@
-
-import { auth } from "./index";
+import { signupDomain } from "./index";
 import type { SignupPayload } from "./types";
 
 export const useSignup = () => {
   return {
     mutate: async (payload: SignupPayload, options?: { onSuccess?: () => void; onError?: (error: unknown) => void }) => {
       try {
-        const result = await auth.signup(payload);
+        const result = await signupDomain.signup(payload);
         options?.onSuccess?.();
         return result;
       } catch (error) {

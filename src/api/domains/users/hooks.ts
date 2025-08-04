@@ -4,10 +4,10 @@ import { useAsyncCache } from "@hooks/useAsyncCache";
 import { users } from "./index";
 import { cacheKeys } from "@api/cacheKeys";
 import type { UpdateUserPayload } from "./types";
-import { getAccessToken, getExpiresAt } from "@lib/tokenService";
+import { getExpiresAt } from "@lib/tokenService";
 
-export const useUser = () => {
-  const authToken = getAccessToken();
+export const useUser = ({ enabled }: { enabled: boolean }) => {
+  
   const tokenExpiresAt = getExpiresAt();
   
   // Calculate TTL based on token expiration
@@ -27,7 +27,7 @@ export const useUser = () => {
   
   return useAsyncCache(cacheKeys.users.me(), () => users.getMe(), {
     ttl,
-    enabled: !!authToken,
+    enabled,
   });
 };
 

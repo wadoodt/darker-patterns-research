@@ -1,6 +1,5 @@
 // src/api/mocks/companies-handler.ts
-import { createPaginatedResponse } from "../../response";
-import { db } from "../db";
+import { createPagedResponse } from "../utils/paged-response";
 
 /**
  * Handles the GET /api/companies request.
@@ -11,17 +10,10 @@ export async function getCompanies(request: Request) {
   const page = parseInt(url.searchParams.get("page") || "1", 10);
   const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-  const companies = db.companies.findMany({});
-  const totalCompanies = companies.length;
-  const totalPages = Math.ceil(totalCompanies / limit);
-  const data = companies.slice((page - 1) * limit, page * limit);
-
-  return createPaginatedResponse(
-    "OPERATION_SUCCESS",
-    "companies",
-    data,
+  return createPagedResponse({
+    table: "companies",
     page,
-    totalPages,
-    totalCompanies
-  );
+    limit,
+    domain: "companies",
+  });
 }

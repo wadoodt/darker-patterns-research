@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { createSuccessResponse, createErrorResponse, createPaginatedResponse } from "../../response";
+import { createSuccessResponse, createErrorResponse } from "../../response";
 import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
 import type { TeamMember, NewTeamMember } from "@api/types";
 import { mockUsers } from "../data/users";
@@ -62,27 +62,18 @@ export const getTeamMembers = (request: Request): Response => {
   const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
   const allMembers = fetchTeamMembers(user.companyId, user.platformRole === "super-admin" || user.platformRole === "qa");
-  const totalMembers = allMembers.length;
-  if (totalMembers === 0) {
-    return createPaginatedResponse(
-      "NO_DATA",
-      "teamMembers",
-      [],
-      0,
-      0,
-      0
-    );
-  }
-  const totalPages = Math.ceil(totalMembers / limit);
+  const totalItems = allMembers.length;
+  const totalPages = Math.ceil(totalItems / limit);
   const data = allMembers.slice((page - 1) * limit, page * limit);
 
-  return createPaginatedResponse(
-    "OPERATION_SUCCESS",
-    "teamMembers",
-    data,
-    page,
-    totalPages,
-    totalMembers
+  return new Response(
+    JSON.stringify({
+      teamMembers: data,
+      currentPage: page,
+      totalPages,
+      total: totalItems,
+    }),
+    { status: 200, statusText: "Operation successful" }
   );
 };
 

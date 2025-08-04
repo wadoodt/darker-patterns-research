@@ -1,86 +1,76 @@
-/**
- * @file Provides a central, robust wrapper for all API client requests.
- */
-import { AxiosError } from "axios";
-import type { ApiResponse } from "types/api";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { ApiError } from "./ApiError";
+import type { ApiError as ApiErrorType } from "./types";
 
-/**
- * Creates a client-side error response that matches the ApiResponse<T> interface.
- * @param code The error code
- * @param message Optional error message
- * @param details Optional error details
- */
-function createClientErrorResponse<T>(
-  code: string,
-  message?: string,
-  details?: unknown
-): ApiResponse<T> {
+function createClientError(code: string, message?: string, details?: unknown): ApiErrorType {
   return {
-    data: null,
-    error: {
-      code,
-      message: message || code,
-      ...(details ? { details } : {})
-    },
-    success: false
+    code,
+    message: message || `An unexpected error occurred: ${code}`,
+    ...(details ? { details } : {}),
   };
 }
 
+function createServerError(axiosError: AxiosError<ApiErrorType>): ApiErrorType {
+  if (axiosError.response?.data?.code) {
+    return axiosError.response.data;
+  }
+
+  if (axiosError.isAxiosError && !axiosError.response) {
+    return createClientError(
+      "NETWORK_ERROR",
+      "Unable to connect to the server. Please check your network connection."
+    );
+  }
+
+  return createClientError(
+    axiosError.response?.statusText || "INTERNAL_SERVER_ERROR",
+    `An unexpected server error occurred: ${axiosError.message}`,
+    {
+      statusCode: axiosError.response?.status,
+      rawError: axiosError.message,
+    }
+  );
+}
+
 /**
- * A centralized, base request handler that wraps all axios calls.
- * It standardizes error handling and provides a single point for logging.
- * It is the foundation for both `handleQuery` and `handleMutation`.
- *
- * @param apiCall A function that returns a promise from the `apiClient`.
- * @returns A promise that always resolves to an `ApiResponse` object.
+ * A generic handler for making API requests.
+ * This function centralizes error handling and response parsing.
+ * @template T - The expected type of the data in the successful API response.
+ * @param apiCall - A function that returns a promise from the `apiClient`.
+ * @param requestConfig - Optional Axios request configuration.
+ * @returns A promise that resolves with the unwrapped data on success, or rejects with an `ApiError` on failure.
  */
-
 export const baseRequestHandler = async <T>(
-  apiCall: () => Promise<{ data: ApiResponse<T>, status?: number, error?: string }>,
-): Promise<ApiResponse<T>> => {
+  apiCall: (config?: AxiosRequestConfig) => Promise<AxiosResponse<T>>,
+  requestConfig?: AxiosRequestConfig
+): Promise<T> => {
   try {
-    const response = await apiCall();
-    console.log('baseRequestHandler response', response);
-    const apiResponse = response.data;
+    const response = await apiCall(requestConfig);
 
-    if (response.status === 404) {
-      return createClientErrorResponse<T>("NOT_FOUND");
+    // Check for a successful response (2xx status code)
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
     }
 
-    if (!apiResponse && response.error) {
-      // This can happen if a real API
-      // returns a 200 OK with non-JSON or empty content.
-      return createClientErrorResponse<T>(
-        "INTERNAL_SERVER_ERROR",
-        "The API response body was empty or invalid.",
-        { detail: "The API response body was empty or invalid." }
-      );
+    if (response.status === 401) {
+      throw new ApiError(createClientError("UNAUTHORIZED", "You are not authorized to access this resource."));
     }
 
-    // Future enhancement: If a global notification library like `sonner` is added,
-    // success toasts can be triggered here based on the response message.
-    // Example: if (apiResponse.statusText) { toast.success(t(apiResponse.statusText)); }
+    if (response.status >= 400 && response.status < 500) {
+      throw new ApiError(createClientError("BAD_REQUEST", "The server returned a bad request."));
+    }
 
-    return apiResponse;
+    // Fallback for unexpected, non-2xx responses that don't throw an error
+    console.error("API call failed with unhandled response: ", response);
+    throw new ApiError(createClientError("UNKNOWN_RESPONSE", "The server returned an unexpected response."));
+
   } catch (error) {
-    // Note: It's important to type the error as AxiosError<ApiResponse<unknown>>
-    // to correctly access the nested error structure our backend provides.
-    const axiosError = error as AxiosError<ApiResponse<unknown>>;
-
-    let errorResponse: ApiResponse<T>;
-
-    if (axiosError.response?.data?.error) {
-      // Case 1: The server responded with a structured API error.
-      errorResponse = { data: null, error: axiosError.response.data.error, success: false };
-    } else {
-      // Case 2: A network error or an unexpected server error occurred.
-      // We create a standardized error response.
-      errorResponse = createClientErrorResponse<T>("INTERNAL_SERVER_ERROR");
+    if (error instanceof ApiError) {
+      throw error; // Re-throw if it's already our custom error
     }
-    
-    // Future enhancement: This is the ideal place to trigger global error toasts.
-    // Example: toast.error(t(errorResponse.error.message));
 
-    return errorResponse;
+    const axiosError = error as AxiosError<ApiErrorType>;
+    const serverError = createServerError(axiosError);
+    throw new ApiError(serverError);
   }
 };

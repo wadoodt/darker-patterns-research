@@ -1,7 +1,8 @@
-export interface ApiResponse<T = unknown> {
-  data: T | null;
-  error: ApiError | null;
-  success: boolean;
+export interface PaginatedResponse<T> {
+  currentPage: number;
+  totalPages: number;
+  total: number;
+  faqs: T[];
 }
 
 export interface ApiError {
@@ -10,3 +11,6 @@ export interface ApiError {
   details?: unknown;
   validations?: Record<string, string>;
 }
+
+export type { Notification } from "./notification";
+

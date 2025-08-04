@@ -1,42 +1,46 @@
-/**
- * @file Provides a specialized handler for mutation operations.
- */
+import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import apiClient from "../client";
 import { baseRequestHandler } from "./baseRequestHandler";
-import { ApiError } from "./ApiError";
-import type { ApiResponse } from "types/api";
 
-/**
- * A specialized request handler for MUTATION operations.
- * It uses the `baseRequestHandler` and extracts the data from the ApiResponse.
- * This provides a consistent pattern where mutations return the actual data
- * rather than the wrapper, making it easier to use in components.
- *
- * @param apiCall A function that returns a promise from the `apiClient`.
- * @returns A promise that resolves to the unwrapped data of type T.
- */
-export const handleMutation = async <T>(
-  apiCall: () => Promise<{
-    data: ApiResponse<T>;
-    error?: string;
-  }>
+const post = <T, D = unknown>(
+  url: string,
+  data: D,
+  config?: AxiosRequestConfig
 ): Promise<T> => {
-  try {
-    const response = await baseRequestHandler(apiCall);
+  const apiCall = (conf?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
+    apiClient.post<T>(url, data, conf);
+  return baseRequestHandler<T>(apiCall, config);
+};
 
-    console.log("handleMutation response", response);
+const put = <T, D = unknown>(
+  url: string,
+  data: D,
+  config?: AxiosRequestConfig
+): Promise<T> => {
+  const apiCall = (conf?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
+    apiClient.put<T>(url, data, conf);
+  return baseRequestHandler<T>(apiCall, config);
+};
 
-    if (response.error) {
-      throw new ApiError({
-        message:
-          response.error?.message || "error.general.internal_server_error",
-      });
-    }
+const patch = <T, D = unknown>(
+  url: string,
+  data: D,
+  config?: AxiosRequestConfig
+): Promise<T> => {
+  const apiCall = (conf?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
+    apiClient.patch<T>(url, data, conf);
+  return baseRequestHandler<T>(apiCall, config);
+};
 
-    return response as T;
-  } catch (error) {
-    // Optionally, you could add more sophisticated error handling/logging here
-    throw error instanceof ApiError
-      ? error
-      : new ApiError({ message: "error.general.internal_server_error" });
-  }
+const del = <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
+  const apiCall = (conf?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
+    apiClient.delete<T>(url, conf);
+  return baseRequestHandler<T>(apiCall, config);
+};
+
+export const handleMutation = {
+  post,
+  put,
+  patch,
+  delete: del,
 };

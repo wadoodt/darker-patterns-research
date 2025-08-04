@@ -1,6 +1,7 @@
 import { db } from "../db";
 import { getAuthenticatedUser, handleUnauthorized } from "../authUtils";
-import { createSuccessResponse, createErrorResponse, createPaginatedResponse } from "../../response";
+import { createSuccessResponse, createErrorResponse } from "../../response";
+import { createPagedResponse } from "../utils/paged-response";
 
 export const getNotifications = async (request: Request) => {
   try {
@@ -11,23 +12,14 @@ export const getNotifications = async (request: Request) => {
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-    // Simulate paged response
-    const allNotifications = db.notifications.findMany({
-      where: { userId: user.id, read: false },
-      orderBy: { createdAt: "desc" },
-    });
-    const totalItems = allNotifications.length;
-    const totalPages = Math.ceil(totalItems / limit);
-    const pagedData = allNotifications.slice((page - 1) * limit, page * limit);
-
-    return createPaginatedResponse(
-      "OPERATION_SUCCESS",
-      "notifications",
-      pagedData,
+    return createPagedResponse({
+      table: "notifications",
       page,
-      totalPages,
-      totalItems
-    );
+      limit,
+      domain: "notifications",
+      orderBy: { createdAt: "desc" },
+      where: { userId: user.id, read: false },
+    });
   } catch {
     return createErrorResponse("INTERNAL_SERVER_ERROR", "Failed to fetch notifications");
   }

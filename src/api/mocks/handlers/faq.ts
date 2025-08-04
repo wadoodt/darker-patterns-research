@@ -1,33 +1,25 @@
 import { db } from "../db";
-import { createPaginatedResponse, createSuccessResponse, createErrorResponse } from "../../response";
+import { createSuccessResponse, createErrorResponse } from "../../response";
+import { createPagedResponse } from "../utils/paged-response";
 import type { FaqCategory } from "@api/domains/faq/types";
 
-export const getFaqs = (request: Request) => {
+export const getFaqs = async (request: Request) => {
   const url = new URL(request.url);
   const category = url.searchParams.get("category") as FaqCategory;
   const page = parseInt(url.searchParams.get("page") || "1", 10);
   const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
   // Only apply category filter if specified and not 'all'
-  const filter = category && category !== 'all' ? { category } : {};
+  const where = category && category !== "all" ? { category } : {};
 
-  const allFaqs = db.faqs.findMany({
-    where: filter,
+  return createPagedResponse({
+    table: "faqs",
+    page,
+    limit,
+    domain: "faqs",
+    where,
     orderBy: { createdAt: "desc" },
   });
-
-  const total = allFaqs.length;
-  const totalPages = Math.ceil(total / limit);
-  const pagedFaqs = allFaqs.slice((page - 1) * limit, page * limit);
-
-  return createPaginatedResponse(
-    "OPERATION_SUCCESS",
-    "faqs",
-    pagedFaqs,
-    page,
-    totalPages,
-    total
-  );
 };
 
 export const createFaq = async (request: Request): Promise<Response> => {

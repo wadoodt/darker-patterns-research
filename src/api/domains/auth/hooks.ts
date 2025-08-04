@@ -5,7 +5,8 @@ import type { LoginCredentials } from "./types";
 export const useLogin = () => {
   return {
     mutateAsync: async (credentials: LoginCredentials) => {
-      return await auth.login(credentials);
+      const response = await auth.login(credentials);
+      return response.auth;
     },
     isLoading: false,
   };

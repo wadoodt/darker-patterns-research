@@ -42,9 +42,9 @@ apiClient.interceptors.request.use(
     }
 
     if (API_DEBUG_MODE) {
-      console.log(`[API Request] > ${config.method?.toUpperCase()} ${config.url}`, {
+      console.log(`[API Request] > ${config.method?.toUpperCase()} ${config.url}`, JSON.stringify({
         payload: config.data,
-      });
+      }, null, 2));
     }
 
     // 2. If mocks are enabled, intercept the request and use the mock resolver.
@@ -97,9 +97,9 @@ apiClient.interceptors.response.use(
     if (API_DEBUG_MODE) {
       console.log(
         `[API Response] < ${response.status} ${response.config.method?.toUpperCase()} ${response.config.url}`,
-        {
+        JSON.stringify({
           data: response.data,
-        },
+        }, null, 2),
       );
     }
     return response;

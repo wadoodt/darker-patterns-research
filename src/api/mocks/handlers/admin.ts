@@ -1,5 +1,6 @@
 import { db } from "../db";
-import { createErrorResponse, createSuccessResponse, createPaginatedResponse } from "../../response";
+import { createErrorResponse, createSuccessResponse } from "../../response";
+import { createPagedResponse } from "../utils/paged-response";
 import type { User } from "@api/domains/users/types";
 
 /**
@@ -19,36 +20,17 @@ export const getUsers = async (request: Request): Promise<Response> => {
   const page = parseInt(url.searchParams.get("page") || "1", 10);
   const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-  let users;
-  if (mockAdminUser.platformRole === 'super-admin') {
-    // Super admin gets all users
-    users = db.users.findMany({});
-  } else {
-    // Company admin gets users from their own company
-    users = db.users.findMany({
-      where: { companyId: mockAdminUser.companyId },
-    });
-  }
+  const where = mockAdminUser.platformRole === 'super-admin' 
+    ? {} 
+    : { companyId: mockAdminUser.companyId };
 
-  // Exclude password from the response
-  const usersResponse = users.map((user) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...rest } = user;
-    return rest;
-  });
-
-  const totalUsers = usersResponse.length;
-  const totalPages = Math.ceil(totalUsers / limit);
-  const data = usersResponse.slice((page - 1) * limit, page * limit);
-
-  return createPaginatedResponse(
-    "OPERATION_SUCCESS",
-    "users",
-    data,
+  return createPagedResponse({
+    table: "users",
     page,
-    totalPages,
-    totalUsers
-  );
+    limit,
+    domain: "users",
+    where,
+  });
 };
 
 /**
@@ -113,21 +95,12 @@ export const getSupportTickets = async (
   const page = parseInt(url.searchParams.get("page") || "1", 10);
   const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-  const allTickets = db.supportTickets.findMany({});
-  const totalTickets = allTickets.length;
-  const totalPages = Math.ceil(totalTickets / limit);
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const tickets = allTickets.slice(startIndex, endIndex);
-
-  return createPaginatedResponse(
-    "OPERATION_SUCCESS",
-    "tickets",
-    tickets,
+  return createPagedResponse({
+    table: "supportTickets",
     page,
-    totalPages,
-    totalTickets
-  );
+    limit,
+    domain: "tickets",
+  });
 };
 
 /**

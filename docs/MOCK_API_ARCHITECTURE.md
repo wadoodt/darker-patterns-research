@@ -172,7 +172,43 @@ export const refreshToken = async (request: Request) => {
 };
 ```
 
-### 3.4. API Resolver (`resolver.ts`)
+### 3.4. Standardized Pagination
+
+All list endpoints in the mock API implement consistent pagination using the `createPagedResponse` utility. This ensures a uniform response format and behavior across all endpoints that return collections of items.
+
+**Key Features:**
+- Consistent query parameters: `page` (1-based) and `limit`
+- Standardized response format:
+  ```typescript
+  {
+    [domain]: T[],  // The paginated data array
+    currentPage: number,
+    totalPages: number,
+    total: number
+  }
+  ```
+- Built-in support for filtering and sorting
+- Automatic calculation of pagination metadata
+
+**Implementation:**
+- Located in `src/api/mocks/utils/paged-response.ts`
+- Used by all collection endpoints (users, companies, support tickets, etc.)
+- Handles edge cases (e.g., out-of-bounds page numbers)
+
+**Example Usage:**
+```typescript
+// In a handler function
+return createPagedResponse({
+  table: 'users',
+  page: parseInt(url.searchParams.get('page') || '1', 10),
+  limit: parseInt(url.searchParams.get('limit') || '10', 10),
+  domain: 'users',
+  where: { active: true },
+  orderBy: { createdAt: 'desc' }
+});
+```
+
+### 3.5. API Resolver (`resolver.ts`)
 
 The resolver is the mock API gateway. It maps incoming requests to the correct handler.
 

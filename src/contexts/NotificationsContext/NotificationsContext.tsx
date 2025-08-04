@@ -39,11 +39,11 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
 
   const markAsRead = useCallback(
     async (id: string) => {
-      const response = await api.notifications.markAsRead(id);
-      if (!response.error) {
+      try {
+        await api.notifications.markAsRead(id);
         await invalidateCacheKeys(cacheKeys.notifications.allPrefix);
-      } else {
-        console.error('Failed to mark notification as read', response.error);
+      } catch (error) {
+        console.error('Failed to mark notification as read', error);
         // Here we could use Sonner to show a toast
       }
     },
@@ -51,11 +51,11 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   );
 
   const markAllAsRead = useCallback(async () => {
-    const response = await api.notifications.markAllAsRead();
-    if (!response.error) {
+    try {
+      await api.notifications.markAllAsRead();
       await invalidateCacheKeys(cacheKeys.notifications.allPrefix);
-    } else {
-      console.error('Failed to mark all notifications as read', response.error);
+    } catch (error) {
+      console.error('Failed to mark all notifications as read', error);
     }
   }, [invalidateCacheKeys]);
   

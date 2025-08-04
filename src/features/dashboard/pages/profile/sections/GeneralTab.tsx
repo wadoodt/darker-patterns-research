@@ -11,10 +11,10 @@ import styles from "./GeneralTab.module.css";
 
 export function GeneralTab() {
   const { t } = useTranslation();
-  const { data: userData } = useUser();
+  const { data: userData } = useUser({ enabled: true });
   const canSeeAdminPanel =
-    userData?.user?.platformRole === "admin" ||
-    userData?.user?.platformRole === "super-admin";
+    userData?.user.platformRole === "admin" ||
+    userData?.user.platformRole === "super-admin";
 
   return (
     <Box className={styles.container}>
