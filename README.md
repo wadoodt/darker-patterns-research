@@ -33,6 +33,7 @@ For a complete understanding of the project's architecture, conventions, and wor
 - **Authentication-aware** TTL calculation
 - **Automatic cache recovery** and resilience
 - **Cache management panel** for debugging
+- **Admin cache editing** with JSON editor and TTL management
 
 ### 🎨 Modern UI
 - **React + TypeScript** for type safety

@@ -9,6 +9,7 @@ export interface CacheEntry<T = unknown> {
   data: T;
   createdAt: number;
   expiresAt: number;
+  updatedAt?: number;
 }
 
 /**

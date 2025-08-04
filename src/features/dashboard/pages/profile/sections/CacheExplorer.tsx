@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useCache } from "../../../../../contexts/CacheContext";
 import { Button, Flex, Text, Heading, TextField, Code, Box, Card, Spinner } from "@radix-ui/themes";
 import type { CacheEntryInfo } from "../../../../../contexts/CacheContext/types";
+import { CacheEditor } from "./CacheEditor";
 
 function CacheDetail({ 
   entry, 
@@ -12,6 +13,67 @@ function CacheDetail({
   onClose: () => void, 
   isLoading: boolean 
 }) {
+  const { getEntryData, updateEntry, deleteEntry, getKeyTTL, isEditableKey } = useCache();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState<object | null>(null);
+  const [editTtl, setEditTtl] = useState<number | null>(null);
+  const [isEditorLoading, setIsEditorLoading] = useState(false);
+
+  const handleEdit = async () => {
+    setIsEditorLoading(true);
+    try {
+      const [data, ttl] = await Promise.all([
+        getEntryData(entry.key),
+        getKeyTTL(entry.key),
+      ]);
+      if (data) {
+        setEditData(data as object);
+        setEditTtl(ttl);
+        setIsEditing(true);
+      } else {
+        alert('Failed to load entry data. It might have expired.');
+      }
+    } catch (error) {
+      alert(`Error loading data for editing: ${error}`);
+    } finally {
+      setIsEditorLoading(false);
+    }
+  };
+
+  const handleSave = async (data: object, ttl: number) => {
+    if (window.confirm('Are you sure you want to save these changes?')) {
+      try {
+        await updateEntry(entry.key, data, ttl);
+        setIsEditing(false);
+        onClose(); // Refresh the view
+      } catch (error) {
+        alert(`Error saving entry: ${error}`);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm(`Are you sure you want to delete the key "${entry.key}"? This action cannot be undone.`)) {
+      try {
+        await deleteEntry(entry.key);
+        onClose(); // Refresh the view
+      } catch (error) {
+        alert(`Error deleting entry: ${error}`);
+      }
+    }
+  };
+
+  if (isEditing && editData) {
+    return (
+      <CacheEditor 
+        initialData={editData} 
+        initialTtl={editTtl}
+        onSave={handleSave}
+        onCancel={() => setIsEditing(false)}
+      />
+    )
+  }
+
   return (
     <Card size="2">
       <Flex direction="column" gap="3">
@@ -28,6 +90,12 @@ function CacheDetail({
             <Box p="2" style={{ background: 'var(--gray-a2)', borderRadius: 'var(--radius-2)' }}>
               <Code wrap="wrap">{entry.dataPreview}</Code>
             </Box>
+            <Flex gap="2" mt="3">
+              {isEditableKey(entry.key) && (
+                <Button onClick={handleEdit} disabled={isEditorLoading}>Edit</Button>
+              )}
+              <Button color="red" onClick={handleDelete}>Delete</Button>
+            </Flex>
           </>
         )}
         <Button onClick={onClose} style={{ marginTop: '1rem' }}>Close</Button>

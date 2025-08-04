@@ -3,6 +3,7 @@ import type { KviDb, CacheEntry } from "@lib/cache/types";
 import { CACHE_TTL } from "@lib/cache/constants";
 import { cleanupExpiredEntries } from "./utils";
 import type { CacheEntryInfo } from "./types";
+import { logAuditEvent } from "./auditLogger";
 
 function useCacheRead(kvRef: React.RefObject<KviDb | null>) {
   const get = useCallback(async <T,>(key: string): Promise<T | null> => {
@@ -41,14 +42,39 @@ function useCacheWrite(kvRef: React.RefObject<KviDb | null>) {
     await kvRef.current.put(key, entry);
   }, [kvRef]);
 
-  const invalidateCacheKeys = useCallback(async (keyPrefix: string[]) => {
-    if (!kvRef.current) return;
+  const invalidateCacheKeys = useCallback(async (keyPrefix: string[], source: string = 'admin-panel') => {
+    if (!kvRef.current) return 0;
+    
     const allKeys = (await kvRef.current.keys()) as string[];
     const prefixStr = keyPrefix.join(":");
     const keysToDelete = allKeys.filter((k) => k.startsWith(prefixStr));
+    
     if (keysToDelete.length > 0) {
+      // Get all entries before deletion for audit logging
+      const entries = await Promise.all(
+        keysToDelete.map(async (key) => ({
+          key,
+          entry: await kvRef.current!.get<CacheEntry>(key),
+        }))
+      );
+      
+      // Delete all keys
       await Promise.all(keysToDelete.map((k) => kvRef.current!.del(k)));
+      
+      // Log invalidation events
+      for (const { key, entry } of entries) {
+        if (entry) {
+          logAuditEvent({
+            action: 'INVALIDATE',
+            key,
+            oldValue: entry.data,
+            source,
+          });
+        }
+      }
     }
+    
+    return keysToDelete.length;
   }, [kvRef]);
 
   const cleanupExpired = useCallback(async () => {
@@ -94,16 +120,77 @@ function useCacheEdit(kvRef: React.RefObject<KviDb | null>) {
     return entry ? entry.data : null;
   }, [kvRef]);
 
-  const updateEntry = useCallback(async () => {
-    throw new Error("Cache entry update not implemented yet.");
+  const updateEntry = useCallback(async <T,>(
+    key: string,
+    data: T,
+    ttl: number = CACHE_TTL.DEFAULT_15_MIN,
+    source: string = 'admin-panel',
+  ) => {
+    if (!kvRef.current) return;
+    
+    // Get existing entry to preserve creation time
+    const existingEntry = await kvRef.current.get<CacheEntry<T>>(key);
+    const now = Date.now();
+    
+    const entry: CacheEntry<T> = {
+      key,
+      data,
+      createdAt: existingEntry?.createdAt ?? now,
+      expiresAt: now + ttl * 1000,
+      updatedAt: now,
+    };
+    
+    await kvRef.current.put(key, entry);
+    
+    // Log the update
+    console.log(`[Cache] Updated entry '${key}' with TTL: ${ttl}s`);
+    
+    // Log audit event
+    logAuditEvent({
+      action: 'UPDATE',
+      key,
+      oldValue: existingEntry?.data,
+      newValue: data,
+      ttl,
+      source,
+    });
+  }, [kvRef]);
+  
+  const getKeyTTL = useCallback(async (key: string): Promise<number | null> => {
+    if (!kvRef.current) return null;
+    const entry = await kvRef.current.get<CacheEntry>(key);
+    if (!entry) return null;
+    const remainingMs = entry.expiresAt - Date.now();
+    return Math.max(0, Math.ceil(remainingMs / 1000)); // Convert to seconds, ensure non-negative
+  }, [kvRef]);
+  
+  const isEditableKey = useCallback((key: string): boolean => {
+    // By default, all keys are editable except those starting with 'auth:'
+    // Add more restrictions as needed
+    return !key.startsWith('auth:');
   }, []);
 
-  const deleteEntry = useCallback(async (key: string) => {
+  const deleteEntry = useCallback(async (key: string, source: string = 'admin-panel') => {
     if (!kvRef.current) return;
+    
+    // Get the entry before deleting for audit logging
+    const existingEntry = await kvRef.current.get<CacheEntry>(key);
+    
     await kvRef.current.del(key);
+    console.log(`[Cache] Deleted entry '${key}'`);
+    
+    // Log audit event
+    if (existingEntry) {
+      logAuditEvent({
+        action: 'DELETE',
+        key,
+        oldValue: existingEntry.data,
+        source,
+      });
+    }
   }, [kvRef]);
 
-  return { getEntryData, updateEntry, deleteEntry };
+  return { getEntryData, updateEntry, deleteEntry, getKeyTTL, isEditableKey };
 }
 
 export function useCacheAPI(kvRef: React.RefObject<KviDb | null>) {

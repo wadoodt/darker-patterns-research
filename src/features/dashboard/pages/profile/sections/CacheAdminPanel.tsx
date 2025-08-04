@@ -14,16 +14,16 @@ function InvalidationPanel() {
   const [statusMessage, setStatusMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAction = async (
-    action: () => Promise<void>,
-    successMessage: string,
+  const handleAction = async <T,>(
+    action: () => Promise<T>,
+    successMessage: string | ((result: T) => string),
   ) => {
     if (!isReady) return;
     setIsLoading(true);
     setStatusMessage("");
     try {
-      await action();
-      setStatusMessage(successMessage);
+      const result = await action();
+      setStatusMessage(typeof successMessage === 'function' ? successMessage(result) : successMessage);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An unknown error occurred.";
@@ -37,7 +37,7 @@ function InvalidationPanel() {
   const handleInvalidateDomain = (domain: string) => {
     handleAction(
       () => invalidateCacheKeys([domain]),
-      `Successfully invalidated all '${domain}' cache entries.`,
+      (count) => `Successfully invalidated ${count} '${domain}' cache entries.`,
     );
   };
 

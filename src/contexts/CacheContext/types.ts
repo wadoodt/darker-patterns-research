@@ -10,7 +10,7 @@ export interface CacheContextValue {
   set: <T>(key: string, data: T, ttl?: number) => Promise<void>;
   get: <T>(key: string) => Promise<T | null>;
 
-  invalidateCacheKeys: (keyPrefix: string[]) => Promise<void>;
+  invalidateCacheKeys: (keyPrefix: string[], source?: string) => Promise<number>;
   cleanupExpired: () => Promise<void>;
   isReady: boolean;
   error: Error | null;
@@ -24,10 +24,14 @@ export interface CacheContextValue {
   ) => Promise<{ keys: string[]; cursor?: string; hasMore: boolean }>;
   inspectEntry: (key: string) => Promise<CacheEntryInfo | null>;
 
-  // --- Editing API (for future implementation) ---
+  // --- Editing API ---
   getEntryData: <T = unknown>(key: string) => Promise<T | null>;
   updateEntry: <T>(key: string, data: T, ttl?: number) => Promise<void>;
   deleteEntry: (key: string) => Promise<void>;
+  
+  // --- Cache Management ---
+  getKeyTTL: (key: string) => Promise<number | null>;
+  isEditableKey: (key: string) => boolean;
 }
 
 export interface CacheProviderProps {
