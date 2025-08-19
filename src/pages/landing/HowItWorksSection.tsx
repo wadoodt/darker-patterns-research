@@ -1,46 +1,76 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import {
-  EnvelopeClosedIcon,
-  LayoutIcon,
-  BarChartIcon,
-} from "@radix-ui/react-icons";
-
-const stepsIcons = [EnvelopeClosedIcon, LayoutIcon, BarChartIcon];
+import { Card, Flex, Box, Text, Heading, Container, Section } from "@radix-ui/themes";
+import { 
+  Users, 
+  FileText,
+  Send,
+  TrendingUp
+} from "lucide-react";
 
 const HowItWorksSection: React.FC = () => {
-  const { t } = useTranslation();
-  // Example steps, replace with i18n content as needed
   const steps = [
     {
-      title: t("pricing.plans.business.title"),
-      description: t("pricing.plans.business.description"),
+      number: "1",
+      title: "Create Campaign",
+      description: "Design beautiful emails with our editor",
+      icon: <FileText size={32} />
     },
     {
-      title: t("pricing.plans.premium.title"),
-      description: t("pricing.plans.premium.description"),
+      number: "2",
+      title: "Target Audience",
+      description: "Segment and personalize messages",
+      icon: <Users size={32} />
     },
     {
-      title: t("pricing.plans.custom.title"),
-      description: t("pricing.plans.custom.description"),
+      number: "3",
+      title: "Send & Track",
+      description: "Launch and monitor in real-time",
+      icon: <Send size={32} />
     },
+    {
+      number: "4",
+      title: "Optimize",
+      description: "Improve with A/B testing",
+      icon: <TrendingUp size={32} />
+    }
   ];
+
   return (
-    <section className="how-it-works-section" id="how-it-works">
-      <h2>{t("pricing.faq.title")}</h2>
-      <div className="how-it-works-steps">
-        {steps.map((step, idx) => {
-          const Icon = stepsIcons[idx];
-          return (
-            <div className="how-it-works-step" key={idx}>
-              <Icon width={32} height={32} aria-hidden="true" />
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </div>
-          );
-        })}
-      </div>
-    </section>
+    <Section size="4" id="how-it-works" style={{ background: '#f8fafc' }}>
+      <Container size="4">
+        <Flex direction="column" gap="6">
+          <Box style={{ textAlign: 'center' }}>
+            <Heading size="8" mb="4">How It Works</Heading>
+            <Text size="4" color="gray">
+              Get started in minutes with our simple four-step process
+            </Text>
+          </Box>
+
+          <Flex gap="4" wrap="wrap" justify="center">
+            {steps.map((step, idx) => (
+              <Card key={idx} style={{ flex: '1 1 250px', maxWidth: '280px' }}>
+                <Flex direction="column" gap="3" p="5" align="center">
+                  <Flex align="center" justify="center" style={{
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                    color: 'white',
+                    fontSize: '24px',
+                    fontWeight: 'bold'
+                  }}>
+                    {step.number}
+                  </Flex>
+                  <Box style={{ color: '#667eea' }}>{step.icon}</Box>
+                  <Heading size="4">{step.title}</Heading>
+                  <Text color="gray" align="center">{step.description}</Text>
+                </Flex>
+              </Card>
+            ))}
+          </Flex>
+        </Flex>
+      </Container>
+    </Section>
   );
 };
 
