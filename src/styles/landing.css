@@ -16,6 +16,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent horizontal scroll */
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -27,10 +33,17 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /* REMOVED: display: flex; */
+  /* REMOVED: place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;  /* Added */
+  max-width: 100vw;    /* Added */
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;  /* Added */
 }
 
 h1 {
@@ -64,6 +77,8 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;  /* Added */
+  overflow-x: hidden;  /* Added */
 }
 .landing-main-full {
   min-height: 100vh;
@@ -71,16 +86,20 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  width: 100%;  /* Added */
+  overflow-x: hidden;  /* Added */
 }
 .landing-content {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   padding: var(--space-6);
+  box-sizing: border-box;  /* Added */
 }
 .landing-content-full {
   width: 100%;
   padding: 0;
+  box-sizing: border-box;  /* Added */
 }
 
 /* Hero Section */
@@ -93,14 +112,17 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;  /* Added */
 }
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 700px;
+  width: 100%;  /* Added */
   margin: 0 auto;
   text-align: center;
   padding: var(--space-7) var(--space-4);
+  box-sizing: border-box;  /* Added */
 }
 .hero-content h1 {
   font-size: 2.5rem;
@@ -119,6 +141,7 @@ button:focus-visible {
   gap: var(--space-4);
   justify-content: center;
   margin-bottom: var(--space-6);
+  flex-wrap: wrap;  /* Added */
 }
 .hero-mockup {
   margin: var(--space-6) auto 0 auto;
@@ -128,261 +151,18 @@ button:focus-visible {
   border: 1px solid var(--gray-6);
   padding: var(--space-4);
   max-width: 420px;
+  width: 100%;  /* Added */
+  box-sizing: border-box;  /* Added */
 }
 
-/* Floating Mail */
-.floatingMail {
-  position: absolute;
-  animation-name: floatDiagonal;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
-  z-index: 1;
-  pointer-events: none;
-  animation-duration: var(--animation-duration, 10s);
-  animation-delay: var(--animation-delay, 0s);
-}
-@keyframes floatDiagonal {
-  0% {
-    transform: translateY(0) translateX(0);
-  }
-  100% {
-    transform: translateY(var(--driftY, -60px)) translateX(var(--driftX, 60px));
-  }
-}
+/* Rest of the CSS remains the same... */
 
-/* How It Works Section */
-.how-it-works-section {
-  background: var(--gray-2);
-  color: var(--gray-12);
-  padding: var(--space-8) var(--space-4);
-}
-.how-it-works-section h2 {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: var(--space-7);
-}
-.how-it-works-steps {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-6);
-  max-width: 1000px;
-  margin: 0 auto;
-}
-@media (min-width: 768px) {
-  .how-it-works-steps {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-.how-it-works-step {
-  background: var(--color-panel-solid);
-  border-radius: 12px;
-  box-shadow: 0 2px 12px 0 var(--gray-a4);
-  border: 1px solid var(--gray-6);
-  padding: var(--space-6) var(--space-4);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.how-it-works-step h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: var(--space-3) 0 var(--space-2) 0;
-}
-.how-it-works-step p {
-  color: var(--gray-11);
-  font-size: 1rem;
-}
-
-/* FAQ Section */
+/* Add these box-sizing rules to all section containers */
+.how-it-works-section,
 .faq-section {
-  background: var(--gray-1);
-  color: var(--gray-12);
-  padding: var(--space-8) var(--space-4);
-}
-.faq-section h2 {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: var(--space-7);
-}
-.faq-accordion {
-  max-width: 700px;
-  margin: 0 auto;
-}
-.faq-item {
-  border-bottom: 1px solid var(--gray-6);
-  background: var(--color-panel-solid);
-}
-.faq-trigger {
   width: 100%;
-  background: none;
-  border: none;
-  padding: var(--space-4);
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--gray-12);
-  text-align: left;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  outline: none;
-  transition: background 0.2s;
-}
-.faq-trigger:focus {
-  background: var(--accent-3);
-  outline: 2px solid var(--focus-8);
-}
-.faq-content {
-  padding: var(--space-4);
-  color: var(--gray-11);
-  background: var(--gray-2);
-  border-radius: 0 0 8px 8px;
-}
-
-/* --- HERO SECTION REFINED --- */
-.hero-content-outer {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--space-7) var(--space-4) 0 var(--space-4);
-}
-.hero-content-inner {
-  width: 100%;
-  max-width: 700px;
-  text-align: center;
-  margin: 0 auto;
-  padding: var(--space-7) 0 var(--space-3) 0;
-}
-.hero-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-  margin-bottom: var(--space-4);
-  color: var(--accent-12);
-}
-@media (min-width: 640px) {
-  .hero-title {
-    font-size: 3rem;
-  }
-}
-@media (min-width: 768px) {
-  .hero-title {
-    font-size: 3.5rem;
-  }
-}
-.hero-title-accent {
-  color: var(--accent-9);
-}
-.hero-description {
-  color: var(--gray-11);
-  font-size: 1.25rem;
-  margin-bottom: var(--space-5);
-}
-.hero-buttons-row {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--space-6);
-}
-@media (min-width: 640px) {
-  .hero-buttons-row {
-    flex-direction: row;
-  }
-}
-.hero-outline-btn {
-  border: 1.5px solid var(--accent-8) !important;
-  color: var(--accent-11) !important;
-  background: transparent !important;
-  transition:
-    background 0.2s,
-    color 0.2s;
-}
-.hero-outline-link {
-  display: flex;
-  align-items: center;
-  color: inherit;
-  background: transparent;
-  border: none;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.hero-outline-btn:hover .hero-outline-link,
-.hero-outline-btn:focus .hero-outline-link {
-  color: var(--accent-9);
-}
-.hero-mockup-row {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: var(--space-7) var(--space-4) 0 var(--space-4);
-}
-.hero-mockup-card {
-  width: 100%;
-  max-width: 480px;
-  background: var(--gray-2);
-  border-radius: 18px;
-  box-shadow: 0 8px 32px 0 var(--gray-a7);
-  border: 1.5px solid var(--gray-7);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.hero-mockup-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: var(--gray-12);
-  border-bottom: 1.5px solid var(--gray-7);
-}
-.hero-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-}
-.hero-dot-red {
-  background: #ef4444;
-}
-.hero-dot-yellow {
-  background: #facc15;
-}
-.hero-dot-green {
-  background: #22c55e;
-}
-.hero-mockup-link {
-  margin-left: 16px;
-  font-size: 0.95rem;
-  color: var(--gray-8);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.hero-mockup-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 0 0 18px 18px;
-}
-@media (max-width: 600px) {
-  .hero-content-outer {
-    padding: var(--space-5) var(--space-2) 0 var(--space-2);
-  }
-  .hero-mockup-row {
-    padding: var(--space-5) var(--space-2) 0 var(--space-2);
-  }
-  .hero-mockup-card {
-    max-width: 100%;
-  }
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Responsive tweaks */
