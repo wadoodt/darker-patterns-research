@@ -1,0 +1,59 @@
+/* /src/styles/common.css */
+
+/* --- Light Navbar Styles --- */
+.light-navbar {
+  /* Full-width bar with shadow and blur */
+  @apply bg-white/80 shadow-md backdrop-blur-lg;
+}
+.light-navbar-content {
+  /* Constrained content within the bar */
+  @apply mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6;
+}
+.light-navbar-logo-accent {
+  @apply text-brand-purple-500;
+}
+.light-navbar-logo-text {
+  @apply hidden text-lg font-semibold text-gray-800 sm:inline;
+}
+.light-navbar-link {
+  @apply hover:text-brand-purple-500 text-sm font-medium text-gray-600 transition-colors;
+}
+
+.light-navbar-link.disabled {
+  @apply cursor-not-allowed text-gray-400;
+}
+
+.light-navbar-action-button {
+  @apply rounded-md bg-white px-3.5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 transition-all duration-150 ease-in-out ring-inset hover:bg-gray-50;
+}
+
+/* --- Light Footer Styles --- */
+.light-footer {
+  @apply border-t border-gray-200 bg-white;
+}
+.light-footer-content {
+  @apply mx-auto max-w-7xl px-6 py-8 text-center lg:px-8;
+}
+.light-footer-credit {
+  @apply text-sm leading-6 text-gray-700;
+}
+.light-footer-text {
+  @apply mt-2 text-xs leading-5 text-gray-500;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  height: 5px;
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}

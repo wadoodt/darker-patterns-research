@@ -1,0 +1,106 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =================================================================
+    // Helper Functions
+    // =================================================================
+    function hasRole(role) {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles[role] == true;
+    }
+
+    function isAdmin() {
+      return hasRole('admin');
+    }
+
+    function isResearcher() {
+      return hasRole('researcher');
+    }
+
+    function canReadData() {
+      return isAdmin() || isResearcher();
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // =================================================================
+    // Publicly Readable Collections
+    // =================================================================
+    match /landing_updates/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /cached_stats/{docId} {
+      allow read: if true;
+      allow write: if false; // Updated by backend functions
+    }
+
+    // =================================================================
+    // Core Project Collections
+    // =================================================================
+    match /dpo_entries/{entry} {
+      allow read: if canReadData();
+      // Admins can perform any write operation.
+      // Researchers can only update specific metadata fields, not core content.
+      allow write: if isAdmin();
+      allow update: if isResearcher() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reviewCount', 'lastReviewedAt', 'isFlaggedCount']);
+    }
+
+    match /dpo_revisions/{revisionId} {
+      // Admins can read all revisions. Researchers can read their own.
+      allow read: if isAdmin() || (isResearcher() && resource.data.submittedBy == request.auth.uid);
+      // Researchers can create revisions, but only for themselves.
+      allow create: if isResearcher() && request.resource.data.submittedBy == request.auth.uid;
+      // Admins can update revisions (e.g., to approve/reject).
+      allow update: if isAdmin();
+      // Admins can delete revisions.
+      allow delete: if isAdmin();
+    }
+
+    match /evaluations/{evaluationId} {
+      allow read: if canReadData();
+      // Public survey participants can create evaluations without being authenticated.
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    match /participant_flags/{flagId} {
+      allow read: if canReadData();
+      // Public survey participants can create flags without being authenticated.
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    match /survey_participants/{participantId} {
+      allow read: if canReadData() || isOwner(participantId);
+      allow create, update: if isOwner(participantId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // =================================================================
+    // User and Admin Collections
+    // =================================================================
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    match /admin_settings/{config} {
+      allow read, write: if isAdmin();
+    }
+
+    // Default-deny all other collections
+    // Default-deny all other collections
+    match /{document=**} {
+      allow read, write: if request.time < timestamp.date(2025, 7, 12);
+    }
+  }
+}

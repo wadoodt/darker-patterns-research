@@ -1,0 +1,126 @@
+/* Keyframes for Scroll Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px); /* Increased from 30px for more noticeable effect */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px); /* Increased */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px); /* Increased */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Base class for items to be animated on scroll */
+.scroll-animate-item {
+  opacity: 0;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out; /* Default transition */
+  will-change: opacity, transform;
+}
+
+/* Define initial states for different animation types */
+.scroll-animate-item.anim-fade-in {
+  /* No initial transform needed, opacity handles it */
+}
+.scroll-animate-item.anim-fade-in-up {
+  transform: translateY(40px);
+}
+.scroll-animate-item.anim-fade-in-left {
+  transform: translateX(-40px);
+}
+.scroll-animate-item.anim-fade-in-right {
+  transform: translateX(40px);
+}
+.scroll-animate-item.anim-scale-up {
+  transform: scale(0.9);
+}
+
+/* Visibility class added by JS to trigger the transition */
+.scroll-animate-item.is-visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1); /* Reset transform for all types */
+}
+
+/* Keyframes for Floating Icons color shift (already in globals.css via theme, but good to have a specific animation if needed outside theme) */
+/* This is now primarily handled by JS in FloatingIcons.tsx for dynamic hue rotation */
+
+/* Sparkle Particle Animation for CTA Button */
+@keyframes sparkle-particle-anim {
+  0% {
+    transform: scale(0.3) translate(0, 0);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1) translate(0, -5px); /* Pop and slight upward motion */
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0) translate(0, -30px); /* Fade out and move further up */
+    opacity: 0;
+  }
+}
+
+/* Staggered animation delays (conceptual, can be expanded) */
+.animation-delay-100 {
+  transition-delay: 0.1s !important;
+  animation-delay: 0.1s !important;
+}
+.animation-delay-200 {
+  transition-delay: 0.2s !important;
+  animation-delay: 0.2s !important;
+}
+.animation-delay-300 {
+  transition-delay: 0.3s !important;
+  animation-delay: 0.3s !important;
+}
+.animation-delay-400 {
+  transition-delay: 0.4s !important;
+  animation-delay: 0.4s !important;
+}
+.animation-delay-500 {
+  transition-delay: 0.5s !important;
+  animation-delay: 0.5s !important;
+}

@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit hooks..."
+
+# Run linters and formatters
+npx lint-staged
+
+# Placeholder for key leak check - replace with actual tool like gitleaks
+# Example: gitleaks protect --staged -v
+echo "Remember to manually check for any sensitive keys before committing."
+# If you want to enforce a check, you can make the script fail if a tool isn't run or finds something.
+# For now, this is a reminder.
+# exit 1 # Uncomment to make commit fail if key check is not "passed" by a tool
+
+echo "Pre-commit hooks finished."

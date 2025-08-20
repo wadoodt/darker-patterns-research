@@ -7,6 +7,7 @@
  * @param parts The remaining parts of the key.
  * @returns A formatted string key.
  */
+<<<<<<< HEAD
 export function createCacheKey(
   prefix: string,
   ...parts: (string | number)[]
@@ -39,4 +40,8 @@ export async function batchCacheSet<T>(
       return cacheSet(key, item.data, item.ttl);
     }),
   );
+=======
+export function createCacheKey(prefix: string, ...parts: (string | number)[]): string {
+  return `${prefix}:${parts.join(':')}`;
+>>>>>>> 7d8ff23e3a32b24434ff8150e085396071dc61b2
 }

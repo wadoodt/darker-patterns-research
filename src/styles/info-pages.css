@@ -1,0 +1,133 @@
+/* src/styles/info-pages.css */
+
+/*
+  These styles target elements within a .prose container,
+  specifically for the light-themed (info) pages.
+  They complement or refine the base styles provided by
+  Tailwind's typography plugin or existing prose utility classes.
+*/
+
+.prose {
+  color: var(--color-light-text-secondary); /* Default text color for prose content */
+}
+
+.prose h1,
+.prose .survey-main-title, /* Target specific title class if used within prose */
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--font-heading-academic); /* Lora font */
+  color: var(--color-light-text-primary);
+  font-weight: 700; /* Ensure headings are bold */
+}
+
+.prose h1,
+.prose .survey-main-title {
+  /* survey-main-title used in info pages */
+  @apply mb-6 text-3xl font-bold sm:text-4xl; /* Consistent title styling */
+}
+
+.prose h2 {
+  @apply border-light-border-primary mt-10 mb-4 border-b pb-2 text-2xl font-semibold sm:text-3xl;
+}
+
+.prose h3 {
+  @apply mb-3 text-xl font-semibold sm:text-2xl;
+}
+
+.prose p {
+  font-family: var(--font-body-academic); /* Open Sans */
+  @apply my-4 text-base leading-relaxed; /* Tailwind utility for line-height and margin */
+  color: var(--color-light-text-secondary);
+}
+
+.prose strong {
+  color: var(--color-light-text-primary);
+  font-weight: 600; /* Noto Sans might need explicit bold weight */
+}
+
+.prose a {
+  color: var(--color-brand-purple-600); /* Slightly darker purple for links on light bg */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+.prose a:hover {
+  color: var(--color-brand-purple-700);
+  text-decoration: underline;
+}
+
+.prose blockquote {
+  border-left-width: 4px;
+  border-left-color: var(--color-brand-purple-300); /* Accent color for border */
+  background-color: var(--color-light-bg-tertiary); /* Subtle background */
+  color: var(--color-light-text-tertiary); /* Slightly muted text for quotes */
+  @apply my-6 rounded-r-md px-5 py-4 text-sm italic;
+}
+.prose blockquote p {
+  color: var(--color-light-text-tertiary); /* Ensure p inside blockquote also gets color */
+  @apply my-0; /* Remove default paragraph margins inside blockquote */
+}
+.prose blockquote p:first-of-type::before {
+  content: none; /* Remove default prose quotes if any */
+}
+.prose blockquote p:last-of-type::after {
+  content: none; /* Remove default prose quotes if any */
+}
+
+.prose ul,
+.prose ol {
+  font-family: var(--font-body-academic);
+  color: var(--color-light-text-secondary);
+  @apply my-4 space-y-2 pl-5; /* Adjusted spacing */
+}
+
+.prose ul > li {
+  @apply pl-2; /* Space for custom marker */
+}
+.prose ul > li::marker {
+  color: var(--color-brand-purple-500);
+  font-size: 1.1em; /* Slightly larger marker */
+  content: '•'; /* Custom bullet point */
+}
+
+.prose ol > li {
+  @apply pl-2; /* Space for custom marker */
+}
+.prose ol > li::marker {
+  color: var(--color-brand-purple-600);
+  font-weight: 500;
+  content: counter(li) '. '; /* Custom ordered list marker */
+  counter-increment: li; /* Increment counter for ordered lists */
+}
+
+.prose li {
+  @apply mb-1;
+}
+.prose li p {
+  /* Paragraphs inside list items */
+  @apply my-1;
+}
+
+/* Ensure images within prose are responsive and have some margin */
+.prose img {
+  @apply my-6 rounded-lg shadow-md;
+}
+
+/* Code blocks and inline code, if needed */
+.prose pre {
+  background-color: var(--color-light-bg-tertiary);
+  color: var(--color-light-text-primary);
+  @apply overflow-x-auto rounded-md p-4 text-xs;
+}
+.prose code {
+  background-color: var(--color-brand-purple-50);
+  color: var(--color-brand-purple-700);
+  @apply rounded px-1 py-0.5 font-mono text-xs;
+}
+.prose code::before,
+.prose code::after {
+  content: none; /* Remove default backticks if any by prose plugin */
+}
