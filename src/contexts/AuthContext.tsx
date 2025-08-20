@@ -6,8 +6,7 @@ import type { AppUser } from '@/types/user';
 import type { User as FirebaseUser } from 'firebase/auth';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import type { ReactNode } from 'react';
-import { createContext, useEffect, useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 interface AuthContextType {
   user: AppUser | null; // Unified user object
   isAdmin: boolean;
@@ -17,8 +16,7 @@ interface AuthContextType {
   refreshUser: () => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
+export const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 function getRoleFlags(roles: string[] | undefined) {
   const isAdmin = !!roles?.includes('admin');
   const isResearcher = !!roles?.includes('researcher') || isAdmin;

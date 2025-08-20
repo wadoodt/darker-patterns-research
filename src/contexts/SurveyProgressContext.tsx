@@ -1,13 +1,12 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { useSurveyActions } from '../lib/survey/hooks';
 import { initialState, surveyReducer } from '../lib/survey/reducer';
 import type { SurveyContextValue } from '../types/survey';
 
-const SurveyProgressContext = createContext<SurveyContextValue | undefined>(undefined);
-
+const SurveyProgressContext = React.createContext<SurveyContextValue | undefined>(undefined);
 export const SurveyProgressProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(surveyReducer, initialState);
   const actions = useSurveyActions(state, dispatch);

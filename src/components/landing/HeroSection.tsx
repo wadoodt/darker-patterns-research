@@ -1,69 +1,129 @@
 'use client';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import CTAButton from './CTAButton';
-import { useEffect, useState } from 'react';
-import { useCache } from '@/contexts/CacheContext';
-import { cachedGetGlobalConfig } from '@/lib/cache/queries';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Box, Card, Container, Flex, Heading, Section, Text } from '@radix-ui/themes';
+import { ArrowRight, Inbox, Send, Sparkles, TrendingUp } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-// Lazy load the FloatingIcons component, and disable SSR since it's client-side only.
-const FloatingIcons = dynamic(() => import('./FloatingIcons'), {
-  ssr: false,
-});
-
-const HeroSection = () => {
-  const cache = useCache();
-  const [isSurveyActive, setIsSurveyActive] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+const HeroSection: React.FC = () => {
+  const { t } = useTranslation();
+  const [emailCount, setEmailCount] = useState(0);
 
   useEffect(() => {
-    cachedGetGlobalConfig(cache).then((config) => {
-      setIsSurveyActive(config.isSurveyActive);
-      setIsLoading(false);
-    });
-  }, [cache]);
+    const interval = setInterval(() => {
+      setEmailCount((prev) => {
+        const next = prev + Math.floor(Math.random() * 10) + 5;
+        return next > 50000 ? 50000 : next;
+      });
+    }, 50);
 
-  const startSurveyButton = (
-    <CTAButton
-      href="/step-introduction"
-      className="px-8 py-3 text-lg font-bold sm:text-xl"
-      disabled={!isSurveyActive || isLoading}
-    >
-      Start Survey
-    </CTAButton>
-  );
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <section id="about-research" className="landing-hero-section pt-20">
-      <FloatingIcons />
-      <div className="relative z-10 mx-auto max-w-3xl px-6 text-center lg:px-8">
-        <h2 className="landing-hero-title">Contribute to Groundbreaking Research</h2>
-        <p className="hero-paragraph mx-auto mt-6 max-w-2xl">
-          Join our study on <strong className="hero-paragraph-highlight">Dark Patterns in LLMs</strong>. Your
-          participation is crucial for building a human-validated DPO dataset and fostering more ethical AI.
-        </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-x-6 gap-y-4 sm:flex-row">
-          {!isSurveyActive ? (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div>{startSurveyButton}</div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>The survey is currently closed. Please check the updates below for more information.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : (
-            startSurveyButton
-          )}
-          <Link href="/about-research" className="btn-link-dark text-sm leading-6 font-semibold">
-            Learn more <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-      </div>
-    </section>
+    <Section
+      size="4"
+      style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        minHeight: '80vh',
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <Container size="4">
+        <Flex direction="column" align="center" gap="6">
+          {/* Badge */}
+          <Box
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              padding: '8px 20px',
+              borderRadius: '20px',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <Flex align="center" gap="2">
+              <Sparkles size={16} color="white" />
+              <Text size="2" style={{ color: 'white' }}>
+                Trusted by thousands of businesses worldwide
+              </Text>
+            </Flex>
+          </Box>
+
+          {/* Main Title */}
+          <Heading size="9" align="center" style={{ color: 'white', maxWidth: '800px' }}>
+            {t('pricing.hero.title', 'Transform Your Email Marketing with')}{' '}
+            <span
+              style={{
+                background: 'linear-gradient(to right, #ffd89b, #19547b)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Penguin Mails
+            </span>
+          </Heading>
+
+          {/* Description */}
+          <Text size="5" align="center" style={{ color: 'rgba(255, 255, 255, 0.9)', maxWidth: '600px' }}>
+            {t(
+              'pricing.hero.description',
+              'Send beautiful, personalized emails at scale with the most reliable email platform',
+            )}
+          </Text>
+
+          {/* CTA Button text */}
+          <a
+            href="/signup"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'inherit' }}
+          >
+            {t('pricing.plans.business.ctaText', 'Start Free Trial')}
+            <ArrowRight size={20} />
+          </a>
+
+          {/* Simple Mockup */}
+          <Card style={{ width: '100%', maxWidth: '800px', marginTop: '40px' }}>
+            <Flex direction="column" gap="4" p="4">
+              <Flex gap="2">
+                <Box style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f57' }} />
+                <Box style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }} />
+                <Box style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28ca42' }} />
+              </Flex>
+              <Flex gap="4" wrap="wrap" justify="center">
+                <Card>
+                  <Flex direction="column" gap="2" p="4" align="center">
+                    <Send size={32} color="#667eea" />
+                    <Text weight="bold">Send Campaign</Text>
+                    <Text size="2" color="gray">
+                      Launch targeted campaigns
+                    </Text>
+                  </Flex>
+                </Card>
+                <Card>
+                  <Flex direction="column" gap="2" p="4" align="center">
+                    <Inbox size={32} color="#764ba2" />
+                    <Text weight="bold">Track Opens</Text>
+                    <Text size="2" color="gray">
+                      Real-time metrics
+                    </Text>
+                  </Flex>
+                </Card>
+                <Card>
+                  <Flex direction="column" gap="2" p="4" align="center">
+                    <TrendingUp size={32} color="#667eea" />
+                    <Text weight="bold">Analyze</Text>
+                    <Text size="2" color="gray">
+                      Data-driven insights
+                    </Text>
+                  </Flex>
+                </Card>
+              </Flex>
+            </Flex>
+          </Card>
+        </Flex>
+      </Container>
+    </Section>
   );
 };
+
 export default HeroSection;
